@@ -1,26 +1,5 @@
 <?php
 
-/**
- * prerequisites:
- * create 3.9 branch
- * update composer requirements to ~4.1
- *
- * usage:
- *
- *    $obj = MetaUpgrader::create()
- *      ->setNameOfTempBranch('4.1-upgrade')
- *      ->setVendorName('SunnySideUp')
- *      ->setRootDir('/var/www/')
- *      ->setUpgradeDirName('upgradeto4')
- *       ->setArrayOfModules(
- *          [
- *              'my_first_module',
- *              'my_second_module'
- *          ]
- *      );
- *      ->setRunImmediately(false)
- *      ->run();
- */
 
 class MetaUpgrader {
 

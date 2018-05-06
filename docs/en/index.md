@@ -54,7 +54,7 @@ run the file to upgrade your modules.
 ### temp branch
 
 `->setNameOfTempBranch('4.1-TEMP-upgrade')` : a temporary branch will be added to your module.  
-All upgrade changes will be committed to this branch. **Careful!  this branch will be deleted every time you run the update process so that you can run the update process many times.**
+All upgrade changes will be committed to this branch. **Careful!  This branch will be deleted every time you run the update process so that you can run the update process many times.**
 
 ### vendor name
 

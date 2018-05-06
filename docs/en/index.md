@@ -54,7 +54,7 @@ run the file to upgrade your modules.
 ### temp branch
 
 `->setNameOfTempBranch('4.1-TEMP-upgrade')` : a temporary branch will be added to your module.  
-All upgrade changes will be committed to this branch. *Careful!  this branch will be deleted every time you run the update process so that you can run the update process many times.*
+All upgrade changes will be committed to this branch. **Careful!  this branch will be deleted every time you run the update process so that you can run the update process many times.**
 
 ### vendor name
 
@@ -66,7 +66,7 @@ All upgrade changes will be committed to this branch. *Careful!  this branch wil
 
 ### upgrade directory
 
-`->setUpgradeDirName('upgradeto4')`. This is the name of the directory that is created in the root dir where the upgrade takes place. *Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.*
+`->setUpgradeDirName('upgradeto4')`. This is the name of the directory that is created in the root dir where the upgrade takes place. **Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**
 
 ### list of modules
 
@@ -75,7 +75,7 @@ All upgrade changes will be committed to this branch. *Careful!  this branch wil
 ### run immediately or create bash script?
 
 `->setRunImmediately(false)`. By default, the script will not do any actual upgrading, but rather, it will output a bash script that does the actual upgrading. 
-When you set `runImmediately` to true, the PHP code will use the `exec` function to output commands on the `command line` immediately. *Careful! Even if you do not run the code immediately, a bunch of code will still be executed on the command line to inspect the module.*
+When you set `runImmediately` to true, the PHP code will use the `exec` function to output commands on the `command line` immediately. **Careful! Even if you do not run the code immediately, a bunch of code will still be executed on the command line to inspect the module.**
 
 
 

@@ -7,39 +7,70 @@
  *
  * usage:
  *
- *    $obj = MetaUpgrader();
- *    $obj->setVendorName('SunnySideUp');
- *    $obj->setRootDir('/var/www/');
- *    $obj->setUpgradeDirName('upgradeto4');
- *    $obj->setArrayOfModules(
+ *    $obj = MetaUpgrader::create()
+ *      ->setNameOfTempBranch('4.1-upgrade')
+ *      ->setVendorName('SunnySideUp')
+ *      ->setRootDir('/var/www/')
+ *      ->setUpgradeDirName('upgradeto4')
+ *       ->setArrayOfModules(
  *          [
  *              'my_first_module',
  *              'my_second_module'
  *          ]
- *    );
+ *      );
+ *      ->setRunImmediately(false)
+ *      ->run();
  */
 
 class MetaUpgrader {
 
+    private static $_singleton
+
+    public static function create()
+    {
+        if(! self::$_singleton) {
+            self::$_singleton = new MetaUpgrader();
+        }
+
+        return self::$_singleton();
+    }
+
+    protected $nameOfTempBranch = 'upgradeto4.1';
+
+    public function setNameOfTempBranch($s)
+    {
+        $this->nameOfTempBranch = $s;
+
+        return $this;
+    }
+
+
     protected $vendorName = '';
 
-    public function setVendorName($v)
+    public function setVendorName($s)
     {
-        $this->vendorName = $v;
+        $this->vendorName = $s;
+
+        return $this;
     }
 
     protected $rootDir = '/var/www';
 
-    public function setRootDir($v)
+    public function setRootDir($s)
     {
-        $this->rootDir = $v;
+        $this->rootDir = $s;
+
+        return $this;
     }
 
     protected $upgradeDirName = 'upgradeto4';
 
-    public function setUpgradeDirName($v)
+    public function setUpgradeDirName($s)
     {
-        $this->upgradeDirName = $v;
+        $this->upgradeDirName = $s;
+
+        return $this;
+
     }
 
     protected $arrayOfModules = [];
@@ -47,40 +78,127 @@ class MetaUpgrader {
     public function setArrayOfModules($a)
     {
         $this->arrayOfModules = $a;
+
+        return $this;
     }
 
-    $upgradeDir = $this->rootDir.'/'.$this->upgradeDirName;
-    foreach($this->arrayOfModules as $moduleFolderName) {
-        $moduleName = $this->camelCase($moduleFolderName);
-        $moduleFolder = $upgradeDir . '/' . $moduleFolderName;
-        $this->execMe('cd '.$this->rootDir);
-        $this->execMe('rm '.$upgradeDir. ' -rf');
-        $this->execMe('composer create-project silverstripe/installer '.$this->rootDir.'/upgradeto4 ^4');
-        $this->execMe('cd '.$upgradeDir);
-        $this->execMe('composer require '.$this->vendorName.'/'.$moduleName.':dev-master');
-        if(file_exists($moduleFolder . '/code')) {
-            $codeDir = $moduleFolder . '/code'
-        } elseif(file_exists($codeDir = $moduleFolder . '/src')) {
-            $codeDir = $moduleFolder . '/src';
-        } else {
-            user_error('Can not find code dir for '.$moduleFolder, E_USER_NOTICE);
-            continue;
-        }
-        $directories = glob($codeDir , GLOB_ONLYDIR);
-        foreach($directories as $dir) {
-            $nameSpaceAppendix = str_replace($codeDir, '', $dir);
-            $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
+    protected $runImmediately = false;
 
-            $nameSpace = $this->vendorName.'\\'.$moduleName.'\\'.$nameSpaceAppendix;
-            foreach($this->::scan($dir, '.php', true);)
-            $this->execMe('php ~/.composer/vendor/bin/upgrade-code add-namespace "'.$nameSpace.'" ./'.$dir.'/  --write -vvv');
-        }
-
-    }
-
-    protected function execMe($line)
+    public function setRunImmediately($b)
     {
-        exec($line);
+        $this->runImmediately = $b;
+
+        return $this;
+    }
+
+    function run()
+    {
+        $this->execMe(
+            true,
+            'echo "===================== START ======================"'
+            ' ###########################'
+        );
+        $upgradeDir = $this->rootDir.'/'.$this->upgradeDirName;
+        foreach($this->arrayOfModules as $moduleFolderName) {
+            $moduleName = $this->camelCase($moduleFolderName);
+            $moduleFolder = $upgradeDir . '/' . $moduleFolderName;
+            $this->execMe(
+                true,
+                'cd '.$this->rootDir,
+                'change to root dir: '.$this->rootDir
+            );
+            $this->execMe(
+                true,
+                'rm '.$upgradeDir. ' -rf',
+                'remove the temp upgrade dir: '.$upgradeDir
+            );
+            $this->execMe(
+                true,
+                'composer create-project silverstripe/installer '.$upgradeDir.' ^4'
+                'set up vanilla install of 4.0+ in: '.$upgradeDir
+            );
+            $this->execMe(
+                true,
+                'cd '.$upgradeDir,
+                'change dir to temp upgrade dir: '.$upgradeDir
+            );
+            $this->execMe(
+                true,
+                'composer require '.$this->vendorName.'/'.$moduleName.':dev-master',
+                'checkout dev master '
+            );
+            $this->execMe(
+                true,
+                'cd '.$moduleFolder,
+                'change dir to module folder: '.$moduleFolder
+            );
+            $this->execMe(
+                true,
+                'git branch -d '.$this->nameOfTempBranch,
+                'delete upgrade branch locally: '.$this->nameOfTempBranch
+            );
+            $this->execMe(
+                true,
+                'git push origin --delete '.$this->nameOfTempBranch,
+                'delete upgrade branch remotely: '.$this->nameOfTempBranch
+            );
+            if(file_exists($moduleFolder . '/code')) {
+                $codeDir = $moduleFolder . '/code'
+            } elseif(file_exists($codeDir = $moduleFolder . '/src')) {
+                $codeDir = $moduleFolder . '/src';
+            } else {
+                user_error('Can not find code dir for '.$moduleFolder, E_USER_NOTICE);
+                continue;
+            }
+            $this->execMe(
+                true,
+                'git checkout -b '.$this->nameOfTempBranch,
+                '(re)create the upgrade branch ...'
+            );
+            $directories = glob($codeDir , GLOB_ONLYDIR);
+            foreach($directories as $dir) {
+                $nameSpaceAppendix = str_replace($codeDir, '', $dir);
+                $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
+
+                $nameSpace = $this->vendorName.'\\'.$moduleName.'\\'.$nameSpaceAppendix;
+                $nameSpaceArray = explode('\\', $nameSpace);
+                $nameSpaceArrayNew = [];
+                foreach($nameSpaceArray as $nameSpaceSnippet) {
+                    if($nameSpaceSnippet) {
+                        $nameSpaceArrayNew[] = $this->camelCase($nameSpaceSnippet);
+                    }
+                }
+                $nameSpace = implode('\\', $nameSpaceArrayNew)
+                foreach($this->scanDirectory($dir, '.php') as $file) {
+                    $this->execMe(
+                        true,
+                        'php ~/.composer/vendor/bin/upgrade-code add-namespace "'.$nameSpace.'" ./'.$dir.'/.'.$file.'  --write -vvv',
+                        'adding name spaces'
+                    );
+                }
+            }
+        }
+        $this->execMe('echo "===================== END ======================"');
+    }
+
+    protected function execMe($alwaysRun, $line, $comment)
+    {
+        echo $this->newLine();
+        echo $this->newLine();
+        echo '# '.$comment;
+        echo $line;
+        if($this->runImmediately || $alwaysRun) {
+            exec($line);
+        }
+    }
+
+    protected function newLine()
+    {
+        if (php_sapi_name() == "cli") {
+            return PHP_EOL;
+        } else {
+            return '<br />';
+        }
     }
 
     protected function camelCase($str, array $noStrip = [])
@@ -97,22 +215,24 @@ class MetaUpgrader {
         return $str;
     }
 
-    protected function scanDirectories($rootDir, $allowext, $allData=array()) {
+    protected function scanDirectory($rootDir, $allowext) {
+        $list = [];
         $dirContent = scandir($rootDir);
         foreach($dirContent as $key => $content) {
             $path = $rootDir.'/'.$content;
             $ext = substr($content, strrpos($content, '.') + 1);
-
-            if(in_array($ext, $allowext)) {
-                if(is_file($path) && is_readable($path)) {
-                    $allData[] = $path;
-                }elseif(is_dir($path) && is_readable($path)) {
+            if(is_readable($path) {
+                if(is_file($path)) {
+                    if(in_array($ext, $allowext)) {
+                        $list[] = $path;
+                    }
+                } elseif(is_dir($path)) {
                     // recursive callback to open new directory
-                    //$allData = scanDirectories($path, $allData);
+                    // $list = scanDirectories($path,$allowext, $allData);
                 }
             }
         }
-        return $allData;
+        return $list;
     }
 
 }

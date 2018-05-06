@@ -54,7 +54,7 @@ run the file to upgrade your modules.
 ### temp branch
 
 `->setNameOfTempBranch('4.1-TEMP-upgrade')` : a temporary branch will be added to your module.  
-All upgrade changes will be committed to this branch.
+All upgrade changes will be committed to this branch. Careful!  this branch will be deleted every time you run the update process so that you can run the update process many times. 
 
 ### vendor name
 
@@ -66,7 +66,7 @@ All upgrade changes will be committed to this branch.
 
 ### upgrade directory
 
-`->setUpgradeDirName('upgradeto4')`. This is the name of the directory that is created in the root dir where the upgrade takes place.
+`->setUpgradeDirName('upgradeto4')`. This is the name of the directory that is created in the root dir where the upgrade takes place. Only use this directory for automated work as it will be deleted when you run the upgrade again.
 
 ### list of modules
 

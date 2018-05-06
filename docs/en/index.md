@@ -32,7 +32,7 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
-    ->setVendorName('SunnySideUp')
+    ->setVendorName('YourVendorNameOnPackagist')
     ->setRootDir('/var/www/')
     ->setUpgradeDirName('upgradeto4')
     ->setArrayOfModules(

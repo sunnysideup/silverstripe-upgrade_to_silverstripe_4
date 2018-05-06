@@ -22,10 +22,15 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 ```
  
 # usage:
+git clone git@github.com:sunnysideup/silverstripe-upgrade_to_silverstripe_4.git in your web root (also see below):
+
+create a new php file in your root dir (or anywhere else you can run it):
 
 ```php
-  $obj = MetaUpgrader::create()
-    ->setNameOfTempBranch('4.1-upgrade')
+<?php
+require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
+$obj = MetaUpgrader::create()
+    ->setNameOfTempBranch('4.1-TEMP-upgrade')
     ->setVendorName('SunnySideUp')
     ->setRootDir('/var/www/')
     ->setUpgradeDirName('upgradeto4')
@@ -38,8 +43,10 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
     ->setRunImmediately(false)
     ->run();
 ```
+run the file to upgrade your modules.
   
-# how it works:
+  
+# options:
 
 ### temp branch
 

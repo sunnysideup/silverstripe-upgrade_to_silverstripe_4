@@ -14,7 +14,7 @@ class MetaUpgrader {
         return self::$_singleton();
     }
 
-    protected $nameOfTempBranch = 'upgradeto4.1';
+    protected $nameOfTempBranch = 'temp-upgradeto4-branch';
 
     public function setNameOfTempBranch($s)
     {

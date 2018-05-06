@@ -1,4 +1,4 @@
-This module aims to help developers upgrade SS3 modules to SS4 without doing any manual rewriting. You can provide a list of modules and
+This module aims to help developers upgrade SS3 modules to SS4 without doing any manual rewriting. You can provide a list of modules and run the code below.  This will create a branch in your module that is SS4 ready. After inspection you can then merge this into `dev/master` as you see fit.
 
 
 # prerequisites before you start
@@ -46,7 +46,9 @@ $obj = MetaUpgrader::create()
 ```
 run the file to upgrade your modules.
   
-  
+3. inspect your new branch that is SS4 ready and merge it into `dev-master` as you see fit. 
+
+
 # options:
 
 ### temp branch

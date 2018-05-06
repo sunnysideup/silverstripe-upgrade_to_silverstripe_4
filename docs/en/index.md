@@ -6,7 +6,7 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
  - create 3.6 branch so that you can keep adding PATCHes to your SS3 version.
  - create a tag (OPTIONAL)
  - module needs to be listed on packagist
- - composer file needs to follow this pattern (MAY CHANGE IN THE FUTURE):
+ - composer file needs to follow this pattern (installer-name requirement may be dropped in the future)
 
 ```json
 {

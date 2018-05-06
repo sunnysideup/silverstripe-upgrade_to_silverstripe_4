@@ -22,9 +22,10 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 ```
  
 # usage:
-git clone git@github.com:sunnysideup/silverstripe-upgrade_to_silverstripe_4.git in your web root (also see below):
+1. Run in your web root (also see below):
+`git clone git@github.com:sunnysideup/silverstripe-upgrade_to_silverstripe_4.git`
 
-create a new php file in your root dir (or anywhere else you can run it):
+2. Create a new php file (e.g. `index.php`) in your root dir (or anywhere else you can run it):
 
 ```php
 <?php

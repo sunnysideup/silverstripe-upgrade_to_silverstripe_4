@@ -80,7 +80,7 @@ class MetaUpgrader {
         return $this;
     }
 
-    //e.g. '~/.composer/vendor/bin/upgrade-code'
+
     protected $locationOfUpgradeModule = 'upgrade-code';
 
     public function setLocationOfUpgradeModule($s)

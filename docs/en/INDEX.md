@@ -43,6 +43,7 @@ $obj = MetaUpgrader::create()
     ->setRunImmediately(false)
     ->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')
+    ->setIncludeEnvironmentFileUpdate(false)
     ->run();
 ```
 run the file to upgrade your modules.

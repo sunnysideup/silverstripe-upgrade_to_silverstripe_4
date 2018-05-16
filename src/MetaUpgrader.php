@@ -159,6 +159,7 @@ class MetaUpgrader {
 
     function run()
     {
+        die('implement "CHANGE DIRECTORY" method');
         if($this->runImmediately === null) {
             if($this->isCommandLine()) {
                 $this->runImmediately = true;

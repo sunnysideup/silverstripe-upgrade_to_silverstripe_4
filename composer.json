@@ -1,0 +1,22 @@
+{
+    "name": "sunnysideup/upgrade_to_silverstripe_4",
+    "type": "silverstripe-module",
+    "description": "Upgrade modules to silverstripe 4",
+    "keywords": [
+        "Silverstripe-CMS",
+        "CMS",
+        "Silverstripe",
+        "upgrade"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Nicolaas Francken",
+            "email": "modules@sunnysideup.co.nz",
+            "role": "lead developer"
+        }
+    ],
+    "extra": {
+        "installer-name": "upgrade_to_silverstripe_4"
+    }
+}

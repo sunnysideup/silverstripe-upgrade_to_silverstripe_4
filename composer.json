@@ -18,5 +18,9 @@
     ],
     "extra": {
         "installer-name": "upgrade_to_silverstripe_4"
+    },
+    "require": {
+        "silverstripe/framework": "~3.6",
+        "silverstripe/cms": "~3.6"
     }
 }

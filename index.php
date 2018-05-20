@@ -2,7 +2,7 @@
 
 require_once('../silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
-    ->setAboveRootDir('/var/www')
+    ->setAboveWebRootDir('/var/www')
     ->setWebRootDirName('__upgradeto4__')
     ->setVendorName('sunnysideup')
     ->setArrayOfModules(

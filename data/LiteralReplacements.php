@@ -5,5 +5,5 @@
 
 
 $data = [
-    'BSE_PATH' => 'Director::baseFolder()'
+    'BASE_PATH' => 'Director::baseFolder()'
 ];

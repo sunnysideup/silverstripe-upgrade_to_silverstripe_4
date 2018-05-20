@@ -59,11 +59,11 @@ class MetaUpgrader {
     /**
      * @var string
      */
-    protected $rootDir = '/var/www';
+    protected $aboveWebrootDir = '/var/www';
 
-    public function setRootDir($s)
+    public function setAboveWebrootDir($s)
     {
-        $this->rootDir = $s;
+        $this->aboveWebrootDir = $s;
 
         return $this;
     }
@@ -71,11 +71,11 @@ class MetaUpgrader {
     /**
      * @var string
      */
-    protected $upgradeDirName = 'upgradeto4';
+    protected $webrootDirName = 'upgradeto4';
 
-    public function setUpgradeDirName($s)
+    public function setWebrootDirName($s)
     {
-        $this->upgradeDirName = $s;
+        $this->webrootDirName = $s;
 
         return $this;
 
@@ -147,11 +147,40 @@ class MetaUpgrader {
         return $this;
     }
 
-    protected $upgradeDir = '';
+    /**
+     * @var bool
+     */
+    protected $includeReorganiseTask = false;
+
+    public function setIncludeReorganiseTask($b)
+    {
+        $this->includeReorganiseTask = $b;
+
+        return $this;
+    }
+
+    /**
+     * @var bool
+     */
+    protected $includeWebrootUpdateTask = false;
+
+    public function setIncludeWebrootUpdateTask($b)
+    {
+        $this->includeWebrootUpdateTask = $b;
+
+        return $this;
+    }
+
+
+    protected $webrootDir = '';
+
+    protected $moduleDir = '';
+
+    protected $codeDir = '';
+
+    protected $currentDir = '';
 
     protected $moduleName = '';
-
-    protected $moduleFolder = '';
 
     protected $vendorNameSpace = '';
 
@@ -169,35 +198,37 @@ class MetaUpgrader {
         }
         $this->startOutput();
         $this->execMe(
-            false,
+            $this->aboveWebrootDir,
             'echo "===================== START ======================"',
-            ' show that the task is starting'
+            'show that the task is starting',
+            false,
         );
-        $this->upgradeDir = $this->rootDir.'/'.$this->upgradeDirName;
+        $this->webrootDir = $this->aboveWebrootDir.'/'.$this->webrootDirName;
         $this->vendorNameSpace = $this->camelCase($this->vendorName);
         if(! $this->vendorNameSpace) {
             user_error('ERROR IN VENDOR NAME SPACE', E_USER_ERROR);
             die('------------');
         }
-        foreach($this->arrayOfModules as $moduleFolderName) {
-            $this->moduleName = $moduleFolderName;
-            $this->moduleFolder = $this->upgradeDir . '/' . $moduleFolderName;
-            $this->moduleNameSpace = $this->camelCase($moduleFolderName);
+        foreach($this->arrayOfModules as $moduleDirName) {
+            $this->moduleName = $moduleDirName;
+            $this->moduleDir = $this->webrootDir . '/' . $moduleDirName;
+            $this->moduleNameSpace = $this->camelCase($moduleDirName);
             if(! $this->moduleNameSpace) {
                 user_error('ERROR IN VENDOR NAME SPACE', E_USER_ERROR);
                 die('------------');
             }
             $this->execMe(
+                $this->aboveWebrootDir,
+                'echo "______ '.$this->moduleName.' in '.$this->moduleDir . '_____ "',
+                'starting new module: '.$this->moduleName.' in '.$this->moduleDir,
                 false,
-                'echo "______ '.$this->moduleName.' in '.$this->moduleFolder . '_____ "',
-                'starting new module: '.$this->moduleName.' in '.$this->moduleFolder
             );
 
             ######## #########
             ######## RESET
             ######## #########
 
-            $this->runResetUpgradeDir();
+            $this->runResetwebrootDir();
 
             $this->runAddUpgradeBranch();
 
@@ -211,7 +242,7 @@ class MetaUpgrader {
             ######## RESET
             ######## #########
 
-            $this->runResetUpgradeDir();
+            $this->runResetwebrootDir();
 
             ######## #########
             ######## RESET
@@ -225,9 +256,10 @@ class MetaUpgrader {
 
         }
         $this->execMe(
-            false,
+            $this->aboveWebrootDir,
             'echo "===================== END ======================"',
-            'show that we are finished'
+            'show that we are finished',
+            false
         );
         $this->endOutput();
     }
@@ -237,27 +269,24 @@ class MetaUpgrader {
      * the upgrade dir is NOT the module dir
      * it is the parent dir in which everything takes place
      */
-    protected function runResetUpgradeDir()
+    protected function runResetwebrootDir()
     {
-        $this->startSequence('runResetUpgradeDir');
+        $this->startSequence('runResetwebrootDir');
 
-        $this->rootDir = $this->checkIfPathExistsAndCleanItUp($this->rootDir);
+        $this->aboveWebrootDir = $this->checkIfPathExistsAndCleanItUp($this->aboveWebrootDir);
+
         $this->execMe(
-            false,
-            'cd '.$this->rootDir,
-            'change back to the root directory: '.$this->rootDir
+            $this->aboveWebrootDir,
+            'rm '.$this->webrootDir. ' -rf',
+            'remove the upgrade dir: '.$this->webrootDir,
+            false
         );
 
         $this->execMe(
-            false,
-            'rm '.$this->upgradeDir. ' -rf',
-            'remove the upgrade dir: '.$this->upgradeDir
-        );
-
-        $this->execMe(
-            false,
-            'mkdir '.$this->upgradeDir. '',
-            'create upgrade directory: '.$this->upgradeDir
+            $this->aboveWebrootDir,
+            'mkdir '.$this->webrootDir. '',
+            'create upgrade directory: '.$this->webrootDir,
+            false
         );
     }
 
@@ -266,42 +295,36 @@ class MetaUpgrader {
     {
         $this->startSequence('runAddUpgradeBranch');
 
-        $this->upgradeDir = $this->checkIfPathExistsAndCleanItUp($this->upgradeDir);
-        $this->execMe(
-            false,
-            'cd '.$this->upgradeDir,
-            'move into the upgrade directory: '.$this->upgradeDir.' to start working in it'
-        );
+        $this->webrootDir = $this->checkIfPathExistsAndCleanItUp($this->webrootDir);
 
         $this->execMe(
-            false,
+            $this->webrootDir,
             'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-master',
-            'checkout dev-master of '.$this->vendorName.'/'.$this->moduleName
+            'checkout dev-master of '.$this->vendorName.'/'.$this->moduleName,
+            false
         );
 
-        $this->moduleFolder = $this->checkIfPathExistsAndCleanItUp($this->moduleFolder);
-        $this->execMe(
-            false,
-            'cd '.$this->moduleFolder,
-            'change to dir of actual module: '.$this->moduleFolder
-        );
+        $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
 
         $this->execMe(
-            false,
+            $this->moduleDir,
             'git branch -d '.$this->nameOfTempBranch,
-            'delete upgrade branch locally: '.$this->nameOfTempBranch
+            'delete upgrade branch locally: '.$this->nameOfTempBranch,
+            false
         );
 
         $this->execMe(
-            false,
+            $this->moduleDir,
             'git push origin --delete '.$this->nameOfTempBranch,
-            'delete upgrade branch remotely: '.$this->nameOfTempBranch
+            'delete upgrade branch remotely: '.$this->nameOfTempBranch,
+            false
         );
 
         $this->execMe(
-            false,
+            $this->moduleDir,
             'git checkout -b '.$this->nameOfTempBranch,
-            'create and checkout new branch: '.$this->nameOfTempBranch
+            'create and checkout new branch: '.$this->nameOfTempBranch,
+            false
         );
     }
 
@@ -310,29 +333,27 @@ class MetaUpgrader {
     {
         $this->startSequence('runCommitAndPush');
 
-        $this->moduleFolder = $this->checkIfPathExistsAndCleanItUp($this->moduleFolder);
-        $this->execMe(
-            false,
-            'cd '.$this->moduleFolder,
-            'change to dir of actual module: '.$this->moduleFolder
-        );
+        $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
 
         $this->execMe(
-            false,
+            $this->moduleDir,
             'git add . -A',
-            'git add all'
+            'git add all',
+            false
         );
 
         $this->execMe(
-            false,
+            $this->moduleDir,
             'git commit . -m "'.$message.'"',
-            'commit changes in composer.json'
+            'commit changes in composer.json',
+            false
         );
 
         $this->execMe(
-            false,
+            $this->moduleDir,
             'git push origin '.$this->nameOfTempBranch,
-            'pushing changes to server on the '.$this->nameOfTempBranch.' branch'
+            'pushing changes to origin on the '.$this->nameOfTempBranch.' branch',
+            false
         );
     }
 
@@ -341,22 +362,21 @@ class MetaUpgrader {
     {
         $this->startSequence('runUpdateComposerRequirements');
 
-        $location = $this->moduleFolder.'/composer.json';
+        $location = $this->moduleDir.'/composer.json';
 
         $this->execMe(
-            false,
-
+            $this->moduleDir,
             'php -r  \''
-            .'$jsonString = file_get_contents("'.$location.'"); '
-            .'$data = json_decode($jsonString, true); '
-            .'if(isset($data["require"]["'.$module.'"])) { '
-            .'    $data["require"]["'.$module.'"] = "'.$newVersion.'"; '
-            .'}'
-            .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT); '
-            .'file_put_contents("'.$location.'", $newJsonString); '
-            .'\'',
-
-            'replace in '.$location.' the require for '.$module.' with '.$newVersion
+                .'$jsonString = file_get_contents("'.$location.'"); '
+                .'$data = json_decode($jsonString, true); '
+                .'if(isset($data["require"]["'.$module.'"])) { '
+                .'    $data["require"]["'.$module.'"] = "'.$newVersion.'"; '
+                .'}'
+                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT); '
+                .'file_put_contents("'.$location.'", $newJsonString); '
+                .'\'',
+            'replace in '.$location.' the require for '.$module.' with '.$newVersion,
+            false
         );
     }
 
@@ -365,43 +385,34 @@ class MetaUpgrader {
         $this->startSequence('runComposerInstallProject');
 
         $this->execMe(
-            false,
-            'cd '.$this->rootDir,
-            'move into the upgrade directory: '.$this->rootDir.' to start working in it'
+            $this->aboveWebrootDir,
+            $this->composerEnvironmentVars.' composer create-project silverstripe/installer '.$this->webrootDir.' ^4',
+            'set up vanilla install of 4.0+ in: '.$this->webrootDir,
+            false
         );
 
-        $this->execMe(
-            false,
-            $this->composerEnvironmentVars.' composer create-project silverstripe/installer '.$this->upgradeDir.' ^4',
-            'set up vanilla install of 4.0+ in: '.$this->upgradeDir
-        );
-
-
-        $this->upgradeDir = $this->checkIfPathExistsAndCleanItUp($this->upgradeDir);
-        $this->execMe(
-            false,
-            'cd '.$this->upgradeDir,
-            'move into the upgrade directory: '.$this->upgradeDir.' to start working in it'
-        );
-
+        $this->webrootDir = $this->checkIfPathExistsAndCleanItUp($this->webrootDir);
 
         $this->execMe(
-            false,
+            $this->webrootDir,
             'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' ', //--prefer-source --keep-vcs
-            'add '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' to install'
+            'add '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' to install',
+            false
         );
 
-        $this->moduleFolder = $this->checkIfPathExistsAndCleanItUp($this->moduleFolder);
+        $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
         $this->execMe(
-            false,
-            'rm '.$this->moduleFolder.' -rf',
-            'we will remove the item again: '.$this->moduleFolder.' so that we can reinstall with vcs data.'
+            $this->webrootDir,
+            'rm '.$this->moduleDir.' -rf',
+            'we will remove the item again: '.$this->moduleDir.' so that we can reinstall with vcs data.',
+            false
         );
 
         $this->execMe(
-            false,
+            $this->webrootDir,
             'composer update',
-            'lets retrieve the module again to make sure we have the vcs data with it!'
+            'lets retrieve the module again to make sure we have the vcs data with it!',
+            false
         );
     }
 
@@ -412,15 +423,10 @@ class MetaUpgrader {
             $this->startSequence('runChangeEnvironmentFile');
 
             $this->execMe(
-                false,
-                'cd '.$this->upgradeDir,
-                'move into the upgrade directory: '.$this->upgradeDir.' to start working in it'
-            );
-
-            $this->execMe(
-                false,
-                'php upgrade-code environment --root-dir='.$this->upgradeDir.' --write -vvv',
-                'lets retrieve the module again to make sure we have the vcs data with it!'
+                $this->webrootDir,
+                'php upgrade-code environment --root-dir='.$this->webrootDir.' --write -vvv',
+                'lets retrieve the module again to make sure we have the vcs data with it!',
+                false
             );
         }
 
@@ -428,12 +434,12 @@ class MetaUpgrader {
     protected function runAddNameSpace()
     {
         if($this->runImmediately) {
-            if(file_exists($this->moduleFolder . '/code')) {
-                $codeDir = $this->moduleFolder . '/code';
-            } elseif(file_exists($codeDir = $this->moduleFolder . '/src')) {
-                $codeDir = $this->moduleFolder . '/src';
+            if(file_exists($this->moduleDir . '/code')) {
+                $codeDir = $this->moduleDir . '/code';
+            } elseif(file_exists($codeDir = $this->moduleDir . '/src')) {
+                $codeDir = $this->moduleDir . '/src';
             } else {
-                user_error('Can not find code dir for '.$this->moduleFolder, E_USER_NOTICE);
+                user_error('Can not find code dir for '.$this->moduleDir, E_USER_NOTICE);
                 return;
             }
 
@@ -461,8 +467,8 @@ class MetaUpgrader {
             }
         } else {
             //@todo: we assume 'code' for now ...
-            $codeDir1 = $this->moduleFolder . '/code';
-            $codeDir2 = $this->moduleFolder . '/src';
+            $codeDir1 = $this->moduleDir . '/code';
+            $codeDir2 = $this->moduleDir . '/src';
             foreach([$codeDir1, $codeDir2] as $codeDir) {
                 $this->execMe(
                     false,
@@ -490,8 +496,11 @@ class MetaUpgrader {
 
 
 
-    protected function execMe($alwaysRun, $line, $comment)
+    protected function execMe($command, $comment, $newDir = '', $alwaysRun = false)
     {
+        if($newDir) {
+            $this->currentDir = $newDir;
+        }
         echo $this->newLine();
         echo $this->newLine();
         if ($this->isHTML()) {
@@ -505,9 +514,9 @@ class MetaUpgrader {
             echo '# '.$comment;
             echo $this->newLine();
         }
-        echo $line;
+        echo $command;
         if($this->runImmediately || $alwaysRun) {
-            $outcome = exec($line.'  2>&1 ', $error, $return);
+            $outcome = exec($command.'  2>&1 ', $error, $return);
             if($return) {
                 print_r($error);
                 $this->endOutput();

@@ -325,16 +325,8 @@ class MetaUpgrader
 
         $this->execMe(
             $this->moduleDir,
-            'if git show-ref --quiet refs/heads/'.$this->nameOfTempBranch.'; then git branch -d '.$this->nameOfTempBranch.'; fi',
-            'delete upgrade branch locally: '.$this->nameOfTempBranch,
-            false
-        );
-
-        //git rev-parse --verify --quiet branch_name
-        $this->execMe(
-            $this->moduleDir,
-            'if git ls-remote --heads 2>/dev/null|awk -F \'refs/heads/\' \'{print $2}\'|grep -x "'.$this->nameOfTempBranch.'"|wc -l; then git push origin --delete '.$this->nameOfTempBranch.'; fi',
-            'delete upgrade branch remotely: '.$this->nameOfTempBranch,
+            'if git show-ref --quiet refs/heads/'.$this->nameOfTempBranch.'; then git branch -d '.$this->nameOfTempBranch.'; git push origin --delete '.$this->nameOfTempBranch.'; fi',
+            'delete upgrade branch ('.$this->nameOfTempBranch.') locally and remotely:',
             false
         );
 

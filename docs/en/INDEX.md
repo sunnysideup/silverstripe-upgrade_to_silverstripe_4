@@ -53,9 +53,9 @@ It then commits and pushes the results for inspection.
 <?php
 require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
-    ->setRunImmediately(false)
+    ->setRunImmediately(true)
     ->setRootDir('/var/www')
-    ->setUpgradeDirName('upgradeto4')
+    ->setUpgradeDirName('__upgradeto4__')
     ->setVendorName('sunnysideup')
     ->setArrayOfModules(
       [
@@ -66,8 +66,8 @@ $obj = MetaUpgrader::create()
     ->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')
     ->setIncludeEnvironmentFileUpdate(false)
-    ->setIncludeReorganiseTask(false)
-    ->setIncludeWebrootUpdateTask(false)
+    ->setIncludeReorganiseTask(true)
+    ->setIncludeWebrootUpdateTask(true)
     ->run();
 ```
 run the file to upgrade your modules - e.g.

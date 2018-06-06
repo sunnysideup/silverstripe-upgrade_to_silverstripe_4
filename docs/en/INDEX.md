@@ -54,8 +54,8 @@ It then commits and pushes the results for inspection.
 require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
     ->setRunImmediately(true)
-    ->setRootDir('/var/www')
-    ->setUpgradeDirName('__upgradeto4__')
+    ->setAboveWebRootDir('/var/www')
+    ->setWebrootDirName('__upgradeto4__')
     ->setVendorName('sunnysideup')
     ->setArrayOfModules(
       [

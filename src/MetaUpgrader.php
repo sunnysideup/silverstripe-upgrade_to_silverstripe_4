@@ -71,7 +71,7 @@ class MetaUpgrader
     protected $webrootDirName = 'upgradeto4';
 
     public function setWebrootDirName($s)
-    {        $this->runSilverstripeUpgradeTask('');
+    {
         $this->webrootDirName = $s;
 
         return $this;
@@ -572,6 +572,7 @@ class MetaUpgrader
         if ($this->runImmediately || $alwaysRun) {
             $outcome = exec($command.'  2>&1 ', $error, $return);
             if ($return) {
+                echo PHP_EOL.PHP_EOL.PHP_EOL;
                 print_r($error);
                 $this->endOutput();
                 die('------ STOPPED -----');
@@ -664,6 +665,8 @@ class MetaUpgrader
             ';
             ob_flush();
             flush();
+        } else {
+            echo PHP_EOL;
         }
     }
 

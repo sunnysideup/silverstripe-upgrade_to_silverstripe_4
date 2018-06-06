@@ -2,10 +2,6 @@
 
 /**
  * recompose (Mandatory, stop execution on failure)
-upgrade (Mandatory, stop execution on failure)
-inspect (Mandatory, stop execution on failure)
-reorganise (Optional)
-webroot (Optional)
  */
 
 class MetaUpgrader
@@ -75,7 +71,7 @@ class MetaUpgrader
     protected $webrootDirName = 'upgradeto4';
 
     public function setWebrootDirName($s)
-    {
+    {        $this->runSilverstripeUpgradeTask('');
         $this->webrootDirName = $s;
 
         return $this;
@@ -235,7 +231,10 @@ class MetaUpgrader
 
             $this->runUpdateComposerRequirements('silverstripe/cms', '~4.0');
 
+            $this->runRecompose('MAJOR: upgrading composer requirements to SS4');
+
             $this->runCommitAndPush('MAJOR: upgrading composer requirements to SS4');
+
 
             ######## #########
             ######## RESET
@@ -249,9 +248,29 @@ class MetaUpgrader
 
             $this->runComposerInstallProject();
 
-            $this->runChangeEnvironmentFile();
+            $this->runChangeEnvironment();
+
+            $this->runCommitAndPush('MAJOR: changing environment file(s)');
 
             $this->runAddNameSpace();
+
+            $this->runCommitAndPush('MAJOR: adding namespaces');
+
+            $this->runUpgrade();
+
+            $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 1');
+
+            $this->runInspectAPIChanges();
+
+            $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 2');
+
+            $this->runReorganise();
+
+            $this->runCommitAndPush('MAJOR: re-organising files');
+
+            $this->runWebrootUpdate();
+
+            $this->runCommitAndPush('MAJOR: adding webroot concept');
         }
         $this->execMe(
             $this->aboveWebRootDir,
@@ -378,6 +397,13 @@ class MetaUpgrader
         );
     }
 
+
+    protected function runRecompose()
+    {
+        $this->startSequence('runRecompose');
+        $this->runSilverstripeUpgradeTask('recompose');
+    }
+
     protected function runComposerInstallProject()
     {
         $this->startSequence('runComposerInstallProject');
@@ -414,21 +440,18 @@ class MetaUpgrader
         );
     }
 
-    protected function runChangeEnvironmentFile()
+    protected function runChangeEnvironment()
     {
+        $this->startSequence('runChangeEnvironment');
         if ($this->includeEnvironmentFileUpdate) {
-            $this->startSequence('runChangeEnvironmentFile');
-
-            $this->execMe(
-                $this->webrootDir,
-                'php upgrade-code environment --root-dir='.$this->webrootDir.' --write -vvv',
-                'lets retrieve the module again to make sure we have the vcs data with it!',
-                false
-            );
+            $this->runSilverstripeUpgradeTask('environment');
         }
     }
+
+
     protected function runAddNameSpace()
     {
+        $this->startSequence('runAddNameSpace');
         if ($this->runImmediately) {
             if (file_exists($this->moduleDir . '/code')) {
                 $codeDir = $this->moduleDir . '/code';
@@ -483,15 +506,47 @@ class MetaUpgrader
     }
 
 
+    protected function runUpgrade()
+    {
+        $this->startSequence('runUpgrade');
+        $this->runSilverstripeUpgradeTask('upgrade');
+    }
 
 
 
+    protected function runInspectAPIChanges()
+    {
+        $this->startSequence('runInspectAPIChanges');
+        $this->runSilverstripeUpgradeTask('inspect');
+    }
+
+    protected function runReorganise()
+    {
+        $this->startSequence('runReorganise');
+        if ($this->includeReorganiseTask) {
+            $this->runSilverstripeUpgradeTask('reorganise');
+        }
+    }
+
+    protected function runWebrootUpdate()
+    {
+        $this->startSequence('runUpdateWebRoot');
+        if ($this->includeWebrootUpdateTask) {
+            $this->runSilverstripeUpgradeTask('webroot');
+        }
+    }
 
 
 
-
-
-
+    protected function runSilverstripeUpgradeTask($task)
+    {
+        $this->execMe(
+            $this->webrootDir,
+            'php '.$this->locationOfUpgradeModule.' '.$task.' --root-dir='.$this->webrootDir.' --write -vvv',
+            'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
+            false
+        );
+    }
 
     protected function execMe($newDir, $command, $comment, $alwaysRun = false)
     {

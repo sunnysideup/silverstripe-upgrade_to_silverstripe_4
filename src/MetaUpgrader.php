@@ -78,19 +78,6 @@ class MetaUpgrader
         return $this;
     }
 
-    /**
-     * vendor name as set in packagist
-     * @var string
-     */
-    protected $vendorName = '';
-
-    public function setVendorName($s)
-    {
-        $this->vendorName = $s;
-
-        return $this;
-    }
-
 
     /**
      * @var string
@@ -118,7 +105,23 @@ class MetaUpgrader
 
     /**
      * specified like this:
-     *     "VendorName/PackageName" => GitRepositoryLink
+     *      [
+     *          'VendorName' => 'A',
+     *          'VendorNamespace' => 'A',
+     *          'PackageName' => 'Package1',
+     *          'PackageNamespace' => 'Package1',
+     *          'GitLink' => 'git@github.com:foor/bar-1.git',
+     *          'UpgradeAsFork' => false
+     *      ],
+     *      [
+     *          'VendorName' => 'A',
+     *          'VendorNamespace' => 'A',
+     *          'PackageName' => 'Package2',
+     *          'PackageNameSpace' => 'Package2',
+     *          'GitLink' => 'git@github.com:foor/bar-2.git',
+     *          'UpgradeAsFork' => false
+     *      ],
+     *
      * @var array
      */
     protected $arrayOfModules = [];
@@ -126,6 +129,13 @@ class MetaUpgrader
     public function setArrayOfModules($a)
     {
         $this->arrayOfModules = $a;
+
+        return $this;
+    }
+
+    public function addModule($a)
+    {
+        $this->arrayOfModules[] = $a;
 
         return $this;
     }
@@ -211,21 +221,23 @@ class MetaUpgrader
     }
 
 
+    protected $lastMethod = false;
+
     protected $webrootDir = '';
 
     protected $moduleDir = '';
 
-    protected $codeDir = '';
+    protected $vendorName = '';
 
-    protected $currentDir = '';
+    protected $vendorNamespace = '';
 
-    protected $moduleName = '';
+    protected $packageName = '';
 
-    protected $vendorNameSpace = '';
+    protected $packageNamespace = '';
 
-    protected $moduleNameSpace = '';
+    protected $gitLink = '';
 
-    protected $lastMethod = false;
+    protected $upgradeAsFork = '';
 
     public function run()
     {
@@ -244,25 +256,37 @@ class MetaUpgrader
             false
         );
         $this->webrootDir = $this->aboveWebRootDir.'/'.$this->webrootDirName;
-        $this->vendorNameSpace = $this->camelCase($this->vendorName);
-        if (! $this->vendorNameSpace) {
-            user_error('ERROR IN VENDOR NAME SPACE', E_USER_ERROR);
-            die('------------');
-        }
-        foreach ($this->arrayOfModules as $moduleDirName) {
-            $this->moduleName = $moduleDirName;
-            $this->moduleDir = $this->webrootDir . '/' . $moduleDirName;
-            $this->moduleNameSpace = $this->camelCase($moduleDirName);
-            if (! $this->moduleNameSpace) {
-                user_error('ERROR IN VENDOR NAME SPACE', E_USER_ERROR);
-                die('------------');
+        foreach ($this->arrayOfModules as $counter => $moduleDetails) {
+            $this->vendorName = $moduleDetails['VendorName'];
+            if(isset($moduleDetails['VendorNamespace'])) {
+                $this->vendorNamespace = $moduleDetails['VendorNamespace'];
+            } else {
+                $this->vendorNamespace = $this->camelCase($this->vendorName);
             }
-            $this->execMe(
-                $this->aboveWebRootDir,
-                'echo "______ '.$this->moduleName.' in '.$this->moduleDir . '_____ "',
-                'starting new module: '.$this->moduleName.' in '.$this->moduleDir,
-                false
-            );
+            $this->packageName = $moduleDetails['PackageName'];
+            if(isset($moduleDetails['PackageNamespace'])) {
+                $this->packageNamespace = $moduleDetails['PackageNamespace'];
+            } else {
+                $this->packageNamespace = $this->camelCase($this->packageName);
+            }
+            $this->moduleDir = $this->webrootDir . '/' . $moduleDirName;
+            if(isset($moduleDetails['GitLink'])) {
+                $this->gitLink = $moduleDetails['GitLink'];
+            } else {
+                $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName;
+            }
+            $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
+            $this->colourPrint('---------------------', 'light_grey');
+            $this->colourPrint('UPGRADE DETAILS', 'light_grey');
+            $this->colourPrint('---------------------', 'light_grey');
+            $this->colourPrint('Vendor Name: '.$this->vendorName, 'light_grey');
+            $this->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_grey');
+            $this->colourPrint('Package Name: '.$this->packageName, 'light_grey');
+            $this->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_grey');
+            $this->colourPrint('Module Dir: '.$this->moduleDir, 'light_grey');
+            $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_grey');
+            $this->colourPrint('Upgrade as Fork: '.$this->upgradeAsFork ? 'yes' : 'no', 'light_grey');
+            $this->colourPrint('---------------------', 'light_grey');
 
             ######## #########
             ######## RESET
@@ -270,13 +294,15 @@ class MetaUpgrader
 
             $this->runResetWebRootDir();
 
+            ######## #########
+            ######## CHANGE COMPOSER FILE
+            ######## #########
+
             $this->runAddUpgradeBranch();
 
             $this->runUpdateComposerRequirements('silverstripe/framework', '~4.0');
 
             $this->runUpdateComposerRequirements('silverstripe/cms', '~4.0');
-
-            $this->runCommitAndPush('MAJOR: upgrading composer requirements to SS4 - STEP 1');
 
             $this->runRecompose('MAJOR: upgrading composer requirements to SS4');
 
@@ -288,16 +314,16 @@ class MetaUpgrader
             $this->runResetWebRootDir();
 
             ######## #########
-            ######## RESET
+            ######## UPGRADE
             ######## #########
 
             $this->runComposerInstallProject();
 
             $this->runChangeEnvironment();
 
-            $this->upperCaseFolderNamesForPSR4();
+            $this->runUpperCaseFolderNamesForPSR4();
 
-            $this->runAddNameSpace();
+            $this->runAddNamespace();
 
             $this->runUpgrade();
 
@@ -350,8 +376,8 @@ class MetaUpgrader
 
             $this->execMe(
                 $this->webrootDir,
-                'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-master',
-                'checkout dev-master of '.$this->vendorName.'/'.$this->moduleName,
+                'composer require '.$this->vendorName.'/'.$this->packageName.':dev-master',
+                'checkout dev-master of '.$this->vendorName.'/'.$this->packageName,
                 false
             );
 
@@ -380,36 +406,6 @@ class MetaUpgrader
         }
     }
 
-
-    protected function runCommitAndPush($message)
-    {
-        if ($this->startMethod('runCommitAndPush')) {
-            $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
-
-            $this->execMe(
-                $this->moduleDir,
-                'git add . -A',
-                'git add all',
-                false
-            );
-
-            $this->execMe(
-                $this->moduleDir,
-                'git commit . -m "'.$message.'"',
-                'commit changes in composer.json',
-                false
-            );
-
-            $this->execMe(
-                $this->moduleDir,
-                'git push origin '.$this->nameOfTempBranch,
-                'pushing changes to origin on the '.$this->nameOfTempBranch.' branch',
-                false
-            );
-        }
-    }
-
-
     protected function runUpdateComposerRequirements($module, $newVersion)
     {
         if ($this->startMethod('runUpdateComposerRequirements')) {
@@ -429,6 +425,7 @@ class MetaUpgrader
                 'replace in '.$location.' the require for '.$module.' with '.$newVersion,
                 false
             );
+            $this->commitAndPush('MAJOR: upgrading composer requirements to SS4 - updating core requirements');
         }
     }
 
@@ -437,7 +434,7 @@ class MetaUpgrader
     {
         if ($this->startMethod('runRecompose')) {
             $this->runSilverstripeUpgradeTask('recompose', $this->moduleDir);
-            $this->runCommitAndPush('MAJOR: upgrading composer requirements to SS4 - STEP 2');
+            $this->commitAndPush('MAJOR: upgrading composer requirements to SS4 - STEP 2');
         }
     }
 
@@ -447,7 +444,7 @@ class MetaUpgrader
             $this->execMe(
                 $this->aboveWebRootDir,
                 $this->composerEnvironmentVars.' composer create-project silverstripe/installer '.$this->webrootDir.' ^4',
-                'set up vanilla install of 4.0+ in: '.$this->webrootDir,
+                'set up vanilla SS4 install',
                 false
             );
 
@@ -455,25 +452,33 @@ class MetaUpgrader
 
             $this->execMe(
                 $this->webrootDir,
-                'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' --prefer-source', //--prefer-source --keep-vcs
-                'add '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' to install',
+                'git clone '.$this->gitLink.' '.$this->moduleDir,
+                'cloning module - we clone to keep all vcs data (composer does not allow this for branch)',
                 false
             );
 
-            $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
-            $this->execMe(
-                $this->webrootDir,
-                'rm '.$this->moduleDir.' -rf',
-                'we will remove the item again: '.$this->moduleDir.' so that we can reinstall with vcs data.',
-                false
-            );
-
-            $this->execMe(
-                $this->webrootDir,
-                'composer update --prefer-source',
-                'lets retrieve the module again to make sure we have the vcs data with it!',
-                false
-            );
+            //
+            // $this->execMe(
+            //     $this->webrootDir,
+            //     'composer require '.$this->vendorName.'/'.$this->packageName.':dev-'.$this->nameOfTempBranch.' --prefer-source', //--prefer-source --keep-vcs
+            //     'add '.$this->vendorName.'/'.$this->packageName.':dev-'.$this->nameOfTempBranch.' to install',
+            //     false
+            // );
+            //
+            // $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
+            // $this->execMe(
+            //     $this->webrootDir,
+            //     'rm '.$this->moduleDir.' -rf',
+            //     'we will remove the item again: '.$this->moduleDir.' so that we can reinstall with vcs data.',
+            //     false
+            // );
+            //
+            // $this->execMe(
+            //     $this->webrootDir,
+            //     'composer update --prefer-source',
+            //     'lets retrieve the module again to make sure we have the vcs data with it!',
+            //     false
+            // );
         }
     }
 
@@ -482,15 +487,15 @@ class MetaUpgrader
         if ($this->startMethod('runChangeEnvironment')) {
             if ($this->includeEnvironmentFileUpdate) {
                 $this->runSilverstripeUpgradeTask('environment');
-                $this->runCommitAndPush('MAJOR: changing environment file(s)');
+                $this->commitAndPush('MAJOR: changing environment file(s)');
             }
         }
     }
 
 
-    protected function upperCaseFolderNamesForPSR4()
+    protected function runUpperCaseFolderNamesForPSR4()
     {
-        if ($this->startMethod('upperCaseFolderNamesForPSR4')) {
+        if ($this->startMethod('runUpperCaseFolderNamesForPSR4')) {
             if ($this->runImmediately) {
                 $codeDir = $this->findCodeDir();
                 $di = new RecursiveIteratorIterator(
@@ -514,9 +519,9 @@ class MetaUpgrader
         }
     }
 
-    protected function runAddNameSpace()
+    protected function runAddNamespace()
     {
-        if ($this->startMethod('runAddNameSpace')) {
+        if ($this->startMethod('runAddNamespace')) {
             if ($this->runImmediately) {
                 $codeDir = $this->findCodeDir();
 
@@ -530,7 +535,7 @@ class MetaUpgrader
                             $nameSpaceAppendix = str_replace($codeDir, '', $dirName);
                             $nameSpaceAppendix = trim($nameSpaceAppendix, '/');
                             $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
-                            $nameSpace = $this->vendorNameSpace.'\\'.$this->moduleNameSpace.'\\'.$nameSpaceAppendix;
+                            $nameSpace = $this->vendorNamespace.'\\'.$this->packageNamespace.'\\'.$nameSpaceAppendix;
                             $nameSpaceArray = explode('\\', $nameSpace);
                             $nameSpaceArrayNew = [];
                             foreach ($nameSpaceArray as $nameSpaceSnippet) {
@@ -558,7 +563,7 @@ class MetaUpgrader
                         'find '.$codeDir.' -mindepth 1 -maxdepth 2 -type d -exec '.
                             'sh -c '.
                                 '\'dir=${1##*/}; '.
-                                'php '.$this->locationOfUpgradeModule.' add-namespace "'.$this->vendorNameSpace.'\\'.$this->moduleNameSpace.'\\$dir" "$dir" --write -r -vvv'.
+                                'php '.$this->locationOfUpgradeModule.' add-namespace "'.$this->vendorNamespace.'\\'.$this->packageNamespace.'\\$dir" "$dir" --write -r -vvv'.
                             '\' _ {} '.
                         '\;',
                         'adding name spaces',
@@ -566,7 +571,7 @@ class MetaUpgrader
                     );
                 }
             }
-            $this->runCommitAndPush('MAJOR: adding namespaces');
+            $this->commitAndPush('MAJOR: adding namespaces');
         }
     }
 
@@ -576,7 +581,7 @@ class MetaUpgrader
         if ($this->startMethod('runUpgrade')) {
             $codeDir = $this->findCodeDir();
             $this->runSilverstripeUpgradeTask('upgrade', $this->webrootDir, $codeDir);
-            $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 1 (upgrade)');
+            $this->commitAndPush('MAJOR: core upgrade to SS4 - STEP 1 (upgrade)');
         }
     }
 
@@ -587,7 +592,7 @@ class MetaUpgrader
         if ($this->startMethod('runInspectAPIChanges')) {
             $codeDir = $this->findCodeDir();
             $this->runSilverstripeUpgradeTask('inspect', $this->webrootDir, $codeDir);
-            $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 2 (inspect)');
+            $this->commitAndPush('MAJOR: core upgrade to SS4 - STEP 2 (inspect)');
         }
     }
 
@@ -596,7 +601,7 @@ class MetaUpgrader
         if ($this->startMethod('runReorganise')) {
             if ($this->includeReorganiseTask) {
                 $this->runSilverstripeUpgradeTask('reorganise');
-                $this->runCommitAndPush('MAJOR: re-organising files');
+                $this->commitAndPush('MAJOR: re-organising files');
             }
         }
     }
@@ -606,7 +611,7 @@ class MetaUpgrader
         if ($this->startMethod('runUpdateWebRoot')) {
             if ($this->includeWebrootUpdateTask) {
                 $this->runSilverstripeUpgradeTask('webroot');
-                $this->runCommitAndPush('MAJOR: adding webroot concept');
+                $this->commitAndPush('MAJOR: adding webroot concept');
             }
         }
     }
@@ -615,6 +620,34 @@ class MetaUpgrader
     ##############################################################################
     ##############################################################################
     ##############################################################################
+
+    protected function commitAndPush($message)
+    {
+        if ($this->startMethod('commitAndPush')) {
+            $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
+
+            $this->execMe(
+                $this->moduleDir,
+                'git add . -A',
+                'git add all',
+                false
+            );
+
+            $this->execMe(
+                $this->moduleDir,
+                'git commit . -m "'.$message.'"',
+                'commit changes: '.$message,
+                false
+            );
+
+            $this->execMe(
+                $this->moduleDir,
+                'git push origin '.$this->nameOfTempBranch,
+                'pushing changes to origin on the '.$this->nameOfTempBranch.' branch',
+                false
+            );
+        }
+    }
 
     protected function runSilverstripeUpgradeTask($task, $rootDir = '', $param1 = '', $param2 = '', $settings = '')
     {
@@ -631,11 +664,11 @@ class MetaUpgrader
 
     protected function execMe($newDir, $command, $comment, $alwaysRun = false)
     {
-        $this->currentDir = $this->checkIfPathExistsAndCleanItUp($newDir);
+        $currentDir = $this->checkIfPathExistsAndCleanItUp($newDir);
 
         //we use && here because this means that the second part only runs
         //if the CD works.
-        $command = 'cd '.$this->currentDir.' && '.$command;
+        $command = 'cd '.$currentDir.' && '.$command;
         if ($this->isHTML()) {
             $this->newLine();
             echo '<strong># '.$comment .'</strong><br />';

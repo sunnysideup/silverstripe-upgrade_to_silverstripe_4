@@ -55,10 +55,16 @@ $obj = MetaUpgrader::create()
     ->setRunImmediately(true)
     ->setAboveWebRootDir('/var/www')
     ->setWebrootDirName('__upgradeto4__')
-    ->setVendorName('sunnysideup')
     ->setArrayOfModules(
         [
-            'my-module-name-foo-bar'
+            [
+              'VendorName' => 'sunnysideup',
+              'VendorNameSpace' => 'Sunnysideup',
+              'PackageName' => 'webpack_requirements_backend',
+              'PackageNameSpace' => 'WebpackRequirementsBackend',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git',
+              'UpgradeAsFork' => false
+            ]
         ]
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
@@ -67,8 +73,8 @@ $obj = MetaUpgrader::create()
     ->setIncludeEnvironmentFileUpdate(false)
     ->setIncludeReorganiseTask(false)
     ->setIncludeWebrootUpdateTask(false)
-    ->SetStartFrom('')
-    ->SetEndWith('');
+    ->SetStartFrom('runRecompose')
+    ->SetEndWith('runComposerInstallProject');
 
 $obj->run();
 ```
@@ -80,11 +86,13 @@ The code above is very verbose to show you all the options available. Here is a 
 require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
     ->setAboveWebRootDir('/var/www')
-    ->setVendorName('sunnysideup')
     ->setArrayOfModules(
-      [
-          'my-module-name-foo-bar'
-      ]
+    ->addModule(
+        [
+          'VendorName' => 'sunnysideup',
+          'PackageName' => 'webpack_requirements_backend'
+        ]
+    )
   );
 
 $obj->run();
@@ -101,7 +109,7 @@ $obj->run();
 5. Merge the upgrade branch into `dev-master` as you see fit.
 
 
-# options:
+# config options:
 
 ### run immediately or create bash script?
 
@@ -121,14 +129,10 @@ By default running on command line, it will run immediately and when accessing i
 `->setUpgradeDirName('upgradeto4')`: this is the name of the directory that is created in the root dir where the upgrade takes place. **Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**
 
 
-### vendor name
-
-`->setVendorName('SunnySideUp')`: you can only upgrade modules for one vendor at the time.
-
 
 ### list of modules
 
-`->setArrayOfModules([])`: this is the name as listed on packagist e.g. `sunnysideup/metatags` should be listed as `metatags`.
+`->setArrayOfModules([])`: See index.php for example of format.
 
 
 ### temp branch

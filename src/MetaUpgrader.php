@@ -586,7 +586,7 @@ class MetaUpgrader
     {
         if ($this->startMethod('runInspectAPIChanges')) {
             $codeDir = $this->findCodeDir();
-            $this->runSilverstripeUpgradeTask('upgrade', $this->webrootDir, $codeDir);
+            $this->runSilverstripeUpgradeTask('inspect', $this->webrootDir, $codeDir);
             $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 2 (inspect)');
         }
     }

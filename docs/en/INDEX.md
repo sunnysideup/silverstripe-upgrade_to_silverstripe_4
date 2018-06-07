@@ -3,8 +3,8 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 
 # prerequisites before you start
 
- - install https://github.com/silverstripe/silverstripe-upgrader#install globally: `composer global require silverstripe/upgrader`
- - module needs to be listed on packagist
+ - run composer update on this packjage or install https://github.com/silverstripe/silverstripe-upgrader#install globally: `composer global require silverstripe/upgrader`
+ - module to be upgraded needs to be listed on packagist
  - composer file needs to follow this pattern (installer-name requirement may be dropped in the future)
 
 
@@ -21,31 +21,30 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 }
 ```
 
-- create 3 branch so that you can keep adding patches to your SS3 version (OPTIONAL)
-- create a tag (OPTIONAL)
+# additional things to consider before you start
+- create 3 branch of the module you are upgrading so that you can keep adding patches to your SS3 version
+- create a tag of the module you are upgrading
 
-# what it does:
+# what does this module do?
 
-For a list of modules, it deletes (if it exists) and (re-)creates a branch for upgrading your module from SS3 to SS4.
+In short: it helps you upgrade SS modules from SS3 to SS4.
 
-In this branch:
+In more detail, this module, for a provided list of modules from a vendor, (re)creates a branch specifically created for upgrading your module from SS3 to SS4. In this branch it:
 
  - updates the composer requirements: https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/recompose.md
  - Updates the environment file (environment): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/environment.md (OPTIONAL)
- - Adds Namespace (add-namespace): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/add-namespace.md
+ - Adds namespaces (add-namespace): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/add-namespace.md
  - Refactors your existing code base (upgrade): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/upgrade.md
  - Applies API changes (inspect): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/inspect.md
  - Renames mysite (reorganise): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/reorganise.md (OPTIONAL)
- - Switches to public web-root: https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/webroot.md (OPTIONAL)
+ - Switches your project to have a public web-root: https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/webroot.md (OPTIONAL)
 
 It then commits and pushes the results for inspection.
 
-
-
 # usage:
 
-1.  Run in your web root (also see below):
-    `git clone git@github.com:sunnysideup/silverstripe-upgrade_to_silverstripe_4.git`
+1.  Install this project:
+    `composer install sunnysideup/upgrade_to_silverstripe_4`
 
 2.  Create a new php file (e.g. `index.php`) in your root dir (or anywhere else  you can run it):
 
@@ -58,25 +57,48 @@ $obj = MetaUpgrader::create()
     ->setWebrootDirName('__upgradeto4__')
     ->setVendorName('sunnysideup')
     ->setArrayOfModules(
-      [
-          'my-module-name-foo-bar'
-      ]
+        [
+            'my-module-name-foo-bar'
+        ]
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
     ->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')
     ->setIncludeEnvironmentFileUpdate(false)
-    ->setIncludeReorganiseTask(true)
-    ->setIncludeWebrootUpdateTask(true)
-    ->setRestartFrom('')
-    ->run();
+    ->setIncludeReorganiseTask(false)
+    ->setIncludeWebrootUpdateTask(false)
+    ->SetStartFrom('')
+    ->SetEndWith('');
+
+$obj->run();
 ```
-run the file to upgrade your modules - e.g.
+
+The code above is very verbose to show you all the options available. Here is a skeleton version:
+
+```php
+<?php
+require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
+$obj = MetaUpgrader::create()
+    ->setAboveWebRootDir('/var/www')
+    ->setVendorName('sunnysideup')
+    ->setArrayOfModules(
+      [
+          'my-module-name-foo-bar'
+      ]
+  );
+
+$obj->run();
+```
+
+3. Run the file to upgrade your modules - e.g.
+
 ```sh
     $ php index.php
 ```
 
-3. inspect your new branch that is SS4 ready and merge it into `dev-master` as you see fit.
+4. Apply any final fixes to this branch to make it SS4 ready.
+
+5. Merge the upgrade branch into `dev-master` as you see fit.
 
 
 # options:
@@ -98,13 +120,16 @@ By default running on command line, it will run immediately and when accessing i
 
 `->setUpgradeDirName('upgradeto4')`: this is the name of the directory that is created in the root dir where the upgrade takes place. **Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**
 
+
 ### vendor name
 
 `->setVendorName('SunnySideUp')`: you can only upgrade modules for one vendor at the time.
 
+
 ### list of modules
 
 `->setArrayOfModules([])`: this is the name as listed on packagist e.g. `sunnysideup/metatags` should be listed as `metatags`.
+
 
 ### temp branch
 
@@ -112,18 +137,20 @@ By default running on command line, it will run immediately and when accessing i
 All upgrade changes will be committed to this branch. **Careful!  This branch will be deleted every time you run the update process so that you can run the update process many times.**
 
 
-
 ### composer environment vars
 
 `->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')`: specific stuff for your composer.
+
 
 ### location for the Silverstripe Upgrade module
 
 `->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')`: you would have installed this already.
 
+
 ### include upgrading `_ss_environment` file?
 
 `->setIncludeEnvironmentFileUpdate(false|true)`: I would leave this out and do this manually.
+
 
 ### run reorganise task?
 
@@ -134,6 +161,12 @@ All upgrade changes will be committed to this branch. **Careful!  This branch wi
 
 `->setIncludeWebrootUpdateTask(false|true)`
 
-### restart from
 
-`->setRestartFrom('mymethod')`: allows you to start the sequence from a particular point.
+### start from
+
+`->SetStartFrom('mymethod')`: allows you to start the sequence from a particular method. See MetaUpgrader::run to see what methods are being run in what order.
+
+
+### end with
+
+`->EndWith('mymethod')`: allows you to end the sequence after a particular method.  See MetaUpgrader::run to see what methods are being run in what order.

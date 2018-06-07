@@ -27,14 +27,27 @@ class MetaUpgrader
     }
 
     /**
-     * if your script breaks then should
+     * start the upgrade sequence at a particular method
      * @var string
      */
-    protected $restartFrom = '';
+    protected $startFrom = '';
 
-    public function setRestartFrom($s)
+    public function SetStartFrom($s)
     {
-        $this->restartFrom = $s;
+        $this->startFrom = $s;
+
+        return $this;
+    }
+
+    /**
+     * end the upgrade sequence after a particular method
+     * @var string
+     */
+    protected $endWith = '';
+
+    public function SetEndWith($s)
+    {
+        $this->endWith = $s;
 
         return $this;
     }
@@ -104,6 +117,8 @@ class MetaUpgrader
     }
 
     /**
+     * specified like this:
+     *     "VendorName/PackageName" => GitRepositoryLink
      * @var array
      */
     protected $arrayOfModules = [];
@@ -145,6 +160,7 @@ class MetaUpgrader
 
 
     /**
+     * //e.g. 'upgrade-code'
      * //e.g. '~/.composer/vendor/bin/upgrade-code'
      * //e.g. '/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code'
      * @var string
@@ -208,6 +224,8 @@ class MetaUpgrader
     protected $vendorNameSpace = '';
 
     protected $moduleNameSpace = '';
+
+    protected $lastMethod = false;
 
     public function run()
     {
@@ -276,6 +294,8 @@ class MetaUpgrader
             $this->runComposerInstallProject();
 
             $this->runChangeEnvironment();
+
+            $this->upperCaseFolderNamesForPSR4();
 
             $this->runAddNameSpace();
 
@@ -426,7 +446,7 @@ class MetaUpgrader
         if ($this->startMethod('runComposerInstallProject')) {
             $this->execMe(
                 $this->aboveWebRootDir,
-                $this->composerEnvironmentVars.' composer create-project silverstripe/installer '.$this->webrootDir.' ^4  --prefer-source',
+                $this->composerEnvironmentVars.' composer create-project silverstripe/installer '.$this->webrootDir.' ^4',
                 'set up vanilla install of 4.0+ in: '.$this->webrootDir,
                 false
             );
@@ -435,7 +455,7 @@ class MetaUpgrader
 
             $this->execMe(
                 $this->webrootDir,
-                'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' --prefer-source --reinstall', //--prefer-source --keep-vcs
+                'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' --prefer-source', //--prefer-source --keep-vcs
                 'add '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' to install',
                 false
             );
@@ -468,34 +488,64 @@ class MetaUpgrader
     }
 
 
+    protected function upperCaseFolderNamesForPSR4()
+    {
+        if ($this->startMethod('upperCaseFolderNamesForPSR4')) {
+            if ($this->runImmediately) {
+                $codeDir = $this->findCodeDir();
+                $di = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($codeDir, FilesystemIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::CHILD_FIRST
+                );
+
+                foreach($di as $name => $fio) {
+                    if($fio->isDir()) {
+                        $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->camelCase($fio->getFilename() );
+                        $this->execMe(
+                            $this->webrootDir,
+                            'mv '.$name.' '.$newName,
+                            'renaming code dir form '.str_replace($codeDir, '', $name).' to '.str_replace($codeDir, '', $newName),
+                            false
+                        );
+                        //rename($name, $newname); - first check the output, then remove the comment...
+                    }
+                }
+            }
+        }
+    }
+
     protected function runAddNameSpace()
     {
         if ($this->startMethod('runAddNameSpace')) {
             if ($this->runImmediately) {
                 $codeDir = $this->findCodeDir();
 
+                $dirsDone = [];
                 $directories = new RecursiveDirectoryIterator($codeDir);
                 foreach (new RecursiveIteratorIterator($directories) as $file => $fileObject) {
                     if ($fileObject->getExtension() === 'php') {
                         $dirName = realpath(dirname($file));
-                        $nameSpaceAppendix = str_replace($codeDir, '', $dirName);
-                        $nameSpaceAppendix = trim($nameSpaceAppendix, '/');
-                        $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
-                        $nameSpace = $this->vendorNameSpace.'\\'.$this->moduleNameSpace.'\\'.$nameSpaceAppendix;
-                        $nameSpaceArray = explode('\\', $nameSpace);
-                        $nameSpaceArrayNew = [];
-                        foreach ($nameSpaceArray as $nameSpaceSnippet) {
-                            if ($nameSpaceSnippet) {
-                                $nameSpaceArrayNew[] = $this->camelCase($nameSpaceSnippet);
+                        if(! isset($dirsDone[$dirName])) {
+                            $dirsDone[$dirName] = true;
+                            $nameSpaceAppendix = str_replace($codeDir, '', $dirName);
+                            $nameSpaceAppendix = trim($nameSpaceAppendix, '/');
+                            $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
+                            $nameSpace = $this->vendorNameSpace.'\\'.$this->moduleNameSpace.'\\'.$nameSpaceAppendix;
+                            $nameSpaceArray = explode('\\', $nameSpace);
+                            $nameSpaceArrayNew = [];
+                            foreach ($nameSpaceArray as $nameSpaceSnippet) {
+                                if ($nameSpaceSnippet) {
+                                    $nameSpaceArrayNew[] = $this->camelCase($nameSpaceSnippet);
+                                }
                             }
+                            $nameSpace = implode('\\', $nameSpaceArrayNew);
+                            $this->execMe(
+                                $codeDir,
+                                'php '.$this->locationOfUpgradeModule.' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->webrootDir.' --write -vvv',
+                                'adding namespace: '.$nameSpace.' to '.$dirName,
+                                false
+                            );
                         }
-                        $nameSpace = implode('\\', $nameSpaceArrayNew);
-                        $this->execMe(
-                            $dirName,
-                            'php '.$this->locationOfUpgradeModule.' add-namespace "'.$nameSpace.'" '.$file.'  --write -vvv',
-                            'adding name space: '.$nameSpace.' to '.$file,
-                            false
-                        );
                     }
                 }
             } else {
@@ -525,7 +575,7 @@ class MetaUpgrader
     {
         if ($this->startMethod('runUpgrade')) {
             $codeDir = $this->findCodeDir();
-            $this->runSilverstripeUpgradeTask('upgrade', $this->moduleDir, $codeDir);
+            $this->runSilverstripeUpgradeTask('upgrade', $this->webrootDir, $codeDir);
             $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 1 (upgrade)');
         }
     }
@@ -535,7 +585,8 @@ class MetaUpgrader
     protected function runInspectAPIChanges()
     {
         if ($this->startMethod('runInspectAPIChanges')) {
-            $this->runSilverstripeUpgradeTask('upgrade', $this->moduleDir, $codeDir);
+            $codeDir = $this->findCodeDir();
+            $this->runSilverstripeUpgradeTask('upgrade', $this->webrootDir, $codeDir);
             $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 2 (inspect)');
         }
     }
@@ -565,14 +616,14 @@ class MetaUpgrader
     ##############################################################################
     ##############################################################################
 
-    protected function runSilverstripeUpgradeTask($task, $dir = '', $param1 = '', $param2 = '', $settings = '')
+    protected function runSilverstripeUpgradeTask($task, $rootDir = '', $param1 = '', $param2 = '', $settings = '')
     {
-        if (! $dir) {
-            $dir = $this->webrootDir;
+        if (! $rootDir) {
+            $rootDir = $this->webrootDir;
         }
         $this->execMe(
             $this->webrootDir,
-            'php '.$this->locationOfUpgradeModule.' '.$task.' '.$param1.' '.$param2.' --root-dir='.$dir.' --write -vvv '.$settings,
+            'php '.$this->locationOfUpgradeModule.' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDir.' --write -vvv '.$settings,
             'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
             false
         );
@@ -585,9 +636,8 @@ class MetaUpgrader
         //we use && here because this means that the second part only runs
         //if the CD works.
         $command = 'cd '.$this->currentDir.' && '.$command;
-        $this->newLine();
-        $this->newLine();
         if ($this->isHTML()) {
+            $this->newLine();
             echo '<strong># '.$comment .'</strong><br />';
             if ($this->runImmediately || $alwaysRun) {
                 //do nothing
@@ -595,37 +645,108 @@ class MetaUpgrader
                 echo '<div style="color: transparent">tput setaf 33; echo " _____ : '.addslashes($comment) .'" ____ </div>';
             }
         } else {
-            echo '# '.$comment;
-            $this->newLine();
+            $this->colourPrint('# '.$comment, 'dark_gray');
         }
-        echo $command;
+        $commandsExploded = explode('&&', $command);
+        foreach($commandsExploded as $commandInner) {
+            $commandsExplodedInner = explode(';', $commandInner);
+            foreach($commandsExplodedInner as $commandInnerInner) {
+                $this->colourPrint(trim($commandInnerInner), 'white');
+            }
+        }
         if ($this->runImmediately || $alwaysRun) {
             $outcome = exec($command.'  2>&1 ', $error, $return);
             if ($return) {
-                $this->newLine(3);
-                print_r($error);
-                $this->newLine(3);
+                $this->colourPrint($error, 'red');
                 if ($this->breakOnAllErrors) {
                     $this->endOutput();
+                    $this->newLine(10);
                     die('------ STOPPED -----');
+                    $this->newLine(10);
                 }
             } else {
-                $this->newLine(3);
-                print_r($outcome);
+                if($outcome) {
+                    $this->colourPrint($outcome, 'green');
+                }
                 if (is_array($error)) {
                     foreach ($error as $line) {
-                        echo $line;
-                        $this->newLine();
+                        $this->colourPrint($line, 'blue');
                     }
+                } else {
+                    $this->colourPrint($error, 'blue');
                 }
-                $this->newLine(3);
-                echo ' <i>[DONE]</i>';
+                if($this->isHTML()) {
+                    echo ' <i>✔</i>';
+                } else {
+                    $this->colourPrint(' ✔', 'green', false);
+                }
+                $this->newLine(2);
             }
         }
         if ($this->isHTML()) {
             ob_flush();
             flush();
         }
+    }
+
+    protected function colourPrint($mixedVar, $colour, $newLine = true)
+    {
+        switch ($colour) {
+            case 'black':
+                $colour = '0;30';
+                break;
+            case 'dark_gray':
+                $colour = '1;30';
+                break;
+            case 'blue':
+                $colour = '0;34';
+                break;
+            case 'light_blue':
+                $colour = '1;34';
+                break;
+            case 'green':
+                $colour = '0;32';
+                break;
+            case 'light_green':
+                $colour = '1;32';
+                break;
+            case 'cyan':
+                $colour = '0;36';
+                break;
+            case 'light_cyan':
+                $colour = '1;36';
+                break;
+            case 'red':
+                $colour = '0;31';
+                break;
+            case 'light_red':
+                $colour = '1;31';
+                break;
+            case 'purple':
+                $colour = '0;35';
+                break;
+            case 'light_purple':
+                $colour = '1;35';
+                break;
+            case 'brown':
+                $colour = '0;33';
+                break;
+            case 'yellow':
+                $colour = '1;33';
+                break;
+            case 'light_gray':
+                $colour = '0;37';
+                break;
+            case 'white':
+            default:
+                $colour = '1;37';
+                break;
+        }
+        $outputString = "\033[" . $colour . "m".print_r($mixedVar, 1)."\033[0m";
+        if($newLine) {
+            $this->newLine();
+        }
+        echo $outputString;
     }
 
     protected function isCommandLine() : bool
@@ -708,7 +829,7 @@ class MetaUpgrader
             ob_flush();
             flush();
         } else {
-            echo PHP_EOL;
+            $this->newLine(3);
         }
     }
 
@@ -725,21 +846,27 @@ class MetaUpgrader
 
     protected function startMethod($name)
     {
-        if ($this->restartFrom) {
-            if ($name === $this->restartFrom) {
-                $this->restartFrom = '';
+        if($this->lastMethod) {
+            $runMe = false;
+        } else {
+            if ($this->startFrom) {
+                if ($name === $this->startFrom) {
+                    $this->startFrom = '';
+                }
             }
+            if ($this->endWith) {
+                if ($name === $this->endWith) {
+                    $this->lastMethod = true;
+                }
+            }
+            $runMe = $this->startFrom ? false : true;
         }
-        $runMe = $this->restartFrom ? false : true;
         $this->newLine(3);
-        echo '# --------------------';
-        $this->newLine();
-        echo '# '.$name;
-        $this->newLine();
-        echo '# --------------------';
-        $this->newLine();
+        $this->colourPrint('# --------------------', 'yellow');
+        $this->colourPrint('# '.$name, 'yellow');
+        $this->colourPrint('# --------------------', 'yellow');
         if (! $runMe) {
-            echo '  ... skipping ... ';
+            $this->colourPrint('# skipped', 'light_green');
         }
         return $runMe;
     }

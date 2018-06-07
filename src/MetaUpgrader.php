@@ -269,24 +269,24 @@ class MetaUpgrader
             } else {
                 $this->packageNamespace = $this->camelCase($this->packageName);
             }
-            $this->moduleDir = $this->webrootDir . '/' . $moduleDirName;
+            $this->moduleDir = $this->webrootDir . '/' . $this->packageName;
             if(isset($moduleDetails['GitLink'])) {
                 $this->gitLink = $moduleDetails['GitLink'];
             } else {
                 $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName;
             }
             $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
-            $this->colourPrint('---------------------', 'light_grey');
-            $this->colourPrint('UPGRADE DETAILS', 'light_grey');
-            $this->colourPrint('---------------------', 'light_grey');
-            $this->colourPrint('Vendor Name: '.$this->vendorName, 'light_grey');
-            $this->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_grey');
-            $this->colourPrint('Package Name: '.$this->packageName, 'light_grey');
-            $this->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_grey');
-            $this->colourPrint('Module Dir: '.$this->moduleDir, 'light_grey');
-            $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_grey');
-            $this->colourPrint('Upgrade as Fork: '.$this->upgradeAsFork ? 'yes' : 'no', 'light_grey');
-            $this->colourPrint('---------------------', 'light_grey');
+            $this->colourPrint('---------------------', 'light_cyan');
+            $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
+            $this->colourPrint('---------------------', 'light_cyan');
+            $this->colourPrint('Vendor Name: '.$this->vendorName, 'light_cyan');
+            $this->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
+            $this->colourPrint('Package Name: '.$this->packageName, 'light_cyan');
+            $this->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_cyan');
+            $this->colourPrint('Module Dir: '.$this->moduleDir, 'light_cyan');
+            $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
+            $this->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
+            $this->colourPrint('---------------------', 'light_cyan');
 
             ######## #########
             ######## RESET
@@ -454,6 +454,27 @@ class MetaUpgrader
                 $this->webrootDir,
                 'git clone '.$this->gitLink.' '.$this->moduleDir,
                 'cloning module - we clone to keep all vcs data (composer does not allow this for branch)',
+                false
+            );
+
+            $this->execMe(
+                $this->moduleDir,
+                ' git branch -a ',
+                'check branch exists',
+                false
+            );
+
+            $this->execMe(
+                $this->moduleDir,
+                'git checkout '.$this->nameOfTempBranch,
+                'switch branch',
+                false
+            );
+
+            $this->execMe(
+                $this->moduleDir,
+                'git branch ',
+                'confirm branch',
                 false
             );
 

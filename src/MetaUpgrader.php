@@ -27,6 +27,32 @@ class MetaUpgrader
     }
 
     /**
+     * if your script breaks then should
+     * @var string
+     */
+    protected $restartFrom = '';
+
+    public function setRestartFrom($s)
+    {
+        $this->restartFrom = $s;
+
+        return $this;
+    }
+
+    /**
+     * should the script stop if any error occurs?
+     * @var bool
+     */
+    protected $breakOnAllErrors = false;
+
+    public function setBreakOnAllErrors($b)
+    {
+        $this->breakOnAllErrors = $b;
+
+        return $this;
+    }
+
+    /**
      * name of the branch created to do the upgrade
      * @var string
      */
@@ -120,6 +146,7 @@ class MetaUpgrader
 
     /**
      * //e.g. '~/.composer/vendor/bin/upgrade-code'
+     * //e.g. '/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code'
      * @var string
      */
     protected $locationOfUpgradeModule = 'upgrade-code';
@@ -231,9 +258,9 @@ class MetaUpgrader
 
             $this->runUpdateComposerRequirements('silverstripe/cms', '~4.0');
 
-            $this->runRecompose('MAJOR: upgrading composer requirements to SS4');
+            $this->runCommitAndPush('MAJOR: upgrading composer requirements to SS4 - STEP 1');
 
-            $this->runCommitAndPush('MAJOR: upgrading composer requirements to SS4');
+            $this->runRecompose('MAJOR: upgrading composer requirements to SS4');
 
 
             ######## #########
@@ -250,27 +277,15 @@ class MetaUpgrader
 
             $this->runChangeEnvironment();
 
-            $this->runCommitAndPush('MAJOR: changing environment file(s)');
-
             $this->runAddNameSpace();
-
-            $this->runCommitAndPush('MAJOR: adding namespaces');
 
             $this->runUpgrade();
 
-            $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 1');
-
             $this->runInspectAPIChanges();
-
-            $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 2');
 
             $this->runReorganise();
 
-            $this->runCommitAndPush('MAJOR: re-organising files');
-
             $this->runWebrootUpdate();
-
-            $this->runCommitAndPush('MAJOR: adding webroot concept');
         }
         $this->execMe(
             $this->aboveWebRootDir,
@@ -288,254 +303,276 @@ class MetaUpgrader
      */
     protected function runResetWebRootDir()
     {
-        $this->startSequence('runResetWebRootDir');
+        if ($this->startMethod('runResetWebRootDir')) {
+            $this->aboveWebRootDir = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDir);
 
-        $this->aboveWebRootDir = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDir);
+            $this->execMe(
+                $this->aboveWebRootDir,
+                'rm '.$this->webrootDir. ' -rf',
+                'remove the upgrade dir: '.$this->webrootDir,
+                false
+            );
 
-        $this->execMe(
-            $this->aboveWebRootDir,
-            'rm '.$this->webrootDir. ' -rf',
-            'remove the upgrade dir: '.$this->webrootDir,
-            false
-        );
-
-        $this->execMe(
-            $this->aboveWebRootDir,
-            'mkdir '.$this->webrootDir. '',
-            'create upgrade directory: '.$this->webrootDir,
-            false
-        );
+            $this->execMe(
+                $this->aboveWebRootDir,
+                'mkdir '.$this->webrootDir. '',
+                'create upgrade directory: '.$this->webrootDir,
+                false
+            );
+        }
     }
 
 
     protected function runAddUpgradeBranch()
     {
-        $this->startSequence('runAddUpgradeBranch');
+        if ($this->startMethod('runAddUpgradeBranch')) {
+            $this->webrootDir = $this->checkIfPathExistsAndCleanItUp($this->webrootDir);
 
-        $this->webrootDir = $this->checkIfPathExistsAndCleanItUp($this->webrootDir);
+            $this->execMe(
+                $this->webrootDir,
+                'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-master',
+                'checkout dev-master of '.$this->vendorName.'/'.$this->moduleName,
+                false
+            );
 
-        $this->execMe(
-            $this->webrootDir,
-            'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-master',
-            'checkout dev-master of '.$this->vendorName.'/'.$this->moduleName,
-            false
-        );
+            $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
 
-        $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
+            $this->execMe(
+                $this->moduleDir,
+                'if git show-ref --quiet refs/heads/'.$this->nameOfTempBranch.'; then git branch -d '.$this->nameOfTempBranch.'; git push origin --delete '.$this->nameOfTempBranch.'; fi',
+                'delete upgrade branch ('.$this->nameOfTempBranch.') locally',
+                false
+            );
 
-        $this->execMe(
-            $this->moduleDir,
-            'if git show-ref --quiet refs/heads/'.$this->nameOfTempBranch.'; then git branch -d '.$this->nameOfTempBranch.'; git push origin --delete '.$this->nameOfTempBranch.'; fi',
-            'delete upgrade branch ('.$this->nameOfTempBranch.') locally and remotely:',
-            false
-        );
+            $this->execMe(
+                $this->moduleDir,
+                'git push origin --delete '.$this->nameOfTempBranch,
+                'delete upgrade branch ('.$this->nameOfTempBranch.') remotely',
+                false
+            );
 
-        $this->execMe(
-            $this->moduleDir,
-            'git checkout -b '.$this->nameOfTempBranch,
-            'create and checkout new branch: '.$this->nameOfTempBranch,
-            false
-        );
+            $this->execMe(
+                $this->moduleDir,
+                'git checkout -b '.$this->nameOfTempBranch,
+                'create and checkout new branch: '.$this->nameOfTempBranch,
+                false
+            );
+        }
     }
 
 
     protected function runCommitAndPush($message)
     {
-        $this->startSequence('runCommitAndPush');
+        if ($this->startMethod('runCommitAndPush')) {
+            $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
 
-        $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
+            $this->execMe(
+                $this->moduleDir,
+                'git add . -A',
+                'git add all',
+                false
+            );
 
-        $this->execMe(
-            $this->moduleDir,
-            'git add . -A',
-            'git add all',
-            false
-        );
+            $this->execMe(
+                $this->moduleDir,
+                'git commit . -m "'.$message.'"',
+                'commit changes in composer.json',
+                false
+            );
 
-        $this->execMe(
-            $this->moduleDir,
-            'git commit . -m "'.$message.'"',
-            'commit changes in composer.json',
-            false
-        );
-
-        $this->execMe(
-            $this->moduleDir,
-            'git push origin '.$this->nameOfTempBranch,
-            'pushing changes to origin on the '.$this->nameOfTempBranch.' branch',
-            false
-        );
+            $this->execMe(
+                $this->moduleDir,
+                'git push origin '.$this->nameOfTempBranch,
+                'pushing changes to origin on the '.$this->nameOfTempBranch.' branch',
+                false
+            );
+        }
     }
 
 
     protected function runUpdateComposerRequirements($module, $newVersion)
     {
-        $this->startSequence('runUpdateComposerRequirements');
+        if ($this->startMethod('runUpdateComposerRequirements')) {
+            $location = $this->moduleDir.'/composer.json';
 
-        $location = $this->moduleDir.'/composer.json';
-
-        $this->execMe(
-            $this->moduleDir,
-            'php -r  \''
-                .'$jsonString = file_get_contents("'.$location.'"); '
-                .'$data = json_decode($jsonString, true); '
-                .'if(isset($data["require"]["'.$module.'"])) { '
-                .'    $data["require"]["'.$module.'"] = "'.$newVersion.'"; '
-                .'}'
-                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT); '
-                .'file_put_contents("'.$location.'", $newJsonString); '
-                .'\'',
-            'replace in '.$location.' the require for '.$module.' with '.$newVersion,
-            false
-        );
+            $this->execMe(
+                $this->moduleDir,
+                'php -r  \''
+                    .'$jsonString = file_get_contents("'.$location.'"); '
+                    .'$data = json_decode($jsonString, true); '
+                    .'if(isset($data["require"]["'.$module.'"])) { '
+                    .'    $data["require"]["'.$module.'"] = "'.$newVersion.'"; '
+                    .'}'
+                    .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
+                    .'file_put_contents("'.$location.'", $newJsonString); '
+                    .'\'',
+                'replace in '.$location.' the require for '.$module.' with '.$newVersion,
+                false
+            );
+        }
     }
 
 
     protected function runRecompose()
     {
-        $this->startSequence('runRecompose');
-        $this->runSilverstripeUpgradeTask('recompose');
+        if ($this->startMethod('runRecompose')) {
+            $this->runSilverstripeUpgradeTask('recompose', $this->moduleDir);
+            $this->runCommitAndPush('MAJOR: upgrading composer requirements to SS4 - STEP 2');
+        }
     }
 
     protected function runComposerInstallProject()
     {
-        $this->startSequence('runComposerInstallProject');
+        if ($this->startMethod('runComposerInstallProject')) {
+            $this->execMe(
+                $this->aboveWebRootDir,
+                $this->composerEnvironmentVars.' composer create-project silverstripe/installer '.$this->webrootDir.' ^4  --prefer-source',
+                'set up vanilla install of 4.0+ in: '.$this->webrootDir,
+                false
+            );
 
-        $this->execMe(
-            $this->aboveWebRootDir,
-            $this->composerEnvironmentVars.' composer create-project silverstripe/installer '.$this->webrootDir.' ^4',
-            'set up vanilla install of 4.0+ in: '.$this->webrootDir,
-            false
-        );
+            $this->webrootDir = $this->checkIfPathExistsAndCleanItUp($this->webrootDir);
 
-        $this->webrootDir = $this->checkIfPathExistsAndCleanItUp($this->webrootDir);
+            $this->execMe(
+                $this->webrootDir,
+                'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' --prefer-source --reinstall', //--prefer-source --keep-vcs
+                'add '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' to install',
+                false
+            );
 
-        $this->execMe(
-            $this->webrootDir,
-            'composer require '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' ', //--prefer-source --keep-vcs
-            'add '.$this->vendorName.'/'.$this->moduleName.':dev-'.$this->nameOfTempBranch.' to install',
-            false
-        );
+            $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
+            $this->execMe(
+                $this->webrootDir,
+                'rm '.$this->moduleDir.' -rf',
+                'we will remove the item again: '.$this->moduleDir.' so that we can reinstall with vcs data.',
+                false
+            );
 
-        $this->moduleDir = $this->checkIfPathExistsAndCleanItUp($this->moduleDir);
-        $this->execMe(
-            $this->webrootDir,
-            'rm '.$this->moduleDir.' -rf',
-            'we will remove the item again: '.$this->moduleDir.' so that we can reinstall with vcs data.',
-            false
-        );
-
-        $this->execMe(
-            $this->webrootDir,
-            'composer update',
-            'lets retrieve the module again to make sure we have the vcs data with it!',
-            false
-        );
+            $this->execMe(
+                $this->webrootDir,
+                'composer update --prefer-source',
+                'lets retrieve the module again to make sure we have the vcs data with it!',
+                false
+            );
+        }
     }
 
     protected function runChangeEnvironment()
     {
-        $this->startSequence('runChangeEnvironment');
-        if ($this->includeEnvironmentFileUpdate) {
-            $this->runSilverstripeUpgradeTask('environment');
+        if ($this->startMethod('runChangeEnvironment')) {
+            if ($this->includeEnvironmentFileUpdate) {
+                $this->runSilverstripeUpgradeTask('environment');
+                $this->runCommitAndPush('MAJOR: changing environment file(s)');
+            }
         }
     }
 
 
     protected function runAddNameSpace()
     {
-        $this->startSequence('runAddNameSpace');
-        if ($this->runImmediately) {
-            if (file_exists($this->moduleDir . '/code')) {
-                $codeDir = $this->moduleDir . '/code';
-            } elseif (file_exists($codeDir = $this->moduleDir . '/src')) {
-                $codeDir = $this->moduleDir . '/src';
-            } else {
-                user_error('Can not find code dir for '.$this->moduleDir, E_USER_NOTICE);
-                return;
-            }
+        if ($this->startMethod('runAddNameSpace')) {
+            if ($this->runImmediately) {
+                $codeDir = $this->findCodeDir();
 
-            $directories = glob($codeDir, GLOB_ONLYDIR);
-            foreach ($directories as $dir) {
-                $nameSpaceAppendix = str_replace($codeDir, '', $dir);
-                $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
-
-                $nameSpace = $this->vendorNameSpace.'\\'.$this->moduleNameSpace.'\\'.$nameSpaceAppendix;
-                $nameSpaceArray = explode('\\', $nameSpace);
-                $nameSpaceArrayNew = [];
-                foreach ($nameSpaceArray as $nameSpaceSnippet) {
-                    if ($nameSpaceSnippet) {
-                        $nameSpaceArrayNew[] = $this->camelCase($nameSpaceSnippet);
+                $directories = new RecursiveDirectoryIterator($codeDir);
+                foreach (new RecursiveIteratorIterator($directories) as $file => $fileObject) {
+                    if ($fileObject->getExtension() === 'php') {
+                        $dirName = realpath(dirname($file));
+                        $nameSpaceAppendix = str_replace($codeDir, '', $dirName);
+                        $nameSpaceAppendix = trim($nameSpaceAppendix, '/');
+                        $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
+                        $nameSpace = $this->vendorNameSpace.'\\'.$this->moduleNameSpace.'\\'.$nameSpaceAppendix;
+                        $nameSpaceArray = explode('\\', $nameSpace);
+                        $nameSpaceArrayNew = [];
+                        foreach ($nameSpaceArray as $nameSpaceSnippet) {
+                            if ($nameSpaceSnippet) {
+                                $nameSpaceArrayNew[] = $this->camelCase($nameSpaceSnippet);
+                            }
+                        }
+                        $nameSpace = implode('\\', $nameSpaceArrayNew);
+                        $this->execMe(
+                            $dirName,
+                            'php '.$this->locationOfUpgradeModule.' add-namespace "'.$nameSpace.'" '.$file.'  --write -vvv',
+                            'adding name space: '.$nameSpace.' to '.$file,
+                            false
+                        );
                     }
                 }
-                $nameSpace = implode('\\', $nameSpaceArrayNew);
-                foreach ($this->scanDirectory($dir, '.php') as $file) {
+            } else {
+                //@todo: we assume 'code' for now ...
+                $codeDir1 = $this->moduleDir . '/code';
+                $codeDir2 = $this->moduleDir . '/src';
+                foreach ([$codeDir1, $codeDir2] as $codeDir) {
                     $this->execMe(
                         $this->locationOfUpgradeModule,
-                        'php '.$this->locationOfUpgradeModule.' add-namespace "'.$nameSpace.'" ./'.$dir.'/.'.$file.'  --write -vvv',
-                        'adding name space: '.$nameSpace.' to ./'.$dir.'/.'.$file,
+                        'find '.$codeDir.' -mindepth 1 -maxdepth 2 -type d -exec '.
+                            'sh -c '.
+                                '\'dir=${1##*/}; '.
+                                'php '.$this->locationOfUpgradeModule.' add-namespace "'.$this->vendorNameSpace.'\\'.$this->moduleNameSpace.'\\$dir" "$dir" --write -r -vvv'.
+                            '\' _ {} '.
+                        '\;',
+                        'adding name spaces',
                         false
                     );
                 }
             }
-        } else {
-            //@todo: we assume 'code' for now ...
-            $codeDir1 = $this->moduleDir . '/code';
-            $codeDir2 = $this->moduleDir . '/src';
-            foreach ([$codeDir1, $codeDir2] as $codeDir) {
-                $this->execMe(
-                    $this->locationOfUpgradeModule,
-                    'find '.$codeDir.' -mindepth 1 -maxdepth 2 -type d -exec '.
-                        'sh -c '.
-                            '\'dir=${1##*/}; '.
-                            'php '.$this->locationOfUpgradeModule.' add-namespace "'.$this->vendorNameSpace.'\\'.$this->moduleNameSpace.'\\$dir" "$dir" --write -r -vvv'.
-                        '\' _ {} '.
-                    '\;',
-                    'adding name spaces',
-                    false
-                );
-            }
+            $this->runCommitAndPush('MAJOR: adding namespaces');
         }
     }
 
 
     protected function runUpgrade()
     {
-        $this->startSequence('runUpgrade');
-        $this->runSilverstripeUpgradeTask('upgrade');
+        if ($this->startMethod('runUpgrade')) {
+            $codeDir = $this->findCodeDir();
+            $this->runSilverstripeUpgradeTask('upgrade', $this->moduleDir, $codeDir);
+            $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 1 (upgrade)');
+        }
     }
 
 
 
     protected function runInspectAPIChanges()
     {
-        $this->startSequence('runInspectAPIChanges');
-        $this->runSilverstripeUpgradeTask('inspect');
+        if ($this->startMethod('runInspectAPIChanges')) {
+            $this->runSilverstripeUpgradeTask('upgrade', $this->moduleDir, $codeDir);
+            $this->runCommitAndPush('MAJOR: core upgrade to SS4 - STEP 2 (inspect)');
+        }
     }
 
     protected function runReorganise()
     {
-        $this->startSequence('runReorganise');
-        if ($this->includeReorganiseTask) {
-            $this->runSilverstripeUpgradeTask('reorganise');
+        if ($this->startMethod('runReorganise')) {
+            if ($this->includeReorganiseTask) {
+                $this->runSilverstripeUpgradeTask('reorganise');
+                $this->runCommitAndPush('MAJOR: re-organising files');
+            }
         }
     }
 
     protected function runWebrootUpdate()
     {
-        $this->startSequence('runUpdateWebRoot');
-        if ($this->includeWebrootUpdateTask) {
-            $this->runSilverstripeUpgradeTask('webroot');
+        if ($this->startMethod('runUpdateWebRoot')) {
+            if ($this->includeWebrootUpdateTask) {
+                $this->runSilverstripeUpgradeTask('webroot');
+                $this->runCommitAndPush('MAJOR: adding webroot concept');
+            }
         }
     }
 
 
+    ##############################################################################
+    ##############################################################################
+    ##############################################################################
 
-    protected function runSilverstripeUpgradeTask($task)
+    protected function runSilverstripeUpgradeTask($task, $dir = '', $param1 = '', $param2 = '', $settings = '')
     {
+        if (! $dir) {
+            $dir = $this->webrootDir;
+        }
         $this->execMe(
             $this->webrootDir,
-            'php '.$this->locationOfUpgradeModule.' '.$task.' --root-dir='.$this->webrootDir.' --write -vvv',
+            'php '.$this->locationOfUpgradeModule.' '.$task.' '.$param1.' '.$param2.' --root-dir='.$dir.' --write -vvv '.$settings,
             'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
             false
         );
@@ -548,8 +585,8 @@ class MetaUpgrader
         //we use && here because this means that the second part only runs
         //if the CD works.
         $command = 'cd '.$this->currentDir.' && '.$command;
-        echo $this->newLine();
-        echo $this->newLine();
+        $this->newLine();
+        $this->newLine();
         if ($this->isHTML()) {
             echo '<strong># '.$comment .'</strong><br />';
             if ($this->runImmediately || $alwaysRun) {
@@ -559,17 +596,29 @@ class MetaUpgrader
             }
         } else {
             echo '# '.$comment;
-            echo $this->newLine();
+            $this->newLine();
         }
         echo $command;
         if ($this->runImmediately || $alwaysRun) {
             $outcome = exec($command.'  2>&1 ', $error, $return);
             if ($return) {
-                echo PHP_EOL.PHP_EOL.PHP_EOL;
+                $this->newLine(3);
                 print_r($error);
-                $this->endOutput();
-                die('------ STOPPED -----');
+                $this->newLine(3);
+                if ($this->breakOnAllErrors) {
+                    $this->endOutput();
+                    die('------ STOPPED -----');
+                }
             } else {
+                $this->newLine(3);
+                print_r($outcome);
+                if (is_array($error)) {
+                    foreach ($error as $line) {
+                        echo $line;
+                        $this->newLine();
+                    }
+                }
+                $this->newLine(3);
                 echo ' <i>[DONE]</i>';
             }
         }
@@ -663,25 +712,36 @@ class MetaUpgrader
         }
     }
 
-    protected function newLine()
+    protected function newLine($numberOfLines = 1)
     {
-        if ($this->isCommandLine()) {
-            return PHP_EOL;
-        } else {
-            return '<br />';
+        for ($i = 0; $i < $numberOfLines; $i++) {
+            if ($this->isCommandLine()) {
+                echo PHP_EOL;
+            } else {
+                echo '<br />';
+            }
         }
     }
 
-    protected function startSequence($name)
+    protected function startMethod($name)
     {
-        echo $this->newLine();
-        echo $this->newLine();
-        echo $this->newLine();
+        if ($this->restartFrom) {
+            if ($name === $this->restartFrom) {
+                $this->restartFrom = '';
+            }
+        }
+        $runMe = $this->restartFrom ? false : true;
+        $this->newLine(3);
         echo '# --------------------';
-        echo $this->newLine();
+        $this->newLine();
         echo '# '.$name;
-        echo $this->newLine();
+        $this->newLine();
         echo '# --------------------';
+        $this->newLine();
+        if (! $runMe) {
+            echo '  ... skipping ... ';
+        }
+        return $runMe;
     }
 
 
@@ -700,25 +760,19 @@ class MetaUpgrader
         return $str;
     }
 
-    protected function scanDirectory($rootDir, $allowext)
+    protected function findCodeDir()
     {
-        $list = [];
-        $dirContent = scandir($rootDir);
-        foreach ($dirContent as $key => $content) {
-            $path = $rootDir.'/'.$content;
-            $ext = substr($content, strrpos($content, '.') + 1);
-            if (is_readable($path)) {
-                if (is_file($path)) {
-                    if (in_array($ext, $allowext)) {
-                        $list[] = $path;
-                    }
-                } elseif (is_dir($path)) {
-                    // recursive callback to open new directory
-                    // $list = scanDirectories($path,$allowext, $allData);
-                }
-            }
+        $codeDir = '';
+        if (file_exists($this->moduleDir . '/code')) {
+            $codeDir = $this->moduleDir . '/code';
+        } elseif (file_exists($this->moduleDir . '/src')) {
+            $codeDir = $this->moduleDir . '/src';
+        } else {
+            user_error('Can not find code dir for '.$this->moduleDir, E_USER_NOTICE);
+            return;
         }
-        return $list;
+
+        return $codeDir;
     }
 
     protected function checkIfPathExistsAndCleanItUp($path)

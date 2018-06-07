@@ -20,6 +20,6 @@
         "installer-name": "upgrade_to_silverstripe_4"
     },
     "require": {
-        "silverstripe/upgrader": "*"
+        "silverstripe/upgrader": "dev-master"
     }
 }

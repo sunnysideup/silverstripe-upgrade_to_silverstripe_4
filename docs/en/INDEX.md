@@ -68,6 +68,7 @@ $obj = MetaUpgrader::create()
     ->setIncludeEnvironmentFileUpdate(false)
     ->setIncludeReorganiseTask(true)
     ->setIncludeWebrootUpdateTask(true)
+    ->setRestartFrom('')
     ->run();
 ```
 run the file to upgrade your modules - e.g.
@@ -132,3 +133,7 @@ All upgrade changes will be committed to this branch. **Careful!  This branch wi
 ### run webroot task
 
 `->setIncludeWebrootUpdateTask(false|true)`
+
+### restart from
+
+`->setRestartFrom('mymethod')`: allows you to start the sequence from a particular point.

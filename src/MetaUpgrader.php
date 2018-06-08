@@ -6,7 +6,6 @@
 
 class MetaUpgrader
 {
-
     /**
      * only instance of me
      * @var MetaUpgrader
@@ -22,7 +21,6 @@ class MetaUpgrader
         if (! self::$_singleton) {
             self::$_singleton = new MetaUpgrader();
         }
-
         return self::$_singleton;
     }
 
@@ -800,6 +798,21 @@ class MetaUpgrader
         if($newLine) {
             $this->newLine();
         }
+
+        //FILE IO happening here.
+
+        $oldContents = file_get_contents($log_file);
+        $newContent = "";
+        //Write output string to the log file.
+
+        if($newLine){
+            $newContent = $oldContents . PHP_EOL . $outputString;
+        } else {
+            $newContent = $oldContents . $outputString;
+        }
+        file_put_contents($log_file, $newContent);
+        //END OF FILE IO
+
         echo $outputString;
     }
 

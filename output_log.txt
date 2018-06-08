@@ -1,0 +1,136 @@
+
+[1;37mcomposer require sunnysideup/webpack_requirements_backend:dev-master[0m
+[1;30m# show that the task is starting[0m
+[1;37mcd /var/www[0m
+[1;37mecho "===================== START ======================"[0m
+[0;32m===================== START ======================[0m
+[0;34m===================== START ======================[0m
+[0;32m ✔[0m
+[1;36m---------------------[0m
+[1;36mUPGRADE DETAILS[0m
+[1;36m---------------------[0m
+[1;36mVendor Name: sunnysideup[0m
+[1;36mVendor Namespace: Sunnysideup[0m
+[1;36mPackage Name: webpack_requirements_backend[0m
+[1;36mPackage Namespace: WebpackRequirementsBackend[0m
+[1;36mModule Dir: /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;36mGit Repository Link: git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git[0m
+[1;36mUpgrade as Fork: no[0m
+[1;36m---------------------[0m
+[1;33m# --------------------[0m
+[1;33m# runResetWebRootDir[0m
+[1;33m# --------------------[0m
+[1;30m# remove the upgrade dir: /var/www/__upgradeto4__[0m
+[1;37mcd /var/www[0m
+[1;37mrm /var/www/__upgradeto4__ -rf[0m
+[0;32m ✔[0m
+[1;30m# create upgrade directory: /var/www/__upgradeto4__[0m
+[1;37mcd /var/www[0m
+[1;37mmkdir /var/www/__upgradeto4__[0m
+[0;32m ✔[0m
+[1;33m# --------------------[0m
+[1;33m# runAddUpgradeBranch[0m
+[1;33m# --------------------[0m
+[1;30m# checkout dev-master of sunnysideup/webpack_requirements_backend[0m
+[1;37mcd /var/www/__upgradeto4__[0m
+[1;37mcomposer require sunnysideup/webpack_requirements_backend:dev-master[0m
+[0;32mGenerating autoload files[0m
+[0;34m./composer.json has been created[0m
+[0;34mLoading composer repositories with package information[0m
+[0;34mUpdating dependencies (including require-dev)[0m
+[0;34mPackage operations: 7 installs, 0 updates, 0 removals[0m
+[0;34m  - Installing composer/installers (v1.5.0): Loading from cache[0m
+[0;34m  - Installing mustangostang/spyc (0.6.2): Loading from cache[0m
+[0;34m  - Installing silverstripe/framework (3.7.0): Loading from cache[0m
+[0;34m  - Installing silverstripe/siteconfig (3.7.0): Loading from cache[0m
+[0;34m  - Installing silverstripe/reports (3.7.0): Loading from cache[0m
+[0;34m  - Installing silverstripe/cms (3.7.0): Loading from cache[0m
+[0;34m  - Installing sunnysideup/webpack_requirements_backend (dev-master 8104457): Cloning 8104457141 from cache[0m
+[0;34mWriting lock file[0m
+[0;34mGenerating autoload files[0m
+[0;32m ✔[0m
+[1;30m# delete upgrade branch (4.1-TEMP-upgrade) locally[0m
+[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;37mif git show-ref --quiet refs/heads/4.1-TEMP-upgrade[0m
+[1;37mthen git branch -d 4.1-TEMP-upgrade[0m
+[1;37mgit push origin --delete 4.1-TEMP-upgrade[0m
+[1;37mfi[0m
+[0;32m ✔[0m
+[1;30m# delete upgrade branch (4.1-TEMP-upgrade) remotely[0m
+[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;37mgit push origin --delete 4.1-TEMP-upgrade[0m
+[0;32m - [deleted]         4.1-TEMP-upgrade[0m
+[0;34mTo git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git[0m
+[0;34m - [deleted]         4.1-TEMP-upgrade[0m
+[0;32m ✔[0m
+[1;30m# create and checkout new branch: 4.1-TEMP-upgrade[0m
+[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;37mgit checkout -b 4.1-TEMP-upgrade[0m
+[0;32mSwitched to a new branch '4.1-TEMP-upgrade'[0m
+[0;34mSwitched to a new branch '4.1-TEMP-upgrade'[0m
+[0;32m ✔[0m
+[1;33m# --------------------[0m
+[1;33m# runUpdateComposerRequirements[0m
+[1;33m# --------------------[0m
+[1;30m# replace in /var/www/__upgradeto4__/webpack_requirements_backend/composer.json the require for silverstripe/framework with ~4.0[0m
+[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;37mphp -r  '$jsonString = file_get_contents("/var/www/__upgradeto4__/webpack_requirements_backend/composer.json")[0m
+[1;37m$data = json_decode($jsonString, true)[0m
+[1;37mif(isset($data["require"]["silverstripe/framework"])) {     $data["require"]["silverstripe/framework"] = "~4.0"[0m
+[1;37m}$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)[0m
+[1;37mfile_put_contents("/var/www/__upgradeto4__/webpack_requirements_backend/composer.json", $newJsonString)[0m
+[1;37m'[0m
+[0;32m ✔[0m
+[1;33m# --------------------[0m
+[1;33m# commitAndPush[0m
+[1;33m# --------------------[0m
+[1;30m# git add all[0m
+[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;37mgit add . -A[0m
+[0;32m ✔[0m
+[1;30m# commit changes: MAJOR: upgrading composer requirements to SS4 - updating core requirements[0m
+[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;37mgit commit . -m "MAJOR: upgrading composer requirements to SS4 - updating core requirements"[0m
+[0;32m 1 file changed, 1 insertion(+), 1 deletion(-)[0m
+[0;34m[4.1-TEMP-upgrade 71bc3fe] MAJOR: upgrading composer requirements to SS4 - updating core requirements[0m
+[0;34m 1 file changed, 1 insertion(+), 1 deletion(-)[0m
+[0;32m ✔[0m
+[1;30m# pushing changes to origin on the 4.1-TEMP-upgrade branch[0m
+[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;37mgit push origin 4.1-TEMP-upgrade[0m/n[1;30m# show that the task is starting[0m/n[1;37mcd /var/www[0m/n[1;37mecho "===================== START ======================"[0m/n[0;32m===================== START ======================[0m/n[0;34m===================== START ======================[0m/n[0;32m ✔[0m/n[1;36m---------------------[0m/n[1;36mUPGRADE DETAILS[0m/n[1;36m---------------------[0m/n[1;36mVendor Name: sunnysideup[0m/n[1;36mVendor Namespace: Sunnysideup[0m/n[1;36mPackage Name: webpack_requirements_backend[0m/n[1;36mPackage Namespace: WebpackRequirementsBackend[0m/n[1;36mModule Dir: /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;36mGit Repository Link: git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git[0m/n[1;36mUpgrade as Fork: no[0m/n[1;36m---------------------[0m/n[1;33m# --------------------[0m/n[1;33m# runResetWebRootDir[0m/n[1;33m# --------------------[0m/n[1;30m# remove the upgrade dir: /var/www/__upgradeto4__[0m/n[1;37mcd /var/www[0m/n[1;37mrm /var/www/__upgradeto4__ -rf[0m/n[0;32m ✔[0m/n[1;30m# create upgrade directory: /var/www/__upgradeto4__[0m/n[1;37mcd /var/www[0m/n[1;37mmkdir /var/www/__upgradeto4__[0m/n[0;32m ✔[0m/n[1;33m# --------------------[0m/n[1;33m# runAddUpgradeBranch[0m/n[1;33m# --------------------[0m/n[1;30m# checkout dev-master of sunnysideup/webpack_requirements_backend[0m/n[1;37mcd /var/www/__upgradeto4__[0m/n[1;37mcomposer require sunnysideup/webpack_requirements_backend:dev-master[0m/n[0;32mGenerating autoload files[0m/n[0;34m./composer.json has been created[0m/n[0;34mLoading composer repositories with package information[0m/n[0;34mUpdating dependencies (including require-dev)[0m/n[0;34mPackage operations: 7 installs, 0 updates, 0 removals[0m/n[0;34m  - Installing composer/installers (v1.5.0): Loading from cache[0m/n[0;34m  - Installing mustangostang/spyc (0.6.2): Loading from cache[0m/n[0;34m  - Installing silverstripe/framework (3.7.0): Loading from cache[0m/n[0;34m  - Installing silverstripe/siteconfig (3.7.0): Loading from cache[0m/n[0;34m  - Installing silverstripe/reports (3.7.0): Loading from cache[0m/n[0;34m  - Installing silverstripe/cms (3.7.0): Loading from cache[0m/n[0;34m  - Installing sunnysideup/webpack_requirements_backend (dev-master 8104457): Cloning 8104457141 from cache[0m/n[0;34mWriting lock file[0m/n[0;34mGenerating autoload files[0m/n[0;32m ✔[0m/n[1;30m# delete upgrade branch (4.1-TEMP-upgrade) locally[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mif git show-ref --quiet refs/heads/4.1-TEMP-upgrade[0m/n[1;37mthen git branch -d 4.1-TEMP-upgrade[0m/n[1;37mgit push origin --delete 4.1-TEMP-upgrade[0m/n[1;37mfi[0m/n[0;32m ✔[0m/n[1;30m# delete upgrade branch (4.1-TEMP-upgrade) remotely[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mgit push origin --delete 4.1-TEMP-upgrade[0m/n[0;31mArray
+(
+    [0] => error: unable to delete '4.1-TEMP-upgrade': remote ref does not exist
+    [1] => error: failed to push some refs to 'git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git'
+)
+[0m/n[1;30m# create and checkout new branch: 4.1-TEMP-upgrade[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mgit checkout -b 4.1-TEMP-upgrade[0m/n[0;32mSwitched to a new branch '4.1-TEMP-upgrade'[0m/n[0;34mSwitched to a new branch '4.1-TEMP-upgrade'[0m/n[0;32m ✔[0m/n[1;33m# --------------------[0m/n[1;33m# runUpdateComposerRequirements[0m/n[1;33m# --------------------[0m/n[1;30m# replace in /var/www/__upgradeto4__/webpack_requirements_backend/composer.json the require for silverstripe/framework with ~4.0[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mphp -r  '$jsonString = file_get_contents("/var/www/__upgradeto4__/webpack_requirements_backend/composer.json")[0m/n[1;37m$data = json_decode($jsonString, true)[0m/n[1;37mif(isset($data["require"]["silverstripe/framework"])) {     $data["require"]["silverstripe/framework"] = "~4.0"[0m/n[1;37m}$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)[0m/n[1;37mfile_put_contents("/var/www/__upgradeto4__/webpack_requirements_backend/composer.json", $newJsonString)[0m/n[1;37m'[0m/n[0;32m ✔[0m/n[1;33m# --------------------[0m/n[1;33m# commitAndPush[0m/n[1;33m# --------------------[0m/n[1;30m# git add all[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mgit add . -A[0m/n[0;32m ✔[0m/n[1;30m# commit changes: MAJOR: upgrading composer requirements to SS4 - updating core requirements[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mgit commit . -m "MAJOR: upgrading composer requirements to SS4 - updating core requirements"[0m/n[0;32m 1 file changed, 1 insertion(+), 1 deletion(-)[0m/n[0;34m[4.1-TEMP-upgrade 4fff043] MAJOR: upgrading composer requirements to SS4 - updating core requirements[0m/n[0;34m 1 file changed, 1 insertion(+), 1 deletion(-)[0m/n[0;32m ✔[0m/n[1;30m# pushing changes to origin on the 4.1-TEMP-upgrade branch[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mgit push origin 4.1-TEMP-upgrade[0m/n[0;32m * [new branch]      4.1-TEMP-upgrade -> 4.1-TEMP-upgrade[0m/n[0;34mTo git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git[0m/n[0;34m * [new branch]      4.1-TEMP-upgrade -> 4.1-TEMP-upgrade[0m/n[0;32m ✔[0m/n[1;33m# --------------------[0m/n[1;33m# runUpdateComposerRequirements[0m/n[1;33m# --------------------[0m/n[1;30m# replace in /var/www/__upgradeto4__/webpack_requirements_backend/composer.json the require for silverstripe/cms with ~4.0[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mphp -r  '$jsonString = file_get_contents("/var/www/__upgradeto4__/webpack_requirements_backend/composer.json")[0m/n[1;37m$data = json_decode($jsonString, true)[0m/n[1;37mif(isset($data["require"]["silverstripe/cms"])) {     $data["require"]["silverstripe/cms"] = "~4.0"[0m/n[1;37m}$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)[0m/n[1;37mfile_put_contents("/var/www/__upgradeto4__/webpack_requirements_backend/composer.json", $newJsonString)[0m/n[1;37m'[0m/n[0;32m ✔[0m/n[1;33m# --------------------[0m/n[1;33m# commitAndPush[0m/n[1;33m# --------------------[0m/n[1;30m# git add all[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mgit add . -A[0m/n[0;32m ✔[0m/n[1;30m# commit changes: MAJOR: upgrading composer requirements to SS4 - updating core requirements[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mgit commit . -m "MAJOR: upgrading composer requirements to SS4 - updating core requirements"[0m/n[0;32m 1 file changed, 1 insertion(+), 1 deletion(-)[0m/n[0;34m[4.1-TEMP-upgrade 40ae8ee] MAJOR: upgrading composer requirements to SS4 - updating core requirements[0m/n[0;34m 1 file changed, 1 insertion(+), 1 deletion(-)[0m/n[0;32m ✔[0m/n[1;30m# pushing changes to origin on the 4.1-TEMP-upgrade branch[0m/n[1;37mcd /var/www/__upgradeto4__/webpack_requirements_backend[0m/n[1;37mgit push origin 4.1-TEMP-upgrade[0m
+[1;30m# show that the task is starting[0m
+[1;37mcd /var/www[0m
+[1;37mecho "===================== START ======================"[0m
+[0;32m===================== START ======================[0m
+[0;34m===================== START ======================[0m[0;32m ✔[0m
+[1;36m---------------------[0m
+[1;36mUPGRADE DETAILS[0m
+[1;36m---------------------[0m
+[1;36mVendor Name: sunnysideup[0m
+[1;36mVendor Namespace: Sunnysideup[0m
+[1;36mPackage Name: webpack_requirements_backend[0m
+[1;36mPackage Namespace: WebpackRequirementsBackend[0m
+[1;36mModule Dir: /var/www/__upgradeto4__/webpack_requirements_backend[0m
+[1;36mGit Repository Link: git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git[0m
+[1;36mUpgrade as Fork: no[0m
+[1;36m---------------------[0m
+[1;33m# --------------------[0m
+[1;33m# runResetWebRootDir[0m
+[1;33m# --------------------[0m
+[1;30m# remove the upgrade dir: /var/www/__upgradeto4__[0m
+[1;37mcd /var/www[0m
+[1;37mrm /var/www/__upgradeto4__ -rf[0m[0;32m ✔[0m
+[1;30m# create upgrade directory: /var/www/__upgradeto4__[0m
+[1;37mcd /var/www[0m
+[1;37mmkdir /var/www/__upgradeto4__[0m[0;32m ✔[0m
+[1;33m# --------------------[0m
+[1;33m# runAddUpgradeBranch[0m
+[1;33m# --------------------[0m
+[1;30m# checkout dev-master of sunnysideup/webpack_requirements_backend[0m
+[1;37mcd /var/www/__upgradeto4__[0m
+[1;37mcomposer require sunnysideup/webpack_requirements_backend:dev-master[0m

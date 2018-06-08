@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "14be5f29fc791794fc25c19bb49b6955",
@@ -1217,12 +1217,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silverstripe/silverstripe-upgrader.git",
-                "reference": "b50d1e2fd41a875be3f9a03d3410ecad98b75232"
+                "reference": "48b7dd491cf62d7e5333df67ae6407d6486d3e5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/b50d1e2fd41a875be3f9a03d3410ecad98b75232",
-                "reference": "b50d1e2fd41a875be3f9a03d3410ecad98b75232",
+                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/48b7dd491cf62d7e5333df67ae6407d6486d3e5e",
+                "reference": "48b7dd491cf62d7e5333df67ae6407d6486d3e5e",
                 "shasum": ""
             },
             "require": {
@@ -1270,7 +1270,7 @@
                 }
             ],
             "description": "A tool to help upgrade your code to handle API changes in packages you used.",
-            "time": "2018-05-21T04:04:24+00:00"
+            "time": "2018-06-07T22:26:28+00:00"
         },
         {
             "name": "symfony/console",

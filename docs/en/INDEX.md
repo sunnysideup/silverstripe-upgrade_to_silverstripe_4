@@ -3,7 +3,6 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 
 # prerequisites before you start
 
- - run composer update on this packjage or install https://github.com/silverstripe/silverstripe-upgrader#install globally: `composer global require silverstripe/upgrader`
  - module to be upgraded needs to be listed on packagist
  - composer file needs to follow this pattern (installer-name requirement may be dropped in the future)
 
@@ -41,10 +40,10 @@ In more detail, this module, for a provided list of modules from a vendor, (re)c
 
 It then commits and pushes the results for inspection.
 
-# usage:
+# installation and usage:
 
-1.  Install this project:
-    `composer install sunnysideup/upgrade_to_silverstripe_4`
+1.  Install this module in your web-root (or another place if needed - we use `/var/www/silverstripe-upgrade_to_silverstripe_4/` in example below):
+    `composer install sunnysideup/upgrade_to_silverstripe_4 /var/www/silverstripe-upgrade_to_silverstripe_4/`
 
 2.  Create a new php file (e.g. `index.php`) in your root dir (or anywhere else  you can run it):
 
@@ -73,8 +72,8 @@ $obj = MetaUpgrader::create()
     ->setIncludeEnvironmentFileUpdate(false)
     ->setIncludeReorganiseTask(false)
     ->setIncludeWebrootUpdateTask(false)
-    ->SetStartFrom('runRecompose')
-    ->SetEndWith('runComposerInstallProject');
+    ->setStartFrom('runRecompose')
+    ->setEndWith('runComposerInstallProject');
 
 $obj->run();
 ```
@@ -86,17 +85,17 @@ The code above is very verbose to show you all the options available. Here is a 
 require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
     ->setAboveWebRootDir('/var/www')
-    ->setArrayOfModules(
     ->addModule(
         [
           'VendorName' => 'sunnysideup',
           'PackageName' => 'webpack_requirements_backend'
         ]
-    )
-  );
+    );
 
 $obj->run();
 ```
+We have included an example file like this in the module root. 
+
 
 3. Run the file to upgrade your modules - e.g.
 
@@ -104,7 +103,9 @@ $obj->run();
     $ php index.php
 ```
 
+
 4. Apply any final fixes to this branch to make it SS4 ready.
+
 
 5. Merge the upgrade branch into `dev-master` as you see fit.
 
@@ -113,10 +114,11 @@ $obj->run();
 
 ### run immediately or create bash script?
 
-`->setRunImmediately(false)`: by default, the script will not do any actual upgrading, but rather, it will output a bash script that does the actual upgrading.
-When you set `runImmediately` to true, the PHP code will use the `exec` function to output commands on the `command line` immediately. **Careful! Even if you do not run the code immediately, a bunch of code will still be executed on the command line to inspect the module.**
+`->setRunImmediately(false)`: When you set `runImmediately` to true, the PHP code will use the `exec` function to run commands on the `command line` immediately. **Careful! Even if you do not run the code immediately, a bunch of code will still be executed on the command line to inspect the module.**
 
-By default running on command line, it will run immediately and when accessing it through http, you will get the script to run in the future.
+By default running on command line, it will run immediately and when accessing it through http the script will not do any actual upgrading, but rather, it will output a bash script to your screen that you can use in the future. 
+
+It is recommended that you use the runImmediate = true option as that is how we test it most of the time. 
 
 
 ### root directory

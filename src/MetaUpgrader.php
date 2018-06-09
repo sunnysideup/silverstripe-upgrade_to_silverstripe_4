@@ -28,9 +28,22 @@ class MetaUpgrader
      * start the upgrade sequence at a particular method
      * @var string
      */
+    protected $logFolderLocation = '';
+
+    public function setLogFolderLocation($s)
+    {
+        $this->logFolderLocation = $s;
+
+        return $this;
+    }
+
+    /**
+     * start the upgrade sequence at a particular method
+     * @var string
+     */
     protected $startFrom = '';
 
-    public function SetStartFrom($s)
+    public function setStartFrom($s)
     {
         $this->startFrom = $s;
 
@@ -43,7 +56,7 @@ class MetaUpgrader
      */
     protected $endWith = '';
 
-    public function SetEndWith($s)
+    public function setEndWith($s)
     {
         $this->endWith = $s;
 
@@ -219,6 +232,8 @@ class MetaUpgrader
     }
 
 
+    protected $logFileLocation = '';
+
     protected $lastMethod = false;
 
     protected $webrootDir = '';
@@ -256,22 +271,25 @@ class MetaUpgrader
         $this->webrootDir = $this->aboveWebRootDir.'/'.$this->webrootDirName;
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
             $this->vendorName = $moduleDetails['VendorName'];
-            if(isset($moduleDetails['VendorNamespace'])) {
+            if (isset($moduleDetails['VendorNamespace'])) {
                 $this->vendorNamespace = $moduleDetails['VendorNamespace'];
             } else {
                 $this->vendorNamespace = $this->camelCase($this->vendorName);
             }
             $this->packageName = $moduleDetails['PackageName'];
-            if(isset($moduleDetails['PackageNamespace'])) {
+            if (isset($moduleDetails['PackageNamespace'])) {
                 $this->packageNamespace = $moduleDetails['PackageNamespace'];
             } else {
                 $this->packageNamespace = $this->camelCase($this->packageName);
             }
             $this->moduleDir = $this->webrootDir . '/' . $this->packageName;
-            if(isset($moduleDetails['GitLink'])) {
+            if (isset($moduleDetails['GitLink'])) {
                 $this->gitLink = $moduleDetails['GitLink'];
             } else {
                 $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName;
+            }
+            if ($this->logFolderLocation) {
+                $this->logFileLocation = $this->logFolderLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
             }
             $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
             $this->colourPrint('---------------------', 'light_cyan');
@@ -284,6 +302,7 @@ class MetaUpgrader
             $this->colourPrint('Module Dir: '.$this->moduleDir, 'light_cyan');
             $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
             $this->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
+            $this->colourPrint('Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
             $this->colourPrint('---------------------', 'light_cyan');
 
             ######## #########
@@ -522,9 +541,9 @@ class MetaUpgrader
                     RecursiveIteratorIterator::CHILD_FIRST
                 );
 
-                foreach($di as $name => $fio) {
-                    if($fio->isDir()) {
-                        $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->camelCase($fio->getFilename() );
+                foreach ($di as $name => $fio) {
+                    if ($fio->isDir()) {
+                        $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->camelCase($fio->getFilename());
                         $this->execMe(
                             $this->webrootDir,
                             'mv '.$name.' '.$newName,
@@ -549,7 +568,7 @@ class MetaUpgrader
                 foreach (new RecursiveIteratorIterator($directories) as $file => $fileObject) {
                     if ($fileObject->getExtension() === 'php') {
                         $dirName = realpath(dirname($file));
-                        if(! isset($dirsDone[$dirName])) {
+                        if (! isset($dirsDone[$dirName])) {
                             $dirsDone[$dirName] = true;
                             $nameSpaceAppendix = str_replace($codeDir, '', $dirName);
                             $nameSpaceAppendix = trim($nameSpaceAppendix, '/');
@@ -700,9 +719,9 @@ class MetaUpgrader
             $this->colourPrint('# '.$comment, 'dark_gray');
         }
         $commandsExploded = explode('&&', $command);
-        foreach($commandsExploded as $commandInner) {
+        foreach ($commandsExploded as $commandInner) {
             $commandsExplodedInner = explode(';', $commandInner);
-            foreach($commandsExplodedInner as $commandInnerInner) {
+            foreach ($commandsExplodedInner as $commandInnerInner) {
                 $this->colourPrint(trim($commandInnerInner), 'white');
             }
         }
@@ -717,7 +736,7 @@ class MetaUpgrader
                     $this->newLine(10);
                 }
             } else {
-                if($outcome) {
+                if ($outcome) {
                     $this->colourPrint($outcome, 'green');
                 }
                 if (is_array($error)) {
@@ -727,7 +746,7 @@ class MetaUpgrader
                 } else {
                     $this->colourPrint($error, 'blue');
                 }
-                if($this->isHTML()) {
+                if ($this->isHTML()) {
                     echo ' <i>✔</i>';
                 } else {
                     $this->colourPrint(' ✔', 'green', false);
@@ -743,6 +762,19 @@ class MetaUpgrader
 
     protected function colourPrint($mixedVar, $colour, $newLine = true)
     {
+        $mixedVarAsString = print_r($mixedVar, 1);
+
+        //write to log
+        if ($this->logFileLocation) {
+            if (! file_exists($this->logFileLocation)) {
+                file_put_contents($this->logFileLocation, date('Y-m-d h:i'));
+            }
+            if ($newLine) {
+                file_put_contents($this->logFileLocation, PHP_EOL, FILE_APPEND | LOCK_EX);
+            }
+            file_put_contents($this->logFileLocation, $mixedVarAsString, FILE_APPEND | LOCK_EX);
+        }
+
         switch ($colour) {
             case 'black':
                 $colour = '0;30';
@@ -794,25 +826,10 @@ class MetaUpgrader
                 $colour = '1;37';
                 break;
         }
-        $outputString = "\033[" . $colour . "m".print_r($mixedVar, 1)."\033[0m";
-        if($newLine) {
+        $outputString = "\033[" . $colour . "m".$mixedVarAsString."\033[0m";
+        if ($newLine) {
             $this->newLine();
         }
-
-        //FILE IO happening here.
-
-        $oldContents = file_get_contents($log_file);
-        $newContent = "";
-        //Write output string to the log file.
-
-        if($newLine){
-            $newContent = $oldContents . PHP_EOL . $outputString;
-        } else {
-            $newContent = $oldContents . $outputString;
-        }
-        file_put_contents($log_file, $newContent);
-        //END OF FILE IO
-
         echo $outputString;
     }
 
@@ -913,7 +930,7 @@ class MetaUpgrader
 
     protected function startMethod($name)
     {
-        if($this->lastMethod) {
+        if ($this->lastMethod) {
             $runMe = false;
         } else {
             if ($this->startFrom) {

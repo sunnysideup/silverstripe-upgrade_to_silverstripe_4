@@ -2,6 +2,7 @@
 require_once('./src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
     //->setRunImmediately(true)
+    ->setLogFolderLocation('/var/www')
     ->setAboveWebRootDir('/var/www')
     ->setWebrootDirName('__upgradeto4__')
     ->setArrayOfModules(

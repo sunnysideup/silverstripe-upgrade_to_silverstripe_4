@@ -53,6 +53,7 @@ It then commits and pushes the results for inspection.
 require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
     ->setRunImmediately(true)
+    ->setLogFolderLocation('/var/www')
     ->setAboveWebRootDir('/var/www')
     ->setWebrootDirName('__upgradeto4__')
     ->setArrayOfModules(
@@ -73,8 +74,8 @@ $obj = MetaUpgrader::create()
     ->setIncludeEnvironmentFileUpdate(false)
     ->setIncludeReorganiseTask(false)
     ->setIncludeWebrootUpdateTask(false)
-    ->SetStartFrom('runRecompose')
-    ->SetEndWith('runComposerInstallProject');
+    ->setStartFrom('runRecompose')
+    ->setEndWith('runComposerInstallProject');
 
 $obj->run();
 ```

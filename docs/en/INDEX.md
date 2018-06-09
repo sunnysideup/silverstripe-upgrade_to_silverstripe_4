@@ -177,3 +177,8 @@ All upgrade changes will be committed to this branch. **Careful!  This branch wi
 ### end with
 
 `->EndWith('mymethod')`: allows you to end the sequence after a particular method.  See MetaUpgrader::run to see what methods are being run in what order.
+
+
+# Important references:
+
+* https://github.com/silverstripe/silverstripe-upgrader/issues/71#issuecomment-395244428

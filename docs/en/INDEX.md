@@ -1,7 +1,7 @@
 This module aims to help developers upgrade SS3 modules to SS4 without doing any manual rewriting. You can provide a list of modules and run the code below.  This will create a branch in your module that is SS4 ready. After inspection you can then merge this into `dev/master` as you see fit.
 
 
-# prerequisites before you start
+# prerequisites before you start:
 
  - module to be upgraded needs to be listed on packagist
  - composer file needs to follow this pattern (installer-name requirement may be dropped in the future)

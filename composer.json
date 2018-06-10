@@ -20,6 +20,7 @@
         "installer-name": "upgrade_to_silverstripe_4"
     },
     "require": {
-        "silverstripe/upgrader": "dev-master"
+        "silverstripe/upgrader": "dev-master",
+        "silverstripe/framework": "3.7.0"
     }
 }

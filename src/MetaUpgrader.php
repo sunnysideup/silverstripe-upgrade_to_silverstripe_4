@@ -25,7 +25,9 @@ class MetaUpgrader
     }
 
     /**
-     * start the upgrade sequence at a particular method
+     * set a folder location for the upgrade log.
+     * if set, a log will be created.
+     *
      * @var string
      */
     protected $logFolderLocation = '';

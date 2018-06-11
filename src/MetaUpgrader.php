@@ -63,6 +63,21 @@ class MetaUpgrader
      * start the upgrade sequence at a particular method
      * @var string
      */
+    protected $listOfTasks = [
+        'x',
+    ];
+
+    public function setListOfTasks($a)
+    {
+        $this->listOfTasks = $a;
+
+        return $this;
+    }
+
+    /**
+     * start the upgrade sequence at a particular method
+     * @var string
+     */
     protected $startFrom = '';
 
     public function setStartFrom($s)
@@ -275,20 +290,16 @@ class MetaUpgrader
     protected $upgradeAsFork = '';
 
     //The import the utils
-    protected $colourPrinter = null;
+    protected $commandLineExec = null;
 
     public function run()
     {
         //Init UTIL and helper objects
 
-        $this->startColourPrinter();
+        $this->startPHP2CommandLine();
 
-        if ($this->runImmediately === null) {
-            if ($this->isCommandLine()) {
-                $this->runImmediately = true;
-            } else {
-                $this->runImmediately = false;
-            }
+        if ($this->runImmediately !== null) {
+            $this->commandLineExec->setRunImmediately($this->runImmediately);
         }
         $this->startOutput();
         $this->execMe(
@@ -302,6 +313,8 @@ class MetaUpgrader
 
             $this->loadVarsForModule($moduleDetails);
 
+
+            //we can only run this once
             ######## #########
             ######## RESET
             ######## #########
@@ -363,37 +376,52 @@ class MetaUpgrader
      * For now it defaults to always existing
      * @return [type] [description]
      */
-    protected function startColourPrinter(){
-        $this->commandLineExec = new PHP2CommandLine(
-            $this->logFileLocation
-        );
+    protected function startPHP2CommandLine()
+    {
+        $this->commandLineExec = new PHP2CommandLine($this->logFileLocation);
     }
 
 
     protected function loadVarsForModule($moduleDetails)
     {
+        //VendorName
         $this->vendorName = $moduleDetails['VendorName'];
+
+        //VendorNamespace
         if (isset($moduleDetails['VendorNamespace'])) {
             $this->vendorNamespace = $moduleDetails['VendorNamespace'];
         } else {
             $this->vendorNamespace = $this->camelCase($this->vendorName);
         }
+
+        //PackageName
         $this->packageName = $moduleDetails['PackageName'];
+
+        //PackageNamespace
         if (isset($moduleDetails['PackageNamespace'])) {
             $this->packageNamespace = $moduleDetails['PackageNamespace'];
         } else {
             $this->packageNamespace = $this->camelCase($this->packageName);
         }
+
+        //GitLink
         $this->moduleDir = $this->webrootDir . '/' . $this->packageName;
         if (isset($moduleDetails['GitLink'])) {
             $this->gitLink = $moduleDetails['GitLink'];
         } else {
             $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName;
         }
+
+        //UpgradeAsFork
+        $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
+
+        //LogFileLocation
+        $this->logFileLocation = '';
         if ($this->logFolderLocation) {
             $this->logFileLocation = $this->logFolderLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
         }
-        $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
+        $this->$commandLineExec->setLogFileLocation($this->logFileLocation);
+
 
         //output the confirmation.
         $this->$colourPrinter->colourPrint('---------------------', 'light_cyan');

@@ -1,5 +1,8 @@
 <?php
 require_once('./src/MetaUpgrader.php');
+
+use Sunnysideup\UpgradeToSilverstripe4\MetaUpgrader;
+
 $obj = MetaUpgrader::create()
     //->setRunImmediately(true)
     ->setLogFolderLocation('/var/www')
@@ -23,6 +26,6 @@ $obj = MetaUpgrader::create()
     ->setIncludeEnvironmentFileUpdate(false)
     ->setIncludeReorganiseTask(true)
     ->setIncludeWebrootUpdateTask(false)
-    ->setStartFrom('')
+    ->setStartFrom('runUpgrade')
     ->setEndWith('')
     ->run();

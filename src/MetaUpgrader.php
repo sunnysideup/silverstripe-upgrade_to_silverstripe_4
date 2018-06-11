@@ -1,5 +1,7 @@
 <?php
 
+namespace Sunnysideup\UpgradeToSilverstripe4;
+use Sunnysideup\UpgradeToSilverstripe4\Util\PHP2CommandLine;
 /**
  * recompose (Mandatory, stop execution on failure)
  */
@@ -37,6 +39,24 @@ class MetaUpgrader
         $this->logFolderLocation = $s;
 
         return $this;
+    }
+
+
+    /**
+     * The folder for storing the log file in.
+     * @param [type] $s [description]
+     */
+    public function getLogFolderLocation()
+    {
+        return $this->logFolderLocation;
+    }
+
+    /**
+     * The file location for storing the update logs.
+     * @return [type] [description]
+     */
+    public function getLogFileLocation(){
+        return $this->logFileLocation;
     }
 
     /**
@@ -254,8 +274,15 @@ class MetaUpgrader
 
     protected $upgradeAsFork = '';
 
+    //The import the utils
+    protected $colourPrinter = null;
+
     public function run()
     {
+        //Init UTIL and helper objects
+
+        $this->startColourPrinter();
+
         if ($this->runImmediately === null) {
             if ($this->isCommandLine()) {
                 $this->runImmediately = true;
@@ -272,40 +299,8 @@ class MetaUpgrader
         );
         $this->webrootDir = $this->aboveWebRootDir.'/'.$this->webrootDirName;
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
-            $this->vendorName = $moduleDetails['VendorName'];
-            if (isset($moduleDetails['VendorNamespace'])) {
-                $this->vendorNamespace = $moduleDetails['VendorNamespace'];
-            } else {
-                $this->vendorNamespace = $this->camelCase($this->vendorName);
-            }
-            $this->packageName = $moduleDetails['PackageName'];
-            if (isset($moduleDetails['PackageNamespace'])) {
-                $this->packageNamespace = $moduleDetails['PackageNamespace'];
-            } else {
-                $this->packageNamespace = $this->camelCase($this->packageName);
-            }
-            $this->moduleDir = $this->webrootDir . '/' . $this->packageName;
-            if (isset($moduleDetails['GitLink'])) {
-                $this->gitLink = $moduleDetails['GitLink'];
-            } else {
-                $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName;
-            }
-            if ($this->logFolderLocation) {
-                $this->logFileLocation = $this->logFolderLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
-            }
-            $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
-            $this->colourPrint('---------------------', 'light_cyan');
-            $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
-            $this->colourPrint('---------------------', 'light_cyan');
-            $this->colourPrint('Vendor Name: '.$this->vendorName, 'light_cyan');
-            $this->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
-            $this->colourPrint('Package Name: '.$this->packageName, 'light_cyan');
-            $this->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_cyan');
-            $this->colourPrint('Module Dir: '.$this->moduleDir, 'light_cyan');
-            $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
-            $this->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
-            $this->colourPrint('Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
-            $this->colourPrint('---------------------', 'light_cyan');
+
+            $this->loadVarsForModule($moduleDetails);
 
             ######## #########
             ######## RESET
@@ -359,6 +354,60 @@ class MetaUpgrader
             false
         );
         $this->endOutput();
+    }
+
+    /**
+     * Starts the logger. Extra checking may be put in here to see if you
+     * want to start the logger or not in different scenarios.
+     *
+     * For now it defaults to always existing
+     * @return [type] [description]
+     */
+    protected function startColourPrinter(){
+        $this->commandLineExec = new PHP2CommandLine(
+            $this->logFileLocation
+        );
+    }
+
+
+    protected function loadVarsForModule($moduleDetails)
+    {
+        $this->vendorName = $moduleDetails['VendorName'];
+        if (isset($moduleDetails['VendorNamespace'])) {
+            $this->vendorNamespace = $moduleDetails['VendorNamespace'];
+        } else {
+            $this->vendorNamespace = $this->camelCase($this->vendorName);
+        }
+        $this->packageName = $moduleDetails['PackageName'];
+        if (isset($moduleDetails['PackageNamespace'])) {
+            $this->packageNamespace = $moduleDetails['PackageNamespace'];
+        } else {
+            $this->packageNamespace = $this->camelCase($this->packageName);
+        }
+        $this->moduleDir = $this->webrootDir . '/' . $this->packageName;
+        if (isset($moduleDetails['GitLink'])) {
+            $this->gitLink = $moduleDetails['GitLink'];
+        } else {
+            $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName;
+        }
+        if ($this->logFolderLocation) {
+            $this->logFileLocation = $this->logFolderLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
+        }
+        $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
+
+        //output the confirmation.
+        $this->$colourPrinter->colourPrint('---------------------', 'light_cyan');
+        $this->$colourPrinter->colourPrint('UPGRADE DETAILS', 'light_cyan');
+        $this->$colourPrinter->colourPrint('---------------------', 'light_cyan');
+        $this->$colourPrinter->colourPrint('Vendor Name: '.$this->vendorName, 'light_cyan');
+        $this->$colourPrinter->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
+        $this->$colourPrinter->colourPrint('Package Name: '.$this->packageName, 'light_cyan');
+        $this->$colourPrinter->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_cyan');
+        $this->$colourPrinter->colourPrint('Module Dir: '.$this->moduleDir, 'light_cyan');
+        $this->$colourPrinter->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
+        $this->$colourPrinter->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
+        $this->$colourPrinter->colourPrint('Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
+        $this->$colourPrinter->colourPrint('---------------------', 'light_cyan');
     }
 
     /**
@@ -656,7 +705,6 @@ class MetaUpgrader
         }
     }
 
-
     ##############################################################################
     ##############################################################################
     ##############################################################################
@@ -702,261 +750,6 @@ class MetaUpgrader
         );
     }
 
-    protected function execMe($newDir, $command, $comment, $alwaysRun = false)
-    {
-        $currentDir = $this->checkIfPathExistsAndCleanItUp($newDir);
-
-        //we use && here because this means that the second part only runs
-        //if the CD works.
-        $command = 'cd '.$currentDir.' && '.$command;
-        if ($this->isHTML()) {
-            $this->newLine();
-            echo '<strong># '.$comment .'</strong><br />';
-            if ($this->runImmediately || $alwaysRun) {
-                //do nothing
-            } else {
-                echo '<div style="color: transparent">tput setaf 33; echo " _____ : '.addslashes($comment) .'" ____ </div>';
-            }
-        } else {
-            $this->colourPrint('# '.$comment, 'dark_gray');
-        }
-        $commandsExploded = explode('&&', $command);
-        foreach ($commandsExploded as $commandInner) {
-            $commandsExplodedInner = explode(';', $commandInner);
-            foreach ($commandsExplodedInner as $commandInnerInner) {
-                $this->colourPrint(trim($commandInnerInner), 'white');
-            }
-        }
-        if ($this->runImmediately || $alwaysRun) {
-            $outcome = exec($command.'  2>&1 ', $error, $return);
-            if ($return) {
-                $this->colourPrint($error, 'red');
-                if ($this->breakOnAllErrors) {
-                    $this->endOutput();
-                    $this->newLine(10);
-                    die('------ STOPPED -----');
-                    $this->newLine(10);
-                }
-            } else {
-                if ($outcome) {
-                    $this->colourPrint($outcome, 'green');
-                }
-                if (is_array($error)) {
-                    foreach ($error as $line) {
-                        $this->colourPrint($line, 'blue');
-                    }
-                } else {
-                    $this->colourPrint($error, 'blue');
-                }
-                if ($this->isHTML()) {
-                    echo ' <i>✔</i>';
-                } else {
-                    $this->colourPrint(' ✔', 'green', false);
-                }
-                $this->newLine(2);
-            }
-        }
-        if ($this->isHTML()) {
-            ob_flush();
-            flush();
-        }
-    }
-
-    protected function colourPrint($mixedVar, $colour, $newLine = true)
-    {
-        $mixedVarAsString = print_r($mixedVar, 1);
-
-        //write to log
-        if ($this->logFileLocation) {
-            if (! file_exists($this->logFileLocation)) {
-                file_put_contents($this->logFileLocation, date('Y-m-d h:i'));
-            }
-            if ($newLine) {
-                file_put_contents($this->logFileLocation, PHP_EOL, FILE_APPEND | LOCK_EX);
-            }
-            file_put_contents($this->logFileLocation, $mixedVarAsString, FILE_APPEND | LOCK_EX);
-        }
-
-        switch ($colour) {
-            case 'black':
-                $colour = '0;30';
-                break;
-            case 'dark_gray':
-                $colour = '1;30';
-                break;
-            case 'blue':
-                $colour = '0;34';
-                break;
-            case 'light_blue':
-                $colour = '1;34';
-                break;
-            case 'green':
-                $colour = '0;32';
-                break;
-            case 'light_green':
-                $colour = '1;32';
-                break;
-            case 'cyan':
-                $colour = '0;36';
-                break;
-            case 'light_cyan':
-                $colour = '1;36';
-                break;
-            case 'red':
-                $colour = '0;31';
-                break;
-            case 'light_red':
-                $colour = '1;31';
-                break;
-            case 'purple':
-                $colour = '0;35';
-                break;
-            case 'light_purple':
-                $colour = '1;35';
-                break;
-            case 'brown':
-                $colour = '0;33';
-                break;
-            case 'yellow':
-                $colour = '1;33';
-                break;
-            case 'light_gray':
-                $colour = '0;37';
-                break;
-            case 'white':
-            default:
-                $colour = '1;37';
-                break;
-        }
-        $outputString = "\033[" . $colour . "m".$mixedVarAsString."\033[0m";
-        if ($newLine) {
-            $this->newLine();
-        }
-        echo $outputString;
-    }
-
-    protected function isCommandLine() : bool
-    {
-        if (php_sapi_name() == "cli") {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    protected function isHTML() : bool
-    {
-        return $this->isCommandLine() ? false : true;
-    }
-
-    protected function startOutput()
-    {
-        if ($this->isHTML()) {
-            // Turn off output buffering
-            // ini_set('output_buffering', 'off');
-            // // Turn off PHP output compression
-            // ini_set('zlib.output_compression', false);
-            //
-            // //Flush (send) the output buffer and turn off output buffering
-            // //ob_end_flush();
-            // while (@ob_end_flush());
-            //
-            // // Implicitly flush the buffer(s)
-            // ini_set('implicit_flush', true);
-            // ob_implicit_flush(true);
-            //
-            // //prevent apache from buffering it for deflate/gzip
-            // header("Content-type: text/plain");
-            // header('Cache-Control: no-cache'); // recommended to prevent caching of event data.
-
-            echo '
-            <!DOCTYPE html>
-            <html lang="en-US">
-            <head>
-            <meta charset="UTF-8">
-            <title>Title of the document</title>
-            </head>
-
-            <body>
-                <pre><code class="sh">#!/bin/bash<br />';
-            ob_flush();
-            flush();
-        }
-    }
-
-
-
-    protected function endOutput()
-    {
-        if ($this->isHTML()) {
-            $dir = dirname(dirname(__FILE__));
-            // $css = file_get_contents($dir.'/javascript/styles/default.css');
-            // $js = file_get_contents($dir.'/javascript/highlight.pack.js');
-            // echo '</code></pre>
-            // <script>
-            //     '.$js.'
-            //     hljs.initHighlightingOnLoad();
-            // </script>
-            echo '
-            <style>
-                html, body {padding: 0; margin: 0; min-height: 100%; height: 100%; background-color: #300a24;color: #fff;}
-                pre {
-                    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
-                }
-                strong {display: block; color: teal;}
-                i {color: green; font-style: normal;}
-                .hljs-string {color: yellow;}
-                .hljs-built_in {color: #ccc;}
-            </style>
-            </body>
-            </html>
-
-            ';
-            ob_flush();
-            flush();
-        } else {
-            $this->newLine(3);
-        }
-    }
-
-    protected function newLine($numberOfLines = 1)
-    {
-        for ($i = 0; $i < $numberOfLines; $i++) {
-            if ($this->isCommandLine()) {
-                echo PHP_EOL;
-            } else {
-                echo '<br />';
-            }
-        }
-    }
-
-    protected function startMethod($name)
-    {
-        if ($this->lastMethod) {
-            $runMe = false;
-        } else {
-            if ($this->startFrom) {
-                if ($name === $this->startFrom) {
-                    $this->startFrom = '';
-                }
-            }
-            if ($this->endWith) {
-                if ($name === $this->endWith) {
-                    $this->lastMethod = true;
-                }
-            }
-            $runMe = $this->startFrom ? false : true;
-        }
-        $this->newLine(3);
-        $this->colourPrint('# --------------------', 'yellow');
-        $this->colourPrint('# '.$name, 'yellow');
-        $this->colourPrint('# --------------------', 'yellow');
-        if (! $runMe) {
-            $this->colourPrint('# skipped', 'light_green');
-        }
-        return $runMe;
-    }
-
 
 
     protected function camelCase($str, array $noStrip = [])
@@ -988,16 +781,44 @@ class MetaUpgrader
         return $codeDir;
     }
 
-    protected function checkIfPathExistsAndCleanItUp($path)
+
+    protected function startMethod($name)
     {
-        if ($this->runImmediately) {
-            $path = realpath($path);
-            if (! file_exists($path)) {
-                die('ERROR! Could not find: '.$path);
-            }
+        if ($this->lastMethod) {
+            $runMe = false;
         } else {
-            $path = str_replace('//', '/', $path);
+            if ($this->startFrom) {
+                if ($name === $this->startFrom) {
+                    $this->startFrom = '';
+                }
+            }
+            if ($this->endWith) {
+                if ($name === $this->endWith) {
+                    $this->lastMethod = true;
+                }
+            }
+            $runMe = $this->startFrom ? false : true;
         }
-        return $path;
+        $this->colourPrint('# --------------------', 'yellow', 3);
+        $this->colourPrint('# '.$name, 'yellow');
+        $this->colourPrint('# --------------------', 'yellow');
+        if (! $runMe) {
+            $this->colourPrint('# skipped', 'light_green');
+        }
+
+        //here we call the PHP2CommandLine
+
+        return $runMe;
     }
+
+    protected function execMe($newDir, $command, $comment, $alwaysRun = false)
+    {
+        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
+    }
+
+    protected function colourPrint($mixedVar, $colour, $newLineCount)
+    {
+        return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
+    }
+
 }

@@ -5,7 +5,7 @@
 3. make a set of tasks to run, remove methods that run particular task
    - setComposerEnvironmentVars
    - setIncludeReorganiseTask
-   - setIncludeWebrootUpdateTask
+   - setIncludeWebRootUpdateTask
 
 4. separate PHP2CommandLine code into separate module
    - when run through HTTP / BROWSER it shows code on screen and does NOT run

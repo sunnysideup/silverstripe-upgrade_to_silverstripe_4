@@ -54,7 +54,7 @@ $obj = MetaUpgrader::create()
     ->setRunImmediately(true)
     ->setLogFolderLocation('/var/www')
     ->setAboveWebRootDir('/var/www')
-    ->setWebrootDirName('__upgradeto4__')
+    ->setWebRootDirName('__upgradeto4__')
     ->setArrayOfModules(
         [
             [
@@ -72,7 +72,7 @@ $obj = MetaUpgrader::create()
     ->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')
     ->setIncludeEnvironmentFileUpdate(false)
     ->setIncludeReorganiseTask(false)
-    ->setIncludeWebrootUpdateTask(false)
+    ->setIncludeWebRootUpdateTask(false)
     ->setStartFrom('runRecompose')
     ->setEndWith('runComposerInstallProject');
 
@@ -166,7 +166,7 @@ All upgrade changes will be committed to this branch. **Careful!  This branch wi
 
 ### run webroot task
 
-`->setIncludeWebrootUpdateTask(false|true)`
+`->setIncludeWebRootUpdateTask(false|true)`
 
 
 ### start from

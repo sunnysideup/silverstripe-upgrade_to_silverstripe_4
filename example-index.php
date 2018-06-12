@@ -7,7 +7,7 @@ $obj = MetaUpgrader::create()
     //->setRunImmediately(true)
     ->setLogFolderLocation('/var/www')
     ->setAboveWebRootDir('/var/www')
-    ->setWebrootDirName('__upgradeto4__')
+    ->setWebRootDirName('__upgradeto4__')
     ->setArrayOfModules(
         [
             1 => [
@@ -25,7 +25,7 @@ $obj = MetaUpgrader::create()
     ->setLocationOfUpgradeModule('/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code')
     ->setIncludeEnvironmentFileUpdate(false)
     ->setIncludeReorganiseTask(true)
-    ->setIncludeWebrootUpdateTask(false)
+    ->setIncludeWebRootUpdateTask(false)
     ->setStartFrom('runUpgrade')
     ->setEndWith('')
     ->run();

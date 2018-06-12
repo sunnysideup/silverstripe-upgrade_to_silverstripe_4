@@ -10,6 +10,23 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Util;
 
 class PHP2CommandLine {
 
+    private static $_singleton;
+
+    public static function create($logFileLocation = '')
+    {
+        if(self::$_singleton === null) {
+            $className = self::getClass();
+            self::$_singleton = new $className($logFileLocation);
+        }
+    }
+
+    public static function delete()
+    {
+        unset(self::$_singleton);
+        self::$_singleton = null;
+        
+        return null;
+    }
 
     /**
      *
@@ -48,7 +65,7 @@ class PHP2CommandLine {
      *
      * @param string $logFileLocation
      */
-    function __construct($logFileLocation){
+    function __construct($logFileLocation = ''){
         $this->logFileLocation = $logFileLocation;
         $this->startOutput();
     }
@@ -127,19 +144,19 @@ class PHP2CommandLine {
     }
 
 
-
-
     public function colourPrint($mixedVar, $colour, $newLineCount = 0)
     {
         $mixedVarAsString = print_r($mixedVar, 1);
-
+        $logFileLocation = $this->getLogFileLocation();
         //write to log
-        if ($this->getLogFileLocation()) {
+        if ($logFileLocation) {
             if (! file_exists($this->getLogFileLocation())) {
                 file_put_contents($this->getLogFileLocation(), date('Y-m-d h:i'));
-            }
-            if ($newLine) {
-                file_put_contents($this->getLogFileLocation(), PHP_EOL, FILE_APPEND | LOCK_EX);
+                file_put_contents($this->getLogFileLocation(), PHP_EOL.PHP_EOL, FILE_APPEND | LOCK_EX);
+            } else {
+                if ($newLine) {
+                    file_put_contents($this->getLogFileLocation(), PHP_EOL, FILE_APPEND | LOCK_EX);
+                }
             }
             file_put_contents($this->getLogFileLocation(), $mixedVarAsString, FILE_APPEND | LOCK_EX);
         }

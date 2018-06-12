@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "14be5f29fc791794fc25c19bb49b6955",
+    "content-hash": "5a3cd0d5aff5c07c63002ad54de6a40e",
     "packages": [
         {
             "name": "composer/semver",
@@ -1170,12 +1170,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silverstripe/silverstripe-upgrader.git",
-                "reference": "948116b857db8c2e64f82b953d3705b1192f55b2"
+                "reference": "d3bee14de4bcbde83fb74caec99c3a7c3a944d0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/948116b857db8c2e64f82b953d3705b1192f55b2",
-                "reference": "948116b857db8c2e64f82b953d3705b1192f55b2",
+                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/d3bee14de4bcbde83fb74caec99c3a7c3a944d0c",
+                "reference": "d3bee14de4bcbde83fb74caec99c3a7c3a944d0c",
                 "shasum": ""
             },
             "require": {
@@ -1223,7 +1223,43 @@
                 }
             ],
             "description": "A tool to help upgrade your code to handle API changes in packages you used.",
-            "time": "2018-06-10T22:50:31+00:00"
+            "time": "2018-06-11T00:35:55+00:00"
+        },
+        {
+            "name": "sunnysideup/php_2_command_line",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sunnysideup/silverstripe-php_2_command_line.git",
+                "reference": "5db826ec98709b24fe52c692f3056c58cdaafcdd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/5db826ec98709b24fe52c692f3056c58cdaafcdd",
+                "reference": "5db826ec98709b24fe52c692f3056c58cdaafcdd",
+                "shasum": ""
+            },
+            "type": "silverstripe-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolaas Francken",
+                    "email": "modules@sunnysideup.co.nz",
+                    "role": "lead developer"
+                }
+            ],
+            "description": "Runs a bash script using PHP",
+            "keywords": [
+                "bash",
+                "cli",
+                "command line",
+                "php",
+                "script"
+            ],
+            "time": "2018-06-12T08:54:17+00:00"
         },
         {
             "name": "symfony/console",
@@ -1619,7 +1655,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "silverstripe/upgrader": 20
+        "silverstripe/upgrader": 20,
+        "sunnysideup/php_2_command_line": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

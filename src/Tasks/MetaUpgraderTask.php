@@ -2,19 +2,17 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
 
-
 abstract class MetaUpgraderTask
 {
-
-    protected function $params = null;
+    protected $params = [];
 
     /**
      * Module Object
      * @var [type]
      */
-    protected function $mo = null;
+    protected $mo = null;
 
-    public function __construct($mo, $params = null)
+    public function __construct($mo, $params = [])
     {
         $this->params = $params;
         $this->mo = $mo;
@@ -22,7 +20,7 @@ abstract class MetaUpgraderTask
 
     public function getTitle()
     {
-        return $this->params['StepName'];
+        return $this->params['TaskName'];
     }
 
     public function run()
@@ -32,18 +30,16 @@ abstract class MetaUpgraderTask
         $this->ender();
     }
 
-    abstract function upgrader($params = []);
+    abstract public function upgrader($params = []);
 
 
     protected function starter()
     {
-
     }
 
     protected function ender()
     {
-        if($this->hasCommit()) {
-
+        if ($this->hasCommit()) {
         }
     }
 
@@ -52,22 +48,14 @@ abstract class MetaUpgraderTask
         return true;
     }
 
-    protected $commitMessage = 'MAJOR: upgrade to new version of Silverstripe - step: '.$this->getTitle();
+    protected $commitMessage = '';
 
     protected function commitMessage()
     {
+        if (! $this->commitMessage) {
+            $this->commitMessage = 'MAJOR: upgrade to new version of Silverstripe - step: '.$this->getTitle();
+        }
         return $this->commitMessage;
-    }
-
-
-    /**
-     * resets the upgrade dir
-     * the upgrade dir is NOT the module dir
-     * it is the parent dir in which everything takes place
-     */
-    protected function ResetWebRootDir($params = [])
-    {
-
     }
 
 
@@ -108,8 +96,4 @@ abstract class MetaUpgraderTask
             false
         );
     }
-
-
-
-
 }

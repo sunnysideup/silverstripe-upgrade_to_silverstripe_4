@@ -1,13 +1,12 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
 class ResetWebRootDir extends MetaUpgraderTask
 {
-
-    public function upgrade($params = [])
+    public function upgrader($params = [])
     {
         $this->mo->execMe(
             $this->mo->getABoveWebRootDir(),
@@ -23,5 +22,4 @@ class ResetWebRootDir extends MetaUpgraderTask
             false
         );
     }
-
 }

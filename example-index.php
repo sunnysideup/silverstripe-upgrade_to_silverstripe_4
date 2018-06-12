@@ -1,5 +1,5 @@
 <?php
-require_once('./src/MetaUpgrader.php');
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\MetaUpgrader;
 
@@ -22,10 +22,7 @@ $obj = MetaUpgrader::create()
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
-    ->setLocationOfUpgradeModule('/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code')
-    ->setIncludeEnvironmentFileUpdate(false)
-    ->setIncludeReorganiseTask(true)
-    ->setIncludeWebRootUpdateTask(false)
+    ->setLocationOfUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     ->setStartFrom('runUpgrade')
     ->setEndWith('')
     ->run();

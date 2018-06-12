@@ -1,13 +1,12 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
 class UpperCaseFolderNamesForPSR4 extends MetaUpgraderTask
 {
-
-    public function upgrade($params = [])
+    public function upgrader($params = [])
     {
         $codeDir = $this->mo->findCodeDir();
         $di = new RecursiveIteratorIterator(
@@ -28,5 +27,4 @@ class UpperCaseFolderNamesForPSR4 extends MetaUpgraderTask
             }
         }
     }
-
 }

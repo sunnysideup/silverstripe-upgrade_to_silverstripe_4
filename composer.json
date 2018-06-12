@@ -20,6 +20,13 @@
         "installer-name": "upgrade_to_silverstripe_4"
     },
     "require": {
-        "silverstripe/upgrader": "dev-master"
+        "silverstripe/upgrader":            "dev-master",
+        "sunnysideup/php_2_command_line":   "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sunnysideup\\UpgradeToSilverstripe4\\":"src/",
+            "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/"
+        }
     }
 }

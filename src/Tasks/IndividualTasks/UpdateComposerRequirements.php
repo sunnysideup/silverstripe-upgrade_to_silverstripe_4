@@ -1,17 +1,16 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
 class UpdateComposerRequirements extends MetaUpgraderTask
 {
-
-    public function upgrade($params = [])
+    public function upgrader($params = [])
     {
         $package = $params['Package'];
         $newVersion = $params['NewVersion'];
-        if(isset($params['ReplacementPackage'])) {
+        if (isset($params['ReplacementPackage'])) {
             $newPackage = $params['ReplacementPackage'];
         } else {
             $newPackage = $package;
@@ -35,5 +34,4 @@ class UpdateComposerRequirements extends MetaUpgraderTask
         );
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - updating core requirements');
     }
-
 }

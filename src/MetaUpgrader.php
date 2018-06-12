@@ -1,11 +1,12 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4;
-use Sunnysideup\UpgradeToSilverstripe4\Util\PHP2CommandLine;
+
+use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
+
 /**
  * recompose (Mandatory, stop execution on failure)
  */
-
 class MetaUpgrader
 {
     /**
@@ -20,7 +21,7 @@ class MetaUpgrader
      */
     public static function create()
     {
-        if (! self::$_singleton) {
+        if (self::$_singleton === null) {
             self::$_singleton = new MetaUpgrader();
         }
         return self::$_singleton;
@@ -50,26 +51,19 @@ class MetaUpgrader
         return $this->logFolderLocation;
     }
 
-    /**
-     * The file location for storing the update logs.
-     * @return [type] [description]
-     */
-    public function getLogFileLocation(){
-        return $this->logFileLocation;
-    }
 
     /**
      * start the upgrade sequence at a particular method
      * @var string
      */
     protected $listOfTasks = [
-        'ResetWebRootDir' = [],
-        'AddUpgradeBranch' = [],
-        'UpdateComposerRequirements_1' => [
+        'ResetWebRootDir' => [],
+        'AddUpgradeBranch' => [],
+        'UpdateComposerRequirements-1' => [
             'Package' => 'silverstripe/framework',
             'NewVersion' => '~4.0'
         ],
-        'UpdateComposerRequirements_1' => [
+        'UpdateComposerRequirements-2' => [
             'Package' => 'silverstripe/cms',
             'ReplacementPackage' => 'silverstripe/recipe-cms',
             'NewVersion' => '1.1.0'
@@ -105,12 +99,12 @@ class MetaUpgrader
 
     public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore)
     {
-        if(! is_array($oneOrMoreTasks)) {
-            $oneOrMoreTasks = [$oneOrMoreTasks]
+        if (! is_array($oneOrMoreTasks)) {
+            $oneOrMoreTasks = [$oneOrMoreTasks];
         }
-        foreach($this->listOfTasks as $key => $task) {
-            if($task === $insertBeforeOrAfter) {
-                if($isBefore) {
+        foreach ($this->listOfTasks as $key => $task) {
+            if ($task === $insertBeforeOrAfter) {
+                if ($isBefore) {
                     $pos = $key - 1;
                 }
                 array_splice(
@@ -406,15 +400,83 @@ class MetaUpgrader
         return $this->upgradeAsFork;
     }
 
+    ###############################
+    # USEFUL COMMANDS
+    ###############################
+
+
+    public function execMe($newDir, $command, $comment, $alwaysRun = false)
+    {
+        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
+    }
+
+    public function colourPrint($mixedVar, $colour, $newLineCount = 1)
+    {
+        return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
+    }
+
+    public function findCodeDir()
+    {
+        $codeDir = '';
+        if (file_exists($this->moduleDir . '/code')) {
+            $codeDir = $this->moduleDir . '/code';
+        } elseif (file_exists($this->moduleDir . '/src')) {
+            $codeDir = $this->moduleDir . '/src';
+        } else {
+            user_error('Can not find code dir for '.$this->moduleDir, E_USER_NOTICE);
+            return;
+        }
+
+        return $codeDir;
+    }
+
+
+
+    public function camelCase($str, array $noStrip = [])
+    {
+        $str = str_replace('-', ' ', $str);
+        $str = str_replace('_', ' ', $str);
+        // non-alpha and non-numeric characters become spaces
+        $str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
+        $str = trim($str);
+        // uppercase the first character of each word
+        $str = ucwords($str);
+        $str = str_replace(" ", "", $str);
+
+        return $str;
+    }
+
+
+
+    public function checkIfPathExistsAndCleanItUp($path)
+    {
+        if ($this->runImmediately) {
+            $path = realpath($path);
+            if (! file_exists($path)) {
+                die('ERROR! Could not find: '.$path);
+            }
+        } else {
+            $path = str_replace('//', '/', $path);
+        }
+        return $path;
+    }
+
+
+    ###############################
+    # RUN
+    ###############################
+
 
     /**
      *
-     * @var Sunnysideup\UpgradeToSilverstripe4\Util\PHP2CommandLine|null
+     * @var Sunnysideup\UpgradeToSilverstripe4\Util\PHP2CommandLineSingleton|null
      */
     protected $commandLineExec = null;
 
     public function run()
     {
+        $this->startPHP2CommandLine();
+
         //Init UTIL and helper objects
         $this->colourPrint(
             '===================== START ======================',
@@ -422,26 +484,24 @@ class MetaUpgrader
             5
         );
 
-        $this->startPHP2CommandLine();
-        $this->startOutput();
-
         if ($this->runImmediately !== null) {
             $this->commandLineExec->setRunImmediately($this->runImmediately);
         }
         $this->aboveWebRootDir = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDir);
         $this->webrootDir = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDir.'/'.$this->webrootDirName);
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
-
             $this->loadVarsForModule($moduleDetails);
 
-            foreach($this->listOfActions as $class => $params) {
-
+            foreach ($this->listOfTasks as $class => $params) {
+                $classArray = explode('-', $class);
+                $class = $classArray[0];
                 $baseClass = $class;
-                if(! class_exists($class)) {
+                if (! class_exists($class)) {
                     $class = $this->defaultNameSpaceForTasks.'\\'.$class;
                 }
-                if(class_exists($class)) {
+                if (class_exists($class)) {
                     if ($this->startMethod($class)) {
+                        $params['TaskName'] = $class;
                         $obj = $class::create($this, $params);
                         $obj->run();
                     }
@@ -449,14 +509,13 @@ class MetaUpgrader
                     user_error($baseClass.' or '.$class.' could not be found as class', E_USER_ERROR);
                 }
             }
-
         }
         $this->colourPrint(
             '===================== END =======================',
             'light_red',
             5
         );
-        $this->endOutput();
+        $this->endPHP2CommandLine();
     }
 
     /**
@@ -468,7 +527,7 @@ class MetaUpgrader
      */
     protected function startPHP2CommandLine()
     {
-        $this->commandLineExec = PHP2CommandLine::create($this->logFileLocation);
+        $this->commandLineExec = PHP2CommandLineSingleton::create($this->logFileLocation);
     }
 
     /**
@@ -477,7 +536,7 @@ class MetaUpgrader
      */
     protected function endPHP2CommandLine()
     {
-        $this->commandLineExec = PHP2CommandLine::delete();
+        $this->commandLineExec = PHP2CommandLineSingleton::delete();
     }
 
 
@@ -519,30 +578,23 @@ class MetaUpgrader
         if ($this->logFolderLocation) {
             $this->logFileLocation = $this->logFolderLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
         }
-        $this->$commandLineExec->setLogFileLocation($this->logFileLocation);
+        $this->commandLineExec->setLogFileLocation($this->logFileLocation);
 
 
         //output the confirmation.
-        $this->$colourPrinter->colourPrint('---------------------', 'light_cyan');
-        $this->$colourPrinter->colourPrint('UPGRADE DETAILS', 'light_cyan');
-        $this->$colourPrinter->colourPrint('---------------------', 'light_cyan');
-        $this->$colourPrinter->colourPrint('Vendor Name: '.$this->vendorName, 'light_cyan');
-        $this->$colourPrinter->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
-        $this->$colourPrinter->colourPrint('Package Name: '.$this->packageName, 'light_cyan');
-        $this->$colourPrinter->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_cyan');
-        $this->$colourPrinter->colourPrint('Module Dir: '.$this->moduleDir, 'light_cyan');
-        $this->$colourPrinter->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
-        $this->$colourPrinter->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
-        $this->$colourPrinter->colourPrint('Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
-        $this->$colourPrinter->colourPrint('---------------------', 'light_cyan');
+        $this->colourPrint('---------------------', 'light_cyan');
+        $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
+        $this->colourPrint('---------------------', 'light_cyan');
+        $this->colourPrint('Vendor Name: '.$this->vendorName, 'light_cyan');
+        $this->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
+        $this->colourPrint('Package Name: '.$this->packageName, 'light_cyan');
+        $this->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_cyan');
+        $this->colourPrint('Module Dir: '.$this->moduleDir, 'light_cyan');
+        $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
+        $this->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
+        $this->colourPrint('---------------------', 'light_cyan');
     }
-
-
-
-    ##############################################################################
-    ##############################################################################
-    ##############################################################################
-
 
     /**
      * start the method ...
@@ -581,53 +633,9 @@ class MetaUpgrader
         return $runMe;
     }
 
-    protected function execMe($newDir, $command, $comment, $alwaysRun = false)
-    {
-        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
-    }
-
-    protected function colourPrint($mixedVar, $colour, $newLineCount)
-    {
-        return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
-    }
 
     protected function positionForTask($s)
     {
         return array_search($s, $this->listOfTasks);
     }
-
-
-
-    protected function findCodeDir()
-    {
-        $codeDir = '';
-        if (file_exists($this->moduleDir . '/code')) {
-            $codeDir = $this->moduleDir . '/code';
-        } elseif (file_exists($this->moduleDir . '/src')) {
-            $codeDir = $this->moduleDir . '/src';
-        } else {
-            user_error('Can not find code dir for '.$this->moduleDir, E_USER_NOTICE);
-            return;
-        }
-
-        return $codeDir;
-    }
-
-
-
-    public function camelCase($str, array $noStrip = [])
-    {
-        $str = str_replace('-', ' ', $str);
-        $str = str_replace('_', ' ', $str);
-        // non-alpha and non-numeric characters become spaces
-        $str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
-        $str = trim($str);
-        // uppercase the first character of each word
-        $str = ucwords($str);
-        $str = str_replace(" ", "", $str);
-
-        return $str;
-    }
-
-
 }

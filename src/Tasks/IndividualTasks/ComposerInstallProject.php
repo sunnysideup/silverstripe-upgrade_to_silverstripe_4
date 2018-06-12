@@ -1,13 +1,12 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
 class ComposerInstallProject extends MetaUpgraderTask
 {
-
-    public function upgrade($params = [])
+    public function upgrader($params = [])
     {
         $this->mo->execMe(
             $this->mo->getABoveWebRootDir(),
@@ -44,7 +43,7 @@ class ComposerInstallProject extends MetaUpgraderTask
             false
         );
 
-            //
+        //
             // $this->mo->execMe(
             //     $this->mo->getWebRootDir(),
             //     'composer require '.$this->mo->getVendorName().'/'.$this->mo->getPackageName().':dev-'.$this->mo->getNameOfTempBranch().' --prefer-source', //--prefer-source --keep-vcs
@@ -66,7 +65,5 @@ class ComposerInstallProject extends MetaUpgraderTask
             //     'lets retrieve the module again to make sure we have the vcs data with it!',
             //     false
             // );
-        }
     }
-
 }

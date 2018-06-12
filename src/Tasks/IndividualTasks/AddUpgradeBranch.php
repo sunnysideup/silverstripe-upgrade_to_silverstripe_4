@@ -1,13 +1,12 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
 class AddUpgradeBranch extends MetaUpgraderTask
 {
-
-    public function upgrade($params = [])
+    public function upgrader($params = [])
     {
         $this->mo->execMe(
             $this->mo->getWebRootDir(),
@@ -36,12 +35,10 @@ class AddUpgradeBranch extends MetaUpgraderTask
             'create and checkout new branch: '.$this->mo->getNameOfTempBranch(),
             false
         );
-
     }
 
     protected function hasCommit()
     {
         return false;
     }
-
 }

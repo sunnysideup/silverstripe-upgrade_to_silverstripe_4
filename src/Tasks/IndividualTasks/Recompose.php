@@ -8,7 +8,7 @@ class Recompose extends MetaUpgraderTask
 {
     public function upgrader($params = [])
     {
-        $this->runSilverstripeUpgradeTask('recompose', $this->mo->getModuleDir());
+        $this->runSilverstripeUpgradeTask('recompose', $this->mo->getModuleDirLocation());
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - STEP 2');
     }
 }

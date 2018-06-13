@@ -9,7 +9,7 @@ class Upgrade extends MetaUpgraderTask
     public function upgrader($params = [])
     {
         $codeDir = $this->mo->findCodeDir();
-        $this->runSilverstripeUpgradeTask('upgrade', $this->mo->getWebRootDir(), $codeDir);
+        $this->runSilverstripeUpgradeTask('upgrade', $this->mo->getWebRootDirLocation(), $codeDir);
         $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 1 (upgrade)');
     }
 }

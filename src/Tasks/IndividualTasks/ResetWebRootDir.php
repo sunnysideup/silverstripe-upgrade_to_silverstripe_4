@@ -9,17 +9,23 @@ class ResetWebRootDir extends MetaUpgraderTask
     public function upgrader($params = [])
     {
         $this->mo->execMe(
-            $this->mo->getABoveWebRootDir(),
-            'rm '.$this->mo->getWebRootDir(). ' -rf',
-            'remove the upgrade dir: '.$this->mo->getWebRootDir(),
+            $this->mo->getAboveWebRootDirLocation(),
+            'rm '.$this->mo->getWebRootDirLocation(). ' -rf',
+            'remove the upgrade dir: '.$this->mo->getWebRootDirLocation(),
             false
         );
 
         $this->mo->execMe(
-            $this->mo->getABoveWebRootDir(),
-            'mkdir '.$this->mo->getWebRootDir(). '',
-            'create upgrade directory: '.$this->mo->getWebRootDir(),
+            $this->mo->getAboveWebRootDirLocation(),
+            'mkdir '.$this->mo->getWebRootDirLocation(). '',
+            'create upgrade directory: '.$this->mo->getWebRootDirLocation(),
             false
         );
     }
+
+    function hasCommit()
+    {
+        return false;
+    }
+
 }

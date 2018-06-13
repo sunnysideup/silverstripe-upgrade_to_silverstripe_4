@@ -5,16 +5,16 @@ use Sunnysideup\UpgradeToSilverstripe4\MetaUpgrader;
 
 $obj = MetaUpgrader::create()
     //->setRunImmediately(true)
-    ->setLogFolderLocation('/var/www')
-    ->setAboveWebRootDir('/var/www')
-    ->setWebRootDirName('__upgradeto4__')
+    ->setLogFolderDirLocation('/var/www')
+    ->setAboveWebRootDirLocation('/var/www')
+    ->setWebRootName('__upgradeto4__')
     ->setArrayOfModules(
         [
             1 => [
               'VendorName' => 'sunnysideup',
-              'VendorNameSpace' => 'Sunnysideup',
+              'VendorNamespace' => 'Sunnysideup',
               'PackageName' => 'webpack_requirements_backend',
-              'PackageNameSpace' => 'WebpackRequirementsBackend',
+              'PackageNamespace' => 'WebpackRequirementsBackend',
               'GitLink' => 'git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git',
               'UpgradeAsFork' => false
             ]
@@ -23,6 +23,6 @@ $obj = MetaUpgrader::create()
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
-    ->setStartFrom('runUpgrade')
+    ->setStartFrom('')
     ->setEndWith('')
     ->run();

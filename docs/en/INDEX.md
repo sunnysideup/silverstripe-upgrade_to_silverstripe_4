@@ -51,30 +51,54 @@ It then commits and pushes the results for inspection.
 <?php
 require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
-    ->setRunImmediately(true)
-    ->setLogFolderLocation('/var/www')
-    ->setAboveWebRootDir('/var/www')
-    ->setWebRootDirName('__upgradeto4__')
+    ->setLogFolderDirLocation('/var/www')
+    ->setAboveWebRootDirLocation('/var/www')
+    ->setWebRootName('__upgradeto4__')
     ->setArrayOfModules(
         [
             [
               'VendorName' => 'sunnysideup',
-              'VendorNameSpace' => 'Sunnysideup',
+              'VendorNamespace' => 'Sunnysideup',
               'PackageName' => 'webpack_requirements_backend',
-              'PackageNameSpace' => 'WebpackRequirementsBackend',
+              'PackageNamespace' => 'WebpackRequirementsBackend',
               'GitLink' => 'git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git',
               'UpgradeAsFork' => false
             ]
         ]
     )
+    ->setListOfTasks(
+        [
+            'ResetWebRootDir-1' => [],
+            'AddUpgradeBranch' => [],
+            'UpdateComposerRequirements-1' => [
+                'Package' => 'silverstripe/framework',
+                'NewVersion' => '~4.0'
+            ],
+            'UpdateComposerRequirements-2' => [
+                'Package' => 'silverstripe/cms',
+                'ReplacementPackage' => 'silverstripe/recipe-cms',
+                'NewVersion' => '1.1.0'
+            ],
+            'Recompose' => [],
+
+            'ResetWebRootDir-2' => [],
+            'ComposerInstallProject' => [],
+            // 'ChangeEnvironment' => [],
+            'UpperCaseFolderNamesForPSR4' => [],
+            'AddHacks' => [],
+            'AddNamespace' => [],
+            'Upgrade' => [],
+            'InspectAPIChanges' => [],
+            'Reorganise' => [],
+            // 'WebRootUpdate' => []    
+
+        ]
+    )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
     ->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')
-    ->setIncludeEnvironmentFileUpdate(false)
-    ->setIncludeReorganiseTask(false)
-    ->setIncludeWebRootUpdateTask(false)
-    ->setStartFrom('runRecompose')
-    ->setEndWith('runComposerInstallProject');
+    ->setStartFrom('Recompose')
+    ->setEndWith('ComposerInstallProject');
 
 $obj->run();
 ```
@@ -85,7 +109,7 @@ The code above is very verbose to show you all the options available. Here is a 
 <?php
 require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
 $obj = MetaUpgrader::create()
-    ->setAboveWebRootDir('/var/www')
+    ->setAboveWebRootDirLocation('/var/www')
     ->addModule(
         [
           'VendorName' => 'sunnysideup',
@@ -95,7 +119,7 @@ $obj = MetaUpgrader::create()
 
 $obj->run();
 ```
-We have included an example file like this in the module root. 
+We have included an example file like this in the module root.
 
 
 3. Run the file to upgrade your modules - e.g.
@@ -117,14 +141,14 @@ We have included an example file like this in the module root.
 
 `->setRunImmediately(false)`: When you set `runImmediately` to true, the PHP code will use the `exec` function to run commands on the `command line` immediately. **Careful! Even if you do not run the code immediately, a bunch of code will still be executed on the command line to inspect the module.**
 
-By default running on command line, it will run immediately and when accessing it through http the script will not do any actual upgrading, but rather, it will output a bash script to your screen that you can use in the future. 
+By default running on command line, it will run immediately and when accessing it through http the script will not do any actual upgrading, but rather, it will output a bash script to your screen that you can use in the future.
 
-It is recommended that you use the runImmediate = true option as that is how we test it most of the time. 
+It is recommended that you use the runImmediate = true option as that is how we test it most of the time.
 
 
 ### root directory
 
-`->setRootDir('/var/www/')`: this is meant to be the directory where you do the work, where you usually save your websites that you work on locally.
+`->setRootDir('/var/www')`: this is meant to be the directory where you do the work, where you usually save your websites that you work on locally.
 
 
 ### upgrade directory

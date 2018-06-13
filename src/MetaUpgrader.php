@@ -9,6 +9,8 @@ use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
  */
 class MetaUpgrader
 {
+
+
     /**
      * only instance of me
      * @var MetaUpgrader
@@ -27,29 +29,49 @@ class MetaUpgrader
         return self::$_singleton;
     }
 
-    /**
-     * set a folder location for the upgrade log.
-     * if set, a log will be created.
-     *
-     * @var string
-     */
-    protected $logFolderLocation = '';
 
-    public function setLogFolderLocation($s)
+    public function __construct()
     {
-        $this->logFolderLocation = $s;
-
-        return $this;
+        $this->startPHP2CommandLine();
     }
 
-    /**
-     * The folder for storing the log file in.
-     * @param [type] $s [description]
-     */
-    public function getLogFolderLocation()
+
+    public function __destruct()
     {
-        return $this->logFolderLocation;
+        $this->endPHP2CommandLine();
     }
+
+    function __call($function , $args) {
+        $getOrSet = substr($function, 0, 3);
+        if($getOrSet === 'set' || $getOrSet === 'get' ) {
+            $var = lcfirst(ltrim($function, $getOrSet));
+            if(isset($this->$var)) {
+                if ($getOrSet === 'get') {
+                    if(strpos($var, 'DirLocation') !== false || strpos($var, 'FileLocation') !== false) {
+                        return $this->checkIfPathExistsAndCleanItUp($this->$var);
+                    } else {
+                        return $this->$var;
+                    }
+                }
+                else if ($getOrSet === 'set') {
+                    $this->$var= $args[0];
+                    return $this;
+                }
+            } else {
+                user_error ('Fatal error: can not get/set variable in MetaUpgrader::'.$var, E_USER_ERROR);
+            }
+        } else {
+            user_error ('Fatal error: Call to undefined method MetaUpgrader::'.$function(), E_USER_ERROR);
+        }
+    }
+
+
+
+
+    #########################################
+    # TASKS
+    #########################################
+
 
 
     /**
@@ -57,7 +79,7 @@ class MetaUpgrader
      * @var string
      */
     protected $listOfTasks = [
-        'ResetWebRootDir' => [],
+        'ResetWebRootDir-1' => [],
         'AddUpgradeBranch' => [],
         'UpdateComposerRequirements-1' => [
             'Package' => 'silverstripe/framework',
@@ -69,7 +91,8 @@ class MetaUpgrader
             'NewVersion' => '1.1.0'
         ],
         'Recompose' => [],
-        // 'ResetWebRootDir' => [],
+
+        'ResetWebRootDir-2' => [],
         'ComposerInstallProject' => [],
         // 'ChangeEnvironment' => [],
         'UpperCaseFolderNamesForPSR4' => [],
@@ -80,13 +103,6 @@ class MetaUpgrader
         'Reorganise' => [],
         // 'WebRootUpdate' => []
     ];
-
-    public function setListOfTasks($a)
-    {
-        $this->listOfTasks = $a;
-
-        return $this;
-    }
 
     public function removeFromListOfTasks($s)
     {
@@ -119,17 +135,17 @@ class MetaUpgrader
     }
 
     /**
+    * end the upgrade sequence after a particular method
+    * @var string
+    */
+    protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
+
+    /**
      * start the upgrade sequence at a particular method
      * @var string
      */
     protected $startFrom = '';
 
-    public function setStartFrom($s)
-    {
-        $this->startFrom = $s;
-
-        return $this;
-    }
 
     /**
      * end the upgrade sequence after a particular method
@@ -137,76 +153,45 @@ class MetaUpgrader
      */
     protected $endWith = '';
 
-    public function setEndWith($s)
-    {
-        $this->endWith = $s;
+    protected $isLastMethod = false;
 
-        return $this;
+
+
+    protected function positionForTask($s)
+    {
+        return array_search($s, $this->listOfTasks);
     }
 
-    /**
-     * end the upgrade sequence after a particular method
-     * @var string
-     */
-    protected $defaultNameSpaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
 
-    public function setDefaultNameSpaceForTasks($s)
+    public function getRunImmediately()
     {
-        $this->defaultNameSpaceForTasks = $s;
-
-        return $this;
+        return $this->commandLineExec->getRunImmediately();
     }
 
-    /**
-     * should the script stop if any error occurs?
-     * @var bool
-     */
-    protected $breakOnAllErrors = false;
+    public function setRunImmediately($b)
+    {
+        $this->commandLineExec->setRunImmediately($b);
+
+        return $this;
+
+    }
+
+    public function getBreakOnAllErrors()
+    {
+        return $this->commandLineExec->getBreakOnAllErrors();
+    }
 
     public function setBreakOnAllErrors($b)
     {
-        $this->breakOnAllErrors = $b;
+        $this->commandLineExec->setBreakOnAllErrors($b);
 
         return $this;
     }
 
-    /**
-     * name of the branch created to do the upgrade
-     * @var string
-     */
-    protected $nameOfTempBranch = 'temp-upgradeto4-branch';
+    #########################################
+    # MODULES
+    #########################################
 
-    public function setNameOfTempBranch($s)
-    {
-        $this->nameOfTempBranch = $s;
-
-        return $this;
-    }
-
-
-    /**
-     * @var string
-     */
-    protected $aboveWebRootDir = '/var/www';
-
-    public function setAboveWebRootDir($s)
-    {
-        $this->aboveWebRootDir = $s;
-
-        return $this;
-    }
-
-    /**
-     * @var string
-     */
-    protected $webrootDirName = 'upgradeto4';
-
-    public function setWebRootDirName($s)
-    {
-        $this->webrootDirName = $s;
-
-        return $this;
-    }
 
     /**
      * specified like this:
@@ -222,7 +207,7 @@ class MetaUpgrader
      *          'VendorName' => 'A',
      *          'VendorNamespace' => 'A',
      *          'PackageName' => 'Package2',
-     *          'PackageNameSpace' => 'Package2',
+     *          'PackageNamespace' => 'Package2',
      *          'GitLink' => 'git@github.com:foor/bar-2.git',
      *          'UpgradeAsFork' => false
      *      ],
@@ -234,13 +219,6 @@ class MetaUpgrader
      */
     protected $arrayOfModules = [];
 
-    public function setArrayOfModules($a)
-    {
-        $this->arrayOfModules = $a;
-
-        return $this;
-    }
-
     public function addModule($a)
     {
         $this->arrayOfModules[] = $a;
@@ -248,17 +226,43 @@ class MetaUpgrader
         return $this;
     }
 
+
+
+
+
+
+
+    #########################################
+    # VENDOR / PACKAGE / GIT DETAILS
+    #########################################
+
+
+
     /**
-     * @var null|bool
+     * name of the branch created to do the upgrade
+     * @var string
      */
-    protected $runImmediately = null;
+    protected $nameOfTempBranch = 'temp-upgradeto4-branch';
 
-    public function setRunImmediately($b)
-    {
-        $this->runImmediately = $b;
+    protected $vendorName = '';
 
-        return $this;
-    }
+    protected $vendorNamespace = '';
+
+    protected $packageName = '';
+
+    protected $packageNamespace = '';
+
+    protected $gitLink = '';
+
+    protected $upgradeAsFork = false;
+
+
+
+
+    #########################################
+    # COMPOSER
+    #########################################
+
 
     /**
      *
@@ -268,12 +272,36 @@ class MetaUpgrader
      */
     protected $composerEnvironmentVars = '';
 
-    public function setComposerEnvironmentVars($s)
-    {
-        $this->composerEnvironmentVars = $s;
 
-        return $this;
-    }
+
+
+
+    #########################################
+    # LOCATIONS
+    #########################################
+
+
+
+
+
+
+    /**
+     *
+     * @var string
+     */
+    protected $logFolderDirLocation = '';
+
+    /**
+     * @var string
+     */
+    protected $aboveWebRootDirLocation = '/var/www';
+
+
+    /**
+     * @var string
+     */
+    protected $webRootName = 'upgradeto4';
+
 
 
 
@@ -285,120 +313,25 @@ class MetaUpgrader
      */
     protected $locationOfUpgradeModule = 'upgrade-code';
 
-    public function setLocationOfUpgradeModule($s)
-    {
-        $this->locationOfUpgradeModule = $s;
-
-        return $this;
-    }
-
-    /**
-     * @var bool
-     */
-    protected $includeEnvironmentFileUpdate = false;
-
-    public function setIncludeEnvironmentFileUpdate($b)
-    {
-        $this->includeEnvironmentFileUpdate = $b;
-
-        return $this;
-    }
-
-    /**
-     * @var bool
-     */
-    protected $includeReorganiseTask = false;
-
-    public function setIncludeReorganiseTask($b)
-    {
-        $this->includeReorganiseTask = $b;
-
-        return $this;
-    }
-
-    /**
-     * @var bool
-     */
-    protected $includeWebRootUpdateTask = false;
-
-    public function setIncludeWebRootUpdateTask($b)
-    {
-        $this->includeWebRootUpdateTask = $b;
-
-        return $this;
-    }
-
-    protected $lastMethod = false;
-
-
     protected $logFileLocation = '';
 
-    public function getLogFileLocation()
-    {
-        return $this->logFileLocation;
-    }
+    protected $webRootDirLocation = '';
+
+    protected $moduleDirLocation = '';
 
 
-    protected $webrootDir = '';
 
-    public function getWebRootDir()
-    {
-        return $this->webrootDir;
-    }
-
-    protected $moduleDir = '';
-
-    public function getModuleDir()
-    {
-        return $this->moduleDir;
-    }
-
-    protected $vendorName = '';
-
-    public function getVendorName()
-    {
-        return $this->vendorName;
-    }
+    ###############################
+    # HELPERS
+    ###############################
 
 
-    protected $vendorNamespace = '';
+    /**
+     *
+     * @var Sunnysideup\UpgradeToSilverstripe4\Util\PHP2CommandLineSingleton|null
+     */
+    protected $commandLineExec = null;
 
-    public function getVendorNamespace()
-    {
-        return $this->vendorNamespace;
-    }
-
-
-    protected $packageName = '';
-
-    public function getPackageName()
-    {
-        return $this->PackageName;
-    }
-
-
-    protected $packageNamespace = '';
-
-    public function getPackageNamespace()
-    {
-        return $this->packageNamespace;
-    }
-
-
-    protected $gitLink = '';
-
-    public function getGitLink()
-    {
-        return $this->getGitLink;
-    }
-
-
-    protected $upgradeAsFork = '';
-
-    public function getUpgradeAsFork()
-    {
-        return $this->upgradeAsFork;
-    }
 
     ###############################
     # USEFUL COMMANDS
@@ -418,12 +351,12 @@ class MetaUpgrader
     public function findCodeDir()
     {
         $codeDir = '';
-        if (file_exists($this->moduleDir . '/code')) {
-            $codeDir = $this->moduleDir . '/code';
-        } elseif (file_exists($this->moduleDir . '/src')) {
-            $codeDir = $this->moduleDir . '/src';
+        if (file_exists($this->moduleDirLocation . '/code')) {
+            $codeDir = $this->moduleDirLocation . '/code';
+        } elseif (file_exists($this->moduleDirLocation . '/src')) {
+            $codeDir = $this->moduleDirLocation . '/src';
         } else {
-            user_error('Can not find code dir for '.$this->moduleDir, E_USER_NOTICE);
+            user_error('Can not find code dir for '.$this->moduleDirLocation, E_USER_NOTICE);
             return;
         }
 
@@ -447,19 +380,27 @@ class MetaUpgrader
     }
 
 
-
+    /**
+     * returns path in a consistent format
+     * e.g. /var/www
+     *
+     * @param  string $path
+     *
+     * @return string
+     */
     public function checkIfPathExistsAndCleanItUp($path)
     {
-        if ($this->runImmediately) {
+        $originalPath = $path;
+        $path = str_replace('///', '/', $path);
+        $path = str_replace('//', '/', $path);
+        if (file_exists($path)) {
             $path = realpath($path);
-            if (! file_exists($path)) {
-                die('ERROR! Could not find: '.$path);
-            }
-        } else {
-            $path = str_replace('//', '/', $path);
         }
+        $path = rtrim($path, '/');
+
         return $path;
     }
+
 
 
     ###############################
@@ -467,11 +408,6 @@ class MetaUpgrader
     ###############################
 
 
-    /**
-     *
-     * @var Sunnysideup\UpgradeToSilverstripe4\Util\PHP2CommandLineSingleton|null
-     */
-    protected $commandLineExec = null;
 
     public function run()
     {
@@ -484,29 +420,26 @@ class MetaUpgrader
             5
         );
 
-        if ($this->runImmediately !== null) {
-            $this->commandLineExec->setRunImmediately($this->runImmediately);
-        }
-        $this->aboveWebRootDir = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDir);
-        $this->webrootDir = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDir.'/'.$this->webrootDirName);
+        $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation);
+        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation.'/'.$this->webRootName);
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
 
             foreach ($this->listOfTasks as $class => $params) {
-                $classArray = explode('-', $class);
-                $class = $classArray[0];
-                $baseClass = $class;
-                if (! class_exists($class)) {
-                    $class = $this->defaultNameSpaceForTasks.'\\'.$class;
+                $properClass = current(explode('-', $class));
+                $nameSpacesArray = explode('\\',$class);
+                $shortClassCode = end($nameSpacesArray);
+                if (! class_exists($properClass)) {
+                    $properClass = $this->defaultNamespaceForTasks.'\\'.$properClass;
                 }
-                if (class_exists($class)) {
-                    if ($this->startMethod($class)) {
-                        $params['TaskName'] = $class;
-                        $obj = $class::create($this, $params);
+                if (class_exists($properClass)) {
+                    if ($this->startMethod($shortClassCode)) {
+                        $params['TaskName'] = $shortClassCode;
+                        $obj = $properClass::create($this, $params);
                         $obj->run();
                     }
                 } else {
-                    user_error($baseClass.' or '.$class.' could not be found as class', E_USER_ERROR);
+                    user_error($properClass.' could not be found as class', E_USER_ERROR);
                 }
             }
         }
@@ -527,7 +460,9 @@ class MetaUpgrader
      */
     protected function startPHP2CommandLine()
     {
-        $this->commandLineExec = PHP2CommandLineSingleton::create($this->logFileLocation);
+        if($this->commandLineExec === null) {
+            $this->commandLineExec = PHP2CommandLineSingleton::create();
+        }
     }
 
     /**
@@ -536,7 +471,9 @@ class MetaUpgrader
      */
     protected function endPHP2CommandLine()
     {
-        $this->commandLineExec = PHP2CommandLineSingleton::delete();
+        if($this->commandLineExec !== null) {
+            $this->commandLineExec = PHP2CommandLineSingleton::delete();
+        }
     }
 
 
@@ -563,7 +500,7 @@ class MetaUpgrader
         }
 
         //GitLink
-        $this->moduleDir = $this->webrootDir . '/' . $this->packageName;
+        $this->moduleDirLocation = $this->webRootDirLocation . '/' . $this->packageName;
         if (isset($moduleDetails['GitLink'])) {
             $this->gitLink = $moduleDetails['GitLink'];
         } else {
@@ -575,8 +512,8 @@ class MetaUpgrader
 
         //LogFileLocation
         $this->logFileLocation = '';
-        if ($this->logFolderLocation) {
-            $this->logFileLocation = $this->logFolderLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
+        if ($this->logFolderDirLocation) {
+            $this->logFileLocation = $this->logFolderDirLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
         }
         $this->commandLineExec->setLogFileLocation($this->logFileLocation);
 
@@ -589,7 +526,7 @@ class MetaUpgrader
         $this->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
         $this->colourPrint('Package Name: '.$this->packageName, 'light_cyan');
         $this->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_cyan');
-        $this->colourPrint('Module Dir: '.$this->moduleDir, 'light_cyan');
+        $this->colourPrint('Module Dir: '.$this->moduleDirLocation, 'light_cyan');
         $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
         $this->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
@@ -606,7 +543,7 @@ class MetaUpgrader
      */
     protected function startMethod($name) : bool
     {
-        if ($this->lastMethod) {
+        if ($this->isLastMethod) {
             $runMe = false;
         } else {
             if ($this->startFrom) {
@@ -616,7 +553,7 @@ class MetaUpgrader
             }
             if ($this->endWith) {
                 if ($name === $this->endWith) {
-                    $this->lastMethod = true;
+                    $this->isLastMethod = true;
                 }
             }
             $runMe = $this->startFrom ? false : true;
@@ -634,8 +571,4 @@ class MetaUpgrader
     }
 
 
-    protected function positionForTask($s)
-    {
-        return array_search($s, $this->listOfTasks);
-    }
 }

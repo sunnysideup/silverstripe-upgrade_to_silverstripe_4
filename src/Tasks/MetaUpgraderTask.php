@@ -4,6 +4,28 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
 
 abstract class MetaUpgraderTask
 {
+
+    private static $_singleton = [];
+
+    public static function create($mo, $params = [])
+    {
+        $className = get_called_class();
+        if (empty(self::$_singleton[$className])) {
+            self::$_singleton[$className] = new $className($mo, $params);
+        }
+
+        return self::$_singleton[$className];
+    }
+
+    public static function delete()
+    {
+        $className = get_called_class();
+        self::$_singleton[$className] = null;
+        unset(self::$_singleton[$className]);
+
+        return null;
+    }
+
     protected $params = [];
 
     /**
@@ -40,6 +62,7 @@ abstract class MetaUpgraderTask
     protected function ender()
     {
         if ($this->hasCommit()) {
+            $this->commitAndPush();
         }
     }
 
@@ -50,7 +73,14 @@ abstract class MetaUpgraderTask
 
     protected $commitMessage = '';
 
-    protected function commitMessage()
+    public function setCommitMessage($s)
+    {
+        $this->commitMessage = $s;
+
+        return $this;
+    }
+
+    protected function getCommitMessage()
     {
         if (! $this->commitMessage) {
             $this->commitMessage = 'MAJOR: upgrade to new version of Silverstripe - step: '.$this->getTitle();
@@ -59,24 +89,26 @@ abstract class MetaUpgraderTask
     }
 
 
-    protected function commitAndPush($message)
+    protected function commitAndPush()
     {
+        $message = $this->getCommitMessage();
+
         $this->mo->execMe(
-            $this->mo->getModuleDir(),
+            $this->mo->getModuleDirLocation(),
             'git add . -A',
             'git add all',
             false
         );
 
         $this->mo->execMe(
-            $this->mo->getModuleDir(),
+            $this->mo->getModuleDirLocation(),
             'git commit . -m "'.$message.'"',
             'commit changes: '.$message,
             false
         );
 
         $this->mo->execMe(
-            $this->mo->getModuleDir(),
+            $this->mo->getModuleDirLocation(),
             'git push origin '.$this->mo->getNameOfTempBranch(),
             'pushing changes to origin on the '.$this->mo->getNameOfTempBranch().' branch',
             false
@@ -87,10 +119,10 @@ abstract class MetaUpgraderTask
     protected function runSilverstripeUpgradeTask($task, $rootDir = '', $param1 = '', $param2 = '', $settings = '')
     {
         if (! $rootDir) {
-            $rootDir = $this->mo->getWebRootDir();
+            $rootDir = $this->mo->getWebRootDirLocation();
         }
         $this->mo->execMe(
-            $this->mo->getWebRootDir(),
+            $this->mo->getWebRootDirLocation(),
             'php '.$this->mo->getLocationOfUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDir.' --write -vvv '.$settings,
             'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
             false

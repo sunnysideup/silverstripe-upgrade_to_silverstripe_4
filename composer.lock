@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "5a3cd0d5aff5c07c63002ad54de6a40e",
@@ -1231,12 +1231,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sunnysideup/silverstripe-php_2_command_line.git",
-                "reference": "5db826ec98709b24fe52c692f3056c58cdaafcdd"
+                "reference": "9061b781f497f9354cdb78e5fd50c09c9850f55b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/5db826ec98709b24fe52c692f3056c58cdaafcdd",
-                "reference": "5db826ec98709b24fe52c692f3056c58cdaafcdd",
+                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/9061b781f497f9354cdb78e5fd50c09c9850f55b",
+                "reference": "9061b781f497f9354cdb78e5fd50c09c9850f55b",
                 "shasum": ""
             },
             "type": "silverstripe-module",
@@ -1259,7 +1259,7 @@
                 "php",
                 "script"
             ],
-            "time": "2018-06-12T08:54:17+00:00"
+            "time": "2018-06-12T10:51:14+00:00"
         },
         {
             "name": "symfony/console",

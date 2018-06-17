@@ -23,6 +23,6 @@ $obj = MetaUpgrader::create()
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
-    ->setStartFrom('')
+    ->setStartFrom('SearchAndReplace')
     ->setEndWith('')
     ->run();

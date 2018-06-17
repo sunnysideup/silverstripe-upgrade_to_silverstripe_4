@@ -96,7 +96,7 @@ class MetaUpgrader
         'ComposerInstallProject' => [],
         // 'ChangeEnvironment' => [],
         'UpperCaseFolderNamesForPSR4' => [],
-        'AddHacks' => [],
+        'SearchAndReplace' => [],
         'AddNamespace' => [],
         'Upgrade' => [],
         'InspectAPIChanges' => [],

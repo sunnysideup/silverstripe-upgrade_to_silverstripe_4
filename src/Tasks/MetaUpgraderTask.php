@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * mo stands for Module Object
+ * @var [type]
+ */
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
 
 abstract class MetaUpgraderTask
@@ -30,7 +33,7 @@ abstract class MetaUpgraderTask
 
     /**
      * Module Object
-     * @var [type]
+     * @var MetaUpgrader
      */
     protected $mo = null;
 

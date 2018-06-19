@@ -29,5 +29,14 @@
             "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/",
             "SilverStripe\\Upgrader\\Util\\":"vendor/silverstripe/Upgrader/src/Util/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [],
+        "post-update-cmd": [
+            "@cleanup",
+            "composer dumpautoload"
+        ]
     }
+
+
 }

@@ -7,24 +7,24 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
 
 abstract class MetaUpgraderTask
 {
+    protected $debug = false;
 
     private static $_singleton = [];
 
     public static function create($mo, $params = [])
     {
         $className = get_called_class();
-        if (empty(self::$_singleton[$className])) {
-            self::$_singleton[$className] = new $className($mo, $params);
+        if (empty(self::$_singleton[$params['TaskName']])) {
+            self::$_singleton[$params['TaskName']] = new $className($mo, $params);
         }
 
-        return self::$_singleton[$className];
+        return self::$_singleton[$params['TaskName']];
     }
 
-    public static function delete()
+    public static function delete($params)
     {
-        $className = get_called_class();
-        self::$_singleton[$className] = null;
-        unset(self::$_singleton[$className]);
+        self::$_singleton[$params['TaskName']] = null;
+        unset(self::$_singleton[$params['TaskName']]);
 
         return null;
     }

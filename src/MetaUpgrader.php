@@ -41,27 +41,27 @@ class MetaUpgrader
         $this->endPHP2CommandLine();
     }
 
-    function __call($function , $args) {
+    public function __call($function, $args)
+    {
         $getOrSet = substr($function, 0, 3);
-        if($getOrSet === 'set' || $getOrSet === 'get' ) {
+        if ($getOrSet === 'set' || $getOrSet === 'get') {
             $var = lcfirst(ltrim($function, $getOrSet));
-            if(isset($this->$var)) {
+            if (isset($this->$var)) {
                 if ($getOrSet === 'get') {
-                    if(strpos($var, 'DirLocation') !== false || strpos($var, 'FileLocation') !== false) {
+                    if (strpos($var, 'DirLocation') !== false || strpos($var, 'FileLocation') !== false) {
                         return $this->checkIfPathExistsAndCleanItUp($this->$var);
                     } else {
                         return $this->$var;
                     }
-                }
-                else if ($getOrSet === 'set') {
+                } elseif ($getOrSet === 'set') {
                     $this->$var= $args[0];
                     return $this;
                 }
             } else {
-                user_error ('Fatal error: can not get/set variable in MetaUpgrader::'.$var, E_USER_ERROR);
+                user_error('Fatal error: can not get/set variable in MetaUpgrader::'.$var, E_USER_ERROR);
             }
         } else {
-            user_error ('Fatal error: Call to undefined method MetaUpgrader::'.$function(), E_USER_ERROR);
+            user_error('Fatal error: Call to undefined method MetaUpgrader::'.$function(), E_USER_ERROR);
         }
     }
 
@@ -80,23 +80,25 @@ class MetaUpgrader
      */
     protected $listOfTasks = [
         'ResetWebRootDir-1' => [],
+        'AddLegacyBranch' => [],
+        'ResetWebRootDir-2' => [],
         'AddUpgradeBranch' => [],
         'UpdateComposerRequirements-1' => [
             'Package' => 'silverstripe/framework',
             'NewVersion' => '~4.0'
         ],
+        'Recompose' => [],
         'UpdateComposerRequirements-2' => [
             'Package' => 'silverstripe/cms',
             'ReplacementPackage' => 'silverstripe/recipe-cms',
-            'NewVersion' => '1.1.0'
+            'NewVersion' => '1.1.2'
         ],
-        'Recompose' => [],
 
-        'ResetWebRootDir-2' => [],
+        'ResetWebRootDir-3' => [],
         'ComposerInstallProject' => [],
+        'SearchAndReplace' => [],
         // 'ChangeEnvironment' => [],
         'UpperCaseFolderNamesForPSR4' => [],
-        'SearchAndReplace' => [],
         'AddNamespace' => [],
         'Upgrade' => [],
         'InspectAPIChanges' => [],
@@ -173,7 +175,6 @@ class MetaUpgrader
         $this->commandLineExec->setRunImmediately($b);
 
         return $this;
-
     }
 
     public function getBreakOnAllErrors()
@@ -427,7 +428,7 @@ class MetaUpgrader
 
             foreach ($this->listOfTasks as $class => $params) {
                 $properClass = current(explode('-', $class));
-                $nameSpacesArray = explode('\\',$class);
+                $nameSpacesArray = explode('\\', $class);
                 $shortClassCode = end($nameSpacesArray);
                 if (! class_exists($properClass)) {
                     $properClass = $this->defaultNamespaceForTasks.'\\'.$properClass;
@@ -437,6 +438,8 @@ class MetaUpgrader
                         $params['TaskName'] = $shortClassCode;
                         $obj = $properClass::create($this, $params);
                         $obj->run();
+                        //important!
+                        $obj = $properClass::delete($params);
                     }
                 } else {
                     user_error($properClass.' could not be found as class', E_USER_ERROR);
@@ -460,7 +463,7 @@ class MetaUpgrader
      */
     protected function startPHP2CommandLine()
     {
-        if($this->commandLineExec === null) {
+        if ($this->commandLineExec === null) {
             $this->commandLineExec = PHP2CommandLineSingleton::create();
         }
     }
@@ -471,7 +474,7 @@ class MetaUpgrader
      */
     protected function endPHP2CommandLine()
     {
-        if($this->commandLineExec !== null) {
+        if ($this->commandLineExec !== null) {
             $this->commandLineExec = PHP2CommandLineSingleton::delete();
         }
     }
@@ -569,6 +572,4 @@ class MetaUpgrader
 
         return $runMe;
     }
-
-
 }

@@ -71,5 +71,4 @@ class ComposerInstallProject extends MetaUpgraderTask
     {
         return false;
     }
-
 }

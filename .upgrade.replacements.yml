@@ -1,31 +1,39 @@
 ####
 #### FORMAT
 #### VERSION;
-####    LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
-####        FindKey
-####            R: replace with entry
-####            C: comment - this makes it a complex replacement
-####            P: more specific path (e.g. src/Foo/Bar or src/MyClass.php)
-####            I: case insensitive (default is case sensitive)
+####    PATH (relative to root folder of module)
+####        LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
+####            FindKey
+####                R: replace with entry
+####                C: comment - this makes it a complex replacement
+####                I: ignore case (default is case sensitive)
 
 SS4:
-    php:
-        mysite:
-            R: 'app'
-            I: true
-        flusable:
-            R: 'Flushable'
-            I: true
-        BASE_PATH:
-            R: 'Director::baseFolder()'
-        extends Extension:
-            R: 'extends Extension'
-            C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider using a trait'
-        extends DataExtension:
-            R: 'extends Extension'
-            C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider using a trait'
-        'public function includeInHTML($templateFile, $content)':
-            R: 'public function includeInHTML($content)'
-            I: true
-            P: 'code/View/Requirements_Backend_For_Webpack.php'
->
+
+    '.':
+        php:
+            mysite:
+                R: 'app'
+                I: true
+            implements flushable:
+                R: 'implements Flushable'
+            BASE_PATH:
+                R: 'Director::baseFolder()'
+            extends Extension:
+                R: 'extends Extension'
+                C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait'
+                I: true
+            extends DataExtension:
+                R: 'extends Extension'
+                C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait'
+                I: true
+    '.':
+        'md':
+            mysite:
+                R: 'app'
+                I: true
+    'code/View/Requirements_Backend_For_Webpack.php':
+        php:
+            'public function includeInHTML($templateFile, $content)':
+                R: 'public function includeInHTML($content)'
+                I: true

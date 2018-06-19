@@ -23,9 +23,8 @@ class ResetWebRootDir extends MetaUpgraderTask
         );
     }
 
-    function hasCommit()
+    public function hasCommit()
     {
         return false;
     }
-
 }

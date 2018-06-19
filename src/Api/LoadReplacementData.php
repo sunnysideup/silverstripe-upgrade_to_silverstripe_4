@@ -13,7 +13,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 use SilverStripe\Upgrader\Util\ConfigFile;
 
-
 class LoadReplacementData
 {
 
@@ -34,15 +33,18 @@ class LoadReplacementData
         $this->mo = $mo;
         $this->fullArray = $this->getData();
         $count = 0;
-        foreach ($this->fullArray as $to => $subArray) {
+        foreach ($this->fullArray as $to => $toArray) {
             $this->tos[$to] = $to;
-            foreach ($subArray as $language => $subSubArray) {
-                $this->languages[$language] = $language;
-                foreach ($subSubArray as $findKey => $details) {
-                    $replaceKey = $details['R'];
-                    $this->flatFindArray[$language][$language."_".$to."_".$count] = $findKey;
-                    $this->flatReplacedArray[$language][$language."_".$to."_".$count] = $replaceKey;
-                    $count++;
+            foreach ($toArray as $path => $pathArray) {
+                foreach ($pathArray as $language => $languageArray) {
+                    $this->languages[$language] = $language;
+                    foreach ($languageArray as $findKey => $findKeyArray) {
+                        $replaceKey = $findKeyArray['R'];
+                        $key = strtolower($to.'_'.$language.'_'.$path.'_'.$count);
+                        $this->flatFindArray[$key] = $findKey;
+                        $this->flatReplacedArray[$key] = $replaceKey;
+                        $count++;
+                    }
                 }
             }
         }
@@ -110,7 +112,7 @@ class LoadReplacementData
             $this->mo->getModuleDirLocation(),
         ];
         $globalFixes = $this->mo->checkIfPathExistsAndCleanItUp(__DIR__.'/../../');
-        if($globalFixes) {
+        if ($globalFixes) {
             $array[] = $globalFixes;
         }
         $this->paths = array_unique($array);
@@ -179,7 +181,4 @@ class LoadReplacementData
 
         return $merged;
     }
-
-
-
 }

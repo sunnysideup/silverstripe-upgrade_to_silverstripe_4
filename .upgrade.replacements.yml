@@ -24,3 +24,8 @@ SS4:
         extends DataExtension:
             R: 'extends Extension'
             C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider using a trait'
+        'public function includeInHTML($templateFile, $content)':
+            R: 'public function includeInHTML($content)'
+            I: true
+            P: 'code/View/Requirements_Backend_For_Webpack.php'
+>

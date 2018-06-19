@@ -18,25 +18,20 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 class SearchAndReplaceAPI
 {
-    private $basePath                  = '.';
+    private $basePath                  = '';
 
-    private $logFileLocation           = '';
+    private $searchPath                = '';
 
-    private $defaultIgnoreFolderArray  = array(
-        "cms",
-        "assets",
-        "sapphire",
-        "framework",
-        "upgrade_silverstripe",
+    private $defaultIgnoreFolderArray  = [
         ".svn",
         ".git"
-    );
+    ];
 
-    private $ignoreFolderArray         = array();
+    private $ignoreFolderArray         = [];
 
-    private $extensions                = array("php", "ss", "yml", "yaml", "json", "js");
+    private $extensions                = ["php", "ss", "yml", "yaml", "json", "js"];
 
-    private $findAllExts               = 0;
+    private $findAllExts               = false;
 
     private $searchKey                 = '';
 
@@ -44,11 +39,11 @@ class SearchAndReplaceAPI
 
     private $futureReplacementKey      = '';
 
-    private $isReplacingEnabled        = 0;
+    private $isReplacingEnabled        = false;
 
-    private $replacementType           = "";
+    private $replacementType           = '';
 
-    private $caseSensitive             = 0;
+    private $caseSensitive             = true;
 
     private $logString                 = ''; //details of one search
 
@@ -58,15 +53,15 @@ class SearchAndReplaceAPI
 
     private $output                    = ''; //buffer of output, until it is retrieved
 
-    private static $search_key_totals  = array();
+    private static $search_key_totals  = [];
 
-    private static $folder_totals      = array();
+    private static $folder_totals      = [];
 
     private static $total_total        = 0;
 
-    public function __construct()
+    public function __construct($basePath = '')
     {
-        $this->ignoreFolderArray = $this->defaultIgnoreFolderArray;
+        $this->basePath = $basePath;
     }
 
 
@@ -81,10 +76,14 @@ class SearchAndReplaceAPI
      *   @param Array ignoreFolderArray
      *   @return none
      */
-    public function setIgnoreFolderArray($ignoreFolderArray = array())
+    public function setIgnoreFolderArray($ignoreFolderArray = [])
     {
-        $this->ignoreFolderArray = $ignoreFolderArray;
-        $this->resetFileCache();
+        if($this->ignoreFolderArray === $ignoreFolderArray) {
+            //do nothing
+        } else {
+            $this->ignoreFolderArray = $ignoreFolderArray;
+            $this->resetFileCache();
+        }
     }
 
     /**
@@ -92,56 +91,35 @@ class SearchAndReplaceAPI
      *   @param Array ignoreFolderArray
      *   @return none
      */
-    public function addIgnoreFolderArray($ignoreFolderArray = array())
+    public function addToIgnoreFolderArray($ignoreFolderArray = [])
     {
-        $this->ignoreFolderArray = $ignoreFolderArray;
-        $this->ignoreFolderArray = array_unique(array_merge($this->ignoreFolderArray, $this->defaultIgnoreFolderArray));
-        $this->resetFileCache();
+        $oldIgnoreFolderArray = $this->ignoreFolderArray;
+        $this->ignoreFolderArray = array_unique(
+            array_merge(
+                $ignoreFolderArray,
+                $this->defaultIgnoreFolderArray
+            )
+        );
+        if($oldIgnoreFolderArray !== $this->ignoreFolderArray) {
+            $this->resetFileCache();
+        }
     }
 
     /**
-     * remove a root folder that is avoided by default
-     * @param String $nameOfFolder
+     * remove ignore folders
      */
-    public function unsetIgnoreFolderArray($nameOfFolder)
+    public function resetIgnoreFolderArray()
     {
-        unset($this->ignoreFolderArray[$nameOfFolder]);
+        $this->ignoreFolderArray = [];
         $this->resetFileCache();
     }
 
 
     /**
-     *   Sets folders to ignore
-     *   @param Array ignoreFolderArray
-     *   @return none
      */
     public function setBasePath($pathLocation)
     {
         $this->basePath = $pathLocation;
-        $this->resetFileCache();
-    }
-
-    /**
-     * Sets location for the log file
-     * logs are only written for real replacements
-     *   @param String
-     *   @return none
-     */
-    public function setLogFileLocation($logFileLocation)
-    {
-        $this->logFileLocation = $logFileLocation;
-    }
-
-    /**
-     *   Sets extensions to look
-     *   @param Array extensions
-     */
-    public function setExtensions($extensions = array())
-    {
-        $this->extensions = $extensions;
-        if (count($this->extensions)) {
-            $this->findAllExts = 0; //not all extensions
-        }
         $this->resetFileCache();
     }
 
@@ -152,11 +130,36 @@ class SearchAndReplaceAPI
 
 
     /**
-     * Sets search key and case sensitivity
-     * @param String $searchKey,
-     * @param Boolean $caseSensitivity
      */
-    public function setSearchKey($searchKey, $caseSensitive = 0, $replacementType)
+    public function setSearchPath($pathLocation)
+    {
+        if($pathLocation !== $this->searchPath) {
+            $this->searchPath = $pathLocation;
+            $this->resetFileCache();
+        }
+    }
+
+    /**
+     *   Sets extensions to look
+     *   @param Array extensions
+     */
+    public function setExtensions($extensions = [])
+    {
+        $this->extensions = $extensions;
+        if (count($this->extensions)) {
+            $this->findAllExts = false;
+        } else {
+            $this->findAllExts = true;
+        }
+        $this->resetFileCache();
+    }
+
+    /**
+     * Sets search key and case sensitivity
+     * @param string $searchKey,
+     * @param bool $caseSensitivity
+     */
+    public function setSearchKey($searchKey, $caseSensitive = false, $replacementType)
     {
         $this->searchKey        = $searchKey;
         $this->caseSensitive    = $caseSensitive;
@@ -170,7 +173,7 @@ class SearchAndReplaceAPI
     public function setReplacementKey($replacementKey)
     {
         $this->replacementKey     = $replacementKey;
-        $this->isReplacingEnabled = 1;
+        $this->isReplacingEnabled = true;
     }
 
     /**
@@ -181,7 +184,7 @@ class SearchAndReplaceAPI
     public function setFutureReplacementKey($replacementKey)
     {
         $this->futureReplacementKey = $replacementKey;
-        $this->isReplacingEnabled   = 0;
+        $this->isReplacingEnabled   = false;
     }
 
 
@@ -199,7 +202,21 @@ class SearchAndReplaceAPI
     {
         $output = $this->output;
         $this->output = "";
+
         return $output;
+    }
+
+    /**
+     * returns full output
+     * and clears it.
+     * @return string
+     */
+    public function getLog()
+    {
+        $logString = $this->logString;
+        $this->logString = "";
+
+        return $logString;
     }
 
 
@@ -236,7 +253,7 @@ class SearchAndReplaceAPI
                 $strippedFile = str_replace($this->basePath, "", $file);
                 $this->addToOutput($strippedFile."\n");
             }
-            $folderSimpleTotals = array();
+            $folderSimpleTotals = [];
             $realBase = realpath($this->basePath);
             $this->addToOutput("\n------------------------------------\nSummary: by search key\n------------------------------------\n");
             arsort(self::$search_key_totals);
@@ -304,21 +321,17 @@ class SearchAndReplaceAPI
     private function resetFileCache()
     {
         self::$file_array = null;
-        self::$file_array = array();
+        self::$file_array = [];
         self::$flat_file_array = null;
-        self::$flat_file_array = array();
+        self::$flat_file_array = [];
         //cleanup other data
-        self::$search_key_totals = null;
-        self::$search_key_totals = array();
-        self::$folder_totals = null;
-        self::$folder_totals = array();
     }
 
     /**
      * array of all the files we are searching
      * @var array
      */
-    private static $file_array = array();
+    private static $file_array = [];
 
 
     /**
@@ -328,10 +341,10 @@ class SearchAndReplaceAPI
      *
      *
      */
-    private function getFileArray($path, $innerLoop = false)
+    private function getFileArray($path, $runningInnerLoop = false)
     {
         $key = str_replace(array("/"), "__", $path);
-        if ($innerLoop || !count(self::$file_array)) {
+        if ($runningInnerLoop || !count(self::$file_array)) {
             $dir = opendir($path);
             while ($file = readdir($dir)) {
                 if (($file == ".") || ($file == "..") || (__FILE__ == "$path/$file") || ($path == "." && basename(__FILE__) == $file)) {
@@ -349,12 +362,12 @@ class SearchAndReplaceAPI
                 }
                 if (filetype("$path/$file") == "dir") {
                     if (
-                        (in_array($file, $this->ignoreFolderArray) && ($path == "."|| $path == $this->basePath)) ||
+                        (in_array($file, $this->ignoreFolderArray) && ($path == "." || $path == $this->searchPath)) ||
                         (in_array($path, $this->ignoreFolderArray))
                     ) {
                         continue;
                     }
-                    $this->getFileArray("$path/$file", $innerLoop = true); //recursive traversing here
+                    $this->getFileArray("$path/$file", $runningInnerLoop = true); //recursive traversing here
                 } elseif ($this->matchedExtension($file)) { //checks extension if we need to search this file
                     if (filesize("$path/$file")) {
                         self::$file_array[$key][] = "$path/$file"; //search file data
@@ -370,15 +383,26 @@ class SearchAndReplaceAPI
      * Flattened array of files.
      * @var Array
      */
-    private static $flat_file_array = array();
+    private static $flat_file_array = [];
 
     private function getFlatFileArray()
     {
-        if (!count(self::$flat_file_array)) {
-            $array = $this->getFileArray($this->basePath, false);
-            $multiDimensionalArray = $this->getFileArray($this->basePath, false);
-            //flatten it!
-            self::$flat_file_array = new RecursiveIteratorIterator(new RecursiveArrayIterator($multiDimensionalArray));
+        if($this->searchPath) {
+            if (count(self::$flat_file_array) === 0) {
+                if(file_exists($this->searchPath)) {
+                    if(is_file($this->searchPath)) {
+                        self::$flat_file_arra = [
+                            $this->searchPath
+                        ];
+                    } else {
+                        $multiDimensionalArray = $this->getFileArray($this->basePath);
+                        //flatten it!
+                        self::$flat_file_array = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($multiDimensionalArray));
+                    }
+                } else {
+                    user_error('Can not find: '.$this->searchPath);
+                }
+            }
         }
         return self::$flat_file_array;
     }
@@ -391,8 +415,9 @@ class SearchAndReplaceAPI
     private function findExtension($file)
     {
         $fileArray = explode(".", $file);
+
         return array_pop($fileArray);
-    }//End of function
+    }
 
     /**
      * Checks if a file extension is one of the extensions we are going to search
@@ -478,10 +503,12 @@ class SearchAndReplaceAPI
 
     /**
     * Appends log data to previous log data
-    * @param filename, match string, replacement key if any
+    * @param string $file
+    * @param string $matchStr
+    *
     * @return none
     */
-    private function appendToLog($file, $matchStr, $replacementKey = null)
+    private function appendToLog($file, $matchStr)
     {
         if ($this->logString == '') {
             $this->logString = "'".$this->searchKey."'\n";
@@ -490,21 +517,17 @@ class SearchAndReplaceAPI
         $this->logString .= "   $matchStr IN $file\n";
     }
 
+
     /**
-     *
-     * @param String $text
+     * returns full output
+     * and clears it.
+     * @return string
      */
-    private function addToOutput($output)
+    private function addToOutput($s)
     {
-        if ($this->logFileLocation && $this->isReplacingEnabled) {
-            $handle = fopen($this->logFileLocation, "a");
-            if ($handle) {
-                fwrite($handle, $output);
-                fclose($handle);
-            } else {
-                die("\n\nLOG ERROR: Can not write to ".realpath(dirname($this->logFileLocation))." (".$this->logFileLocation.") .");
-            }
-        }
-        $this->output .= $output;
+        $this->output .= $s;
     }
+
+
+
 }

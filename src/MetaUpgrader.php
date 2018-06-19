@@ -343,7 +343,7 @@ class MetaUpgrader
         return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
     }
 
-    public function colourPrint($mixedVar, $colour, $newLineCount = 1)
+    public function colourPrint($mixedVar, $colour = 'dark_gray', $newLineCount = 1)
     {
         return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
     }

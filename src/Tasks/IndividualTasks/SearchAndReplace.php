@@ -11,10 +11,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
 
 class SearchAndReplace extends MetaUpgraderTask
 {
-    public function upgrader($params = [])
-    {
-        //do stuff ....
-    }
+
 
 
     private $checkReplacementIssues = false;
@@ -26,123 +23,72 @@ class SearchAndReplace extends MetaUpgraderTask
         return $this;
     }
 
-    private $upgradeFileLocation = '.upgrade.replacement.yml';
+    private $ignoreFolderArray = [
+        ".git"
+    ];
 
-    public function setUpgradeFileLocation($s)
+    public function setIgnoreFolderArray($a)
     {
-        $this->upgradeFileLocation = $b;
+        $this->ignoreFolderArray = $b;
 
         return $this;
     }
 
-
-    private $marker = "### @@@@ START UPGRADE REQUIRED @@@@ ###";
+    private $startMarker = "### @@@@ START UPGRADE REQUIRED @@@@ ###";
 
     private $endMarker = "### @@@@ END UPGRADE REQUIRED @@@@ ###";
 
-
-    private $numberOfStraightReplacements = 0;
-
-    public function getNumberOfStraightReplacements()
+    public function upgrader($params = [])
     {
-        return intval($this->numberOfStraightReplacements);
-    }
 
-    private $numberOfAllReplacements = 0;
-
-    public function getNumberOfAllReplacements()
-    {
-        return intval($this->numberOfAllReplacements);
-    }
-
-
-    /**
-     *
-     * @param String $pathLocation - enter dot for anything in current directory.
-     * @param Array $ignoreFolderArray - a list of folders that should not be searched (and replaced) - folders that are automatically ignore are: CMS, SAPPHIRE, FRAMEWORK (all in lowercase)
-     * outputs to screen and/or to file
-     */
-    public function upgradePerPath(
-        $pathLocation,
-        array $ignoreFolderArray = []
-    ) {
-        if (!file_exists($pathLocation)) {
-            user_error("ERROR: could not find specified path: ".$pathLocation);
-        }
         if ($this->checkReplacementIssues) {
-            $this->checkReplacementIssues();
+            $this->checkReplacementDataIssues();
         }
-        //basic checks
 
-        //get replacements
+        //replacement data
         $replacementDataObject = new LoadReplacementData($this->mo, $this->params);
+        $replacementArray = $replacementDataObject->getReplacementArrays();
 
-        $previousTos = $replacementDataObject->getTos();
-        $migrationChecksDone = false;
-        $this->numberOfStraightReplacements = 0;
-        $this->numberOfAllReplacements = 0;
-        $totalForOneVersion = 0;
-        $numberToAdd = $this->numberOfReplacements($pathLocation, $previousTo, $ignoreFolderArray, true);
-        $totalForOneVersion += $numberToAdd;
-        $this->numberOfStraightReplacements += $numberToAdd;
-        if ($this->numberOfStraightReplacements == 0) {
-            $this->mo->colourPrint("[BASIC: DONE] migration to $previousTo for basic replacements completed.");
-        } else {
-            $this->mo->colourPrint("[BASIC: TO DO] migration to $previousTo for basic replacements NOT completed yet ($numberToAdd items to do).");
-            $previousMigrationsDone = false;
-        }
-        $numberToAdd = $this->numberOfReplacements($pathLocation, $previousTo, $ignoreFolderArray, false);
-        $totalForOneVersion += $numberToAdd;
-        $this->numberOfAllReplacements += $numberToAdd;
-        if ($this->numberOfAllReplacements == 0) {
-            $this->mo->colourPrint("[COMPLEX: DONE] migration to $previousTo for complicated items completed.");
-        } else {
-            $this->mo->colourPrint("[COMPLEX: UNSURE] migration to $previousTo for complicated items NOT completed yet ($numberToAdd items to do).");
-        }
-        $this->mo->colourPrint("
-------------------------------------
-$totalForOneVersion items to do for $previousTo
-------------------------------------"
-        );
-        $totalForOneVersion = 0;
+        //replace API
         $textSearchMachine = new SearchAndReplaceAPI();
+        $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
+        $textSearchMachine->setBasePath($this->mo->getModuleDirLocation());
 
-        //set basics
-        $textSearchMachine->addIgnoreFolderArray($ignoreFolderArray); //setting extensions to search files within
-        $textSearchMachine->setBasePath($pathLocation);
-        $array = $replacementDataObject->getReplacementArrays($to);
-        foreach ($array as $extension => $extensionArray) {
+        foreach ($replacementArray as $extension => $extensionArray) {
             $this->mo->colourPrint("
 ++++++++++++++++++++++++++++++++++++
 CHECKING $extension FILES
 ++++++++++++++++++++++++++++++++++++"
             );
-            $textSearchMachine->setExtensions(array($extension)); //setting extensions to search files within
-            foreach ($extensionArray as $replaceArray) {
-                $find = $replaceArray[0];
+            $textSearchMachine->setExtensions(explode('|',$extension)); //setting extensions to search files within
+            foreach ($extensionArray as $find => $findDetails) {
+                $replace = isset($replaceArray['R'])       ? $replaceArray['R'] : $find;
+                $comment = isset($replaceArray['C'])       ? $replaceArray['C'] : '';
+                $ignoreCase = isset($replaceArray['I']) ? $replaceArray['I'] : true;
+                $caseSensitive = $ignoreCase ? 0 : 1;
+                $path = $this->mo->getModuleDirLocation()  . isset($replaceArray['P']) ? : '' ;
+                $path = $this->mo->checkIfPathExistsAndCleanItUp($path);
+                if (!file_exists($path)) {
+                    user_error("ERROR: could not find specified path: ".$path);
+                }
                 //$replace = $replaceArray[1]; unset($replaceArray[1]);
                 //$fullReplacement = (isset($replaceArray[2]) ? "/* ".$replaceArray[2]." */\n" : "").$replaceArray[1];
-                $fullReplacement = "";
-                $isStraightReplace = true;
-                if (isset($replaceArray[2])) {
-                    // Has comment
-                    $isStraightReplace = false;
-                    $fullReplacement = "/*\n".$this->marker."\nFIND: ".$replaceArray[0]."\nNOTE: ".$replaceArray[2]." \n".$this->endMarker."\n*/".$replaceArray[1];
-                } else { // Straight replace
-                    $fullReplacement = $replaceArray[1];
+                $fullReplacement = '';
+                $isStraightReplace = $comment ? false : true;
+                if ($isStraightReplace) {
+                    $fullReplacement = $replace;
+                } else {
+                    $fullReplacement = $replace."/*\n".$this->startMarker."\nFIND: ".$find."\nNOTE: ".$comment." \n".$this->endMarker."\n*/";
                 }
-                $comment = isset($replaceArray[2]) ? $replaceArray[2] : "";
-                $codeReplacement = $replaceArray[1];
                 if (!$find) {
                     user_error("no find is specified, replace is: $replace");
                 }
                 if (!$fullReplacement) {
                     user_error("no replace is specified, find is: $find");
                 }
-                if (!$markStickingPoints && !$isStraightReplace) {
-                    continue;
-                }
-                $textSearchMachine->setSearchKey($find, 0, $isStraightReplace ? "BASIC" : "COMPLEX");
+                $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
+                $textSearchMachine->setSearchPath($path);
+                $textSearchMachine->setSearchKey($find, $caseSensitive, $replaceKey);
                 $textSearchMachine->setReplacementKey($fullReplacement);
                 $textSearchMachine->startSearching();//starting search
                 //output - only write to log for real replacements!
@@ -150,58 +96,13 @@ CHECKING $extension FILES
                 //$textSearchMachine->showLog();//showing log
             }
             $replacements = $textSearchMachine->showFormattedSearchTotals(false);
+            $this->mo->colourPrint($textSearchMachine->getOutput());
             if ($replacements) {
-                $this->mo->colourPrint($textSearchMachine->getOutput());
             } else {
                 //flush output anyway!
-                $textSearchMachine->getOutput();
                 $this->mo->colourPrint("No replacements for  $extension");
             }
         }
-        return $this->printItNow();
-    }
-
-    /**
-     *
-     * @var Int
-     */
-    private function numberOfReplacements(
-        $pathLocation = ".",
-        $ignoreFolderArray = array()
-    ) {
-        //basic checks
-        $total = 0;
-        $textSearchMachine = new SearchAndReplaceAPI();
-
-        //get replacements
-        $replacementData = new LoadReplacementData();
-        $array = $replacementData->getReplacementArrays();
-
-        //set basics
-        $textSearchMachine->addIgnoreFolderArray($ignoreFolderArray); //setting extensions to search files within
-        $textSearchMachine->setBasePath($pathLocation);
-        foreach ($array as $extension => $extensionArray) {
-            $textSearchMachine->setExtensions(array($extension)); //setting extensions to search files within
-            foreach ($extensionArray as $replaceArray) {
-                $find = $replaceArray[0];
-                $isStraightReplace = isset($replaceArray[2]) ? true : false;
-                if ($isStraightReplace && $simpleOnly) {
-                    // Has comment
-                    continue;
-                } elseif (!$isStraightReplace && !$simpleOnly) {
-                    continue;
-                }
-                $textSearchMachine->setSearchKey($find, 0, $isStraightReplace ? "BASIC" : "COMPLEX");
-                $textSearchMachine->setFutureReplacementKey("TEST ONLY");
-                $textSearchMachine->startSearching();//starting search
-            }
-            //IMPORTANT!
-            $total += $textSearchMachine->showFormattedSearchTotals(true);
-        }
-        //flush output anyway!
-        $textSearchMachine->getOutput();
-
-        return $total;
     }
 
     /**
@@ -209,22 +110,22 @@ CHECKING $extension FILES
      * find can be found 2x
      *
      */
-    private function checkReplacementIssues()
+    private function checkReplacementDataIssues()
     {
         $r = new ReplacementData();
         $arr = $r->getReplacementArrays(null);
-        $arrTos = array();
+        $arrTos = [];
         $arrLanguages = $r->getLanguages();
         $fullFindArray = $r->getFlatFindArray();
         $fullReplaceArray = $r->getFlatReplacedArray();
 
-        //1, check that one find may not stop another replacement.
+        //1. check that one find may not stop another replacement.
         foreach ($arrLanguages as $language) {
-            if (!isset($fullFindArray[$language])) {
+            if (! isset($fullFindArray[$language])) {
                 continue;
             }
             unset($keyOuterDoneSoFar);
-            $keyOuterDoneSoFar = array();
+            $keyOuterDoneSoFar = [];
             foreach ($fullFindArray[$language] as $keyOuter => $findStringOuter) {
                 $keyOuterDoneSoFar[$keyOuter] = true;
                 foreach ($fullFindArray[$language] as $keyInner => $findStringInner) {
@@ -249,7 +150,7 @@ ERROR in $language: \t\t we are trying to find the same thing twice (A and B)
                 continue;
             }
             unset($keyOuterDoneSoFar);
-            $keyOuterDoneSoFar = array();
+            $keyOuterDoneSoFar = [];
             foreach ($fullReplaceArray[$language] as $keyOuter => $findStringOuter) {
                 $keyOuterDoneSoFar[$keyOuter] = true;
                 foreach ($fullFindArray[$language] as $keyInner => $findStringInner) {

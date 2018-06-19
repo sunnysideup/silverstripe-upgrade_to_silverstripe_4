@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "5a3cd0d5aff5c07c63002ad54de6a40e",
@@ -1170,12 +1170,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silverstripe/silverstripe-upgrader.git",
-                "reference": "b2f382c706ec2a6eb4d41d441aaeaa9ea82e12e4"
+                "reference": "215b854169e71dbe07d9cde7dd9a8bfb79dfda5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/b2f382c706ec2a6eb4d41d441aaeaa9ea82e12e4",
-                "reference": "b2f382c706ec2a6eb4d41d441aaeaa9ea82e12e4",
+                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/215b854169e71dbe07d9cde7dd9a8bfb79dfda5c",
+                "reference": "215b854169e71dbe07d9cde7dd9a8bfb79dfda5c",
                 "shasum": ""
             },
             "require": {
@@ -1223,7 +1223,7 @@
                 }
             ],
             "description": "A tool to help upgrade your code to handle API changes in packages you used.",
-            "time": "2018-06-15T00:48:03+00:00"
+            "time": "2018-06-17T22:14:10+00:00"
         },
         {
             "name": "sunnysideup/php_2_command_line",

@@ -24,5 +24,5 @@ $obj = MetaUpgrader::create()
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     ->setStartFrom('')
-    ->setEndWith('ResetWebRootDir-2')
+    ->setEndWith('')
     ->run();

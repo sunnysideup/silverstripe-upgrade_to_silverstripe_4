@@ -1,0 +1,6 @@
+SS4:
+    php:
+        'public function includeInHTML($templateFile, $content)':
+            R: 'public function includeInHTML($content)'
+            I: true
+            P: 'code/View/Requirements_Backend_For_Webpack.php'

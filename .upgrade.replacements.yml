@@ -4,34 +4,60 @@
 ####    PATH (relative to root folder of module)
 ####        LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
 ####            FindKey
-####                R: replace with entry
-####                C: comment - this makes it a complex replacement
+####                R: replace with entry - you can leave empty to keep it as the find... in that case you should add a comment
+####                C: comment - this makes it a complex replacement.
 ####                I: ignore case (default is case sensitive)
 
 SS4:
 
     '.':
+
         php:
-            mysite:
+
+            'mysite/css/':
+                R: 'ModuleLoader::getModule('mysite')->getResource('css/UPGRADE-FIX-REQUIRED.css')->getRelativePath()'
+                C: 'Please review update and fix as required'
+            'mysite/javascript/':
+                R: 'ModuleLoader::getModule('mysite')->getResource('javascript/UPGRADE-FIX-REQUIRED.js')->getRelativePath()'
+                C: 'Please review update and fix as required'
+            'mysite/images/':
+                R: 'ModuleLoader::getModule('mysite')->getResource('images/UPGRADE-FIX-REQUIRED.png')->getRelativePath()'
+                C: 'Please review update and fix as required'
+            'mysite':
                 R: 'app'
                 I: true
-            implements flushable:
-                R: 'implements Flushable'
-            BASE_PATH:
+            ' implements flushable':
+                R: ' implements Flushable'
+                I: true
+            'BASE_PATH':
                 R: 'Director::baseFolder()'
-            extends Extension:
-                R: 'extends Extension'
+            ' extends Extension':
+                R: ''
                 C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait'
                 I: true
-            extends DataExtension:
-                R: 'extends Extension'
+            ' extends DataExtension':
+                R: ''
                 C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait'
                 I: true
-    '.':
+            'FRAMEWORK_DIR':
+                R: 'SilverStripe\Core\Manifest\ModuleLoader::getModule('silverstripe/framework')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()'
+                C: 'Please review update and fix as required'
+                I: true
+            'SSViewer::get_theme_folder()':
+                R: 'SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('UPGRADE-FIX-REQUIRED/styles.css', SilverStripe\View\SSViewer::get_themes())'
+                C: 'Please review update and fix as required'
+                I: true
+            'THEMES_DIR':
+                R: 'ThemeResourceLoader::inst()->getPath('UPGRADE-FIX-REQUIRED')'
+                C: 'Please review update and fix as required'
+                I: true
+
         'md':
-            mysite:
+            'mysite':
                 R: 'app'
                 I: true
+
+# example of a path specific one                
     'code/View/Requirements_Backend_For_Webpack.php':
         php:
             'public function includeInHTML($templateFile, $content)':

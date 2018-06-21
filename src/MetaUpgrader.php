@@ -93,11 +93,10 @@ class MetaUpgrader
             'ReplacementPackage' => 'silverstripe/recipe-cms',
             'NewVersion' => '1.1.2'
         ],
-
         'ResetWebRootDir-3' => [],
         'ComposerInstallProject' => [],
+        'ChangeEnvironment' => [],
         'SearchAndReplace' => [],
-        // 'ChangeEnvironment' => [],
         'UpperCaseFolderNamesForPSR4' => [],
         'AddNamespace' => [],
         'Upgrade' => [],

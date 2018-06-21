@@ -48,16 +48,20 @@ SS4:
                 C: 'Please review update and fix as required'
                 I: true
             'THEMES_DIR':
-                R: 'ThemeResourceLoader::inst()->getPath('UPGRADE-FIX-REQUIRED')'
+                R: 'ThemeResourceLoader::inst()->getPath('UPGRADE-FIX-REQUIRED.foo.bar')'
                 C: 'Please review update and fix as required'
                 I: true
+            'Session::':
+                R: 'Session::inst()->'
+                C: 'Please review update and fix as required'
+
 
         'md':
             'mysite':
                 R: 'app'
                 I: true
 
-# example of a path specific one                
+# example of a path specific one
     'code/View/Requirements_Backend_For_Webpack.php':
         php:
             'public function includeInHTML($templateFile, $content)':

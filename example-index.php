@@ -13,9 +13,9 @@ $obj = MetaUpgrader::create()
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'webpack_requirements_backend',
-              'PackageNamespace' => 'WebpackRequirementsBackend',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-webpack_requirements_backend.git',
+              'PackageName' => 'dataobject-generator',
+              'PackageNamespace' => 'DataObjectGenerator',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-dataobject-generator.git',
               'UpgradeAsFork' => false
             ]
         ]

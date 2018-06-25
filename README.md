@@ -3,6 +3,7 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 
 # prerequisites before you start:
 
+- The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to silverstripe/framework, where classes are put in the right folder.  You do not need to use title case for the folder names.
  - module to be upgraded needs to be listed on packagist
  - composer file needs to follow this pattern (installer-name requirement may be dropped in the future)
 
@@ -23,6 +24,9 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 # additional things to consider before you start
 - create 3 branch of the module you are upgrading so that you can keep adding patches to your SS3 version
 - create a tag of the module you are upgrading
+
+
+
 
 # what does this module do?
 

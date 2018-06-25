@@ -15,55 +15,67 @@ SS4:
         php:
 
             'mysite/css/':
-                R: 'ModuleLoader::getModule('mysite')->getResource('css/UPGRADE-FIX-REQUIRED.css')->getRelativePath()'
-                C: 'Please review update and fix as required'
+                R: "ModuleLoader::getModule('mysite')->getResource('css/UPGRADE-FIX-REQUIRED.css')->getRelativePath()"
+                C: "Please review update and fix as required"
             'mysite/javascript/':
-                R: 'ModuleLoader::getModule('mysite')->getResource('javascript/UPGRADE-FIX-REQUIRED.js')->getRelativePath()'
-                C: 'Please review update and fix as required'
+                R: "ModuleLoader::getModule('mysite')->getResource('javascript/UPGRADE-FIX-REQUIRED.js')->getRelativePath()"
+                C: "Please review update and fix as required"
             'mysite/images/':
-                R: 'ModuleLoader::getModule('mysite')->getResource('images/UPGRADE-FIX-REQUIRED.png')->getRelativePath()'
-                C: 'Please review update and fix as required'
+                R: "ModuleLoader::getModule('mysite')->getResource('images/UPGRADE-FIX-REQUIRED.png')->getRelativePath()"
+                C: "Please review update and fix as required"
             'mysite':
-                R: 'app'
+                R: "app"
+            'Mysite':
+                R: "App"
+
+            ' extends Object':
+                R: " extends ViewableData"
+                C: "This used to extend Object, but object does not exist anymore. "
+                I: true
+            ' extends \Object':
+                R: " extends ViewableData"
+                C: "This used to extend Object, but object does not exist anymore. "
                 I: true
             ' implements flushable':
-                R: ' implements Flushable'
+                R: " implements Flushable"
                 I: true
-            'BASE_PATH':
-                R: 'Director::baseFolder()'
             ' extends Extension':
-                R: ''
-                C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait'
+                R: ""
+                C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
                 I: true
             ' extends DataExtension':
-                R: ''
-                C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait'
+                R: ""
+                C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
                 I: true
+
+            'BASE_PATH':
+                R: "Director::baseFolder()"
             'FRAMEWORK_DIR':
-                R: 'SilverStripe\Core\Manifest\ModuleLoader::getModule('silverstripe/framework')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()'
-                C: 'Please review update and fix as required'
+                R: "SilverStripe\\Core\\Manifest\\ModuleLoader::getModule('silverstripe/framework')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()"
+                C: "Please review update and fix as required"
                 I: true
             'SSViewer::get_theme_folder()':
-                R: 'SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('UPGRADE-FIX-REQUIRED/styles.css', SilverStripe\View\SSViewer::get_themes())'
-                C: 'Please review update and fix as required'
+                R: "SilverStripe\\View\\ThemeResourceLoader::inst()->findThemedResource('UPGRADE-FIX-REQUIRED/styles.css', SilverStripe\\View\\SSViewer::get_themes())"
+                C: "Please review update and fix as required"
                 I: true
             'THEMES_DIR':
-                R: 'ThemeResourceLoader::inst()->getPath('UPGRADE-FIX-REQUIRED.foo.bar')'
-                C: 'Please review update and fix as required'
+                R: "ThemeResourceLoader::inst()->getPath('UPGRADE-FIX-REQUIRED.foo.bar')"
+                C: "Please review update and fix as required"
                 I: true
             'Session::':
-                R: 'Session::inst()->'
-                C: 'Please review update and fix as required'
+                R: "Session::inst()->"
+                C: "Please review update and fix as required"
 
 
         'md':
             'mysite':
-                R: 'app'
-                I: true
+                R: "app"
+            'Mysite':
+                R: "App"
 
 # example of a path specific one
     'code/View/Requirements_Backend_For_Webpack.php':
         php:
             'public function includeInHTML($templateFile, $content)':
-                R: 'public function includeInHTML($content)'
+                R: "public function includeInHTML($content)"
                 I: true

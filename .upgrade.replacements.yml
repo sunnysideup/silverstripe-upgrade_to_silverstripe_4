@@ -73,6 +73,12 @@ SS4:
             'Mysite':
                 R: "App"
 
+        'ss':
+            'mysite':
+                R: "app"
+            'Mysite':
+                R: "App"
+
 # example of a path specific one
     'code/View/Requirements_Backend_For_Webpack.php':
         php:

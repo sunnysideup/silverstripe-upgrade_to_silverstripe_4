@@ -7,24 +7,24 @@ use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 /**
  * recompose (Mandatory, stop execution on failure)
  */
-class MetaUpgrader
+class ModuleUpgrader
 {
 
 
     /**
      * only instance of me
-     * @var MetaUpgrader
+     * @var ModuleUpgrader
      */
     private static $_singleton = null;
 
     /**
      * only instance of me
-     * @return MetaUpgrader
+     * @return ModuleUpgrader
      */
     public static function create()
     {
         if (self::$_singleton === null) {
-            self::$_singleton = new MetaUpgrader();
+            self::$_singleton = new ModuleUpgrader();
         }
         return self::$_singleton;
     }
@@ -41,6 +41,21 @@ class MetaUpgrader
         $this->endPHP2CommandLine();
     }
 
+    /**
+     * creates magic getters and setters
+     * if you call $this->getFooBar() then it will get the variable FooBar even if the method
+     * getFooBar does not exist.
+     *
+     * if you call $this->setFooBar('hello') then it will set the variable FooBar even if the method
+     * setFooBar does not exist.
+     *
+     * See: http://php.net/manual/en/language.oop5.overloading.php#object.call
+     *
+     * @param  string   $function name of the function
+     * @param  array    $args     parameters provided to the getter / setter
+     *
+     * @return mixed|Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
+     */
     public function __call($function, $args)
     {
         $getOrSet = substr($function, 0, 3);
@@ -53,15 +68,17 @@ class MetaUpgrader
                     } else {
                         return $this->$var;
                     }
+
                 } elseif ($getOrSet === 'set') {
-                    $this->$var= $args[0];
+                    $this->$var = $args[0];
+
                     return $this;
                 }
             } else {
-                user_error('Fatal error: can not get/set variable in MetaUpgrader::'.$var, E_USER_ERROR);
+                user_error('Fatal error: can not get/set variable in ModuleUpgrader::'.$var, E_USER_ERROR);
             }
         } else {
-            user_error('Fatal error: Call to undefined method MetaUpgrader::'.$function(), E_USER_ERROR);
+            user_error('Fatal error: Call to undefined method ModuleUpgrader::'.$function.'()', E_USER_ERROR);
         }
     }
 
@@ -75,8 +92,8 @@ class MetaUpgrader
 
 
     /**
-     * start the upgrade sequence at a particular method
-     * @var string
+     *
+     * @var array
      */
     protected $listOfTasks = [
         'ResetWebRootDir-1' => [],
@@ -105,6 +122,12 @@ class MetaUpgrader
         // 'WebRootUpdate' => []
     ];
 
+    /**
+     *
+     * @param  string $s name of the task
+     *
+     * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
+     */
     public function removeFromListOfTasks($s)
     {
         if ($key = $this->positionForTask($s) !== false) {
@@ -114,6 +137,14 @@ class MetaUpgrader
         return $this;
     }
 
+    /**
+     *
+     * @param string|array  $oneOrMoreTasks
+     * @param bool          $insertBeforeOrAfter
+     * @param bool          $isBefore
+     *
+     * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
+     */
     public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore)
     {
         if (! is_array($oneOrMoreTasks)) {
@@ -154,16 +185,28 @@ class MetaUpgrader
      */
     protected $endWith = '';
 
+    /**
+     * Is this the last TASK we are running?
+     * @var bool
+     */
     protected $isLastMethod = false;
 
-
-
+    /**
+     * find out where in the sequence we can find the task.
+     *
+     * @param string $s name of the task
+     *
+     * @return mixed
+     */
     protected function positionForTask($s)
     {
         return array_search($s, $this->listOfTasks);
     }
 
-
+    /**
+     * Set the command line exec to run immediately rather than outputting the bash script
+     * @return bool
+     */
     public function getRunImmediately()
     {
         return $this->commandLineExec->getRunImmediately();
@@ -200,7 +243,7 @@ class MetaUpgrader
      *          'VendorNamespace' => 'A',
      *          'PackageName' => 'Package1',
      *          'PackageNamespace' => 'Package1',
-     *          'GitLink' => 'git@github.com:foor/bar-1.git',
+     *          'GitLinkg' => 'git@github.com:foor/bar-1.git',
      *          'UpgradeAsFork' => false
      *      ],
      *      [
@@ -219,6 +262,12 @@ class MetaUpgrader
      */
     protected $arrayOfModules = [];
 
+    /**
+     *
+     * @param array
+     *
+     * @return
+     */
     public function addModule($a)
     {
         $this->arrayOfModules[] = $a;

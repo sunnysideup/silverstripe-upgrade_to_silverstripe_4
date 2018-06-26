@@ -19,11 +19,11 @@ class LoadReplacementData
     /**
      * Standard file name
      */
-    const NAME = '.upgrade.replacements.yml';
+    protected $ymlFileName = '.upgrade.replacements.yml';
 
     /**
      * Module Object
-     * @var MetaUpgrader
+     * @var ModuleUpgrader
      */
     protected $mo = null;
 
@@ -124,7 +124,7 @@ class LoadReplacementData
         // Merge with any other upgrade spec in the top level
         $config = [];
         foreach ($this->paths as $path) {
-            $nextFile = $path . DIRECTORY_SEPARATOR . static::NAME;
+            $nextFile = $path . DIRECTORY_SEPARATOR . $this->ymlFileName;
             if (file_exists($nextFile)) {
                 $nextConfig = ConfigFile::loadConfig($nextFile);
                 // Merge

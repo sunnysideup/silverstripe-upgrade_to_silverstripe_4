@@ -2,9 +2,9 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
-class Upgrade extends MetaUpgraderTask
+class Upgrade extends Task
 {
     public function upgrader($params = [])
     {

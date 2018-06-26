@@ -5,10 +5,9 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
 use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
-
-class SearchAndReplace extends MetaUpgraderTask
+class SearchAndReplace extends Task
 {
     protected $debug = true;
 

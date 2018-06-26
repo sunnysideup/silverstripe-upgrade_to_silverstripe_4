@@ -10,15 +10,14 @@ use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 class ModuleUpgrader
 {
 
-
     /**
-     * only instance of me
-     * @var ModuleUpgrader
+     * Holds the only instance of me
+     * @var null|ModuleUpgrader
      */
     private static $_singleton = null;
 
     /**
-     * only instance of me
+     * Create the only instance of me and return it
      * @return ModuleUpgrader
      */
     public static function create()
@@ -29,13 +28,17 @@ class ModuleUpgrader
         return self::$_singleton;
     }
 
-
+    /**
+     * Starts the output to the commandline / browser
+     */
     public function __construct()
     {
         $this->startPHP2CommandLine();
     }
 
-
+    /**
+     * Ends output to commandline / browser
+     */
     public function __destruct()
     {
         $this->endPHP2CommandLine();
@@ -92,8 +95,9 @@ class ModuleUpgrader
 
 
     /**
-     *
-     * @var array
+     * An array of all the 'TaskName's of the tasks that you wish to run during the execution of this upgrader task.
+     * This array can be overriden in the example-index.php file that you create.
+     * @var string[] of TaskName
      */
     protected $listOfTasks = [
         'ResetWebRootDir-1' => [],
@@ -123,10 +127,9 @@ class ModuleUpgrader
     ];
 
     /**
-     *
-     * @param  string $s name of the task
-     *
-     * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
+     * Removes the given task from the list of tasks to execute
+     * @param  string $s name of the task to remove
+     * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader for chaining
      */
     public function removeFromListOfTasks($s)
     {
@@ -138,9 +141,10 @@ class ModuleUpgrader
     }
 
     /**
-     *
-     * @param string|array  $oneOrMoreTasks
-     * @param bool          $insertBeforeOrAfter
+     * Inserts another task to the list of tasks at a given position in the order of execution, if it is set
+     * TODO These parameter names need some more refining
+     * @param string|array  $oneOrMoreTasks the tasks to be inserted
+     * @param bool          $insertBeforeOrAfter If to insert before or after
      * @param bool          $isBefore
      *
      * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
@@ -167,21 +171,21 @@ class ModuleUpgrader
     }
 
     /**
-    * end the upgrade sequence after a particular method
+    * The default namespace for all tasks
     * @var string
     */
     protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
 
     /**
-     * start the upgrade sequence at a particular method
-     * @var string
+     * start the upgrade sequence at a particular task
+     * @var string task to start the upgrade sequence from
      */
     protected $startFrom = '';
 
 
     /**
-     * end the upgrade sequence after a particular method
-     * @var string
+     * end the upgrade sequence after a particular task
+     * @var string task to end the upgrade sequence on
      */
     protected $endWith = '';
 
@@ -192,11 +196,11 @@ class ModuleUpgrader
     protected $isLastMethod = false;
 
     /**
-     * find out where in the sequence we can find the task.
+     * What is the index of given task within the sequence
      *
-     * @param string $s name of the task
+     * @param string $s name of the task to find
      *
-     * @return mixed
+     * @return mixed the key/index of task
      */
     protected function positionForTask($s)
     {
@@ -212,6 +216,9 @@ class ModuleUpgrader
         return $this->commandLineExec->getRunImmediately();
     }
 
+    /**
+     * @param bool $b
+     */
     public function setRunImmediately($b)
     {
         $this->commandLineExec->setRunImmediately($b);
@@ -219,11 +226,18 @@ class ModuleUpgrader
         return $this;
     }
 
+    /**
+     * Whether execution should come to a halt when an error is reached
+     * @return bool
+     */
     public function getBreakOnAllErrors()
     {
         return $this->commandLineExec->getBreakOnAllErrors();
     }
 
+    /**
+     * @param bool $b
+     */
     public function setBreakOnAllErrors($b)
     {
         $this->commandLineExec->setBreakOnAllErrors($b);
@@ -257,16 +271,17 @@ class ModuleUpgrader
      * required are:
      * - VendorName
      * - PacakageName
-     * The rest can be deducted (theoretically)
-     * @var array
+     * The rest can be deduced (theoretically)
+     * @var array of array modules to upgrade
      */
     protected $arrayOfModules = [];
 
     /**
+     * Appends the given module in the form of all its module data that has to be formatted in an array
+     * to the array of modules that will be worked with during the upgrade procedure.
      *
-     * @param array
-     *
-     * @return
+     * @param array module data to append
+     * @return ModuleUpgrader for chaining
      */
     public function addModule($a)
     {
@@ -289,20 +304,44 @@ class ModuleUpgrader
 
     /**
      * name of the branch created to do the upgrade
-     * @var string
+     * @var string branch name
      */
     protected $nameOfTempBranch = 'temp-upgradeto4-branch';
 
+    /**
+     * Name of module vendor
+     * @var string
+     */
     protected $vendorName = '';
 
+    /**
+     * module vendors namespace
+     * @var string
+     */
     protected $vendorNamespace = '';
 
+    /**
+     * Package name for the module
+     * @var string
+     */
     protected $packageName = '';
 
+    /**
+     *Name space for the modules package
+     * @var string
+     */
     protected $packageNamespace = '';
 
+    /**
+     * git link for the module
+     * @var string
+     */
     protected $gitLink = '';
 
+    /**
+     * Should the upgrade to this module create a fork
+     * @var bool
+     */
     protected $upgradeAsFork = false;
 
 
@@ -329,30 +368,25 @@ class ModuleUpgrader
     # LOCATIONS
     #########################################
 
-
-
-
-
+    //TODO double check descriptions for these variables as still rather ambiguous
 
     /**
-     *
+     * The folder for storing the log file in
+     * used in setting the php2 command line printer up
      * @var string
      */
     protected $logFolderDirLocation = '';
 
     /**
-     * @var string
+     * location of web root above module
+     * @var string directory
      */
     protected $aboveWebRootDirLocation = '/var/www';
-
 
     /**
      * @var string
      */
     protected $webRootName = 'upgradeto4';
-
-
-
 
     /**
      * //e.g. 'upgrade-code'
@@ -364,11 +398,17 @@ class ModuleUpgrader
 
     protected $logFileLocation = '';
 
+    /**
+     * Combination of the web dir root name and the above webRootDirLocation
+     * @var string
+     */
     protected $webRootDirLocation = '';
 
+    /**
+     * Directory that holds the module
+     * @var string
+     */
     protected $moduleDirLocation = '';
-
-
 
     ###############################
     # HELPERS
@@ -376,7 +416,7 @@ class ModuleUpgrader
 
 
     /**
-     *
+     *Reference to the commandline printer that outputs everything to the command line
      * @var Sunnysideup\UpgradeToSilverstripe4\Util\PHP2CommandLineSingleton|null
      */
     protected $commandLineExec = null;
@@ -386,17 +426,31 @@ class ModuleUpgrader
     # USEFUL COMMANDS
     ###############################
 
-
+    /**
+     * Executes given operations on the PHP2CommandLineSingleton instance
+     * Documentation for this can be found in the PHP2CommandLineSingleton module
+     */
     public function execMe($newDir, $command, $comment, $alwaysRun = false)
     {
         return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
     }
 
+    /**
+     * Executes given operations on the PHP2CommandLineSingleton instance
+     * Documentation for this can be found in the PHP2CommandLineSingleton module
+     */
     public function colourPrint($mixedVar, $colour = 'dark_gray', $newLineCount = 1)
     {
         return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
     }
 
+    /**
+     * Locates the directory in which the code is kept within the module directory
+     *
+     * If it can be found returns the location otherwise it errors
+     *
+     * @return string codedirlocation
+     */
     public function findCodeDir()
     {
         $codeDir = '';
@@ -413,7 +467,12 @@ class ModuleUpgrader
     }
 
 
-
+    /**
+     * Cleans an input string and returns a more natural human readable version
+     * @param  string $str input string
+     * @param  array  $noStrip
+     * @return string cleaned string
+     */
     public function camelCase($str, array $noStrip = [])
     {
         $str = str_replace('-', ' ', $str);
@@ -457,7 +516,10 @@ class ModuleUpgrader
     ###############################
 
 
-
+    /**
+     * Starts the command line output and prints some opening information to the output
+     * also initalises various environment variables
+     */
     public function run()
     {
         $this->startPHP2CommandLine();
@@ -511,9 +573,7 @@ class ModuleUpgrader
      */
     protected function startPHP2CommandLine()
     {
-        if ($this->commandLineExec === null) {
-            $this->commandLineExec = PHP2CommandLineSingleton::create();
-        }
+        $this->commandLineExec = PHP2CommandLineSingleton::create();
     }
 
     /**
@@ -527,7 +587,10 @@ class ModuleUpgrader
         }
     }
 
-
+    /**
+     * Loads in and sets all the meta data for a module from the inputed array
+     * @param array $moduleDetails
+     */
     protected function loadVarsForModule($moduleDetails)
     {
         //VendorName

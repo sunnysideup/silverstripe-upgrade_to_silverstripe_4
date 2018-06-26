@@ -70,7 +70,7 @@ abstract class Task
     public function __construct($mu, $params = [])
     {
         $this->params = $params;
-        $this->mu = $mu;
+        $this->mu = new ModuleUpgrader();
     }
 
     /**

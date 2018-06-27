@@ -2,12 +2,24 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\MetaUpgraderTask;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
-class AddLegacyBranch extends MetaUpgraderTask
+/**
+ * This task adds a legacy branch to the git repo of the original to act as a backup/legacy version for
+ * holding a version of the module before it was changed
+ */
+class AddLegacyBranch extends Task
 {
+    /**
+     * @var string what should the legacy branch be called
+     */
     protected $nameOfLegacyBranch = '3';
 
+    /**
+     * [upgrader description]
+     * @param  array  $params not currently used for this task
+     * @return [type]         [description]
+     */
     public function upgrader($params = [])
     {
         $this->mo->execMe(

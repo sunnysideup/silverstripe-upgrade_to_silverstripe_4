@@ -7,40 +7,58 @@ use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 /**
  * recompose (Mandatory, stop execution on failure)
  */
-class MetaUpgrader
+class ModuleUpgrader
 {
 
-
     /**
-     * only instance of me
-     * @var MetaUpgrader
+     * Holds the only instance of me
+     * @var null|ModuleUpgrader
      */
     private static $_singleton = null;
 
     /**
-     * only instance of me
-     * @return MetaUpgrader
+     * Create the only instance of me and return it
+     * @return ModuleUpgrader
      */
     public static function create()
     {
         if (self::$_singleton === null) {
-            self::$_singleton = new MetaUpgrader();
+            self::$_singleton = new ModuleUpgrader();
         }
         return self::$_singleton;
     }
 
-
+    /**
+     * Starts the output to the commandline / browser
+     */
     public function __construct()
     {
         $this->startPHP2CommandLine();
     }
 
-
+    /**
+     * Ends output to commandline / browser
+     */
     public function __destruct()
     {
         $this->endPHP2CommandLine();
     }
 
+    /**
+     * creates magic getters and setters
+     * if you call $this->getFooBar() then it will get the variable FooBar even if the method
+     * getFooBar does not exist.
+     *
+     * if you call $this->setFooBar('hello') then it will set the variable FooBar even if the method
+     * setFooBar does not exist.
+     *
+     * See: http://php.net/manual/en/language.oop5.overloading.php#object.call
+     *
+     * @param  string   $function name of the function
+     * @param  array    $args     parameters provided to the getter / setter
+     *
+     * @return mixed|Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
+     */
     public function __call($function, $args)
     {
         $getOrSet = substr($function, 0, 3);
@@ -53,15 +71,17 @@ class MetaUpgrader
                     } else {
                         return $this->$var;
                     }
+
                 } elseif ($getOrSet === 'set') {
-                    $this->$var= $args[0];
+                    $this->$var = $args[0];
+
                     return $this;
                 }
             } else {
-                user_error('Fatal error: can not get/set variable in MetaUpgrader::'.$var, E_USER_ERROR);
+                user_error('Fatal error: can not get/set variable in ModuleUpgrader::'.$var, E_USER_ERROR);
             }
         } else {
-            user_error('Fatal error: Call to undefined method MetaUpgrader::'.$function(), E_USER_ERROR);
+            user_error('Fatal error: Call to undefined method ModuleUpgrader::'.$function.'()', E_USER_ERROR);
         }
     }
 
@@ -75,8 +95,9 @@ class MetaUpgrader
 
 
     /**
-     * start the upgrade sequence at a particular method
-     * @var string
+     * An array of all the 'TaskName's of the tasks that you wish to run during the execution of this upgrader task.
+     * This array can be overriden in the example-index.php file that you create.
+     * @var string[] of TaskName
      */
     protected $listOfTasks = [
         'ResetWebRootDir-1' => [],
@@ -105,6 +126,11 @@ class MetaUpgrader
         // 'WebRootUpdate' => []
     ];
 
+    /**
+     * Removes the given task from the list of tasks to execute
+     * @param  string $s name of the task to remove
+     * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader for chaining
+     */
     public function removeFromListOfTasks($s)
     {
         if ($key = $this->positionForTask($s) !== false) {
@@ -114,6 +140,15 @@ class MetaUpgrader
         return $this;
     }
 
+    /**
+     * Inserts another task to the list of tasks at a given position in the order of execution, if it is set
+     * TODO These parameter names need some more refining
+     * @param string|array  $oneOrMoreTasks the tasks to be inserted
+     * @param bool          $insertBeforeOrAfter If to insert before or after
+     * @param bool          $isBefore
+     *
+     * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
+     */
     public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore)
     {
         if (! is_array($oneOrMoreTasks)) {
@@ -136,39 +171,54 @@ class MetaUpgrader
     }
 
     /**
-    * end the upgrade sequence after a particular method
+    * The default namespace for all tasks
     * @var string
     */
     protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
 
     /**
-     * start the upgrade sequence at a particular method
-     * @var string
+     * start the upgrade sequence at a particular task
+     * @var string task to start the upgrade sequence from
      */
     protected $startFrom = '';
 
 
     /**
-     * end the upgrade sequence after a particular method
-     * @var string
+     * end the upgrade sequence after a particular task
+     * @var string task to end the upgrade sequence on
      */
     protected $endWith = '';
 
+    /**
+     * Is this the last TASK we are running?
+     * @var bool
+     */
     protected $isLastMethod = false;
 
-
-
+    /**
+     * What is the index of given task within the sequence
+     *
+     * @param string $s name of the task to find
+     *
+     * @return mixed the key/index of task
+     */
     protected function positionForTask($s)
     {
         return array_search($s, $this->listOfTasks);
     }
 
-
+    /**
+     * Set the command line exec to run immediately rather than outputting the bash script
+     * @return bool
+     */
     public function getRunImmediately()
     {
         return $this->commandLineExec->getRunImmediately();
     }
 
+    /**
+     * @param bool $b
+     */
     public function setRunImmediately($b)
     {
         $this->commandLineExec->setRunImmediately($b);
@@ -176,11 +226,18 @@ class MetaUpgrader
         return $this;
     }
 
+    /**
+     * Whether execution should come to a halt when an error is reached
+     * @return bool
+     */
     public function getBreakOnAllErrors()
     {
         return $this->commandLineExec->getBreakOnAllErrors();
     }
 
+    /**
+     * @param bool $b
+     */
     public function setBreakOnAllErrors($b)
     {
         $this->commandLineExec->setBreakOnAllErrors($b);
@@ -200,7 +257,7 @@ class MetaUpgrader
      *          'VendorNamespace' => 'A',
      *          'PackageName' => 'Package1',
      *          'PackageNamespace' => 'Package1',
-     *          'GitLink' => 'git@github.com:foor/bar-1.git',
+     *          'GitLinkg' => 'git@github.com:foor/bar-1.git',
      *          'UpgradeAsFork' => false
      *      ],
      *      [
@@ -214,11 +271,18 @@ class MetaUpgrader
      * required are:
      * - VendorName
      * - PacakageName
-     * The rest can be deducted (theoretically)
-     * @var array
+     * The rest can be deduced (theoretically)
+     * @var array of array modules to upgrade
      */
     protected $arrayOfModules = [];
 
+    /**
+     * Appends the given module in the form of all its module data that has to be formatted in an array
+     * to the array of modules that will be worked with during the upgrade procedure.
+     *
+     * @param array module data to append
+     * @return ModuleUpgrader for chaining
+     */
     public function addModule($a)
     {
         $this->arrayOfModules[] = $a;
@@ -240,20 +304,44 @@ class MetaUpgrader
 
     /**
      * name of the branch created to do the upgrade
-     * @var string
+     * @var string branch name
      */
     protected $nameOfTempBranch = 'temp-upgradeto4-branch';
 
+    /**
+     * Name of module vendor
+     * @var string
+     */
     protected $vendorName = '';
 
+    /**
+     * module vendors namespace
+     * @var string
+     */
     protected $vendorNamespace = '';
 
+    /**
+     * Package name for the module
+     * @var string
+     */
     protected $packageName = '';
 
+    /**
+     *Name space for the modules package
+     * @var string
+     */
     protected $packageNamespace = '';
 
+    /**
+     * git link for the module
+     * @var string
+     */
     protected $gitLink = '';
 
+    /**
+     * Should the upgrade to this module create a fork
+     * @var bool
+     */
     protected $upgradeAsFork = false;
 
 
@@ -280,30 +368,25 @@ class MetaUpgrader
     # LOCATIONS
     #########################################
 
-
-
-
-
+    //TODO double check descriptions for these variables as still rather ambiguous
 
     /**
-     *
+     * The folder for storing the log file in
+     * used in setting the php2 command line printer up
      * @var string
      */
     protected $logFolderDirLocation = '';
 
     /**
-     * @var string
+     * location of web root above module
+     * @var string directory
      */
     protected $aboveWebRootDirLocation = '/var/www';
-
 
     /**
      * @var string
      */
     protected $webRootName = 'upgradeto4';
-
-
-
 
     /**
      * //e.g. 'upgrade-code'
@@ -315,11 +398,17 @@ class MetaUpgrader
 
     protected $logFileLocation = '';
 
+    /**
+     * Combination of the web dir root name and the above webRootDirLocation
+     * @var string
+     */
     protected $webRootDirLocation = '';
 
+    /**
+     * Directory that holds the module
+     * @var string
+     */
     protected $moduleDirLocation = '';
-
-
 
     ###############################
     # HELPERS
@@ -327,7 +416,7 @@ class MetaUpgrader
 
 
     /**
-     *
+     *Reference to the commandline printer that outputs everything to the command line
      * @var Sunnysideup\UpgradeToSilverstripe4\Util\PHP2CommandLineSingleton|null
      */
     protected $commandLineExec = null;
@@ -337,17 +426,31 @@ class MetaUpgrader
     # USEFUL COMMANDS
     ###############################
 
-
+    /**
+     * Executes given operations on the PHP2CommandLineSingleton instance
+     * Documentation for this can be found in the PHP2CommandLineSingleton module
+     */
     public function execMe($newDir, $command, $comment, $alwaysRun = false)
     {
         return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
     }
 
+    /**
+     * Executes given operations on the PHP2CommandLineSingleton instance
+     * Documentation for this can be found in the PHP2CommandLineSingleton module
+     */
     public function colourPrint($mixedVar, $colour = 'dark_gray', $newLineCount = 1)
     {
         return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
     }
 
+    /**
+     * Locates the directory in which the code is kept within the module directory
+     *
+     * If it can be found returns the location otherwise it errors
+     *
+     * @return string codedirlocation
+     */
     public function findCodeDir()
     {
         $codeDir = '';
@@ -364,7 +467,12 @@ class MetaUpgrader
     }
 
 
-
+    /**
+     * Cleans an input string and returns a more natural human readable version
+     * @param  string $str input string
+     * @param  array  $noStrip
+     * @return string cleaned string
+     */
     public function camelCase($str, array $noStrip = [])
     {
         $str = str_replace('-', ' ', $str);
@@ -408,7 +516,10 @@ class MetaUpgrader
     ###############################
 
 
-
+    /**
+     * Starts the command line output and prints some opening information to the output
+     * also initalises various environment variables
+     */
     public function run()
     {
         $this->startPHP2CommandLine();
@@ -462,9 +573,7 @@ class MetaUpgrader
      */
     protected function startPHP2CommandLine()
     {
-        if ($this->commandLineExec === null) {
-            $this->commandLineExec = PHP2CommandLineSingleton::create();
-        }
+        $this->commandLineExec = PHP2CommandLineSingleton::create();
     }
 
     /**
@@ -478,7 +587,10 @@ class MetaUpgrader
         }
     }
 
-
+    /**
+     * Loads in and sets all the meta data for a module from the inputed array
+     * @param array $moduleDetails
+     */
     protected function loadVarsForModule($moduleDetails)
     {
         //VendorName

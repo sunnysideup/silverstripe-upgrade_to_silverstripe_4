@@ -63,8 +63,10 @@ SS4:
                 C: "Please review update and fix as required"
                 I: true
             'Session::':
-                R: "Session::inst()->"
-                C: "Please review update and fix as required"
+                R: "$this->getRequest()->getSession()"
+                C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
+            'SSViewer::set_source_file_comments(':
+                R: "Config::inst()->set('SSViewer' ', 'source_file_comments', "
 
 
         'md':

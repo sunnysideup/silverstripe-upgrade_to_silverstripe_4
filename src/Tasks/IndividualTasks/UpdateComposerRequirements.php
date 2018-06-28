@@ -15,10 +15,10 @@ class UpdateComposerRequirements extends Task
         } else {
             $newPackage = $package;
         }
-        $location = $this->mo->getModuleDirLocation().'/composer.json';
+        $location = $this->mu->getModuleDirLocation().'/composer.json';
 
-        $this->mo->execMe(
-            $this->mo->getModuleDirLocation(),
+        $this->mu->execMe(
+            $this->mu->getModuleDirLocation(),
             'php -r  \''
                 .'$jsonString = file_get_contents("'.$location.'"); '
                 .'$data = json_decode($jsonString, true); '

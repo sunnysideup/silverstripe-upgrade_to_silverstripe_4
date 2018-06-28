@@ -8,8 +8,8 @@ class AddNamespace extends Task
 {
     public function upgrader($params = [])
     {
-        if ($this->mo->getRunImmediately()) {
-            $codeDir = $this->mo->findCodeDir();
+        if ($this->mu->getRunImmediately()) {
+            $codeDir = $this->mu->findCodeDir();
 
             $dirsDone = [];
             $directories = new \RecursiveDirectoryIterator($codeDir);
@@ -21,18 +21,18 @@ class AddNamespace extends Task
                         $nameSpaceAppendix = str_replace($codeDir, '', $dirName);
                         $nameSpaceAppendix = trim($nameSpaceAppendix, '/');
                         $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
-                        $nameSpace = $this->mo->getVendorNamespace().'\\'.$this->mo->getPackageNamespace().'\\'.$nameSpaceAppendix;
+                        $nameSpace = $this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace().'\\'.$nameSpaceAppendix;
                         $nameSpaceArray = explode('\\', $nameSpace);
                         $nameSpaceArrayNew = [];
                         foreach ($nameSpaceArray as $nameSpaceSnippet) {
                             if ($nameSpaceSnippet) {
-                                $nameSpaceArrayNew[] = $this->mo->camelCase($nameSpaceSnippet);
+                                $nameSpaceArrayNew[] = $this->mu->camelCase($nameSpaceSnippet);
                             }
                         }
                         $nameSpace = implode('\\', $nameSpaceArrayNew);
-                        $this->mo->execMe(
+                        $this->mu->execMe(
                             $codeDir,
-                            'php '.$this->mo->getLocationOfUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mo->getWebRootDirLocation().' --write -vvv',
+                            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mu->getWebRootDirLocation().' --write -vvv',
                             'adding namespace: '.$nameSpace.' to '.$dirName,
                             false
                         );
@@ -41,15 +41,15 @@ class AddNamespace extends Task
             }
         } else {
             //@todo: we assume 'code' for now ...
-            $codeDir1 = $this->mo->getModuleDirLocation() . '/code';
-            $codeDir2 = $this->mo->getModuleDirLocation() . '/src';
+            $codeDir1 = $this->mu->getModuleDirLocation() . '/code';
+            $codeDir2 = $this->mu->getModuleDirLocation() . '/src';
             foreach ([$codeDir1, $codeDir2] as $codeDir) {
-                $this->mo->execMe(
-                    $this->mo->getLocationOfUpgradeModule(),
+                $this->mu->execMe(
+                    $this->mu->getLocationOfUpgradeModule(),
                     'find '.$codeDir.' -mindepth 1 -maxdepth 2 -type d -exec '.
                         'sh -c '.
                             '\'dir=${1##*/}; '.
-                            'php '.$this->mo->getLocationOfUpgradeModule().' add-namespace "'.$this->mo->getVendorNamespace().'\\'.$this->mo->getPackageNamespace().'\\$dir" "$dir" --write -r -vvv'.
+                            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace().'\\$dir" "$dir" --write -r -vvv'.
                         '\' _ {} '.
                     '\;',
                     'adding name spaces',

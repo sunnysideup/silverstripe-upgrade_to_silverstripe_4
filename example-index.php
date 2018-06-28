@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Sunnysideup\UpgradeToSilverstripe4\MetaUpgrader;
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
-$obj = MetaUpgrader::create()
+$obj = ModuleUpgrader::create()
     //->setRunImmediately(true)
     ->setLogFolderDirLocation('/var/www')
     ->setAboveWebRootDirLocation('/var/www')
@@ -13,9 +13,9 @@ $obj = MetaUpgrader::create()
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'dataobject-generator',
-              'PackageNamespace' => 'DataObjectGenerator',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-dataobject-generator.git',
+              'PackageName' => 'typography',
+              'PackageNamespace' => 'Typography',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-typography-generator.git',
               'UpgradeAsFork' => false
             ]
         ]

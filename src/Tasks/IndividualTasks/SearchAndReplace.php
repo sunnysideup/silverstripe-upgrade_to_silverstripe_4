@@ -42,33 +42,33 @@ class SearchAndReplace extends Task
         }
 
         //replacement data
-        $replacementDataObject = new LoadReplacementData($this->mo, $this->params);
+        $replacementDataObject = new LoadReplacementData($this->mu, $this->params);
         $replacementArray = $replacementDataObject->getReplacementArrays();
 
         if ($this->debug) {
-            $this->mo->colourPrint(print_r($replacementArray, 1));
+            $this->mu->colourPrint(print_r($replacementArray, 1));
         }
 
         //replace API
-        $textSearchMachine = new SearchAndReplaceAPI($this->mo->getModuleDirLocation());
+        $textSearchMachine = new SearchAndReplaceAPI($this->mu->getModuleDirLocation());
         $textSearchMachine->setIsReplacingEnabled(true);
         $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
 
         foreach ($replacementArray as $path => $pathArray) {
-            $path = $this->mo->getModuleDirLocation()  . '/'.$path ? : '' ;
-            $path = $this->mo->checkIfPathExistsAndCleanItUp($path);
+            $path = $this->mu->getModuleDirLocation()  . '/'.$path ? : '' ;
+            $path = $this->mu->checkIfPathExistsAndCleanItUp($path);
             if (!file_exists($path)) {
                 user_error("ERROR: could not find specified path: ".$path);
             }
             $textSearchMachine->setSearchPath($path);
             foreach ($pathArray as $extension => $extensionArray) {
                 $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
-                $this->mo->colourPrint(
+                $this->mu->colourPrint(
                     "++++++++++++++++++++++++++++++++++++\n".
                     "CHECKING\n".
                     "IN $path\n".
                     "FOR $extension FILES\n".
-                    "BASE ".$this->mo->getModuleDirLocation()."\n".
+                    "BASE ".$this->mu->getModuleDirLocation()."\n".
                     "++++++++++++++++++++++++++++++++++++\n"
                 );
                 foreach ($extensionArray as $find => $findDetails) {
@@ -101,9 +101,9 @@ class SearchAndReplace extends Task
                 if ($replacements) {
                 } else {
                     //flush output anyway!
-                    $this->mo->colourPrint("No replacements for  $extension");
+                    $this->mu->colourPrint("No replacements for  $extension");
                 }
-                $this->mo->colourPrint($textSearchMachine->getOutput());
+                $this->mu->colourPrint($textSearchMachine->getOutput());
             }
         }
     }
@@ -136,7 +136,7 @@ class SearchAndReplace extends Task
                         if ($keyOuter != $keyInner) {
                             $findStringOuterReplaced = str_replace($findStringInner, "...", $findStringOuter);
                             if ($findStringOuter == $findStringInner || $findStringOuterReplaced != $findStringOuter) {
-                                $this->mo->colourPrint("
+                                $this->mu->colourPrint("
 ERROR in $language: \t\t we are trying to find the same thing twice (A and B)
 ---- A: ($keyOuter): \t\t $findStringOuter
 ---- B: ($keyInner): \t\t $findStringInner");
@@ -161,7 +161,7 @@ ERROR in $language: \t\t we are trying to find the same thing twice (A and B)
                         if ($keyOuter != $keyInner) {
                             $findStringOuterReplaced = str_replace($findStringInner, "...", $findStringOuter);
                             if ($findStringOuter == $findStringInner || $findStringOuterReplaced != $findStringOuter) {
-                                $this->mo->colourPrint("
+                                $this->mu->colourPrint("
 ERROR in $language: \t\t there is a replacement (A) that was earlier tried to be found (B).
 ---- A: ($keyOuter): \t\t $findStringOuter
 ---- B: ($keyInner): \t\t $findStringInner");
@@ -171,6 +171,6 @@ ERROR in $language: \t\t there is a replacement (A) that was earlier tried to be
                 }
             }
         }
-        $this->mo->colourPrint("");
+        $this->mu->colourPrint("");
     }
 }

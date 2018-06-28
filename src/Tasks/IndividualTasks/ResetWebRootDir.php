@@ -8,17 +8,17 @@ class ResetWebRootDir extends Task
 {
     public function upgrader($params = [])
     {
-        $this->mo->execMe(
-            $this->mo->getAboveWebRootDirLocation(),
-            'rm '.$this->mo->getWebRootDirLocation(). ' -rf',
-            'remove the upgrade dir: '.$this->mo->getWebRootDirLocation(),
+        $this->mu->execMe(
+            $this->mu->getAboveWebRootDirLocation(),
+            'rm '.$this->mu->getWebRootDirLocation(). ' -rf',
+            'remove the upgrade dir: '.$this->mu->getWebRootDirLocation(),
             false
         );
 
-        $this->mo->execMe(
-            $this->mo->getAboveWebRootDirLocation(),
-            'mkdir '.$this->mo->getWebRootDirLocation(). '',
-            'create upgrade directory: '.$this->mo->getWebRootDirLocation(),
+        $this->mu->execMe(
+            $this->mu->getAboveWebRootDirLocation(),
+            'mkdir '.$this->mu->getWebRootDirLocation(). '',
+            'create upgrade directory: '.$this->mu->getWebRootDirLocation(),
             false
         );
     }

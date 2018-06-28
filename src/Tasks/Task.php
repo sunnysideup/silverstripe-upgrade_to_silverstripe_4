@@ -5,6 +5,10 @@
  */
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+
+
+
 abstract class Task
 {
     /**
@@ -70,7 +74,7 @@ abstract class Task
     public function __construct($mu, $params = [])
     {
         $this->params = $params;
-        $this->mu = new ModuleUpgrader();
+        $this->mu = ModuleUpgrader::create();
     }
 
     /**

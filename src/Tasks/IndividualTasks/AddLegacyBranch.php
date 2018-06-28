@@ -22,15 +22,15 @@ class AddLegacyBranch extends Task
      */
     public function upgrader($params = [])
     {
-        $this->mo->execMe(
-            $this->mo->getWebRootDirLocation(),
-            'composer require '.$this->mo->getVendorName().'/'.$this->mo->getPackageName().':dev-master',
-            'checkout dev-master of '.$this->mo->getVendorName().'/'.$this->mo->getPackageName(),
+        $this->mu->execMe(
+            $this->mu->getWebRootDirLocation(),
+            'composer require '.$this->mu->getVendorName().'/'.$this->mu->getPackageName().':dev-master',
+            'checkout dev-master of '.$this->mu->getVendorName().'/'.$this->mu->getPackageName(),
             false
         );
 
-        $this->mo->execMe(
-            $this->mo->getModuleDirLocation(),
+        $this->mu->execMe(
+            $this->mu->getModuleDirLocation(),
             '
             if git show-ref --quiet refs/heads/'.$this->nameOfLegacyBranch.';
                 then

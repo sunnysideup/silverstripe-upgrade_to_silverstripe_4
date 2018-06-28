@@ -56,9 +56,9 @@ class SearchAndReplaceAPI
     * array of all the files we are searching
     * @var array
     */
-    private $fileArray = [];
+    private $fileArray                 = [];
 
-    private $flatFileArray = [];
+    private $flatFileArray             = [];
 
     //stats and reporting
 
@@ -494,7 +494,7 @@ class SearchAndReplaceAPI
                         $this->flatFileArray = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($multiDimensionalArray));
                     }
                 } else {
-                    user_error('Can not find: '.$this->searchPath);
+                    $this->addToOutput("\n".'SKIPPED: can not find: '.$this->searchPath."\n");
                 }
             }
         }

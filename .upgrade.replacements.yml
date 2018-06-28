@@ -67,7 +67,11 @@ SS4:
                 C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
             'SSViewer::set_source_file_comments(':
                 R: "Config::inst()->set('SSViewer' ', 'source_file_comments', "
-
+            'ReadOnlyField':
+                R: "ReadonlyField"
+            '->setError':
+                R: "->setCustomValidationMessage"
+                C: "This needs further investigation, see: https://github.com/silverstripe/silverstripe-framework/issues/8225"
 
         'md':
             'mysite':
@@ -80,7 +84,9 @@ SS4:
                 R: "app"
             'Mysite':
                 R: "App"
-
+        'yml':
+            Director:
+                R: "SilverStripe\\Control\\Director"
 # example of a path specific one
     'code/View/Requirements_Backend_For_Webpack.php':
         php:

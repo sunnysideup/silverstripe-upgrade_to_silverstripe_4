@@ -9,7 +9,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class SearchAndReplace extends Task
 {
-    protected $debug = true;
+    protected $debug = false;
 
     private $checkReplacementIssues = false;
 
@@ -58,52 +58,53 @@ class SearchAndReplace extends Task
             $path = $this->mu->getModuleDirLocation()  . '/'.$path ? : '' ;
             $path = $this->mu->checkIfPathExistsAndCleanItUp($path);
             if (!file_exists($path)) {
-                user_error("ERROR: could not find specified path: ".$path);
-            }
-            $textSearchMachine->setSearchPath($path);
-            foreach ($pathArray as $extension => $extensionArray) {
-                $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
-                $this->mu->colourPrint(
-                    "++++++++++++++++++++++++++++++++++++\n".
-                    "CHECKING\n".
-                    "IN $path\n".
-                    "FOR $extension FILES\n".
-                    "BASE ".$this->mu->getModuleDirLocation()."\n".
-                    "++++++++++++++++++++++++++++++++++++\n"
-                );
-                foreach ($extensionArray as $find => $findDetails) {
-                    $replace = isset($findDetails['R'])       ? $findDetails['R'] : $find;
-                    $comment = isset($findDetails['C'])       ? $findDetails['C'] : '';
-                    $ignoreCase = isset($findDetails['I'])    ? $findDetails['I'] : false;
-                    $caseSensitive = ! $ignoreCase;
-                    //$replace = $replaceArray[1]; unset($replaceArray[1]);
-                    //$fullReplacement = (isset($replaceArray[2]) ? "/* ".$replaceArray[2]." */\n" : "").$replaceArray[1];
-                    $fullReplacement = '';
-                    $isStraightReplace = $comment ? false : true;
-                    if ($isStraightReplace) {
-                        $fullReplacement = $replace;
-                    } else {
-                        $fullReplacement = $replace."/*\n".$this->startMarker."\nFIND: ".$find."\nNOTE: ".$comment." \n".$this->endMarker."\n*/";
-                    }
-                    if (!$find) {
-                        user_error("no find is specified, replace is: $replace");
-                    }
-                    if (!$fullReplacement) {
-                        user_error("no replace is specified, find is: $find");
-                    }
-                    $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
+                $this->mu->colourPrint("SKIPPING $path");
+            } else {
+                $textSearchMachine->setSearchPath($path);
+                foreach ($pathArray as $extension => $extensionArray) {
+                    $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
+                    $this->mu->colourPrint(
+                        "++++++++++++++++++++++++++++++++++++\n".
+                        "CHECKING\n".
+                        "IN $path\n".
+                        "FOR $extension FILES\n".
+                        "BASE ".$this->mu->getModuleDirLocation()."\n".
+                        "++++++++++++++++++++++++++++++++++++\n"
+                    );
+                    foreach ($extensionArray as $find => $findDetails) {
+                        $replace = isset($findDetails['R'])       ? $findDetails['R'] : $find;
+                        $comment = isset($findDetails['C'])       ? $findDetails['C'] : '';
+                        $ignoreCase = isset($findDetails['I'])    ? $findDetails['I'] : false;
+                        $caseSensitive = ! $ignoreCase;
+                        //$replace = $replaceArray[1]; unset($replaceArray[1]);
+                        //$fullReplacement = (isset($replaceArray[2]) ? "/* ".$replaceArray[2]." */\n" : "").$replaceArray[1];
+                        $fullReplacement = '';
+                        $isStraightReplace = $comment ? false : true;
+                        if ($isStraightReplace) {
+                            $fullReplacement = $replace;
+                        } else {
+                            $fullReplacement = $replace."/*\n".$this->startMarker."\nFIND: ".$find."\nNOTE: ".$comment." \n".$this->endMarker."\n*/";
+                        }
+                        if (!$find) {
+                            user_error("no find is specified, replace is: $replace");
+                        }
+                        if (!$fullReplacement) {
+                            user_error("no replace is specified, find is: $find");
+                        }
+                        $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
 
-                    $textSearchMachine->setSearchKey($find, $caseSensitive, $replaceKey);
-                    $textSearchMachine->setReplacementKey($fullReplacement);
-                    $textSearchMachine->startSearchAndReplace();
+                        $textSearchMachine->setSearchKey($find, $caseSensitive, $replaceKey);
+                        $textSearchMachine->setReplacementKey($fullReplacement);
+                        $textSearchMachine->startSearchAndReplace();
+                    }
+                    $replacements = $textSearchMachine->showFormattedSearchTotals();
+                    if ($replacements) {
+                    } else {
+                        //flush output anyway!
+                        $this->mu->colourPrint("No replacements for  $extension");
+                    }
+                    $this->mu->colourPrint($textSearchMachine->getOutput());
                 }
-                $replacements = $textSearchMachine->showFormattedSearchTotals();
-                if ($replacements) {
-                } else {
-                    //flush output anyway!
-                    $this->mu->colourPrint("No replacements for  $extension");
-                }
-                $this->mu->colourPrint($textSearchMachine->getOutput());
             }
         }
     }

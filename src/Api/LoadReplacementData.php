@@ -25,12 +25,12 @@ class LoadReplacementData
      * Module Object
      * @var ModuleUpgrader
      */
-    protected $mo = null;
+    protected $mu = null;
 
-    public function __construct($mo, $params = [])
+    public function __construct($mu, $params = [])
     {
         $this->params = $params;
-        $this->mo = $mo;
+        $this->mu = $mu;
         $this->fullArray = $this->getData();
         $count = 0;
         foreach ($this->fullArray as $to => $toArray) {
@@ -109,9 +109,9 @@ class LoadReplacementData
     protected function getPaths()
     {
         $array = [
-            $this->mo->getModuleDirLocation(),
+            $this->mu->getModuleDirLocation(),
         ];
-        $globalFixes = $this->mo->checkIfPathExistsAndCleanItUp(__DIR__.'/../../');
+        $globalFixes = $this->mu->checkIfPathExistsAndCleanItUp(__DIR__.'/../../');
         if ($globalFixes) {
             $array[] = $globalFixes;
         }
@@ -130,7 +130,7 @@ class LoadReplacementData
                 // Merge
                 $config = $this->mergeConfig($config, $nextConfig);
             } else {
-                $this->mo->colourPrint('could not find: '.$nextFile);
+                $this->mu->colourPrint('could not find: '.$nextFile);
             }
         }
         ksort($config);

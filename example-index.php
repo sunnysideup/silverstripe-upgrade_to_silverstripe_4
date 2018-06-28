@@ -15,7 +15,7 @@ $obj = ModuleUpgrader::create()
               'VendorNamespace' => 'Sunnysideup',
               'PackageName' => 'typography',
               'PackageNamespace' => 'Typography',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-typography-generator.git',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-typography.git',
               'UpgradeAsFork' => false
             ]
         ]
@@ -42,6 +42,7 @@ $obj = ModuleUpgrader::create()
 
             'ResetWebRootDir-3' => [],
             'ComposerInstallProject' => [],
+            'MoveCodeToSRC' => [],
             'SearchAndReplace' => [],
             // 'ChangeEnvironment' => [],
             'UpperCaseFolderNamesForPSR4' => [],

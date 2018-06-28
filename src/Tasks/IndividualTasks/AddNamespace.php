@@ -32,7 +32,7 @@ class AddNamespace extends Task
                         $nameSpace = implode('\\', $nameSpaceArrayNew);
                         $this->mu->execMe(
                             $codeDir,
-                            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mu->getWebRootDirLocation().' --write -vvv',
+                            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mu->getWebRootDirLocation().' --write --psr4 -vvv',
                             'adding namespace: '.$nameSpace.' to '.$dirName,
                             false
                         );

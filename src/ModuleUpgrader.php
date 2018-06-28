@@ -117,6 +117,7 @@ class ModuleUpgrader
         'ResetWebRootDir-3' => [],
         'ComposerInstallProject' => [],
         'ChangeEnvironment' => [],
+        'MoveCodeToSRC' => [],
         'SearchAndReplace' => [],
         'UpperCaseFolderNamesForPSR4' => [],
         'AddNamespace' => [],

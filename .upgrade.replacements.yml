@@ -82,22 +82,9 @@ SS4:
             "$cache->save(":
                 R: "$cache->set("
                 C: "Check carefully KEY AND VALUE NEED TO BE SWAPPED: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
-
-// set a value and save it via the adapter
--$cache->save(1234, 'myCacheKey');
-+$cache->set('myCacheKey', 1234);
-
-// retrieve the cache item
--if (!$cache->load('myCacheKey')) {
--    // ... item does not exists in the cache
--}
-+if (!$cache->has('myCacheKey')) {
-+    // ... item does not exists in the cache
-+}
-
-// Remove a cache key
--$cache->remove('myCacheKey');
-+$cache->delete('myCacheKey');
+            "$cache->remove(":
+                R: "$cache->delete("
+                C: "Check carefully: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
 
         'yml':
             Director:

@@ -13,11 +13,11 @@ class InspectAPIChanges extends Task
         $this->mu->execMe(
             $this->mu->getWebRootDirLocation(),
             'composer dump-autoload',
-            'update composer autoload',
+            'run composer dump-autoload',
             false
         );
 
         $this->runSilverstripeUpgradeTask('inspect', $this->mu->getWebRootDirLocation(), $codeDir);
-        $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 2 (inspect)');
+        $this->setCommitMessage('MAJOR: core upgrade to SS4: INSPECT');
     }
 }

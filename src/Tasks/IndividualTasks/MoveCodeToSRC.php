@@ -19,13 +19,14 @@ class MoveCodeToSRC extends Task
     public function upgrader($params = [])
     {
         $old = $this->mu->getModuleDirLocation().'/code/ ';
-        $new = $this->mu->getModuleDirLocation().'src/';
+        $new = $this->mu->getModuleDirLocation().'/src/';
         $this->mu->execMe(
             $this->mu->getModuleDirLocation(),
-            'if [ -f '.$old.' ]; then mv '.$old.' '.$new.'; fi',
-            'moving '.$old.' to '.$new,
+            'mv -vn '.$old.' '.$new.'',
+            'moving '.$old.' to '.$new.' -v is verbose, -n is only if src does not exists',
             false
         );
+    }
 
     protected function hasCommit()
     {

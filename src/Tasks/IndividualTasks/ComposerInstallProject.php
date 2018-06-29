@@ -6,12 +6,15 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class ComposerInstallProject extends Task
 {
+
+    protected $versionToLoad = '^4';
+
     public function upgrader($params = [])
     {
         $this->mu->execMe(
             $this->mu->getAboveWebRootDirLocation(),
-            $this->mu->getComposerEnvironmentVars().' composer create-project silverstripe/installer '.$this->mu->getWebRootDirLocation().' ^4',
-            'set up vanilla SS4 install',
+            $this->mu->getComposerEnvironmentVars().' composer create-project silverstripe/installer '.$this->mu->getWebRootDirLocation().' '.$this->versionToLoad,
+            'set up vanilla SS4 install: '.$this->versionToLoad,
             false
         );
 

@@ -92,9 +92,9 @@ abstract class Task
      */
     public function run()
     {
-        $this->starter();
+        $this->starter($this->params);
         $this->upgrader($this->params);
-        $this->ender();
+        $this->ender($this->params);
     }
 
     /**
@@ -107,8 +107,13 @@ abstract class Task
      * Runs everything that should be run and begining of execution, I.e commiting everything to get or creating a
      * backup branch before making changes
      */
-    protected function starter()
+    protected function starter($params = [])
     {
+        foreach($params as $paramKey => $paramValue){
+            if(isset($this->$paramKey)) {
+                $this->$paramKey = $paramValue;
+            }
+        }
     }
 
     /**
@@ -117,7 +122,7 @@ abstract class Task
      */
     protected function ender()
     {
-        if ($this->hasCommit()) {
+        if ($this->hasCommit($params = [])) {
             $this->commitAndPush();
         }
     }

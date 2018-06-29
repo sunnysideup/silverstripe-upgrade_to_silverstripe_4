@@ -112,8 +112,9 @@ class ModuleUpgrader
         'UpdateComposerRequirements-2' => [
             'Package' => 'silverstripe/cms',
             'ReplacementPackage' => 'silverstripe/recipe-cms',
-            'NewVersion' => '1.1.2'
+            'NewVersion' => '~1'
         ],
+        'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
         'ComposerInstallProject' => [],
         'ChangeEnvironment' => [],
@@ -122,9 +123,11 @@ class ModuleUpgrader
         'UpperCaseFolderNamesForPSR4' => [],
         'AddNamespace' => [],
         'Upgrade' => [],
-        'InspectAPIChanges' => [],
+        'InspectAPIChanges-1' => [],
         'Reorganise' => [],
-        // 'WebRootUpdate' => []
+        // 'WebRootUpdate' => [],
+        'FinalDevBuild' => [],
+        'InspectAPIChanges-2' => []
     ];
 
     /**

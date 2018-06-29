@@ -6,11 +6,20 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class AddNamespace extends Task
 {
+
+    public function Description()
+    {
+        return '
+            Places all your code into namespaces (provided by silvertripe/upgrader),
+            using the PSR-4 approach (matching folders and namespaces)';
+    }
+
+
     public function upgrader($params = [])
     {
         if ($this->mu->getRunImmediately()) {
             $codeDir = $this->mu->findCodeDir();
-
+            $baseNameSpace = $this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace();
             $dirsDone = [];
             $directories = new \RecursiveDirectoryIterator($codeDir);
             foreach (new \RecursiveIteratorIterator($directories) as $file => $fileObject) {
@@ -21,7 +30,7 @@ class AddNamespace extends Task
                         $nameSpaceAppendix = str_replace($codeDir, '', $dirName);
                         $nameSpaceAppendix = trim($nameSpaceAppendix, '/');
                         $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
-                        $nameSpace = $this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace().'\\'.$nameSpaceAppendix;
+                        $nameSpace = $baseNameSpace.'\\'.$nameSpaceAppendix;
                         $nameSpaceArray = explode('\\', $nameSpace);
                         $nameSpaceArrayNew = [];
                         foreach ($nameSpaceArray as $nameSpaceSnippet) {
@@ -39,6 +48,12 @@ class AddNamespace extends Task
                     }
                 }
             }
+            $this->mu->execMe(
+                $codeDir,
+                'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$baseNameSpace.'" '.$this->mu->getModuleDirLocation().' --root-dir='.$this->mu->getWebRootDirLocation().' --write --psr4 -vvv',
+                'adding namespace: '.$nameSpace.' to '.$dirName,
+                false
+            );
         } else {
             //@todo: we assume 'code' for now ...
             $codeDir1 = $this->mu->getModuleDirLocation() . '/code';

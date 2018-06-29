@@ -13,9 +13,9 @@ $obj = ModuleUpgrader::create()
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'typography',
-              'PackageNamespace' => 'Typography',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-typography.git',
+              'PackageName' => 'metatags',
+              'PackageNamespace' => 'Metatags',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-metatags.git',
               'UpgradeAsFork' => false
             ]
         ]
@@ -23,36 +23,6 @@ $obj = ModuleUpgrader::create()
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
-    ->setListOfTasks(
-        [
-            'ResetWebRootDir-1' => [],
-            'AddLegacyBranch' => [],
-            'ResetWebRootDir-2' => [],
-            'AddUpgradeBranch' => [],
-            'UpdateComposerRequirements-1' => [
-                'Package' => 'silverstripe/framework',
-                'NewVersion' => '~4.0'
-            ],
-            'Recompose' => [],
-            'UpdateComposerRequirements-2' => [
-                'Package' => 'silverstripe/cms',
-                'ReplacementPackage' => 'silverstripe/recipe-cms',
-                'NewVersion' => '1.1.2'
-            ],
-
-            'ResetWebRootDir-3' => [],
-            'ComposerInstallProject' => [],
-            'MoveCodeToSRC' => [],
-            'SearchAndReplace' => [],
-            // 'ChangeEnvironment' => [],
-            'UpperCaseFolderNamesForPSR4' => [],
-            'AddNamespace' => [],
-            'Upgrade' => [],
-            'InspectAPIChanges' => [],
-            'Reorganise' => [],
-            // 'WebRootUpdate' => []
-        ]
-    )
-    ->setStartFrom('')
-    ->setEndWith('')
+    ->setStartFrom('InspectAPIChanges-2')
+    ->setEndWith('InspectAPIChanges-2')
     ->run();

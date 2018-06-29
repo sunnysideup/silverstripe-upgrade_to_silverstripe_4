@@ -34,7 +34,7 @@ class SearchAndReplaceAPI
 
     private $ignoreFolderArray         = [];
 
-    private $extensions                = ["php", "ss", "yml", "yaml", "json", "js"];
+    private $extensions                = ["php", "ss", "yml", "yaml", "json", "js", "md"];
 
     private $findAllExts               = false;
 
@@ -520,9 +520,12 @@ class SearchAndReplaceAPI
      */
     private function matchedExtension($file)
     {
+        $fileExtension = $this->findExtension($file);
         if ($this->findAllExts) {
             return true;
-        } elseif (sizeof(array_keys($this->extensions, $this->findExtension($file)))==1) {
+        } elseif (in_array('*', $this->extensions)) {
+            return true;
+        } elseif (in_array($fileExtension, $this->extensions)) {
             return true;
         }
         return false;

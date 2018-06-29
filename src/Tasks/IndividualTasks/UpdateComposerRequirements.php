@@ -6,6 +6,11 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class UpdateComposerRequirements extends Task
 {
+
+    protected $package = '';
+    protected $newVersion = '';
+    protected $newPackage = '';
+
     public function upgrader($params = [])
     {
         $package = $params['Package'];

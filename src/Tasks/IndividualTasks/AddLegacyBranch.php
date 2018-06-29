@@ -10,6 +10,14 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class AddLegacyBranch extends Task
 {
+
+    public function Description()
+    {
+        return '
+            Creates a legacy branch: '.$this->nameOfLegacyBranch.' so that you
+            can keep making bugfixes to older versions.';
+    }
+
     /**
      * @var string what should the legacy branch be called
      */
@@ -18,7 +26,6 @@ class AddLegacyBranch extends Task
     /**
      * [upgrader description]
      * @param  array  $params not currently used for this task
-     * @return [type]         [description]
      */
     public function upgrader($params = [])
     {

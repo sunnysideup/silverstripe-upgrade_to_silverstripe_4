@@ -73,9 +73,9 @@ SS4:
             '->setError':
                 R: "->setCustomValidationMessage"
                 C: "This needs further investigation, see: https://github.com/silverstripe/silverstripe-framework/issues/8225"
-            "Cache::factory('":
-               R: "Injector::inst()->get(CacheInterface::class . '."
-               C: "ADD TO TOP OF CLASS: use Psr\\SimpleCache\\CacheInterface;"
+            "Cache::factory(":
+               R: "Injector::inst()->get("
+               C: "ADD TO TOP OF CLASS: use Psr\\SimpleCache\\CacheInterface; add to key: CacheInterface::class.'.'"
             "$cache->load(":
                 R: "$cache->get("
                 C: "Check carefully and add some stuff to yml: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"

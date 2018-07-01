@@ -7,7 +7,12 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class AddNamespace extends Task
 {
 
-    public function Description()
+    public function getTitle()
+    {
+        return 'Name Spaces';
+    }
+
+    public function getDescription()
     {
         return '
             Places all your code into namespaces (provided by silvertripe/upgrader),
@@ -17,9 +22,9 @@ class AddNamespace extends Task
 
     public function upgrader($params = [])
     {
+        $baseNameSpace = $this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace();
         if ($this->mu->getRunImmediately()) {
             $codeDir = $this->mu->findCodeDir();
-            $baseNameSpace = $this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace();
             $dirsDone = [];
             $directories = new \RecursiveDirectoryIterator($codeDir);
             foreach (new \RecursiveIteratorIterator($directories) as $file => $fileObject) {
@@ -48,12 +53,6 @@ class AddNamespace extends Task
                     }
                 }
             }
-            $this->mu->execMe(
-                $codeDir,
-                'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$baseNameSpace.'" '.$this->mu->getModuleDirLocation().' --root-dir='.$this->mu->getWebRootDirLocation().' --write --psr4 -vvv',
-                'adding namespace: '.$nameSpace.' to '.$dirName,
-                false
-            );
         } else {
             //@todo: we assume 'code' for now ...
             $codeDir1 = $this->mu->getModuleDirLocation() . '/code';
@@ -64,7 +63,7 @@ class AddNamespace extends Task
                     'find '.$codeDir.' -mindepth 1 -maxdepth 2 -type d -exec '.
                         'sh -c '.
                             '\'dir=${1##*/}; '.
-                            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace().'\\$dir" "$dir" --write -r -vvv'.
+                            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace().'\\$dir" "$dir" --write --psr4 -r -vvv'.
                         '\' _ {} '.
                     '\;',
                     'adding name spaces',
@@ -72,6 +71,12 @@ class AddNamespace extends Task
                 );
             }
         }
+        $this->mu->execMe(
+            $codeDir,
+            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$baseNameSpace.'" '.$this->mu->getModuleDirLocation().' --root-dir='.$this->mu->getWebRootDirLocation().' --write --psr4 -vvv',
+            'adding namespace: '.$baseNameSpace.' to '.$this->mu->getModuleDirLocation(),
+            false
+        );
         $this->setCommitMessage('MAJOR: adding namespaces');
     }
 }

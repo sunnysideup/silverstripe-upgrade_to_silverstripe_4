@@ -18,6 +18,12 @@ abstract class Task
     protected $debug = false;
 
     /**
+     * code name for task
+     * @var string
+     */
+    protected $taskName = '';
+
+    /**
      * A static array for holding all the different Tasks that are running
      * @var Task[]
      */
@@ -34,28 +40,28 @@ abstract class Task
     public static function create($mu, $params = [])
     {
         $className = get_called_class();
-        if (empty(self::$_singleton[$params['TaskName']])) {
-            self::$_singleton[$params['TaskName']] = new $className($mu, $params);
+        if (empty(self::$_singleton[$params['taskName']])) {
+            self::$_singleton[$params['taskName']] = new $className($mu, $params);
         }
 
-        return self::$_singleton[$params['TaskName']];
+        return self::$_singleton[$params['taskName']];
     }
 
     /**
      * Deletes reference to given task and removes it from list of tasks
-     * @param array $params array containing the 'TaskName' of target task to delete
+     * @param array $params array containing the 'taskName' of target task to delete
      * @return null
      */
     public static function delete($params)
     {
-        self::$_singleton[$params['TaskName']] = null;
-        unset(self::$_singleton[$params['TaskName']]);
+        self::$_singleton[$params['taskName']] = null;
+        unset(self::$_singleton[$params['taskName']]);
 
         return null;
     }
 
     /**
-     * Array of params that define this task, holds information such as its TaskName etc.
+     * Array of params that define this task, holds information such as its taskName etc.
      * @var mixed
      */
     protected $params = [];
@@ -78,12 +84,32 @@ abstract class Task
     }
 
     /**
-     * @return string Returns the 'TaskName' of the current Task, this is the main Identifier when
+     * @return string Returns the 'taskName' of the current Task, this is the main Identifier when
      * used in looking up and managing this task
      */
     public function getTitle()
     {
-        return $this->params['TaskName'];
+        return $this->params['taskName'];
+    }
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function getDescription();
+
+    /**
+     *
+     * @return string
+     */
+    public function getDescriptionNice()
+    {
+        $des = $this->getDescription();
+        $des = trim(preg_replace('/\s+/', ' ', $des));
+        $des = trim(wordwrap($des));
+        $des = str_replace("\n", "\n".'# ', $des);
+
+        return $des;
     }
 
     /**
@@ -112,6 +138,8 @@ abstract class Task
         foreach($params as $paramKey => $paramValue){
             if(isset($this->$paramKey)) {
                 $this->$paramKey = $paramValue;
+            } else {
+                user_error('You are trying to set '.$paramKey.' but it is meaninguless to this class: '.get_called_class());
             }
         }
     }
@@ -122,7 +150,7 @@ abstract class Task
      */
     protected function ender()
     {
-        if ($this->hasCommit($params = [])) {
+        if ($this->hasCommit()) {
             $this->commitAndPush();
         }
     }
@@ -192,9 +220,8 @@ abstract class Task
     }
 
     /**
-     * TODO fill this out with NTHELP
-     * Runs the SilverStripe made ModuleUpgrader
-     * @param  [type] $task     [description]
+     * Runs the SilverStripe made upgrader
+     * @param  string $task     [description]
      * @param  string $rootDir  modules root directory
      * @param  string $param1   [description]
      * @param  string $param2   [description]

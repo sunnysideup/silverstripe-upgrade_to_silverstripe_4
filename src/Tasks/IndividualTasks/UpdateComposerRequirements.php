@@ -7,19 +7,32 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class UpdateComposerRequirements extends Task
 {
 
+    public function getTitle()
+    {
+        return 'Update composer.json requirements';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Change '.$this->package.' to '.$this->getReplacementPackage().':'.$this->newVersion.'
+            in the composer file of your module.';
+    }
+
     protected $package = '';
+
     protected $newVersion = '';
-    protected $newPackage = '';
+
+    protected $replacementPackage = '';
 
     public function upgrader($params = [])
     {
-        $package = $params['Package'];
-        $newVersion = $params['NewVersion'];
-        if (isset($params['ReplacementPackage'])) {
-            $newPackage = $params['ReplacementPackage'];
-        } else {
-            $newPackage = $package;
-        }
+        $package = $this->package;
+
+        $newVersion = $this->newVersion;
+
+        $newPackage = $this->getReplacementPackage();
+
         $location = $this->mu->getModuleDirLocation().'/composer.json';
 
         $this->mu->execMe(
@@ -39,4 +52,17 @@ class UpdateComposerRequirements extends Task
         );
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - updating core requirements');
     }
+
+
+    public function getReplacementPackage()
+    {
+        if (empty($this->replacementPackage)) {
+            $newPackage = $this->package;
+        } else {
+            $newPackage = $this->replacementPackage;
+        }
+
+        return $newPackage;
+    }
+
 }

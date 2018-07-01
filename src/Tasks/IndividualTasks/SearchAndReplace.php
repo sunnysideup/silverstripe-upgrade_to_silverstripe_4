@@ -9,6 +9,20 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class SearchAndReplace extends Task
 {
+
+    public function getTitle()
+    {
+        return 'Search and Replace';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Replaces a bunch of code snippets in preparation of the upgrade.
+            Controversial replacements will be replaced with a comment
+            next to it so you can review replacements easily.' ;
+    }
+
     protected $debug = false;
 
     private $checkReplacementIssues = false;

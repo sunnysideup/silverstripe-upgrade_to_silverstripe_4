@@ -7,6 +7,18 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class RemoveInstallerFolder extends Task
 {
 
+    public function getTitle()
+    {
+        return 'Remove installer-name from composer.json';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Remove installer folder from composer.json file so that package
+            installs into vendor folder.' ;
+    }
+
     protected $package = '';
 
     protected $newVersion = '';

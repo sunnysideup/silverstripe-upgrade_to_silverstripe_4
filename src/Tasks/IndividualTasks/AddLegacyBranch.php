@@ -11,7 +11,12 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class AddLegacyBranch extends Task
 {
 
-    public function Description()
+    public function getTitle()
+    {
+        return 'Add Legacy Branch';
+    }
+
+    public function getDescription()
     {
         return '
             Creates a legacy branch: '.$this->nameOfLegacyBranch.' so that you

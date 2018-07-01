@@ -7,6 +7,19 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class ComposerInstallProject extends Task
 {
 
+    public function getTitle()
+    {
+        return 'Composer Install Silverstripe 4';
+    }
+
+
+    public function getDescription()
+    {
+        return '
+            Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')
+            using composer' ;
+    }
+
     protected $versionToLoad = '^4';
 
     public function upgrader($params = [])

@@ -6,6 +6,18 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class ResetWebRootDir extends Task
 {
+
+    public function getTitle()
+    {
+        return 'Remove and reset Web Root';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Delete the web root directory to allow for a fresh install.' ;
+    }
+
     public function upgrader($params = [])
     {
         $this->mu->execMe(

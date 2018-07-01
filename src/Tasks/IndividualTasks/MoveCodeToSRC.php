@@ -11,6 +11,17 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class MoveCodeToSRC extends Task
 {
 
+    public function getTitle()
+    {
+        return 'Move code to src folder';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Move code folder to src folder to match PSR requirements.' ;
+    }
+
     /**
      * [upgrader description]
      * @param  array  $params not currently used for this task

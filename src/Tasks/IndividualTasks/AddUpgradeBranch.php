@@ -6,6 +6,20 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class AddUpgradeBranch extends Task
 {
+
+    public function getTitle()
+    {
+        return 'Add Upgrade Branch';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Adds a new branch ('.$this->mu->getNameOfTempBranch().') to your
+            repository ('.$this->mu->getVendorName().'/'.$this->mu->getPackageName().')
+            that is going to be used for upgrading it.' ;
+    }
+
     public function upgrader($params = [])
     {
         $this->mu->execMe(

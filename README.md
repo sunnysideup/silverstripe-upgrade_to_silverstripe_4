@@ -103,7 +103,7 @@ All upgrade changes will be committed to this branch.
 
 ### start from
 
-`->SetStartFrom('mymethod')`:
+`->setStartFrom('mymethod')`:
 Allows you to start the sequence from a particular method.
 See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
 Use the **Code** for any step to set this particular step as the first step
@@ -111,16 +111,53 @@ being executed in your upgrade sequence.
 
 ### end with
 
-`->EndWith('mymethod')`:
+`->setEndWith('mymethod')`:
 Allows you to end the sequence after a particular method.  
 See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
 Use the **Code** for any step to set this particular step as the last step
 being executed in your upgrade sequence.
 
+### log dir
+
+`->setLogFolderDirLocation('/var/www/logs')`:
+If set, a log of your upgrade will be saved in this folder.
 
 
 
 # advanced config options:
+
+### set list of tasks
+
+`->setListOfTasks()`:
+Customise your list of tasks to run on your module during the upgrade.
+
+```php
+->setListOfTasks(
+    [
+        'ResetWebRootDir-1' => [],
+        'AddLegacyBranch' => [],
+        'ResetWebRootDir-2' => [],
+        'UpdateComposerRequirements-2' => [
+            'Package' => 'silverstripe/cms',
+            'ReplacementPackage' => 'silverstripe/recipe-cms',
+            'NewVersion' => '1.1.2'
+        ],
+        'Reorganise' => []
+    ]
+)
+```
+See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
+
+### remove from list of tasks
+
+`->removeFromListOfTasks('FooBar')`:
+Remove an item from your list of tasks.
+
+### add to list of tasks
+
+`->addToListOfTasks('FooBarTask', $insertBeforeOrAfter = 'FooBarAnotherTask', $isBefore = false)`:
+Add an task to your list of tasks.
+See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
 
 ### composer environment vars
 

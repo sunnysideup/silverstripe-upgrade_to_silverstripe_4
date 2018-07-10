@@ -198,7 +198,7 @@ class ModuleUpgrader
      * Is this the last TASK we are running?
      * @var bool
      */
-    protected $isLastMethod = false;
+    private $isLastMethod = false;
 
     /**
      * What is the index of given task within the sequence
@@ -401,19 +401,19 @@ class ModuleUpgrader
      */
     protected $locationOfUpgradeModule = 'upgrade-code';
 
-    protected $logFileLocation = '';
+    private $logFileLocation = '';
 
     /**
      * Combination of the web dir root name and the above webRootDirLocation
      * @var string
      */
-    protected $webRootDirLocation = '';
+    private $webRootDirLocation = '';
 
     /**
      * Directory that holds the module
      * @var string
      */
-    protected $moduleDirLocation = '';
+    private $moduleDirLocation = '';
 
     ###############################
     # HELPERS

@@ -541,7 +541,7 @@ class ModuleUpgrader
                 $obj = $properClass::create($this, $params);
                 $html .= '<h3>Step '.$count.'/'.$totalCount.'. '.$obj->getTitle().'</h3>';
                 $html .= '<p>'.$obj->getDescription().'</p>';
-                $html .= '<p> ['.$properClass.'/link/to/path]  (Place/holder/location) </p>';
+                $html .= '['.$properClass.'/link/to/path]  (Place/holder/location) ';
                 $obj = $properClass::delete($params);
             } else {
                 user_error($properClass.' could not be found as class', E_USER_ERROR);

@@ -524,7 +524,7 @@ class ModuleUpgrader
 
     public function createListOfTasks()
     {
-        $html = '';
+        $html = '<h1>List of Tasks in run order</h1>';
         $count = 0;
         $totalCount = count($this->listOfTasks);
         foreach ($this->listOfTasks as $class => $params) {
@@ -542,7 +542,7 @@ class ModuleUpgrader
                 $reflectionClass = new \ReflectionClass($properClass);
                 $html .= '<h3>Step '.$count.'/'.$totalCount.'. '.$obj->getTitle().'</h3>';
                 $html .= '<p>';
-                $html .= '<br /><strong>Description: </strong>'.$obj->getDescription();
+                $html .= '<strong>Description: </strong>'.$obj->getDescription();
                 $html .= '<br /><strong>Class Name: </strong><a href="/src/Tasks/IndividualTasks/'. $reflectionClass->getShortName() .'.php">'. $reflectionClass->getShortName() .'</a>';
                 $html .= '</p>';
                 $obj = $properClass::delete($params);

@@ -543,7 +543,7 @@ class ModuleUpgrader
                 $html .= '<h3>Step '.$count.'/'.$totalCount.'. '.$obj->getTitle().'</h3>';
                 $html .= '<p>'.$obj->getDescription().'</p>';
                 $html .= '<p>Classname:' . $reflectionClass->getName() .'.php';
-                $html .= 'Location <a href = "Place/holder/location"> '.$properClass.'/link/to/path</a> </p>';
+                $html .= 'Location <a href = "Place/holder/location"> Open Class</a></p>';
                 $obj = $properClass::delete($params);
             } else {
                 user_error($properClass.' could not be found as class', E_USER_ERROR);

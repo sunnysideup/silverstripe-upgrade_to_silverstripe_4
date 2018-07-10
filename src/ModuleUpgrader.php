@@ -525,6 +525,7 @@ class ModuleUpgrader
     public function createListOfTasks()
     {
         $html = '';
+        $count = 0;
         foreach ($this->listOfTasks as $class => $params) {
             $properClass = current(explode('-', $class));
             $nameSpacesArray = explode('\\', $class);
@@ -533,10 +534,11 @@ class ModuleUpgrader
                 $properClass = $this->defaultNamespaceForTasks.'\\'.$properClass;
             }
             if (class_exists($properClass)) {
+                $count++;
                 $runItNow = $this->shouldWeRunIt($shortClassCode);
                 $params['taskName'] = $shortClassCode;
                 $obj = $properClass::create($this, $params);
-                $html .= '<h3>'.$obj->getTitle().'</h3>';
+                $html .= '<h3>'.$count.' '.$obj->getTitle().'</h3>';
                 $html .= '<p>'.$obj->getDescription().'</p>';
                 $obj = $properClass::delete($params);
             } else {

@@ -541,6 +541,10 @@ class ModuleUpgrader
                 $obj = $properClass::create($this, $params);
                 $reflectionClass = new \ReflectionClass($properClass);
                 $html .= '<h3>Step '.$count.'/'.$totalCount.'. '.$obj->getTitle().'</h3>';
+
+                $html .= '| Details        |             |';
+                $html .= '| ------------- |:-------------:|';
+                $html .= '| Description |'. $obj->getDescription() .'|';
                 $html .= '<p>'.$obj->getDescription().'</p>';
                 $html .= '<p>Classname:' . $reflectionClass->getName() .'.php';
                 $html .= 'Location <a href = "Place/holder/location"> Open Class</a></p>';

@@ -12,6 +12,11 @@ SS4:
 
     '.':
 
+        '*':
+            'mysite':
+                R: "app"
+            'Mysite':
+                R: "App"
         php:
 
             'mysite/css/':
@@ -23,10 +28,6 @@ SS4:
             'mysite/images/':
                 R: "ModuleLoader::getModule('mysite')->getResource('images/UPGRADE-FIX-REQUIRED.png')->getRelativePath()"
                 C: "Please review update and fix as required"
-            'mysite':
-                R: "app"
-            'Mysite':
-                R: "App"
 
             ' extends Object':
                 R: " extends ViewableData"
@@ -40,11 +41,11 @@ SS4:
                 R: " implements Flushable"
                 I: true
             ' extends Extension':
-                R: ""
+                R: " extends Extension"
                 C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
                 I: true
             ' extends DataExtension':
-                R: ""
+                R: " extends DataExtension"
                 C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
                 I: true
 
@@ -63,22 +64,31 @@ SS4:
                 C: "Please review update and fix as required"
                 I: true
             'Session::':
-                R: "Session::inst()->"
-                C: "Please review update and fix as required"
+                R: "$this->getRequest()->getSession()"
+                C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
+            'SSViewer::set_source_file_comments(':
+                R: "Config::inst()->set('SSViewer' ', 'source_file_comments', "
+            'ReadOnlyField':
+                R: "ReadonlyField"
+            '->setError':
+                R: "->setCustomValidationMessage"
+                C: "This needs further investigation, see: https://github.com/silverstripe/silverstripe-framework/issues/8225"
+            "Cache::factory(":
+               R: "Injector::inst()->get("
+               C: "ADD TO TOP OF CLASS: use Psr\\SimpleCache\\CacheInterface; add to key: CacheInterface::class.'.'"
+            "$cache->load(":
+                R: "$cache->get("
+                C: "Check carefully and add some stuff to yml: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
+            "$cache->save(":
+                R: "$cache->set("
+                C: "Check carefully KEY AND VALUE NEED TO BE SWAPPED: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
+            "$cache->remove(":
+                R: "$cache->delete("
+                C: "Check carefully: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
 
-
-        'md':
-            'mysite':
-                R: "app"
-            'Mysite':
-                R: "App"
-
-        'ss':
-            'mysite':
-                R: "app"
-            'Mysite':
-                R: "App"
-
+        'yml':
+            Director:
+                R: "SilverStripe\\Control\\Director"
 # example of a path specific one
     'code/View/Requirements_Backend_For_Webpack.php':
         php:

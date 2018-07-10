@@ -95,9 +95,9 @@ class ModuleUpgrader
 
 
     /**
-     * An array of all the 'TaskName's of the tasks that you wish to run during the execution of this upgrader task.
+     * An array of all the 'taskName's of the tasks that you wish to run during the execution of this upgrader task.
      * This array can be overriden in the example-index.php file that you create.
-     * @var string[] of TaskName
+     * @var string[] of taskName
      */
     protected $listOfTasks = [
         'ResetWebRootDir-1' => [],
@@ -105,25 +105,29 @@ class ModuleUpgrader
         'ResetWebRootDir-2' => [],
         'AddUpgradeBranch' => [],
         'UpdateComposerRequirements-1' => [
-            'Package' => 'silverstripe/framework',
-            'NewVersion' => '~4.0'
+            'package' => 'silverstripe/framework',
+            'newVersion' => '~4.0'
         ],
         'Recompose' => [],
         'UpdateComposerRequirements-2' => [
-            'Package' => 'silverstripe/cms',
-            'ReplacementPackage' => 'silverstripe/recipe-cms',
-            'NewVersion' => '1.1.2'
+            'package' => 'silverstripe/cms',
+            'replacementPackage' => 'silverstripe/recipe-cms',
+            'newVersion' => '~1'
         ],
+        'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
         'ComposerInstallProject' => [],
         'ChangeEnvironment' => [],
+        'MoveCodeToSRC' => [],
         'SearchAndReplace' => [],
         'UpperCaseFolderNamesForPSR4' => [],
         'AddNamespace' => [],
         'Upgrade' => [],
-        'InspectAPIChanges' => [],
+        'InspectAPIChanges-1' => [],
         'Reorganise' => [],
-        // 'WebRootUpdate' => []
+        // 'WebRootUpdate' => [],
+        'FinalDevBuild' => [],
+        'InspectAPIChanges-2' => []
     ];
 
     /**
@@ -454,13 +458,15 @@ class ModuleUpgrader
     public function findCodeDir()
     {
         $codeDir = '';
-        if (file_exists($this->moduleDirLocation . '/code')) {
-            $codeDir = $this->moduleDirLocation . '/code';
-        } elseif (file_exists($this->moduleDirLocation . '/src')) {
-            $codeDir = $this->moduleDirLocation . '/src';
-        } else {
-            user_error('Can not find code dir for '.$this->moduleDirLocation, E_USER_NOTICE);
-            return;
+        if($this->getRunImmediately()) {
+            if (file_exists($this->moduleDirLocation . '/code')) {
+                $codeDir = $this->moduleDirLocation . '/code';
+            } elseif (file_exists($this->moduleDirLocation . '/src')) {
+                $codeDir = $this->moduleDirLocation . '/src';
+            } else {
+                user_error('Can not find code dir for '.$this->moduleDirLocation, E_USER_NOTICE);
+                return;
+            }
         }
 
         return $codeDir;
@@ -544,13 +550,22 @@ class ModuleUpgrader
                     $properClass = $this->defaultNamespaceForTasks.'\\'.$properClass;
                 }
                 if (class_exists($properClass)) {
-                    if ($this->startMethod($shortClassCode)) {
-                        $params['TaskName'] = $shortClassCode;
-                        $obj = $properClass::create($this, $params);
+                    $runIt = $this->shouldWeRunIt($shortClassCode);
+                    $params['taskName'] = $shortClassCode;
+                    $obj = $properClass::create($this, $params);
+                    $this->colourPrint('# --------------------', 'yellow', 3);
+                    $this->colourPrint('# '.$obj->getTitle(), 'yellow');
+                    $this->colourPrint('# --------------------', 'yellow');
+                    $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
+                    $this->colourPrint('# --------------------', 'yellow');
+                    if($runIt) {
                         $obj->run();
+                    } else {
+                        $this->colourPrint('# skipped', 'light_green');
+                        $this->colourPrint('# --------------------', 'yellow');
                         //important!
-                        $obj = $properClass::delete($params);
                     }
+                    $obj = $properClass::delete($params);
                 } else {
                     user_error($properClass.' could not be found as class', E_USER_ERROR);
                 }
@@ -650,12 +665,11 @@ class ModuleUpgrader
     /**
      * start the method ...
      * - should we run it?
-     * - print the starting header
      *
      * @param  string $name whatever is listed in the listOfTasks
      * @return bool
      */
-    protected function startMethod($name) : bool
+    protected function shouldWeRunIt($name) : bool
     {
         if ($this->isLastMethod) {
             $runMe = false;
@@ -671,12 +685,6 @@ class ModuleUpgrader
                 }
             }
             $runMe = $this->startFrom ? false : true;
-        }
-        $this->colourPrint('# --------------------', 'yellow', 3);
-        $this->colourPrint('# '.$name, 'yellow');
-        $this->colourPrint('# --------------------', 'yellow');
-        if (! $runMe) {
-            $this->colourPrint('# skipped', 'light_green');
         }
 
         //here we call the PHP2CommandLine

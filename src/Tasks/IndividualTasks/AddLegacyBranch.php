@@ -10,6 +10,19 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class AddLegacyBranch extends Task
 {
+
+    public function getTitle()
+    {
+        return 'Add Legacy Branch';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Creates a legacy branch: '.$this->nameOfLegacyBranch.' so that you
+            can keep making bugfixes to older versions.';
+    }
+
     /**
      * @var string what should the legacy branch be called
      */
@@ -18,19 +31,18 @@ class AddLegacyBranch extends Task
     /**
      * [upgrader description]
      * @param  array  $params not currently used for this task
-     * @return [type]         [description]
      */
     public function upgrader($params = [])
     {
-        $this->mo->execMe(
-            $this->mo->getWebRootDirLocation(),
-            'composer require '.$this->mo->getVendorName().'/'.$this->mo->getPackageName().':dev-master',
-            'checkout dev-master of '.$this->mo->getVendorName().'/'.$this->mo->getPackageName(),
+        $this->mu->execMe(
+            $this->mu->getWebRootDirLocation(),
+            'composer require '.$this->mu->getVendorName().'/'.$this->mu->getPackageName().':dev-master',
+            'checkout dev-master of '.$this->mu->getVendorName().'/'.$this->mu->getPackageName(),
             false
         );
 
-        $this->mo->execMe(
-            $this->mo->getModuleDirLocation(),
+        $this->mu->execMe(
+            $this->mu->getModuleDirLocation(),
             '
             if git show-ref --quiet refs/heads/'.$this->nameOfLegacyBranch.';
                 then

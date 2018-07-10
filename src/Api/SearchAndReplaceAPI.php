@@ -34,7 +34,7 @@ class SearchAndReplaceAPI
 
     private $ignoreFolderArray         = [];
 
-    private $extensions                = ["php", "ss", "yml", "yaml", "json", "js"];
+    private $extensions                = ["php", "ss", "yml", "yaml", "json", "js", "md"];
 
     private $findAllExts               = false;
 
@@ -56,9 +56,9 @@ class SearchAndReplaceAPI
     * array of all the files we are searching
     * @var array
     */
-    private $fileArray = [];
+    private $fileArray                 = [];
 
-    private $flatFileArray = [];
+    private $flatFileArray             = [];
 
     //stats and reporting
 
@@ -494,7 +494,7 @@ class SearchAndReplaceAPI
                         $this->flatFileArray = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($multiDimensionalArray));
                     }
                 } else {
-                    user_error('Can not find: '.$this->searchPath);
+                    $this->addToOutput("\n".'SKIPPED: can not find: '.$this->searchPath."\n");
                 }
             }
         }
@@ -520,9 +520,12 @@ class SearchAndReplaceAPI
      */
     private function matchedExtension($file)
     {
+        $fileExtension = $this->findExtension($file);
         if ($this->findAllExts) {
             return true;
-        } elseif (sizeof(array_keys($this->extensions, $this->findExtension($file)))==1) {
+        } elseif (in_array('*', $this->extensions)) {
+            return true;
+        } elseif (in_array($fileExtension, $this->extensions)) {
             return true;
         }
         return false;

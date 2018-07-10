@@ -49,8 +49,8 @@ It then commits and pushes the results for inspection.
 
 ```php
 <?php
-require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
-$obj = MetaUpgrader::create()
+require_once('silverstripe-upgrade_to_silverstripe_4/src/ModuleUpgrader.php');
+$obj = ModuleUpgrader::create()
     ->setLogFolderDirLocation('/var/www')
     ->setAboveWebRootDirLocation('/var/www')
     ->setWebRootName('__upgradeto4__')
@@ -107,8 +107,8 @@ The code above is very verbose to show you all the options available. Here is a 
 
 ```php
 <?php
-require_once('silverstripe-upgrade_to_silverstripe_4/src/MetaUpgrader.php');
-$obj = MetaUpgrader::create()
+require_once('silverstripe-upgrade_to_silverstripe_4/src/ModuleUpgrader.php');
+$obj = ModuleUpgrader::create()
     ->setAboveWebRootDirLocation('/var/www')
     ->addModule(
         [
@@ -195,12 +195,12 @@ All upgrade changes will be committed to this branch. **Careful!  This branch wi
 
 ### start from
 
-`->SetStartFrom('mymethod')`: allows you to start the sequence from a particular method. See MetaUpgrader::run to see what methods are being run in what order.
+`->SetStartFrom('mymethod')`: allows you to start the sequence from a particular method. See ModuleUpgrader::run to see what methods are being run in what order.
 
 
 ### end with
 
-`->EndWith('mymethod')`: allows you to end the sequence after a particular method.  See MetaUpgrader::run to see what methods are being run in what order.
+`->EndWith('mymethod')`: allows you to end the sequence after a particular method.  See ModuleUpgrader::run to see what methods are being run in what order.
 
 
 # Important references:

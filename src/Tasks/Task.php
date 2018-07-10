@@ -84,13 +84,11 @@ abstract class Task
     }
 
     /**
-     * @return string Returns the 'taskName' of the current Task, this is the main Identifier when
-     * used in looking up and managing this task
+     * returns title of the task at hand ...
+     *
+     * @return string
      */
-    public function getTitle()
-    {
-        return $this->params['taskName'];
-    }
+    abstract public function getTitle();
 
     /**
      *
@@ -99,6 +97,8 @@ abstract class Task
     abstract public function getDescription();
 
     /**
+     * remove white space from description and add # at the end
+     * lines are also wordwrapped
      *
      * @return string
      */
@@ -114,20 +114,13 @@ abstract class Task
 
     /**
      * Executes the seperate stages of this task in chronological ordering
-     * @return null
      */
     public function run()
     {
         $this->starter($this->params);
-        $this->upgrader($this->params);
+        $this->runActualTask($this->params);
         $this->ender($this->params);
     }
-
-    /**
-     * TODO explain this with NTHELP
-     */
-    abstract public function upgrader($params = []);
-
 
     /**
      * Runs everything that should be run and begining of execution, I.e commiting everything to get or creating a
@@ -143,6 +136,13 @@ abstract class Task
             }
         }
     }
+
+    /**
+     * runs the actual task and needs to be defined in any class that extends
+     * this class.
+     */
+    abstract public function runActualTask($params = []);
+
 
     /**
      * Executed as the last step of a task. Used primarily for finishing off of changes made during execution of task.

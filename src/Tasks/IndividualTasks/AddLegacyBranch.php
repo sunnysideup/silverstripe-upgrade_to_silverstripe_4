@@ -29,10 +29,10 @@ class AddLegacyBranch extends Task
     protected $nameOfLegacyBranch = '3';
 
     /**
-     * [upgrader description]
+     * [runActualTask description]
      * @param  array  $params not currently used for this task
      */
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->mu->execMe(
             $this->mu->getWebRootDirLocation(),

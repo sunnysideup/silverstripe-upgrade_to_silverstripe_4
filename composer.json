@@ -34,7 +34,8 @@
         "post-install-cmd": [],
         "post-update-cmd": [
             "@cleanup",
-            "composer dumpautoload"
+            "composer dumpautoload",
+            "php create-list-of-tasks.php"
         ]
     }
 

@@ -49,7 +49,7 @@ class SearchAndReplace extends Task
 
     private $endMarker = "### @@@@ END UPGRADE REQUIRED @@@@ ###";
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         if ($this->checkReplacementIssues) {
             $this->checkReplacementDataIssues();

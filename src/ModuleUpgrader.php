@@ -114,6 +114,7 @@ class ModuleUpgrader
             'replacementPackage' => 'silverstripe/recipe-cms',
             'newVersion' => '~1'
         ],
+        'UpdateComposerModuleType' => [],
         'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
         'ComposerInstallProject' => [],
@@ -521,7 +522,32 @@ class ModuleUpgrader
     # RUN
     ###############################
 
-
+    public function createListOfTasks()
+    {
+        $html = '';
+        foreach ($this->listOfTasks as $class => $params) {
+            $properClass = current(explode('-', $class));
+            $nameSpacesArray = explode('\\', $class);
+            $shortClassCode = end($nameSpacesArray);
+            if (! class_exists($properClass)) {
+                $properClass = $this->defaultNamespaceForTasks.'\\'.$properClass;
+            }
+            if (class_exists($properClass)) {
+                $runItNow = $this->shouldWeRunIt($shortClassCode);
+                $params['taskName'] = $shortClassCode;
+                $obj = $properClass::create($this, $params);
+                $html .= '<h3>'.$obj->getTitle().'</h3>'
+                $html .= '<p>'.$obj->getDescriptionNice().'</p>'
+                $obj = $properClass::delete($params);
+            } else {
+                user_error($properClass.' could not be found as class', E_USER_ERROR);
+            }
+        }
+        file_put_contents(
+            $html,
+            basename(__DIR__).'docs/en/Tasks.md'
+        );
+    }
     /**
      * Starts the command line output and prints some opening information to the output
      * also initalises various environment variables
@@ -550,7 +576,7 @@ class ModuleUpgrader
                     $properClass = $this->defaultNamespaceForTasks.'\\'.$properClass;
                 }
                 if (class_exists($properClass)) {
-                    $runIt = $this->shouldWeRunIt($shortClassCode);
+                    $runItNow = $this->shouldWeRunIt($shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     $this->colourPrint('# --------------------', 'yellow', 3);
@@ -558,7 +584,7 @@ class ModuleUpgrader
                     $this->colourPrint('# --------------------', 'yellow');
                     $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
                     $this->colourPrint('# --------------------', 'yellow');
-                    if($runIt) {
+                    if($runItNow) {
                         $obj->run();
                     } else {
                         $this->colourPrint('# skipped', 'light_green');

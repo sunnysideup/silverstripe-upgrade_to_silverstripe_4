@@ -25,7 +25,7 @@ class UpdateComposerRequirements extends Task
 
     protected $replacementPackage = '';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $package = $this->package;
 

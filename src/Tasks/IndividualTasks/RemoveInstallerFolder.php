@@ -25,7 +25,7 @@ class RemoveInstallerFolder extends Task
 
     protected $newPackage = '';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $location = $this->mu->getModuleDirLocation().'/composer.json';
 

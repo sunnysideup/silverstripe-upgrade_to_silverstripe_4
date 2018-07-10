@@ -20,7 +20,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
             steps.';
     }
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $codeDir = $this->mu->findCodeDir();
         if($this->mu->getRunImmediately() && file_exists($codeDir)) {

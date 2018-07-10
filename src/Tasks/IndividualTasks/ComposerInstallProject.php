@@ -22,7 +22,7 @@ class ComposerInstallProject extends Task
 
     protected $versionToLoad = '^4';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->mu->execMe(
             $this->mu->getAboveWebRootDirLocation(),

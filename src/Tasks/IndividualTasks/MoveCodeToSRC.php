@@ -23,11 +23,11 @@ class MoveCodeToSRC extends Task
     }
 
     /**
-     * [upgrader description]
+     * [runActualTask description]
      * @param  array  $params not currently used for this task
      * @return [type]         [description]
      */
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $old = $this->mu->getModuleDirLocation().'/code/ ';
         $new = $this->mu->getModuleDirLocation().'/src/';

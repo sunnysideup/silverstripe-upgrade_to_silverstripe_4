@@ -536,16 +536,17 @@ class ModuleUpgrader
                 $runItNow = $this->shouldWeRunIt($shortClassCode);
                 $params['taskName'] = $shortClassCode;
                 $obj = $properClass::create($this, $params);
-                $html .= '<h3>'.$obj->getTitle().'</h3>'
-                $html .= '<p>'.$obj->getDescriptionNice().'</p>'
+                $html .= '<h3>'.$obj->getTitle().'</h3>';
+                $html .= '<p>'.$obj->getDescription().'</p>';
                 $obj = $properClass::delete($params);
             } else {
                 user_error($properClass.' could not be found as class', E_USER_ERROR);
             }
         }
+        $dir = __DIR__.'/../docs/en/';
         file_put_contents(
-            $html,
-            basename(__DIR__).'docs/en/Tasks.md'
+            $dir . '/AvailableTasks.md',
+            $html
         );
     }
     /**

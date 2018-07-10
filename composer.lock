@@ -1183,12 +1183,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silverstripe/silverstripe-upgrader.git",
-                "reference": "092b2c9445e074e6a055d42ddcdfbb4833564237"
+                "reference": "73ecac150f0f690e1fa81078f843eba6120456da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/092b2c9445e074e6a055d42ddcdfbb4833564237",
-                "reference": "092b2c9445e074e6a055d42ddcdfbb4833564237",
+                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/73ecac150f0f690e1fa81078f843eba6120456da",
+                "reference": "73ecac150f0f690e1fa81078f843eba6120456da",
                 "shasum": ""
             },
             "require": {
@@ -1208,7 +1208,8 @@
             },
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "^7"
+                "phpunit/phpunit": "^7",
+                "secondtruth/phar-compiler": "^1.1"
             },
             "bin": [
                 "bin/upgrade-code"
@@ -1236,7 +1237,7 @@
                 }
             ],
             "description": "A tool to help upgrade your code to handle API changes in packages you used.",
-            "time": "2018-07-04T23:12:27+00:00"
+            "time": "2018-07-10T02:18:49+00:00"
         },
         {
             "name": "sunnysideup/php_2_command_line",

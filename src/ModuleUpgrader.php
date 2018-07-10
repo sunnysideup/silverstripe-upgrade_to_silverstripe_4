@@ -540,10 +540,12 @@ class ModuleUpgrader
                 $params['taskName'] = $shortClassCode;
                 $obj = $properClass::create($this, $params);
                 $reflectionClass = new \ReflectionClass($properClass);
-                $html .= '<h3>Step '.$count.'/'.$totalCount.'. '.$obj->getTitle().'</h3>';
+                $html .= '<h3>Step '.$count.' / '.$totalCount.': '.$obj->getTitle().'</h3>';
                 $html .= '<p>';
                 $html .= '<strong>Description: </strong>'.$obj->getDescription();
-                $html .= '<br /><strong>Class Name: </strong><a href="/src/Tasks/IndividualTasks/'. $reflectionClass->getShortName() .'.php">'. $reflectionClass->getShortName() .'</a>';
+                $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/src/';
+                $path .=  str_replace('\\', '/', $reflectionClass->getName()).'.php';
+                $html .= '<br /><strong>Class Name: </strong><a href="'.$path.'">'. $reflectionClass->getShortName() .'</a>';
                 $html .= '</p>';
                 $obj = $properClass::delete($params);
             } else {

@@ -539,9 +539,10 @@ class ModuleUpgrader
                 $runItNow = $this->shouldWeRunIt($shortClassCode);
                 $params['taskName'] = $shortClassCode;
                 $obj = $properClass::create($this, $params);
+                $reflectionClass = new \ReflectionClass($properClass);
                 $html .= '<h3>Step '.$count.'/'.$totalCount.'. '.$obj->getTitle().'</h3>';
                 $html .= '<p>'.$obj->getDescription().'</p>';
-                $html .= '<p>Classname:' .$properClass;
+                $html .= '<p>Classname:' . $reflectionClass->getName() .'.php';
                 $html .= 'Location <a href = "Place/holder/location"> '.$properClass.'/link/to/path</a> </p>';
                 $obj = $properClass::delete($params);
             } else {

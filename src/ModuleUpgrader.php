@@ -541,13 +541,11 @@ class ModuleUpgrader
                 $obj = $properClass::create($this, $params);
                 $reflectionClass = new \ReflectionClass($properClass);
                 $html .= '<h3>Step '.$count.'/'.$totalCount.'. '.$obj->getTitle().'</h3>';
-
-                $html .= '| Details        |             |';
-                $html .= '| ------------- |:-------------:|';
-                $html .= '| Description |'. $obj->getDescription() .'|';
-                $html .= '<p>'.$obj->getDescription().'</p>';
-                $html .= '<p>Classname:' . $reflectionClass->getName() .'.php';
-                $html .= 'Location <a href = "Place/holder/location"> Open Class</a></p>';
+                $html .= '<p>';
+                $html .= '<br /><strong>Description: </strong>'.$obj->getDescription();
+                $html .= '<br /><strong>Class Name: </strong>'. $reflectionClass->getName();
+                $html .= '<br /><strong>See:<a href="/src/Tasks/IndividualTasks/AddLegacyBranch.php">Open Class</a></p>';
+                $html .= '</p>';
                 $obj = $properClass::delete($params);
             } else {
                 user_error($properClass.' could not be found as class', E_USER_ERROR);

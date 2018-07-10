@@ -43,7 +43,7 @@ To customise your list of tasks, please see config options below.
 
 2.  Create a new php file (e.g. `index.php`) in your root dir (or anywhere else  you can run it):
 
-**We have included two example files [like this](/example-index.full.php) and [this](example-index.short.php) in the module root.**
+**We have included two example files like [ this](/example-index.full.php) and [this](example-index.short.php) in the module root.**
 
 
 3. Run the file to upgrade your modules - e.g.

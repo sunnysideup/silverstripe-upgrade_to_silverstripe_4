@@ -29,7 +29,7 @@ class AddLegacyBranch extends Task
     protected $nameOfLegacyBranch = '3';
 
     /**
-     * [runActualTask description]
+     * 
      * @param  array  $params not currently used for this task
      */
     public function runActualTask($params = [])

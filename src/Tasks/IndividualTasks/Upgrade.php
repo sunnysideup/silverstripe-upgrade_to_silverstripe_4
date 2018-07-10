@@ -4,6 +4,10 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Runs the silverstripe upgrade task 'upgrade'.
+ * More information on this task at https://github.com/silverstripe/silverstripe-runActualTask#upgrade
+ */
 class Upgrade extends Task
 {
 

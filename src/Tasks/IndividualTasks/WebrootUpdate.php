@@ -4,6 +4,10 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * This task runs the silverstripe upgrade task 'webroot' to configure
+ * your project to use the public web root structure
+ */
 class WebRootUpdate extends Task
 {
 

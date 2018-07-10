@@ -4,9 +4,12 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.
+ * This means your module will be installed in the vendor folder after this upgrade.
+ */
 class UpdateComposerModuleType extends Task
 {
-
     public function getTitle()
     {
         return 'Update composer type to silverstripe-vendormodule ';

@@ -546,6 +546,7 @@ class ModuleUpgrader
                 $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
                 $path =  str_replace('\\', '/', $reflectionClass->getName()).'.php';
                 $path =  str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
+                $path =  str_replace('docs/en', 'src', $path);
                 $html .= '<br /><strong>Class Name: </strong><a href="'.$path.'">'. $reflectionClass->getShortName() .'</a>';
                 $html .= '</p>';
                 $obj = $properClass::delete($params);

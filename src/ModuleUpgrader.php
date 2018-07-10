@@ -114,7 +114,6 @@ class ModuleUpgrader
             'replacementPackage' => 'silverstripe/recipe-cms',
             'newVersion' => '~1'
         ],
-        'UpdateComposerModuleType' => [],
         'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
         'ComposerInstallProject' => [],
@@ -126,6 +125,7 @@ class ModuleUpgrader
         'Upgrade' => [],
         'InspectAPIChanges-1' => [],
         'Reorganise' => [],
+        'UpdateComposerModuleType' => [],        
         // 'WebRootUpdate' => [],
         'FinalDevBuild' => [],
         'InspectAPIChanges-2' => []

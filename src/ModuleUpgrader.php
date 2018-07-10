@@ -538,7 +538,7 @@ class ModuleUpgrader
                 $runItNow = $this->shouldWeRunIt($shortClassCode);
                 $params['taskName'] = $shortClassCode;
                 $obj = $properClass::create($this, $params);
-                $html .= '<h3>'.$count.' '.$obj->getTitle().'</h3>';
+                $html .= '<h3>'.$count.'. '.$obj->getTitle().'</h3>';
                 $html .= '<p>'.$obj->getDescription().'</p>';
                 $obj = $properClass::delete($params);
             } else {

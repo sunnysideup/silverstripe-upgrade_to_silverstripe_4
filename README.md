@@ -3,7 +3,7 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 
 # prerequisites before you start:
 
-- The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to silverstripe/framework, where classes are put in the right folder.  You do not need to use title case for the folder names.
+- **IMPORTANT** The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to silverstripe/framework, where classes are put in the right folder.  You do not need to use title case for the folder names.
  - module to be upgraded needs to be listed on packagist
  - composer file needs to follow this pattern (installer-name requirement may be dropped in the future)
 
@@ -32,17 +32,9 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
 
 In short: it helps you upgrade SS modules from SS3 to SS4.
 
-In more detail, this module, for a provided list of modules from a vendor, (re)creates a branch specifically created for upgrading your module from SS3 to SS4. In this branch it:
+To see a list of default tasks, visit our auto-generated complete list of [default tasks](/docs/en/AvailableTasks.md).
 
- - updates the composer requirements: https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/recompose.md
- - Updates the environment file (environment): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/environment.md (OPTIONAL)
- - Adds namespaces (add-namespace): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/add-namespace.md
- - Refactors your existing code base (upgrade): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/upgrade.md
- - Applies API changes (inspect): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/inspect.md
- - Renames mysite (reorganise): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/reorganise.md (OPTIONAL)
- - Switches your project to have a public web-root: https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/webroot.md (OPTIONAL)
-
-It then commits and pushes the results for inspection.
+To customise your list of tasks, please see config options below.
 
 # installation and usage:
 
@@ -51,7 +43,7 @@ It then commits and pushes the results for inspection.
 
 2.  Create a new php file (e.g. `index.php`) in your root dir (or anywhere else  you can run it):
 
-**We have included an example file like this in the module root.**
+**We have included two example files [like this](/example-index.full.php) and [this](example-index.short.php) in the module root.**
 
 
 3. Run the file to upgrade your modules - e.g.

@@ -66,32 +66,37 @@ To customise your list of tasks, please see config options below.
 
 ### run immediately or create bash script?
 
-`->setRunImmediately(false)`: When you set `runImmediately` to true, the PHP code will use the PHP `exec` function to run commands.
+`->setRunImmediately(false)`:
+When you set `runImmediately` to true, the PHP code will use the PHP `exec` function to run commands.
 If you set this option to false then you will be provided with a sample bash script.  It is recommended, however, that you use the
 `->setRunImmediately(true)` to run this tool rather than using the provided bash script.
 
 
 ### root directory
 
-`->setRootDir('/var/www')`: this is meant to be the directory where you do the work.
+`->setRootDir('/var/www')`:
+This is meant to be the directory where you do the work.
 This should be a folder where you usually save your websites locally so that you can test your upgraded module.
 
 
 ### upgrade directory
 
-`->setUpgradeDirName('upgradeto4')`: this is the name of the directory that is created in the root dir where the upgrade takes place.
+`->setUpgradeDirName('upgradeto4')`:
+This is the name of the directory that is created in the root dir where the upgrade takes place.
 That is, your actual module will be cloned in the `[rootdir]/[upgrade directory]` and when completed, this directory will be deleted.
 **Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**
 
 
 ### list of modules
 
-`->setArrayOfModules([])`: This contains a list of modules you intend to update.
+`->setArrayOfModules([])`:
+This contains a list of modules you intend to update.
 We recommend updating one module at a time. For details see: [example index file](/example-index.full.php).
 
 ### temp branch
 
-`->setNameOfTempBranch('4.1-TEMP-upgrade')`: This is the name of the (temporary OR upgrade) branch added to your module.
+`->setNameOfTempBranch('4.1-TEMP-upgrade')`:
+This is the name of the (temporary OR upgrade) branch added to your module.
 All upgrade changes will be committed to this branch.
 **Careful!  This branch will be deleted every time you run the update process to allow you to rerun the upgrade process.**
 
@@ -101,11 +106,16 @@ All upgrade changes will be committed to this branch.
 `->SetStartFrom('mymethod')`:
 Allows you to start the sequence from a particular method.
 See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
-
+Use the **Code** for any step to set this particular step as the first step
+being executed in your upgrade sequence.
 
 ### end with
 
-`->EndWith('mymethod')`: allows you to end the sequence after a particular method.  See MetaUpgrader::run to see what methods are being run in what order.
+`->EndWith('mymethod')`:
+Allows you to end the sequence after a particular method.  
+See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
+Use the **Code** for any step to set this particular step as the last step
+being executed in your upgrade sequence.
 
 
 
@@ -114,7 +124,8 @@ See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
 
 ### composer environment vars
 
-`->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')`: specific stuff for your composer.
+`->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')`:
+specific stuff for your composer.
 
 
 ### location for the Silverstripe Upgrade module
@@ -126,7 +137,8 @@ so, in general, there is no need to set this.
 
 ### include upgrading `_ss_environment` file?
 
-`->setIncludeEnvironmentFileUpdate(false|true)`: we recommend to set this to false
+`->setIncludeEnvironmentFileUpdate(false|true)`:
+we recommend to set this to false
 as it is easier to do this manually.
 See https://github.com/silverstripe/silverstripe-upgrader/blob/master/README.md#environment
 for details.
@@ -134,7 +146,8 @@ for details.
 
 ### run reorganise task?
 
-`->setIncludeReorganiseTask(false|true)`: do you want the folder names to be changed?
+`->setIncludeReorganiseTask(false|true)`:
+do you want the folder names to be changed?
 See https://github.com/silverstripe/silverstripe-upgrader/blob/master/README.md#reorganise
 for details.
 

@@ -87,6 +87,9 @@ SS4:
                 C: "Check carefully: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
             "$result->error(":
                 R: "$result->addError("
+            "Object::use_custom_class":
+                R: ""
+                C: "You need to move this code to yml, using SilverStripe\\Core\\Injector\\Injector\n  OldClass: NewClass"
 
         'yml':
             Director:

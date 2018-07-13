@@ -6,16 +6,16 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 $obj = ModuleUpgrader::create()
     ->setRunImmediately(true)
     ->setLogFolderDirLocation('/var/www/logdir')
-    ->setAboveWebRootDirLocation('/var/www/jtemp')
+    ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('__upgradeto4__')
     ->setArrayOfModules(
         [
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'permission_provider',
-              'PackageNamespace' => 'PermissionProvider',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-permission_provider.git',
+              'PackageName' => 'cleaner_tinymce_config',
+              'PackageNamespace' => 'CleanerTinyMCEConfig',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-cleaner_tinymce_config.git',
               'UpgradeAsFork' => false
             ]
         ]

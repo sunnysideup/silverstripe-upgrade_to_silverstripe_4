@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class AddNamespace extends Task
 {
-
     public function getTitle()
     {
         return 'Name Spaces';

@@ -9,7 +9,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class SearchAndReplace extends Task
 {
-
     public function getTitle()
     {
         return 'Search and Replace';

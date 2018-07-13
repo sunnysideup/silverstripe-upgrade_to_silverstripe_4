@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class Reorganise extends Task
 {
-
     public function getTitle()
     {
         return 'move mysite/code folder to app/src';

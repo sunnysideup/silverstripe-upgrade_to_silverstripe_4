@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class Upgrade extends Task
 {
-
     public function getTitle()
     {
         return 'Update Code';
@@ -31,10 +30,10 @@ class Upgrade extends Task
 
     public function upgrader($params = [])
     {
-        if(empty($this->runDir)) {
+        if (empty($this->runDir)) {
             $this->runDir = $this->mu->getWebRootDirLocation();
         }
-        if(empty($this->param1)) {
+        if (empty($this->param1)) {
             $this->param1 = $this->mu->findCodeDir();
         }
         $this->runSilverstripeUpgradeTask(

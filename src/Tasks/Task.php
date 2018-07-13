@@ -7,8 +7,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
-
-
 abstract class Task
 {
     /**
@@ -135,8 +133,8 @@ abstract class Task
      */
     protected function starter($params = [])
     {
-        foreach($params as $paramKey => $paramValue){
-            if(isset($this->$paramKey)) {
+        foreach ($params as $paramKey => $paramValue) {
+            if (isset($this->$paramKey)) {
                 $this->$paramKey = $paramValue;
             } else {
                 user_error('You are trying to set '.$paramKey.' but it is meaninguless to this class: '.get_called_class());
@@ -196,7 +194,6 @@ abstract class Task
     protected function commitAndPush()
     {
         $message = $this->getCommitMessage();
-
         $this->mu->execMe(
             $this->mu->getModuleDirLocation(),
             'git add . -A',

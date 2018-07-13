@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class RemoveInstallerFolder extends Task
 {
-
     public function getTitle()
     {
         return 'Remove installer-name from composer.json';

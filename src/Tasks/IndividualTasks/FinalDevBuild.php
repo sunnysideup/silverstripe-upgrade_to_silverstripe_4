@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class FinalDevBuild extends Task
 {
-
     public function getTitle()
     {
         return 'Run dev/build';

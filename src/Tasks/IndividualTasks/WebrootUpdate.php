@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class WebRootUpdate extends Task
 {
-
     public function getTitle()
     {
         return 'Fix Folder Case';

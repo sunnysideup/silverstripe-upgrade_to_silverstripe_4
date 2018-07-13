@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class UpdateComposerRequirements extends Task
 {
-
     public function getTitle()
     {
         return 'Update composer.json requirements';
@@ -64,5 +63,4 @@ class UpdateComposerRequirements extends Task
 
         return $newPackage;
     }
-
 }

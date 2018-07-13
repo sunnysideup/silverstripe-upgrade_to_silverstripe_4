@@ -71,7 +71,6 @@ class ModuleUpgrader
                     } else {
                         return $this->$var;
                     }
-
                 } elseif ($getOrSet === 'set') {
                     $this->$var = $args[0];
 
@@ -458,7 +457,7 @@ class ModuleUpgrader
     public function findCodeDir()
     {
         $codeDir = '';
-        if($this->getRunImmediately()) {
+        if ($this->getRunImmediately()) {
             if (file_exists($this->moduleDirLocation . '/code')) {
                 $codeDir = $this->moduleDirLocation . '/code';
             } elseif (file_exists($this->moduleDirLocation . '/src')) {
@@ -558,7 +557,7 @@ class ModuleUpgrader
                     $this->colourPrint('# --------------------', 'yellow');
                     $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
                     $this->colourPrint('# --------------------', 'yellow');
-                    if($runIt) {
+                    if ($runIt) {
                         $obj->run();
                     } else {
                         $this->colourPrint('# skipped', 'light_green');

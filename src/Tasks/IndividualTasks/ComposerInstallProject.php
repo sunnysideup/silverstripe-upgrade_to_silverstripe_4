@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class ComposerInstallProject extends Task
 {
-
     public function getTitle()
     {
         return 'Composer Install Silverstripe 4';

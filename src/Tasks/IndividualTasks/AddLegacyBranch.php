@@ -10,7 +10,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class AddLegacyBranch extends Task
 {
-
     public function getTitle()
     {
         return 'Add Legacy Branch';

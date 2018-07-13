@@ -10,7 +10,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class MoveCodeToSRC extends Task
 {
-
     public function getTitle()
     {
         return 'Move code to src folder';

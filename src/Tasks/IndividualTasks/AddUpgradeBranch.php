@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class AddUpgradeBranch extends Task
 {
-
     public function getTitle()
     {
         return 'Add Upgrade Branch';

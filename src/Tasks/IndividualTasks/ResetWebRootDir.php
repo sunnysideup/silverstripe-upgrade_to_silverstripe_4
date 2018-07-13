@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class ResetWebRootDir extends Task
 {
-
     public function getTitle()
     {
         return 'Remove and reset Web Root';

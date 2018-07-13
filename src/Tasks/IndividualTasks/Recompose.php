@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class Recompose extends Task
 {
-
     public function getTitle()
     {
         return 'Update composer.json from 3 to 4';
@@ -30,7 +29,7 @@ class Recompose extends Task
 
     public function upgrader($params = [])
     {
-        if(empty($this->runDir)) {
+        if (empty($this->runDir)) {
             $this->runDir = $this->mu->getModuleDirLocation();
         }
         $this->runSilverstripeUpgradeTask(

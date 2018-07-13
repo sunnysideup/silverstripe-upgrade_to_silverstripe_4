@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class UpperCaseFolderNamesForPSR4 extends Task
 {
-
     public function getTitle()
     {
         return 'Fix Folder Case';
@@ -23,7 +22,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
     public function upgrader($params = [])
     {
         $codeDir = $this->mu->findCodeDir();
-        if($this->mu->getRunImmediately() && file_exists($codeDir)) {
+        if ($this->mu->getRunImmediately() && file_exists($codeDir)) {
             $di = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($codeDir, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST

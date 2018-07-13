@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class ChangeEnvironment extends Task
 {
-
     public function getTitle()
     {
         return 'Change Environment File';

@@ -15,7 +15,7 @@ class ChangeEnvironment extends Task
     {
         return '
             Runs the silverstripe/upgrade task "environment". See:
-            https://github.com/silverstripe/silverstripe-upgrader#environment.
+            https://github.com/silverstripe/silverstripe-runActualTask#environment.
             You can use this command to migrate an SilverStripe 3 _ss_environment.php
             file to the .env format used by SilverStripe 4.' ;
     }
@@ -28,7 +28,7 @@ class ChangeEnvironment extends Task
 
     protected $settings = '';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->runSilverstripeUpgradeTask(
             'environment',

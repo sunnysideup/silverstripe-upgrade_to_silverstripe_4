@@ -4,6 +4,11 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Fixes the folder name cases in to make them PSR4 compatible
+ * e.g.
+ * yourmodule/src/model becomes yourmodule/src/Model
+ */
 class UpperCaseFolderNamesForPSR4 extends Task
 {
     public function getTitle()
@@ -19,7 +24,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
             steps.';
     }
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $codeDir = $this->mu->findCodeDir();
         if ($this->mu->getRunImmediately() && file_exists($codeDir)) {

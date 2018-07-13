@@ -71,6 +71,7 @@ class ModuleUpgrader
                     } else {
                         return $this->$var;
                     }
+
                 } elseif ($getOrSet === 'set') {
                     $this->$var = $args[0];
 
@@ -124,6 +125,7 @@ class ModuleUpgrader
         'Upgrade' => [],
         'InspectAPIChanges-1' => [],
         'Reorganise' => [],
+        'UpdateComposerModuleType' => [],        
         // 'WebRootUpdate' => [],
         'FinalDevBuild' => [],
         'InspectAPIChanges-2' => []
@@ -196,7 +198,7 @@ class ModuleUpgrader
      * Is this the last TASK we are running?
      * @var bool
      */
-    protected $isLastMethod = false;
+    private $isLastMethod = false;
 
     /**
      * What is the index of given task within the sequence
@@ -399,19 +401,19 @@ class ModuleUpgrader
      */
     protected $locationOfUpgradeModule = 'upgrade-code';
 
-    protected $logFileLocation = '';
+    private $logFileLocation = '';
 
     /**
      * Combination of the web dir root name and the above webRootDirLocation
      * @var string
      */
-    protected $webRootDirLocation = '';
+    private $webRootDirLocation = '';
 
     /**
      * Directory that holds the module
      * @var string
      */
-    protected $moduleDirLocation = '';
+    private $moduleDirLocation = '';
 
     ###############################
     # HELPERS
@@ -457,7 +459,7 @@ class ModuleUpgrader
     public function findCodeDir()
     {
         $codeDir = '';
-        if ($this->getRunImmediately()) {
+        if($this->getRunImmediately()) {
             if (file_exists($this->moduleDirLocation . '/code')) {
                 $codeDir = $this->moduleDirLocation . '/code';
             } elseif (file_exists($this->moduleDirLocation . '/src')) {
@@ -520,7 +522,44 @@ class ModuleUpgrader
     # RUN
     ###############################
 
-
+    public function createListOfTasks()
+    {
+        $html = '<h1>List of Tasks in run order</h1>';
+        $count = 0;
+        $totalCount = count($this->listOfTasks);
+        foreach ($this->listOfTasks as $class => $params) {
+            $properClass = current(explode('-', $class));
+            $nameSpacesArray = explode('\\', $class);
+            $shortClassCode = end($nameSpacesArray);
+            if (! class_exists($properClass)) {
+                $properClass = $this->defaultNamespaceForTasks.'\\'.$properClass;
+            }
+            if (class_exists($properClass)) {
+                $count++;
+                $runItNow = $this->shouldWeRunIt($shortClassCode);
+                $params['taskName'] = $shortClassCode;
+                $obj = $properClass::create($this, $params);
+                $reflectionClass = new \ReflectionClass($properClass);
+                $html .= '<h3>Step '.$count.' / '.$totalCount.': '.$obj->getTitle().'</h3>';
+                $html .= '<p>';
+                $html .= '<strong>Code: </strong>'.$class;
+                $html .= '<br /><strong>Description: </strong>'.$obj->getDescription();
+                $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
+                $path .=  str_replace('\\', '/', $reflectionClass->getName()).'.php';
+                $path =  str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
+                $html .= '<br /><strong>Class Name: </strong><a href="'.$path.'">'. $reflectionClass->getShortName() .'</a>';
+                $html .= '</p>';
+                $obj = $properClass::delete($params);
+            } else {
+                user_error($properClass.' could not be found as class', E_USER_ERROR);
+            }
+        }
+        $dir = __DIR__.'/../docs/en/';
+        file_put_contents(
+            $dir . '/AvailableTasks.md',
+            $html
+        );
+    }
     /**
      * Starts the command line output and prints some opening information to the output
      * also initalises various environment variables
@@ -549,7 +588,7 @@ class ModuleUpgrader
                     $properClass = $this->defaultNamespaceForTasks.'\\'.$properClass;
                 }
                 if (class_exists($properClass)) {
-                    $runIt = $this->shouldWeRunIt($shortClassCode);
+                    $runItNow = $this->shouldWeRunIt($shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     $this->colourPrint('# --------------------', 'yellow', 3);
@@ -557,7 +596,7 @@ class ModuleUpgrader
                     $this->colourPrint('# --------------------', 'yellow');
                     $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
                     $this->colourPrint('# --------------------', 'yellow');
-                    if ($runIt) {
+                    if($runItNow) {
                         $obj->run();
                     } else {
                         $this->colourPrint('# skipped', 'light_green');

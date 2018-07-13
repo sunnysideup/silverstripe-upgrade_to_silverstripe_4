@@ -7,6 +7,11 @@ use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Replaces a bunch of code snippets in preparation of the upgrade.
+ * Controversial replacements will be replaced with a comment
+ * next to it so you can review replacements easily.
+ */
 class SearchAndReplace extends Task
 {
     public function getTitle()
@@ -48,7 +53,7 @@ class SearchAndReplace extends Task
 
     private $endMarker = "### @@@@ END UPGRADE REQUIRED @@@@ ###";
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         if ($this->checkReplacementIssues) {
             $this->checkReplacementDataIssues();

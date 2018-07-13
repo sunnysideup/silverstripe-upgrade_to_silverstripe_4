@@ -4,6 +4,10 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Runs the silverstripe upgrade task 'upgrade'.
+ * More information on this task at https://github.com/silverstripe/silverstripe-runActualTask#upgrade
+ */
 class Upgrade extends Task
 {
     public function getTitle()
@@ -17,7 +21,7 @@ class Upgrade extends Task
         return '
             Runs the silverstripe/upgrade task "upgrade". See:
             Upgrade a variety of stuff (e.g. update reference with namespaces)
-            https://github.com/silverstripe/silverstripe-upgrader#upgrade' ;
+            https://github.com/silverstripe/silverstripe-runActualTask#upgrade' ;
     }
 
     protected $runDir = '';
@@ -28,7 +32,7 @@ class Upgrade extends Task
 
     protected $settings = '';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         if (empty($this->runDir)) {
             $this->runDir = $this->mu->getWebRootDirLocation();

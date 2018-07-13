@@ -17,7 +17,7 @@ class ResetWebRootDir extends Task
             Delete the web root directory to allow for a fresh install.' ;
     }
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->mu->execMe(
             $this->mu->getAboveWebRootDirLocation(),

@@ -4,25 +4,24 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
-class RemoveInstallerFolder extends Task
+/**
+ * Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.
+ * This means your module will be installed in the vendor folder after this upgrade.
+ */
+class UpdateComposerModuleType extends Task
 {
     public function getTitle()
     {
-        return 'Remove installer-name from composer.json';
+        return 'Update composer type to silverstripe-vendormodule ';
     }
 
     public function getDescription()
     {
         return '
-            Remove installer folder from composer.json file so that package
-            installs into vendor folder.' ;
+            Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.
+            This means your module will be installed in the vendor folder after this upgrade.';
     }
 
-    protected $package = '';
-
-    protected $newVersion = '';
-
-    protected $newPackage = '';
 
     public function runActualTask($params = [])
     {
@@ -33,8 +32,8 @@ class RemoveInstallerFolder extends Task
             'php -r  \''
                 .'$jsonString = file_get_contents("'.$location.'"); '
                 .'$data = json_decode($jsonString, true); '
-                .'if(isset($data["extra"]["installer-name"])) { '
-                .'    unset($data["extra"]["installer-name"]);'
+                .'if(isset($data["type"]) && $data["type"] === "silverstripe-module") { '
+                .'    $data["type"] = "silverstripe-vendormodule";'
                 .'}'
                 .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
                 .'file_put_contents("'.$location.'", $newJsonString); '
@@ -42,6 +41,8 @@ class RemoveInstallerFolder extends Task
             'Removing extra.installer-name variable from composer.json',
             false
         );
-        $this->setCommitMessage('MAJOR: Removing extra.installer-name variable from composer.json ');
+        $this->setCommitMessage('MAJOR: '.$this->getTitle());
     }
+
+
 }

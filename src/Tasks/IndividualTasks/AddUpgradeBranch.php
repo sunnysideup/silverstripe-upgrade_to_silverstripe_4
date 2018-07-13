@@ -19,7 +19,7 @@ class AddUpgradeBranch extends Task
             that is going to be used for upgrading it.' ;
     }
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->mu->execMe(
             $this->mu->getWebRootDirLocation(),

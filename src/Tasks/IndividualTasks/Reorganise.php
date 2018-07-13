@@ -15,7 +15,7 @@ class Reorganise extends Task
     {
         return '
             Runs the silverstripe/upgrade task "reorganise". See:
-            https://github.com/silverstripe/silverstripe-upgrader#reorganise
+            https://github.com/silverstripe/silverstripe-runActualTask#reorganise
             You can use this command to reorganise your folder structure to
             conform to the new structure introduced with SilverStripe 4.1.
             Your mysite folder will be renamed to app and your code folder will be rename to src.
@@ -30,7 +30,7 @@ class Reorganise extends Task
 
     protected $settings = '';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->runSilverstripeUpgradeTask(
             'reorganise',

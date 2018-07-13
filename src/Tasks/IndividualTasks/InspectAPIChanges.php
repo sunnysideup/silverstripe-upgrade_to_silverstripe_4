@@ -15,7 +15,7 @@ class InspectAPIChanges extends Task
     {
         return '
             Runs the silverstripe/upgrade task "inpect". See:
-            https://github.com/silverstripe/silverstripe-upgrader#inspect.
+            https://github.com/silverstripe/silverstripe-runActualTask#inspect.
             Once a project has all class names migrated, and is brought up to a
             "loadable" state (that is, where all classes reference or extend real classes)
             then the inspect command can be run to perform additional automatic code rewrites.
@@ -30,7 +30,7 @@ class InspectAPIChanges extends Task
 
     protected $settings = '';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->mu->execMe(
             $this->mu->getWebRootDirLocation(),

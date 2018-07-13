@@ -4,6 +4,10 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Updates the composer requirements to reflect the new version and package names
+ * in the composer file of your module
+ */
 class UpdateComposerRequirements extends Task
 {
     public function getTitle()
@@ -24,7 +28,7 @@ class UpdateComposerRequirements extends Task
 
     protected $replacementPackage = '';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $package = $this->package;
 

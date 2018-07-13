@@ -15,7 +15,7 @@ class Recompose extends Task
     {
         return '
             Runs the silverstripe/upgrade task "recompose". See:
-            https://github.com/silverstripe/silverstripe-upgrader#recompose' ;
+            https://github.com/silverstripe/silverstripe-runActualTask#recompose' ;
     }
 
     protected $runDir = '';
@@ -27,7 +27,7 @@ class Recompose extends Task
     protected $settings = '';
 
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         if (empty($this->runDir)) {
             $this->runDir = $this->mu->getModuleDirLocation();

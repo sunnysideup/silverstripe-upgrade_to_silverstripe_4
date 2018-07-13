@@ -17,7 +17,7 @@ class FinalDevBuild extends Task
             Run a dev/build as a smoke test to see if all is well.' ;
     }
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->mu->execMe(
             $this->mu->getWebRootDirLocation(),

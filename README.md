@@ -1,13 +1,22 @@
-This module aims to help developers upgrade SS3 modules to SS4 without doing any manual rewriting. You can provide a list of modules and run the code below.  This will create a branch in your module that is SS4 ready. After inspection you can then merge this into `dev/master` as you see fit.
+# Upgrade your module to Silverstripe 4
 
+This module helps you upgrade Silverstripe 3 modules to SS4 with the least amount of effort.
+You can provide this tool with a list of modules and the tool will create an upgraded branch in each of your modules.
+After inspection you can then merge this into `dev/master` as you see fit.
+
+This tool is highly customisable so that you can define your own upgrade path.
 
 # prerequisites before you start:
 
-- The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to silverstripe/framework, where classes are put in the right folder.  You do not need to use title case for the folder names.
- - module to be upgraded needs to be listed on packagist
- - composer file needs to follow this pattern (installer-name requirement may be dropped in the future)
+- module to be upgraded needs to be listed on packagist
+- **IMPORTANT** The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to silverstripe/framework, where classes are put in semantic folder names.  
+You do not need to use title case for the folder names as this will be fixed by the upgrade tool.
 
 
+
+
+# additional things to consider before you start
+- It is recommended that your composer file follows this pattern:
 ```json
 {
     "name": "sunnysideup/my-module-name-foo-bar",
@@ -20,38 +29,24 @@ This module aims to help developers upgrade SS3 modules to SS4 without doing any
     },
 }
 ```
-
-# additional things to consider before you start
-- create 3 branch of the module you are upgrading so that you can keep adding patches to your SS3 version
-- create a tag of the module you are upgrading
-
-
+- create a tag of your current state of the module you are upgrading
 
 
 # what does this module do?
 
-In short: it helps you upgrade SS modules from SS3 to SS4.
+To see a list of default upgrade tasks that will run, visit the auto-generated list of [default tasks](/docs/en/AvailableTasks.md).
 
-In more detail, this module, for a provided list of modules from a vendor, (re)creates a branch specifically created for upgrading your module from SS3 to SS4. In this branch it:
-
- - updates the composer requirements: https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/recompose.md
- - Updates the environment file (environment): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/environment.md (OPTIONAL)
- - Adds namespaces (add-namespace): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/add-namespace.md
- - Refactors your existing code base (upgrade): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/upgrade.md
- - Applies API changes (inspect): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/inspect.md
- - Renames mysite (reorganise): https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/reorganise.md (OPTIONAL)
- - Switches your project to have a public web-root: https://github.com/silverstripe/silverstripe-upgrader/blob/master/docs/en/webroot.md (OPTIONAL)
-
-It then commits and pushes the results for inspection.
+To customise your list of tasks, please see config options below.
 
 # installation and usage:
 
-1.  Install this module in your web-root (or another place if needed - we use `/var/www/silverstripe-upgrade_to_silverstripe_4/` in example below):
+1.  Install this module in your web-root (or another place if needed - we use `/var/www/silverstripe-upgrade_to_silverstripe_4/` in example below) as follows:
     `composer install sunnysideup/upgrade_to_silverstripe_4 /var/www/silverstripe-upgrade_to_silverstripe_4/`
 
-2.  Create a new php file (e.g. `index.php`) in your root dir (or anywhere else  you can run it):
+2.  Create a php file (e.g. `index.php`) in your root dir (or anywhere else where you can run it) - using the examples provided:
 
-**We have included an example file like this in the module root.**
+  - [full](/example-index.full.php) - overview of all settings available
+  - [short](example-index.short.php) - least amount of settings required
 
 
 3. Run the file to upgrade your modules - e.g.
@@ -60,79 +55,145 @@ It then commits and pushes the results for inspection.
     $ php index.php
 ```
 
-
-4. Apply any final fixes to this branch to make it SS4 ready.
-
+4. Apply any manual final fixes to the upgrade branch of your module(s) to make it/them SS4 ready.
 
 5. Merge the upgrade branch into `dev-master` as you see fit.
 
+**NB: You can run (3) as many times as you see fit**.
 
-# config options:
+
+# main config options:
 
 ### run immediately or create bash script?
 
-`->setRunImmediately(false)`: When you set `runImmediately` to true, the PHP code will use the `exec` function to run commands on the `command line` immediately. **Careful! Even if you do not run the code immediately, a bunch of code will still be executed on the command line to inspect the module.**
-
-By default running on command line, it will run immediately and when accessing it through http the script will not do any actual upgrading, but rather, it will output a bash script to your screen that you can use in the future.
-
-It is recommended that you use the runImmediate = true option as that is how we test it most of the time.
+`->setRunImmediately(false)`:
+When you set `runImmediately` to true, the PHP code will use the PHP `exec` function to run commands.
+If you set this option to false then you will be provided with a sample bash script.  It is recommended, however, that you use the
+`->setRunImmediately(true)` to run this tool rather than using the provided bash script.
 
 
 ### root directory
 
-`->setRootDir('/var/www')`: this is meant to be the directory where you do the work, where you usually save your websites that you work on locally.
+`->setRootDir('/var/www')`:
+This is meant to be the directory where you do the work.
+This should be a folder where you usually save your websites locally so that you can test your upgraded module.
 
 
 ### upgrade directory
 
-`->setUpgradeDirName('upgradeto4')`: this is the name of the directory that is created in the root dir where the upgrade takes place. **Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**
-
+`->setUpgradeDirName('upgradeto4')`:
+This is the name of the directory that is created in the root dir where the upgrade takes place.
+That is, your actual module will be cloned in the `[rootdir]/[upgrade directory]` and when completed, this directory will be deleted.
+**Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**
 
 
 ### list of modules
 
-`->setArrayOfModules([])`: See index.php for example of format.
-
+`->setArrayOfModules([])`:
+This contains a list of modules you intend to update.
+We recommend updating one module at a time. For details see: [example index file](/example-index.full.php).
 
 ### temp branch
 
-`->setNameOfTempBranch('4.1-TEMP-upgrade')`: a temporary branch will be added to your module.  
-All upgrade changes will be committed to this branch. **Careful!  This branch will be deleted every time you run the update process so that you can run the update process many times.**
-
-
-### composer environment vars
-
-`->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')`: specific stuff for your composer.
-
-
-### location for the Silverstripe Upgrade module
-
-`->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')`: you would have installed this already.
-
-
-### include upgrading `_ss_environment` file?
-
-`->setIncludeEnvironmentFileUpdate(false|true)`: I would leave this out and do this manually.
-
-
-### run reorganise task?
-
-`->setIncludeReorganiseTask(false|true)`: do you want the folder names to be changed?
-
-
-### run webroot task
-
-`->setIncludeWebRootUpdateTask(false|true)`
+`->setNameOfTempBranch('4.1-TEMP-upgrade')`:
+This is the name of the (temporary OR upgrade) branch added to your module.
+All upgrade changes will be committed to this branch.
+**Careful!  This branch will be deleted every time you run the update process to allow you to rerun the upgrade process.**
 
 
 ### start from
 
-`->SetStartFrom('mymethod')`: allows you to start the sequence from a particular method. See MetaUpgrader::run to see what methods are being run in what order.
-
+`->setStartFrom('mymethod')`:
+Allows you to start the sequence from a particular method.
+See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
+Use the **Code** for any step to set this particular step as the first step
+being executed in your upgrade sequence.
 
 ### end with
 
-`->EndWith('mymethod')`: allows you to end the sequence after a particular method.  See MetaUpgrader::run to see what methods are being run in what order.
+`->setEndWith('mymethod')`:
+Allows you to end the sequence after a particular method.  
+See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
+Use the **Code** for any step to set this particular step as the last step
+being executed in your upgrade sequence.
+
+### log dir
+
+`->setLogFolderDirLocation('/var/www/logs')`:
+If set, a log of your upgrade will be saved in this folder.
+
+
+
+# advanced config options:
+
+### set list of tasks
+
+`->setListOfTasks()`:
+Customise your list of tasks to run on your module during the upgrade.
+
+```php
+->setListOfTasks(
+    [
+        'ResetWebRootDir-1' => [],
+        'AddLegacyBranch' => [],
+        'ResetWebRootDir-2' => [],
+        'UpdateComposerRequirements-2' => [
+            'Package' => 'silverstripe/cms',
+            'ReplacementPackage' => 'silverstripe/recipe-cms',
+            'NewVersion' => '1.1.2'
+        ],
+        'Reorganise' => []
+    ]
+)
+```
+See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
+
+### remove from list of tasks
+
+`->removeFromListOfTasks('FooBar')`:
+Remove an item from your list of tasks.
+
+### add to list of tasks
+
+`->addToListOfTasks('FooBarTask', $insertBeforeOrAfter = 'FooBarAnotherTask', $isBefore = false)`:
+Add an task to your list of tasks.
+See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
+
+### composer environment vars
+
+`->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')`:
+specific stuff for your composer.
+
+
+### location for the Silverstripe Upgrade module
+
+`->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')`:
+this module is also installed with this tool (via composer requirements)
+so, in general, there is no need to set this.
+
+
+### include upgrading `_ss_environment` file?
+
+`->setIncludeEnvironmentFileUpdate(false|true)`:
+we recommend to set this to false
+as it is easier to do this manually.
+See https://github.com/silverstripe/silverstripe-upgrader/blob/master/README.md#environment
+for details.
+
+
+### run reorganise task?
+
+`->setIncludeReorganiseTask(false|true)`:
+do you want the folder names to be changed?
+See https://github.com/silverstripe/silverstripe-upgrader/blob/master/README.md#reorganise
+for details.
+
+
+### run webroot task
+
+`->setIncludeWebRootUpdateTask(false|true)`:
+See https://github.com/silverstripe/silverstripe-upgrader/blob/master/README.md#webroot
+for details
 
 
 # Important references:

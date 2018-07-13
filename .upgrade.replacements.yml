@@ -85,6 +85,8 @@ SS4:
             "$cache->remove(":
                 R: "$cache->delete("
                 C: "Check carefully: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
+            "$result->error(":
+                R: "$result->addError("
 
         'yml':
             Director:

@@ -14,12 +14,12 @@ class AddNamespace extends Task
     public function getDescription()
     {
         return '
-            Places all your code into namespaces (provided by silvertripe/upgrader),
+            Places all your code into namespaces (provided by silvertripe/runActualTask),
             using the PSR-4 approach (matching folders and namespaces)';
     }
 
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $baseNameSpace = $this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace();
         if ($this->mu->getRunImmediately()) {

@@ -4,6 +4,10 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * This task runs the silverstripe upgrade task 'webroot' to configure
+ * your project to use the public web root structure
+ */
 class WebRootUpdate extends Task
 {
     public function getTitle()
@@ -16,7 +20,7 @@ class WebRootUpdate extends Task
     {
         return '
             Runs the silverstripe/upgrade task "webroot". See:
-            https://github.com/silverstripe/silverstripe-upgrader#webroot.
+            https://github.com/silverstripe/silverstripe-runActualTask#webroot.
             Configure your project to use the public web root structure
             introduced with SilverStripe 4.1' ;
     }
@@ -29,7 +33,7 @@ class WebRootUpdate extends Task
 
     protected $settings = '';
 
-    public function upgrader($params = [])
+    public function runActualTask($params = [])
     {
         $this->runSilverstripeUpgradeTask(
             'webroot',

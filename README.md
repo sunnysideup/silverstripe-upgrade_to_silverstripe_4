@@ -8,11 +8,24 @@ This tool is highly customisable so that you can define your own upgrade path.
 
 # prerequisites before you start:
 
-- module to be upgraded needs to be listed on packagist
-- **IMPORTANT** The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to silverstripe/framework, where classes are put in semantic folder names.  
+
+- Module to be upgraded needs to be listed on packagist
+
+- **IMPORTANT** The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to **silverstripe/framework**, where classes are put in semantic folder names.  
 You do not need to use title case for the folder names as this will be fixed by the upgrade tool.
 
-
+- Separate MyPage and MyPageController into separate classes and move them into Pages and Control folder
+``` 
+/code/MyPage1.php (contains class MyPage1 AND MyPage1_Controller)
+/code/MyPage2.php (contains class MyPage2 AND MyPage2_Controller)
+```
+becomes:
+```
+/code/Pages/MyPage1.php (contains class MyPage1)
+/code/Pages/MyPage2.php (contains class MyPage2)
+/code/Control/MyPage1Controller.php (contains class MyPage1Controller)
+/code/Control/MyPage2Controller.php (contains class MyPage2Controller)
+```
 
 
 # additional things to consider before you start
@@ -60,6 +73,15 @@ To customise your list of tasks, please see config options below.
 5. Merge the upgrade branch into `dev-master` as you see fit.
 
 **NB: You can run (3) as many times as you see fit**.
+
+# once completed:
+
+- Merge upgrade branch into master
+
+- Add $private static $table_name for every class that extends DataObject (including pages)
+    (e.g private static $table_name = 'WebPortfolioPage';) 
+    
+- Check for use statements WITHOUT namespacing - these may need attention 
 
 
 # main config options:

@@ -34,6 +34,9 @@ class ModuleUpgrader
     public function __construct()
     {
         $this->startPHP2CommandLine();
+        if(!$this->locationOfUpgradeModule) {
+            $this->locationOfUpgradeModule = __DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code';
+        }
     }
 
     /**
@@ -125,7 +128,7 @@ class ModuleUpgrader
         'Upgrade' => [],
         'InspectAPIChanges-1' => [],
         'Reorganise' => [],
-        'UpdateComposerModuleType' => [],        
+        'UpdateComposerModuleType' => [],
         // 'WebRootUpdate' => [],
         'FinalDevBuild' => [],
         'InspectAPIChanges-2' => []
@@ -399,8 +402,11 @@ class ModuleUpgrader
      * //e.g. '/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code'
      * @var string
      */
-    protected $locationOfUpgradeModule = 'upgrade-code';
+    protected $locationOfUpgradeModule = '';
 
+    /**
+     * @var string
+     */
     private $logFileLocation = '';
 
     /**

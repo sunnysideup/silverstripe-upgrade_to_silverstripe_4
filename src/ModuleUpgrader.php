@@ -35,7 +35,7 @@ class ModuleUpgrader
     {
         $this->startPHP2CommandLine();
         if(!$this->locationOfUpgradeModule) {
-            $this->locationOfUpgradeModule = __DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code';
+            $this->locationOfUpgradeModule = dirname(__DIR__) .'/vendor/silverstripe/upgrader/bin/upgrade-code';
         }
     }
 

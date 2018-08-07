@@ -10,3 +10,4 @@ coverage/
 /index.php
 /**/*.js.map
 /vendor
+/myupgrader.php

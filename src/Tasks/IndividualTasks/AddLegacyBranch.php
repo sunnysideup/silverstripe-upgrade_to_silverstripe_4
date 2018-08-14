@@ -28,7 +28,7 @@ class AddLegacyBranch extends Task
     protected $nameOfLegacyBranch = '3';
 
     /**
-     * 
+     *
      * @param  array  $params not currently used for this task
      */
     public function runActualTask($params = [])
@@ -43,9 +43,9 @@ class AddLegacyBranch extends Task
         $this->mu->execMe(
             $this->mu->getModuleDirLocation(),
             '
-            if git show-ref --quiet refs/heads/'.$this->nameOfLegacyBranch.';
+            if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->nameOfLegacyBranch . "'" . '); then
                 then
-                    echo "branch exists";
+                    echo branch exists
                 else
                     git checkout -b '.$this->nameOfLegacyBranch.';
                     git push origin '.$this->nameOfLegacyBranch.';

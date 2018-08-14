@@ -67,7 +67,7 @@ SS4:
                 R: "$this->getRequest()->getSession()"
                 C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
             'SSViewer::set_source_file_comments(':
-                R: "Config::inst()->set('SSViewer' ', 'source_file_comments', "
+                R: "Config::inst()->set('SSViewer', 'source_file_comments', "
             'ReadOnlyField':
                 R: "ReadonlyField"
             '->setError':
@@ -90,6 +90,12 @@ SS4:
             "Object::use_custom_class":
                 R: ""
                 C: "You need to move this code to yml, using SilverStripe\\Core\\Injector\\Injector\n  OldClass: NewClass"
+            "_Controller extends PageController":
+                R: "Controller extends PageController"
+                C: "Remove the underscore in your classname - check all references!"
+            "_Controller extends Page_Controller":
+                R: "Controller extends Page_Controller"
+                C: "Remove the underscore in your classname - check all references!"
 
         'yml':
             Director:

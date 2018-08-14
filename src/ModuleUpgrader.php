@@ -103,6 +103,7 @@ class ModuleUpgrader
      * @var string[] of taskName
      */
     protected $listOfTasks = [
+        'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
@@ -573,7 +574,13 @@ class ModuleUpgrader
     public function run()
     {
         $this->startPHP2CommandLine();
-
+        for($i = 0; $i < 500; $i++) {
+            $this->colourPrint(
+                '.',
+                'light_red',
+                5
+            );
+        }
         //Init UTIL and helper objects
         $this->colourPrint(
             '===================== START ======================',

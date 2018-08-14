@@ -116,7 +116,10 @@ abstract class Task
     public function run()
     {
         $this->starter($this->params);
-        $this->runActualTask($this->params);
+        $error = $this->runActualTask($this->params);
+        if(is_string($error) && strlen($error) > 0 ) {
+            die('FATAL ERROR: '.$error);
+        }
         $this->ender($this->params);
     }
 
@@ -138,6 +141,10 @@ abstract class Task
     /**
      * runs the actual task and needs to be defined in any class that extends
      * this class.
+     *
+     * When it returns a string, we regard this to be a description of a fatal error!
+     *
+     * @return null|string
      */
     abstract public function runActualTask($params = []);
 

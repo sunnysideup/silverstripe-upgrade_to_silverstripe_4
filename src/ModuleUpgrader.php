@@ -693,9 +693,31 @@ class ModuleUpgrader
         //LogFileLocation
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {
+            //check that log dir is exists
+            if(! file_exists($this->logFolderDirLocation)){
+                die('
+Log dir not exists: ' . $this->logFolderDirLocation);
+            } else {
+                //Directory exists, now check if writable.
+                if(! is_writable($this->logFolderDirLocation)){
+                    die('
+Log dir: ' . $this->logFolderDirLocation. ' is not writable');
+                    return 'No point in running tool with directory not ready';
+                } else {
+                    //all ok
+                }
+            }
             $this->logFileLocation = $this->logFolderDirLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
+            $this->commandLineExec->setLogFileLocation($this->logFileLocation);
+        } else {
+            $this->logFileLocation = '';
+            $this->commandLineExec->setLogFileLocation('');
+            echo '
+
+Log dir is not set so we continue without log! ';
+
+
         }
-        $this->commandLineExec->setLogFileLocation($this->logFileLocation);
 
 
         //output the confirmation.
@@ -742,4 +764,6 @@ class ModuleUpgrader
 
         return $runMe;
     }
+
+
 }

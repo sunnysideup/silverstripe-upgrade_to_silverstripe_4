@@ -44,7 +44,6 @@ class AddLegacyBranch extends Task
             $this->mu->getModuleDirLocation(),
             '
             if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->nameOfLegacyBranch . "'" . '); then
-                then
                     echo branch exists
                 else
                     git checkout -b '.$this->nameOfLegacyBranch.';

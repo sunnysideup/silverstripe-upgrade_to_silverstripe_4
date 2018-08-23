@@ -1,7 +1,0 @@
-#!/bin/bash
-
-if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q 'refs/heads/3'); then
-    echo found
-else
-    echo not found
-fi

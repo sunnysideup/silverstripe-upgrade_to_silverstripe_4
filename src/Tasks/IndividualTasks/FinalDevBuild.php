@@ -27,7 +27,7 @@ class FinalDevBuild extends Task
         );
     }
 
-    public function hasCommit()
+    public function hasCommitAndPush()
     {
         return false;
     }

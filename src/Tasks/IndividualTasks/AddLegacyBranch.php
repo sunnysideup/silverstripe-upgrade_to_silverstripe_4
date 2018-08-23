@@ -56,7 +56,7 @@ class AddLegacyBranch extends Task
         );
     }
 
-    protected function hasCommit()
+    protected function hasCommitAndPush()
     {
         return false;
     }

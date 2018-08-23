@@ -82,7 +82,7 @@ class ComposerInstallProject extends Task
             // );
     }
 
-    protected function hasCommit()
+    protected function hasCommitAndPush()
     {
         return false;
     }

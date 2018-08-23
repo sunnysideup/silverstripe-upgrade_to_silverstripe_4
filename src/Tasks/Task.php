@@ -155,7 +155,7 @@ abstract class Task
      */
     protected function ender()
     {
-        if ($this->hasCommit()) {
+        if ($this->hasCommitAndPush()) {
             $this->commitAndPush();
         }
     }
@@ -164,13 +164,13 @@ abstract class Task
      * Does the task require the module changes to be committed after the task has run.
      * @return bool Defaults to true
      */
-    protected function hasCommit()
+    protected function hasCommitAndPush()
     {
         return true;
     }
 
     /**
-     * What to write in the commit message after the task is run, only useful if hasCommit() returns true
+     * What to write in the commit message after the task is run, only useful if hasCommitAndPush() returns true
      * @var string message
      */
     protected $commitMessage = '';

@@ -9,7 +9,7 @@ This tool is highly customisable so that you can define your own upgrade path.
 # prerequisites before you start:
 
 
-- Module to be upgraded needs to be listed on packagist
+- Module to be upgraded needs to be listed on packagist.
 
 - **IMPORTANT** The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to **silverstripe/framework**, where classes are put in semantic folder names.  
 You do not need to use title case for the folder names as this will be fixed by the upgrade tool.

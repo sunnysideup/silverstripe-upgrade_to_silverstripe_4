@@ -4,6 +4,10 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Places all your code into namespaces (provided by silvertripe/runActualTask),
+ * using the PSR-4 approach (matching folders and namespaces)
+ */
 class AddNamespace extends Task
 {
     public function getTitle()

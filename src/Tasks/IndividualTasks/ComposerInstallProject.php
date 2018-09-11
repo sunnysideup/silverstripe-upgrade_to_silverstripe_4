@@ -4,6 +4,10 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+* Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')
+* using composer' ;
+*/
 class ComposerInstallProject extends Task
 {
     public function getTitle()

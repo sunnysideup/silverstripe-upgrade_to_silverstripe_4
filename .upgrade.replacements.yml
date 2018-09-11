@@ -31,11 +31,11 @@ SS4:
 
             ' extends Object':
                 R: " extends ViewableData"
-                C: "This used to extend Object, but object does not exist anymore. "
+                C: "This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable"
                 I: true
             ' extends \Object':
                 R: " extends ViewableData"
-                C: "This used to extend Object, but object does not exist anymore. "
+                C: "This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable"
                 I: true
             ' implements flushable':
                 R: " implements Flushable"
@@ -96,7 +96,14 @@ SS4:
             "_Controller extends Page_Controller":
                 R: "Controller extends Page_Controller"
                 C: "Remove the underscore in your classname - check all references!"
-
+            'THIRDPARTY_DIR."/jquery/jquery.js"':
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+            'THIRDPARTY_DIR . "/jquery/jquery.js"':
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+            "THIRDPARTY_DIR . '/jquery/jquery.js'":
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+            "THIRDPARTY_DIR.'/jquery/jquery.js'":
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
         'yml':
             Director:
                 R: "SilverStripe\\Control\\Director"

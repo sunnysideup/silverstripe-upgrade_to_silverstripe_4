@@ -4,6 +4,9 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Delete the web root directory to allow for a fresh install.
+ */
 class ResetWebRootDir extends Task
 {
     public function getTitle()

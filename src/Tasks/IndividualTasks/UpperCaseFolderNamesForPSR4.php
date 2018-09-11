@@ -33,15 +33,22 @@ class UpperCaseFolderNamesForPSR4 extends Task
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
 
+            //For all directories
             foreach ($di as $name => $fio) {
                 if ($fio->isDir()) {
+                    //If its a directory then
                     $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->mu->camelCase($fio->getFilename());
-                    $this->mu->execMe(
-                        $this->mu->getWebRootDirLocation(),
-                        'mv '.$name.' '.$newName,
-                        'renaming code dir form '.str_replace($codeDir, '', $name).' to '.str_replace($codeDir, '', $newName),
-                        false
-                    );
+                    if($name === $newName) {
+                        $this->mu->colourPrint('No need to move '.str_replace($codeDir, '', $name).' as it is already in CamelCase', 'dark_gray');
+                    } else {
+                        $this->mu->colourPrint('New name for directory: ' . $newName , 'red');
+                        $this->mu->execMe(
+                            $this->mu->getWebRootDirLocation(),
+                            'mv '.$name.' '.$newName,
+                            'renaming code dir form '.str_replace($codeDir, '', $name).' to '.str_replace($codeDir, '', $newName),
+                            false
+                        );
+                    }
                     //rename($name, $newname); - first check the output, then remove the comment...
                 }
             }

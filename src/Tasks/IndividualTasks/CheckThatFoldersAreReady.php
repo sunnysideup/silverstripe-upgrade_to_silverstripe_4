@@ -4,6 +4,9 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Checks that all the directories needed to run this tool exist and are writable.
+ */
 class CheckThatFoldersAreReady extends Task
 {
     public function getTitle()

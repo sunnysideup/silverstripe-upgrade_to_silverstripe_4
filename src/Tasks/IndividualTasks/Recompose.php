@@ -4,6 +4,10 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
+/**
+ * Runs the silverstripe/upgrade task "recompose". See:
+ * https://github.com/silverstripe/silverstripe-runActualTask#recompose'
+ */
 class Recompose extends Task
 {
     public function getTitle()

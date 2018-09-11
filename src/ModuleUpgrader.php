@@ -123,13 +123,16 @@ class ModuleUpgrader
         'ComposerInstallProject' => [],
         'ChangeEnvironment' => [],
         'MoveCodeToSRC' => [],
+        'CreateClientFolder' => [],
         'SearchAndReplace' => [],
+        'FixRequirements' => [],
         'UpperCaseFolderNamesForPSR4' => [],
         'AddNamespace' => [],
         'Upgrade' => [],
         'InspectAPIChanges-1' => [],
         'Reorganise' => [],
         'UpdateComposerModuleType' => [],
+        'AddVendorExposeDataToComposer' => [],
         // 'WebRootUpdate' => [],
         'FinalDevBuild' => [],
         'InspectAPIChanges-2' => []
@@ -334,6 +337,12 @@ class ModuleUpgrader
      * @var string
      */
     protected $packageName = '';
+
+    /**
+     * e.g. sunnysideup/my-cool-module
+     * @var string
+     */
+    protected $vendorAndPackageAsLocation = '';
 
     /**
      *Name space for the modules package
@@ -681,6 +690,15 @@ class ModuleUpgrader
 
         //GitLink
         $this->moduleDirLocation = $this->webRootDirLocation . '/' . $this->packageName;
+
+        $this->vendorAndPackageAsLocation = strtolower($this->vendorName . '/' . $this->packageName);
+
+        if (isset($moduleDetails['VendorAndPackageAsLocation'])) {
+            $this->vendorAndPackageAsLocation = $moduleDetails['VendorAndPackageAsLocation'];
+        } else {
+            $this->vendorAndPackageAsLocation = strtolower($this->vendorName . '/' . $this->packageName);
+        }
+
         if (isset($moduleDetails['GitLink'])) {
             $this->gitLink = $moduleDetails['GitLink'];
         } else {

@@ -54,7 +54,13 @@ To customise your list of tasks, please see config options below.
 # installation and usage:
 
 1.  Install this module in your web-root (or another place if needed - we use `/var/www/silverstripe-upgrade_to_silverstripe_4/` in example below) as follows:
-    `composer install sunnysideup/upgrade_to_silverstripe_4 /var/www/silverstripe-upgrade_to_silverstripe_4/`
+
+```
+    mkdir /var/www/silverstripe-upgrade_to_silverstripe_4/
+    cd /var/www/silverstripe-upgrade_to_silverstripe_4/
+    git clone git@github.com:sunnysideup/silverstripe-upgrade_to_silverstripe_4.git .
+    composer update
+```
 
 2.  Create a php file (e.g. `index.php`) in your root dir (or anywhere else where you can run it) - using the examples provided:
 

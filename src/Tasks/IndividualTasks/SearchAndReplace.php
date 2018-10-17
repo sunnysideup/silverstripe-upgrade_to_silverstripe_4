@@ -60,7 +60,7 @@ class SearchAndReplace extends Task
         }
 
         //replacement data
-        $replacementDataObject = new LoadReplacementData($this->mu()->, $this->params);
+        $replacementDataObject = new LoadReplacementData($this->mu(), $this->params);
         $replacementArray = $replacementDataObject->getReplacementArrays();
 
         if ($this->debug) {

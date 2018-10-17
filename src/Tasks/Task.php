@@ -78,16 +78,16 @@ abstract class Task
     public function __construct($mu, $params = [])
     {
         $this->params = $params;
-        $this->mu()-> = ModuleUpgrader::create();
+        $this->mu = ModuleUpgrader::create();
     }
 
     public function mu()
     {
-        if(! $this->mu()->) {
-            $this->mu()-> = ModuleUpgrader::create();
+        if(! $this->mu) {
+            $this->mu = ModuleUpgrader::create();
         }
 
-        return $this->mu()->;
+        return $this->mu;
     }
 
     /**

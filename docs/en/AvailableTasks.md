@@ -2,7 +2,7 @@
             Checks that all the directories needed to run this tool exist and are writable.
             <br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/CheckThatFoldersAreReady.php">CheckThatFoldersAreReady</a></p><h3>Step 2 / 25: Remove and reset Web Root</h3><p><strong>Code: </strong>ResetWebRootDir-1<br /><strong>Description: </strong>
             Delete the web root directory to allow for a fresh install.<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/ResetWebRootDir.php">ResetWebRootDir</a></p><h3>Step 3 / 25: Add Legacy Branch</h3><p><strong>Code: </strong>AddLegacyBranch<br /><strong>Description: </strong>
-            Creates a legacy branch: 3 so that you
+            Creates a legacy branch: 3 of your module so that you
             can keep making bugfixes to older versions.<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddLegacyBranch.php">AddLegacyBranch</a></p><h3>Step 4 / 25: Remove and reset Web Root</h3><p><strong>Code: </strong>ResetWebRootDir-2<br /><strong>Description: </strong>
             Delete the web root directory to allow for a fresh install.<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/ResetWebRootDir.php">ResetWebRootDir</a></p><h3>Step 5 / 25: Add Upgrade Branch</h3><p><strong>Code: </strong>AddUpgradeBranch<br /><strong>Description: </strong>
             Adds a new branch (temp-upgradeto4-branch) to your

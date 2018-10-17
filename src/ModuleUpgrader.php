@@ -556,12 +556,13 @@ class ModuleUpgrader
                 $params['taskName'] = $shortClassCode;
                 $obj = $properClass::create($this, $params);
                 $reflectionClass = new \ReflectionClass($properClass);
-                $html .= '<h3>Step '.$count.' / '.$totalCount.': '.$obj->getTitle().'</h3>';
-                $html .= '<p>'.$obj->getDescription().'<br />';
-                $html .= '<strong>Code: </strong>'.$class;
                 $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
                 $path .=  str_replace('\\', '/', $reflectionClass->getName()).'.php';
                 $path =  str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
+
+                $html .= '<h3>Step '.$count.' / '.$totalCount.': '.$obj->getTitle().'</h3>';
+                $html .= '<p>'.$obj->getDescription().'<br />';
+                $html .= '<strong>Code: </strong>'.$class;
                 $html .= '<br /><strong>Class Name: </strong><a href="'.$path.'">'. $reflectionClass->getShortName() .'</a>';
                 $html .= '</p>';
                 $obj = $properClass::delete($params);

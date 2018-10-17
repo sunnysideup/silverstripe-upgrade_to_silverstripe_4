@@ -6,6 +6,25 @@ After inspection you can then merge this into `dev/master` as you see fit.
 
 This tool is highly customisable so that you can define your own upgrade path.
 
+# tl;dr
+
+Here is what this module does, AUTOMAGICALLY:
+
+ * clear workbench
+ * checkout master of your module
+ * create legacy branch
+ * create upgrade branch
+ * clear workbench
+ * do upgrade stuff
+ * set up SS4 vanilla install
+ * add your module again (upgrade branch)
+ * do more upgrade stuff
+
+Once that has completed you an MANUALLY:
+ * review and fix any outstanding issues (many of them clearly marked) OR rerun full process (it is repeatable).
+ * merge your upgrade branch into your master (and delete it) 
+ * you are now SS4 ready
+
 # prerequisites before you start:
 
 

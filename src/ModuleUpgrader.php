@@ -557,9 +557,8 @@ class ModuleUpgrader
                 $obj = $properClass::create($this, $params);
                 $reflectionClass = new \ReflectionClass($properClass);
                 $html .= '<h3>Step '.$count.' / '.$totalCount.': '.$obj->getTitle().'</h3>';
-                $html .= '<p>';
+                $html .= '<p>'.$obj->getDescription().'<br />';
                 $html .= '<strong>Code: </strong>'.$class;
-                $html .= '<br /><strong>Description: </strong>'.$obj->getDescription();
                 $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
                 $path .=  str_replace('\\', '/', $reflectionClass->getName()).'.php';
                 $path =  str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);

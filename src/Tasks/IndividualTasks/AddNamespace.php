@@ -25,9 +25,9 @@ class AddNamespace extends Task
 
     public function runActualTask($params = [])
     {
-        $baseNameSpace = $this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace();
-        if ($this->mu->getRunImmediately()) {
-            $codeDir = $this->mu->findCodeDir();
+        $baseNameSpace = $this->mu()->getVendorNamespace().'\\'.$this->mu()->->getPackageNamespace();
+        if ($this->mu()->->getRunImmediately()) {
+            $codeDir = $this->mu()->->findCodeDir();
             $dirsDone = [];
             $directories = new \RecursiveDirectoryIterator($codeDir);
             foreach (new \RecursiveIteratorIterator($directories) as $file => $fileObject) {
@@ -43,13 +43,13 @@ class AddNamespace extends Task
                         $nameSpaceArrayNew = [];
                         foreach ($nameSpaceArray as $nameSpaceSnippet) {
                             if ($nameSpaceSnippet) {
-                                $nameSpaceArrayNew[] = $this->mu->camelCase($nameSpaceSnippet);
+                                $nameSpaceArrayNew[] = $this->mu()->->camelCase($nameSpaceSnippet);
                             }
                         }
                         $nameSpace = implode('\\', $nameSpaceArrayNew);
-                        $this->mu->execMe(
+                        $this->mu()->->execMe(
                             $codeDir,
-                            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mu->getWebRootDirLocation().' --write --psr4 -vvv',
+                            'php '.$this->mu()->->getLocationOfUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mu()->->getWebRootDirLocation().' --write --psr4 -vvv',
                             'adding namespace: '.$nameSpace.' to '.$dirName,
                             false
                         );
@@ -58,15 +58,15 @@ class AddNamespace extends Task
             }
         } else {
             //@todo: we assume 'code' for now ...
-            $codeDir1 = $this->mu->getModuleDirLocation() . '/code';
-            $codeDir2 = $this->mu->getModuleDirLocation() . '/src';
+            $codeDir1 = $this->mu()->->getModuleDirLocation() . '/code';
+            $codeDir2 = $this->mu()->->getModuleDirLocation() . '/src';
             foreach ([$codeDir1, $codeDir2] as $codeDir) {
-                $this->mu->execMe(
-                    $this->mu->getLocationOfUpgradeModule(),
+                $this->mu()->->execMe(
+                    $this->mu()->->getLocationOfUpgradeModule(),
                     'find '.$codeDir.' -mindepth 1 -maxdepth 2 -type d -exec '.
                         'sh -c '.
                             '\'dir=${1##*/}; '.
-                            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$this->mu->getVendorNamespace().'\\'.$this->mu->getPackageNamespace().'\\$dir" "$dir" --write --psr4 -r -vvv'.
+                            'php '.$this->mu()->->getLocationOfUpgradeModule().' add-namespace "'.$this->mu()->->getVendorNamespace().'\\'.$this->mu()->->getPackageNamespace().'\\$dir" "$dir" --write --psr4 -r -vvv'.
                         '\' _ {} '.
                     '\;',
                     'adding name spaces',
@@ -74,10 +74,10 @@ class AddNamespace extends Task
                 );
             }
         }
-        $this->mu->execMe(
+        $this->mu()->->execMe(
             $codeDir,
-            'php '.$this->mu->getLocationOfUpgradeModule().' add-namespace "'.$baseNameSpace.'" '.$this->mu->getModuleDirLocation().' --root-dir='.$this->mu->getWebRootDirLocation().' --write --psr4 -vvv',
-            'adding namespace: '.$baseNameSpace.' to '.$this->mu->getModuleDirLocation(),
+            'php '.$this->mu()->->getLocationOfUpgradeModule().' add-namespace "'.$baseNameSpace.'" '.$this->mu()->->getModuleDirLocation().' --root-dir='.$this->mu()->->getWebRootDirLocation().' --write --psr4 -vvv',
+            'adding namespace: '.$baseNameSpace.' to '.$this->mu()->->getModuleDirLocation(),
             false
         );
         $this->setCommitMessage('MAJOR: adding namespaces');

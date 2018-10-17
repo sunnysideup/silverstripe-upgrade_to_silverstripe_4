@@ -68,11 +68,11 @@ class FixRequirements extends Task
         ];
 
         if ($this->debug) {
-            $this->mu->colourPrint(print_r($replacementArray, 1));
+            $this->mu()->colourPrint(print_r($replacementArray, 1));
         }
 
         //Start search machine from the module location. replace API
-        $textSearchMachine = new SearchAndReplaceAPI($this->mu->getModuleDirLocation());
+        $textSearchMachine = new SearchAndReplaceAPI($this->mu()->getModuleDirLocation());
         $textSearchMachine->setIsReplacingEnabled(true);
         $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
 
@@ -81,20 +81,20 @@ class FixRequirements extends Task
         * together making it ['src']['php']
         */
         foreach ($replacementArray as $path => $pathArray) {
-            $path = $this->mu->getModuleDirLocation()  . '/'.$path ? : '' ;
-            $path = $this->mu->checkIfPathExistsAndCleanItUp($path);
+            $path = $this->mu()->getModuleDirLocation()  . '/'.$path ? : '' ;
+            $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
             if (!file_exists($path)) {
-                $this->mu->colourPrint("SKIPPING $path");
+                $this->mu()->colourPrint("SKIPPING $path");
             } else {
                 $textSearchMachine->setSearchPath($path);
                 foreach ($pathArray as $extension => $extensionArray) {
                     $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
-                    $this->mu->colourPrint(
+                    $this->mu()->colourPrint(
                         "++++++++++++++++++++++++++++++++++++\n".
                         "CHECKING\n".
                         "IN $path\n".
                         "FOR $extension FILES\n".
-                        "BASE ".$this->mu->getModuleDirLocation()."\n".
+                        "BASE ".$this->mu()->getModuleDirLocation()."\n".
                         "++++++++++++++++++++++++++++++++++++\n"
                     );
                     foreach ($extensionArray as $find => $findDetails) {
@@ -108,8 +108,8 @@ class FixRequirements extends Task
                         // REPLACMENT PATTERN!
                         //Requirements::javascript(moduledirfolder/bla);
                         //Requirements::javascript(vpl: bla);
-                        $findWithPackageName = $find.strtolower($this->mu->getPackageName());
-                        $vendorAndPackageAsLocation = $this->mu->getVendorAndPackageAsLocation();
+                        $findWithPackageName = $find.strtolower($this->mu()->getPackageName());
+                        $vendorAndPackageAsLocation = $this->mu()->getVendorAndPackageAsLocation();
                         if (!$find) {
                             user_error("no find is specified, replace is: $replace");
                         }
@@ -121,7 +121,7 @@ class FixRequirements extends Task
                                 user_error("no replace is specified, find is: $find");
                             }
                             $finalFind = $find.$quoteMark;
-                            $this->mu->colourPrint(
+                            $this->mu()->colourPrint(
                                 '    --- FIND: '.$finalFind."\n".
                                 '    --- REPLACE: '.$finalReplace."\n"
                             );
@@ -141,7 +141,7 @@ class FixRequirements extends Task
                         $isStraightReplace = true;
                         $finalFind = $vendorAndPackageAsLocation.': silverstripe/'.$ssModule.': ';
                         $finalReplace = 'silverstripe/'.$ssModule.': ';
-                        $this->mu->colourPrint(
+                        $this->mu()->colourPrint(
                             '    --- FIND: '.$finalFind."\n".
                             '    --- REPLACE: '.$finalReplace."\n"
                         );
@@ -155,9 +155,9 @@ class FixRequirements extends Task
                     if ($replacements) {
                     } else {
                         //flush output anyway!
-                        $this->mu->colourPrint("No replacements for  $extension");
+                        $this->mu()->colourPrint("No replacements for  $extension");
                     }
-                    $this->mu->colourPrint($textSearchMachine->getOutput());
+                    $this->mu()->colourPrint($textSearchMachine->getOutput());
                 }
             }
         }

@@ -22,17 +22,17 @@ class ResetWebRootDir extends Task
 
     public function runActualTask($params = [])
     {
-        $this->mu->execMe(
-            $this->mu->getAboveWebRootDirLocation(),
-            'rm '.$this->mu->getWebRootDirLocation(). ' -rf',
-            'remove the upgrade dir: '.$this->mu->getWebRootDirLocation(),
+        $this->mu()->execMe(
+            $this->mu()->getAboveWebRootDirLocation(),
+            'rm '.$this->mu()->getWebRootDirLocation(). ' -rf',
+            'remove the upgrade dir: '.$this->mu()->getWebRootDirLocation(),
             false
         );
 
-        $this->mu->execMe(
-            $this->mu->getAboveWebRootDirLocation(),
-            'mkdir '.$this->mu->getWebRootDirLocation(). '',
-            'create upgrade directory: '.$this->mu->getWebRootDirLocation(),
+        $this->mu()->execMe(
+            $this->mu()->getAboveWebRootDirLocation(),
+            'mkdir '.$this->mu()->getWebRootDirLocation(). '',
+            'create upgrade directory: '.$this->mu()->getWebRootDirLocation(),
             false
         );
     }

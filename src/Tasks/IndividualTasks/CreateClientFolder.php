@@ -28,9 +28,9 @@ class CreateClientFolder extends Task
      */
     public function runActualTask($params = [])
     {
-        $newClientFolder = $this->mu->getModuleDirLocation().'/client/ ';
-        $this->mu->execMe(
-            $this->mu->getModuleDirLocation(),
+        $newClientFolder = $this->mu()->getModuleDirLocation().'/client/ ';
+        $this->mu()->execMe(
+            $this->mu()->getModuleDirLocation(),
             'mkdir -v '.$newClientFolder,
             'creating new client folder '.$newClientFolder,
             false
@@ -43,9 +43,9 @@ class CreateClientFolder extends Task
             'css'
         ];
         foreach($foldersToMoveName as $folderToMoveName) {
-            $folderToMove = $this->mu->getModuleDirLocation().'/'.$folderToMoveName.'/ ';
-            $this->mu->execMe(
-                $this->mu->getModuleDirLocation(),
+            $folderToMove = $this->mu()->getModuleDirLocation().'/'.$folderToMoveName.'/ ';
+            $this->mu()->execMe(
+                $this->mu()->getModuleDirLocation(),
                 'mv -vn '.$folderToMove.' '.$newClientFolder.'',
                 'moving '.$folderToMove.' to '.$newClientFolder.' -v is verbose, -n is only if does not exists already.',
                 false

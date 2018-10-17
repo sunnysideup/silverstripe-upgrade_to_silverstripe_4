@@ -28,10 +28,10 @@ class MoveCodeToSRC extends Task
      */
     public function runActualTask($params = [])
     {
-        $old = $this->mu->getModuleDirLocation().'/code/ ';
-        $new = $this->mu->getModuleDirLocation().'/src/';
-        $this->mu->execMe(
-            $this->mu->getModuleDirLocation(),
+        $old = $this->mu()->getModuleDirLocation().'/code/ ';
+        $new = $this->mu()->getModuleDirLocation().'/src/';
+        $this->mu()->execMe(
+            $this->mu()->getModuleDirLocation(),
             'mv -vn '.$old.' '.$new.'',
             'moving '.$old.' to '.$new.' -v is verbose, -n is only if src does not exists',
             false

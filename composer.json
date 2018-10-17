@@ -37,6 +37,6 @@
             "composer dumpautoload",
             "php create-list-of-tasks.php"
         ]
-    }
+    },
     "minimum-stability": "dev"
 }

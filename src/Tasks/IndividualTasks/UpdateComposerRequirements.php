@@ -18,8 +18,9 @@ class UpdateComposerRequirements extends Task
     public function getDescription()
     {
         return '
-            Change '.$this->package.' to '.$this->getReplacementPackage().':'.$this->newVersion.'
-            in the composer file of your module.';
+            Change requirements in composer.json file from
+            '.($this->package ?: 'an Old Package').' to '.($this->getReplacementPackage() ?: 'a New Package').':'.($this->newVersion ?: ' (and New Version)').'
+            For example, we upgrade silverstripe/framework requirement from 3 to 4.';
     }
 
     protected $package = '';

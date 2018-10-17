@@ -19,7 +19,7 @@ class AddNamespace extends Task
     {
         return '
             Places all your code into namespaces (provided by silvertripe/runActualTask),
-            using the PSR-4 approach (matching folders and namespaces)';
+            using the PSR-4 approach (matching folders and namespaces).';
     }
 
 

@@ -20,8 +20,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
     {
         return '
             Change your src/code folders from lowercase to TitleCase - e.g.
-            yourmodule/src/model becomes yourmodule/src/Model to match the upgrade
-            steps.';
+            yourmodule/src/model becomes yourmodule/src/Model in accordance with PSR-4 autoloading';
     }
 
     public function runActualTask($params = [])

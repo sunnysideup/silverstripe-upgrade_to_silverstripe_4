@@ -18,7 +18,7 @@ class AddUpgradeBranch extends Task
     {
         return '
             Adds a new branch ('.$this->mu()->getNameOfTempBranch().') to your
-            repository ('.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().')
+            repository ('.($this->mu()->getVendorName() ? : 'Vendor Name').'/'.($this->mu()->getPackageName()? : 'Package Name').')
             that is going to be used for upgrading it.' ;
     }
 

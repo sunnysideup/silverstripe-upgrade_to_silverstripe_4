@@ -18,7 +18,7 @@ class AddLegacyBranch extends Task
     public function getDescription()
     {
         return '
-            Creates a legacy branch: '.$this->nameOfLegacyBranch.' of your module so that you
+            Creates a legacy branch: "'.$this->nameOfLegacyBranch.'" of your module so that you
             can keep making bugfixes to older versions.';
     }
 

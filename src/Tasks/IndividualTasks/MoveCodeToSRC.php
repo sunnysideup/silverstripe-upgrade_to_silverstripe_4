@@ -18,7 +18,7 @@ class MoveCodeToSRC extends Task
     public function getDescription()
     {
         return '
-            Move code folder to src folder to match PSR requirements.' ;
+            Move the code folder to the src folder to match PSR requirements.' ;
     }
 
     /**

@@ -18,7 +18,8 @@ SS4:
             'Mysite':
                 R: "App"
         php:
-
+            'HtmlEditorField':
+                R: 'HTMLEditorField'
             'mysite/css/':
                 R: "ModuleLoader::getModule('mysite')->getResource('css/UPGRADE-FIX-REQUIRED.css')->getRelativePath()"
                 C: "Please review update and fix as required"

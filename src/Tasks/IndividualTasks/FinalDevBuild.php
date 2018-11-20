@@ -22,8 +22,8 @@ class FinalDevBuild extends Task
 
     public function runActualTask($params = [])
     {
-        $this->mu->execMe(
-            $this->mu->getWebRootDirLocation(),
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
             'php vendor/silverstripe/framework/cli-script.php dev/build flush=all',
             'It is time for a dev/build',
             false

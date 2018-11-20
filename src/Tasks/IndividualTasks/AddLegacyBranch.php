@@ -18,7 +18,7 @@ class AddLegacyBranch extends Task
     public function getDescription()
     {
         return '
-            Creates a legacy branch: '.$this->nameOfLegacyBranch.' so that you
+            Creates a legacy branch: "'.$this->nameOfLegacyBranch.'" of your module so that you
             can keep making bugfixes to older versions.';
     }
 
@@ -33,15 +33,15 @@ class AddLegacyBranch extends Task
      */
     public function runActualTask($params = [])
     {
-        $this->mu->execMe(
-            $this->mu->getWebRootDirLocation(),
-            'composer require '.$this->mu->getVendorName().'/'.$this->mu->getPackageName().':dev-master',
-            'checkout dev-master of '.$this->mu->getVendorName().'/'.$this->mu->getPackageName(),
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master',
+            'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
             false
         );
 
-        $this->mu->execMe(
-            $this->mu->getModuleDirLocation(),
+        $this->mu()->execMe(
+            $this->mu()->getModuleDirLocation(),
             '
             if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->nameOfLegacyBranch . "'" . '); then
                     echo branch exists

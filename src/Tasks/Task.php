@@ -81,6 +81,15 @@ abstract class Task
         $this->mu = ModuleUpgrader::create();
     }
 
+    public function mu()
+    {
+        if(! $this->mu) {
+            $this->mu = ModuleUpgrader::create();
+        }
+
+        return $this->mu;
+    }
+
     /**
      * returns title of the task at hand ...
      *
@@ -201,24 +210,24 @@ abstract class Task
     protected function commitAndPush()
     {
         $message = $this->getCommitMessage();
-        $this->mu->execMe(
-            $this->mu->getModuleDirLocation(),
+        $this->mu()->execMe(
+            $this->mu()->getModuleDirLocation(),
             'git add . -A',
             'git add all',
             false
         );
 
-        $this->mu->execMe(
-            $this->mu->getModuleDirLocation(),
+        $this->mu()->execMe(
+            $this->mu()->getModuleDirLocation(),
             'git commit . -m "'.$message.'"',
             'commit changes: '.$message,
             false
         );
 
-        $this->mu->execMe(
-            $this->mu->getModuleDirLocation(),
-            'git push origin '.$this->mu->getNameOfTempBranch(),
-            'pushing changes to origin on the '.$this->mu->getNameOfTempBranch().' branch',
+        $this->mu()->execMe(
+            $this->mu()->getModuleDirLocation(),
+            'git push origin '.$this->mu()->getNameOfTempBranch(),
+            'pushing changes to origin on the '.$this->mu()->getNameOfTempBranch().' branch',
             false
         );
     }
@@ -235,11 +244,11 @@ abstract class Task
     protected function runSilverstripeUpgradeTask($task, $rootDir = '', $param1 = '', $param2 = '', $settings = '')
     {
         if (! $rootDir) {
-            $rootDir = $this->mu->getWebRootDirLocation();
+            $rootDir = $this->mu()->getWebRootDirLocation();
         }
-        $this->mu->execMe(
-            $this->mu->getWebRootDirLocation(),
-            'php '.$this->mu->getLocationOfUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDir.' --write -vvv '.$settings,
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'php '.$this->mu()->getLocationOfUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDir.' --write -vvv '.$settings,
             'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
             false
         );

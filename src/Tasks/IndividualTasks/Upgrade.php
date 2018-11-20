@@ -35,10 +35,10 @@ class Upgrade extends Task
     public function runActualTask($params = [])
     {
         if (empty($this->runDir)) {
-            $this->runDir = $this->mu->getWebRootDirLocation();
+            $this->runDir = $this->mu()->getWebRootDirLocation();
         }
         if (empty($this->param1)) {
-            $this->param1 = $this->mu->findCodeDir();
+            $this->param1 = $this->mu()->findCodeDir();
         }
         $this->runSilverstripeUpgradeTask(
             'upgrade',

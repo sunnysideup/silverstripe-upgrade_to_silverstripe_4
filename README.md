@@ -6,6 +6,25 @@ After inspection you can then merge this into `dev/master` as you see fit.
 
 This tool is highly customisable so that you can define your own upgrade path.
 
+# tl;dr
+
+Here is what this module does, AUTOMAGICALLY:
+
+ * clear workbench
+ * checkout master of your module
+ * create legacy branch
+ * create upgrade branch
+ * clear workbench
+ * do upgrade stuff
+ * set up SS4 vanilla install
+ * add your module again (upgrade branch)
+ * do more upgrade stuff
+
+Once that has completed you an MANUALLY:
+ * review and fix any outstanding issues (many of them clearly marked) OR rerun full process (it is repeatable).
+ * merge your upgrade branch into your master (and delete it) 
+ * you are now SS4 ready
+
 # prerequisites before you start:
 
 
@@ -54,9 +73,15 @@ To customise your list of tasks, please see config options below.
 # installation and usage:
 
 1.  Install this module in your web-root (or another place if needed - we use `/var/www/silverstripe-upgrade_to_silverstripe_4/` in example below) as follows:
-    `composer install sunnysideup/upgrade_to_silverstripe_4 /var/www/silverstripe-upgrade_to_silverstripe_4/`
 
-2.  Create a php file (e.g. `index.php`) in your root dir (or anywhere else where you can run it) - using the examples provided:
+```sh
+    $ mkdir /var/www/silverstripe-upgrade_to_silverstripe_4/
+    $ cd /var/www/silverstripe-upgrade_to_silverstripe_4/
+    $ git clone git@github.com:sunnysideup/silverstripe-upgrade_to_silverstripe_4.git .
+    $ composer update
+```
+
+2.  Create a php file (e.g. `index.php`) in your root dir, i.e. `/var/www/silverstripe-upgrade_to_silverstripe_4/` (or anywhere else where you can run it) - using the examples provided:
 
   - [full](/example-index.full.php) - overview of all settings available
   - [short](example-index.short.php) - least amount of settings required
@@ -70,18 +95,15 @@ To customise your list of tasks, please see config options below.
 
 4. Apply any manual final fixes to the upgrade branch of your module(s) to make it/them SS4 ready.
 
-5. Merge the upgrade branch into `dev-master` as you see fit.
-
 **NB: You can run (3) as many times as you see fit**.
 
 # once completed:
 
-- Merge upgrade branch into master
+1. Merge upgrade branch into master.
 
-- Add $private static $table_name for every class that extends DataObject (including pages)
-    (e.g private static $table_name = 'WebPortfolioPage';) 
+2. Add $private static $table_name for every class that extends DataObject, including pages (e.g private static $table_name = 'WebPortfolioPage';). 
     
-- Check for use statements WITHOUT namespacing - these may need attention 
+3. Check for use statements WITHOUT name spacing - as these may need attention. 
 
 
 # main config options:
@@ -168,7 +190,7 @@ Customise your list of tasks to run on your module during the upgrade.
     ]
 )
 ```
-See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
+See [available tasks](/docs/en/AvailableTasks.md) and also the current [default tasks](https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/blob/master/src/ModuleUpgrader.php#L105-L139).
 
 ### remove from list of tasks
 

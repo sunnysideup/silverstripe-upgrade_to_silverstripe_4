@@ -34,7 +34,7 @@ class Recompose extends Task
     public function runActualTask($params = [])
     {
         if (empty($this->runDir)) {
-            $this->runDir = $this->mu->getModuleDirLocation();
+            $this->runDir = $this->mu()->getModuleDirLocation();
         }
         $this->runSilverstripeUpgradeTask(
             'recompose',

@@ -18,7 +18,7 @@ class MoveCodeToSRC extends Task
     public function getDescription()
     {
         return '
-            Move code folder to src folder to match PSR requirements.' ;
+            Move the code folder to the src folder to match PSR requirements.' ;
     }
 
     /**
@@ -28,10 +28,10 @@ class MoveCodeToSRC extends Task
      */
     public function runActualTask($params = [])
     {
-        $old = $this->mu->getModuleDirLocation().'/code/ ';
-        $new = $this->mu->getModuleDirLocation().'/src/';
-        $this->mu->execMe(
-            $this->mu->getModuleDirLocation(),
+        $old = $this->mu()->getModuleDirLocation().'/code/ ';
+        $new = $this->mu()->getModuleDirLocation().'/src/';
+        $this->mu()->execMe(
+            $this->mu()->getModuleDirLocation(),
             'mv -vn '.$old.' '.$new.'',
             'moving '.$old.' to '.$new.' -v is verbose, -n is only if src does not exists',
             false

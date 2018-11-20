@@ -25,7 +25,7 @@ class Reorganise extends Task
             https://github.com/silverstripe/silverstripe-runActualTask#reorganise
             You can use this command to reorganise your folder structure to
             conform to the new structure introduced with SilverStripe 4.1.
-            Your mysite folder will be renamed to app and your code folder will be rename to src.
+            Your mysite folder will be renamed to app and your code folder will be renamed to src.
             ' ;
     }
 

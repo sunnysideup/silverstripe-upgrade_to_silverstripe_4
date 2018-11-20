@@ -40,18 +40,18 @@ class InspectAPIChanges extends Task
 
     public function runActualTask($params = [])
     {
-        $this->mu->execMe(
-            $this->mu->getWebRootDirLocation(),
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
             'composer dump-autoload',
             'run composer dump-autoload',
             false
         );
 
         if (empty($this->runDir)) {
-            $this->runDir = $this->mu->getWebRootDirLocation();
+            $this->runDir = $this->mu()->getWebRootDirLocation();
         }
         if (empty($this->param1)) {
-            $this->param1 = $this->mu->findCodeDir();
+            $this->param1 = $this->mu()->findCodeDir();
         }
         $this->runSilverstripeUpgradeTask(
             'inspect',

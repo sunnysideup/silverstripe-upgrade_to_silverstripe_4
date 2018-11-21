@@ -219,7 +219,8 @@ abstract class Task
 
         $this->mu()->execMe(
             $this->mu()->getModuleDirLocation(),
-            'if ! git diff --quiet; then git commit . -m "'.addslashes($message).'"; fi;',
+            // 'if ! git diff --quiet; then git commit . -m "'.addslashes($message).'"; fi;',
+            'git commit . -m "'.addslashes($message).'"',
             'commit changes: '.$message,
             false
         );

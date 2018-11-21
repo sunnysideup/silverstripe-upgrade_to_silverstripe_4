@@ -96,12 +96,11 @@ class SearchAndReplace extends Task
                         $caseSensitive = ! $ignoreCase;
                         //$replace = $replaceArray[1]; unset($replaceArray[1]);
                         //$fullReplacement = (isset($replaceArray[2]) ? "/* ".$replaceArray[2]." */\n" : "").$replaceArray[1];
-                        $fullReplacement = '';
-                        $isStraightReplace = $comment ? false : true;
-                        if ($isStraightReplace) {
-                            $fullReplacement = $replace;
-                        } else {
-                            $fullReplacement = $replace."/*\n".$this->startMarker."\nFIND: ".$find."\nNOTE: ".$comment." \n".$this->endMarker."\n*/";
+                        $fullReplacement = $replace;
+                        $isStraightReplace = true;
+                        if ($comment) {
+                            $isStraightReplace = false;
+                            $comment = ."/*\n".$this->startMarker."\nFIND: ".$find."\nNOTE: ".$comment." \n".$this->endMarker."\n*/";
                         }
                         if (!$find) {
                             user_error("no find is specified, replace is: $replace");

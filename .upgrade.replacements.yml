@@ -64,6 +64,9 @@ SS4:
                 R: "ThemeResourceLoader::inst()->getPath('UPGRADE-FIX-REQUIRED.foo.bar')"
                 C: "Please review update and fix as required"
                 I: true
+            'Session::get_all()':
+                R: "$this->getRequest()->getSession()->getAll()"
+                C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
             'Session::':
                 R: "$this->getRequest()->getSession()"
                 C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
@@ -114,3 +117,6 @@ SS4:
             'public function includeInHTML($templateFile, $content)':
                 R: "public function includeInHTML($content)"
                 I: true
+        'parent::includeInHTML($content)':
+            R: "parent::includeInHTML($content)"
+            I: true

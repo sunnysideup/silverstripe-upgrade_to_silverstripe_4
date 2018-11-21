@@ -32,8 +32,8 @@ class MoveCodeToSRC extends Task
         $new = $this->mu()->getModuleDirLocation().'/src/';
         $this->mu()->execMe(
             $this->mu()->getModuleDirLocation(),
-            'mv -vn '.$old.' '.$new.'',
-            'moving '.$old.' to '.$new.' -v is verbose, -n is only if src does not exists',
+            'if test -d '.$old.'; then mv -vn '.$old.' '.$new.'; fi;',
+            'moving '.$old.' to '.$new.' -v is verbose, -n is only if destination does not exists',
             false
         );
     }

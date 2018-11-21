@@ -391,16 +391,14 @@ class SearchAndReplaceAPI
             $foundCount = 0;
             foreach($oldFileContentArray as $key => $oldLineContent)  {
                 $newLineContent = $oldLineContent;
-                $foundInLine += preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
-                if($foundInLine) {
-                    $foundCount += $foundInLine;
-                    if ($foundInLine) {
-                        if ($this->isReplacingEnabled) {
-                            $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
-                            if($oldLineContent !== $newLineContent) {
-                                if($this->comment) {
-                                    $newFileContentArray[] = $this->comment;
-                                }
+                $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
+                if($foundInLineCount) {
+                    $foundCount += $foundInLineCount;
+                    if ($this->isReplacingEnabled) {
+                        $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
+                        if($oldLineContent !== $newLineContent) {
+                            if($this->comment) {
+                                $newFileContentArray[] = $this->comment;
                             }
                         }
                     }

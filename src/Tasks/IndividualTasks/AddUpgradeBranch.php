@@ -26,7 +26,7 @@ class AddUpgradeBranch extends Task
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master',
+            'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source',
             'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
             false
         );

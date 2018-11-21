@@ -18,6 +18,8 @@ SS4:
             'Mysite':
                 R: "App"
         php:
+            ' implements flushable':
+                R: ' implements flushable'
             'HtmlEditorField':
                 R: 'HTMLEditorField'
             'mysite/css/':

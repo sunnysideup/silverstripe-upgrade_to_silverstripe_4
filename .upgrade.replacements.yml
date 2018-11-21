@@ -117,6 +117,6 @@ SS4:
             'public function includeInHTML($templateFile, $content)':
                 R: "public function includeInHTML($content)"
                 I: true
-        'parent::includeInHTML($content)':
-            R: "parent::includeInHTML($content)"
-            I: true
+            'parent::includeInHTML($content)':
+                R: "parent::includeInHTML($content)"
+                I: true

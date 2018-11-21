@@ -388,11 +388,12 @@ class SearchAndReplaceAPI
             } else {
                 $pattern    = "/$searchKey/Ui";
             }
-            $foundInFile = 0;
+            $foundCount = 0;
             foreach($oldFileContentArray as $key => $oldLineContent)  {
+                $newLineContent = $oldLineContent;
                 $foundInLine += preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
                 if($foundInLine) {
-                    $foundInFile += $foundInLine
+                    $foundCount += $foundInLine;
                     if ($foundInLine) {
                         if ($this->isReplacingEnabled) {
                             $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
@@ -400,15 +401,15 @@ class SearchAndReplaceAPI
                                 if($this->comment) {
                                     $newFileContentArray[] = $this->comment;
                                 }
-                                $newFileContentArray[] = $newLineContent;
                             }
                         }
                     }
                 }
+                $newFileContentArray[] = $newLineContent;
             }
-            if($foundInFile) {
-                $oldFileContent = implode(PHP_EOL, $oldFileContentArray)
-                $newFileContent = implode(PHP_EOL, $newFileContentArray)
+            if($foundCount) {
+                $oldFileContent = implode($oldFileContentArray);
+                $newFileContent = implode($newFileContentArray);
                 if ($newFileContent === $oldFileContent) {
                     $this->writeToFile($file, $newFileContent);
 
@@ -417,23 +418,23 @@ class SearchAndReplaceAPI
                     if (!isset(self::$search_key_totals[$this->searchKey])) {
                         self::$search_key_totals[$this->searchKey] = 0;
                     }
-                    self::$search_key_totals[$this->searchKey] += $foundInFile;
+                    self::$search_key_totals[$this->searchKey] += $foundCount;
 
                     if (!isset(self::$folder_totals[dirname($file)])) {
                         self::$folder_totals[dirname($file)] = 0;
                     }
-                    self::$folder_totals[dirname($file)] += $foundInFile;
+                    self::$folder_totals[dirname($file)] += $foundCount;
 
                     //log
-                    $foundStr = "-- $foundInFile x";
+                    $foundStr = "-- $foundCount x";
                     $this->appendToLog($file, $foundStr);
                 } else {
                     $this->appendToLog($file, "********** NO REPLACEMENT DESPITE MATCHES - searched for: ".$pattern." AND REPLACED WITH ".$this->replacementKey." \n");
                 }
             }
+        } else {
+            $this->appendToLog($file, "********** ERROR: Replacement Text is not defined");
         }
-    } else {
-        $this->appendToLog($file, "********** ERROR: Replacement Text is not defined");
     }
 
     /**

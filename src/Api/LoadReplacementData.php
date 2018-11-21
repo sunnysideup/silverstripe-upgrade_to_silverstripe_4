@@ -39,6 +39,9 @@ class LoadReplacementData
                 foreach ($pathArray as $language => $languageArray) {
                     $this->languages[$language] = $language;
                     foreach ($languageArray as $findKey => $findKeyArray) {
+                        if(!isset($findKeyArray['R'])) {
+                            user_error('replacement key not set: '.print_r($findKeyArray, 1));
+                        }
                         $replaceKey = $findKeyArray['R'];
                         $key = strtolower($to.'_'.$language.'_'.$path.'_'.$count);
                         $this->flatFindArray[$key] = $findKey;

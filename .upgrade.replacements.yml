@@ -18,6 +18,10 @@ SS4:
             'Mysite':
                 R: "App"
         php:
+            ' implements flushable':
+                R: ' implements Flushable'
+            'HtmlEditorField':
+                R: 'HTMLEditorField'
             '$this->process_combined_files();':
                 R: '$this->processCombinedFiles();'
                 C: this is likely to be part of the Requirements_Backend calls'

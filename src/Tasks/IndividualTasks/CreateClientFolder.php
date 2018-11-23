@@ -46,7 +46,7 @@ class CreateClientFolder extends Task
             $folderToMove = $this->mu()->getModuleDirLocation().'/'.$folderToMoveName.'/ ';
             $this->mu()->execMe(
                 $this->mu()->getModuleDirLocation(),
-                'mv -vn '.$folderToMove.' '.$newClientFolder.'',
+                'if test -d '.$folderToMove.'; then mv -vn '.$folderToMove.' '.$newClientFolder.'; fi;',
                 'moving '.$folderToMove.' to '.$newClientFolder.' -v is verbose, -n is only if does not exists already.',
                 false
             );

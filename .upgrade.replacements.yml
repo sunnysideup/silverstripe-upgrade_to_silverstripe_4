@@ -18,7 +18,12 @@ SS4:
             'Mysite':
                 R: "App"
         php:
-
+            '$this->process_combined_files();':
+                R: '$this->processCombinedFiles();'
+                C: this is likely to be part of the Requirements_Backend calls'
+            '$this->path_for_file();':
+                R: '$this->pathForFile();'
+                C: this is likely to be part of the Requirements_Backend calls'
             'mysite/css/':
                 R: "ModuleLoader::getModule('mysite')->getResource('css/UPGRADE-FIX-REQUIRED.css')->getRelativePath()"
                 C: "Please review update and fix as required"

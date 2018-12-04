@@ -35,13 +35,13 @@ class RecomposeHomeBrew extends Task
         'unset($data["require"]["composer/installers"]);';
         foreach($this->requireLinesToAdd as $key => $value) {
             $command .=
-        '$data["require"]['.$key.'] = "'.$value.'"; ';
+        '$data["require"]["'.$key.'"] = "'.$value.'"; ';
         };
         $this->updateJSONViaCommandLine(
             $this->mu()->getModuleDirLocation(),
             $command,
             'exposing javascript, images and css'
         );
-        $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - STEP 2');
+        $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 ');
     }
 }

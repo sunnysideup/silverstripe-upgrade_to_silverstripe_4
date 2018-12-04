@@ -49,10 +49,6 @@ class SearchAndReplace extends Task
         return $this;
     }
 
-    private $startMarker = "### @@@@ START UPGRADE REQUIRED @@@@ ###";
-
-    private $endMarker = "### @@@@ END UPGRADE REQUIRED @@@@ ###";
-
     public function runActualTask($params = [])
     {
         if ($this->checkReplacementIssues) {
@@ -100,14 +96,6 @@ class SearchAndReplace extends Task
                         $isStraightReplace = true;
                         if ($comment) {
                             $isStraightReplace = false;
-                            $comment =
-                                '/**'.PHP_EOL.
-                                '  * '.$this->startMarker.PHP_EOL.
-                                '  * OLD: '.$find.PHP_EOL.
-                                '  * NEW: '.$replace.PHP_EOL.
-                                '  * EXP: '.$comment.PHP_EOL.
-                                '  * '.$this->endMarker.PHP_EOL.
-                                '  */';
                         }
                         if (!$find) {
                             user_error("no find is specified, replace is: $replace");
@@ -122,6 +110,7 @@ class SearchAndReplace extends Task
                         if($comment) {
                             $textSearchMachine->setComment($comment);
                         }
+                        $this->setReplacementHeader($this->replacementHeader);
                         $textSearchMachine->startSearchAndReplace();
                     }
                     $replacements = $textSearchMachine->showFormattedSearchTotals();

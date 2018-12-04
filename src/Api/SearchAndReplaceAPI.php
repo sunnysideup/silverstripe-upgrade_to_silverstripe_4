@@ -48,8 +48,13 @@ class SearchAndReplaceAPI
 
     private $comment                   = '';
 
-    private $replacementType           = '';
+    private $startMarker               =  '### @@@@ START REPLACEMENT @@@@ ###';
 
+    private $endMarker                 =  '### @@@@ STOP REPLACEMENT @@@@ ###';
+
+    private $replacementHeader         =  '';
+
+    private $replacementType           = '';
 
     private $caseSensitive             = true;
 
@@ -204,6 +209,27 @@ class SearchAndReplaceAPI
         return $this;
     }
 
+    public function setStartMarker($s)
+    {
+        $this->startMarker = $s;
+
+        return $this;
+    }
+
+    public function setEndMarker($s)
+    {
+        $this->endMarker = $s;
+
+        return $this;
+    }
+
+    public function setReplacementHeader($s)
+    {
+        $this->replacementHeader = $s;
+
+        return $this;
+    }
+
     //================================================
     // Setters Before Every Search
     //================================================
@@ -246,6 +272,34 @@ class SearchAndReplaceAPI
         $this->comment            = $comment;
 
         return $this;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getFullComment()
+    {
+        $string = '';
+        if($this->comment) {
+            $string =
+            PHP_EOL.
+                '/**'.PHP_EOL.
+                '  * '.$this->startMarker.PHP_EOL;
+            if($this->replacementHeader) {
+                $string .= '  * WHY: '.$this->replacementHeader.PHP_EOL;
+            }
+            $string =
+                '  * OLD: '.$this->searchKey.' ('.($this->caseSensitive ? 'case sensitive' : 'ignore case').')' . PHP_EOL.
+                '  * NEW: '.$this->replacementKey.($this->replacementType ? ' ('.$this->replacementType.')' : '').PHP_EOL.
+                '  * EXP: '.$comment.PHP_EOL.
+                '  * '.$this->endMarker.PHP_EOL.
+                '  */'.
+                PHP_EOL;
+        }
+
+        return $string;
+
     }
 
 
@@ -388,41 +442,46 @@ class SearchAndReplaceAPI
                 $pattern = "/$searchKey/Ui";
             }
             $foundCount = 0;
+            $outsidePreviousComment = false;
             foreach($oldFileContentArray as $key => $oldLineContent)  {
-
                 $newLineContent = $oldLineContent;
-                $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
-                if($foundInLineCount) {
-                    if($this->caseSensitive) {
-                        if(strpos($oldLineContent, $this->searchKey) === FALSE) {
-                            user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+
+                //check if it is actually already replaced ...
+                if(strpos($oldLineContent, $this->startMarker) !== FALSE) {
+                    $outsidePreviousComment = false;
+                }
+                if(strpos($oldLineContent, $this->endMarker) !== FALSE) {
+                    $outsidePreviousComment = true;
+                }
+                if($outsidePreviousComment) {
+                    $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
+                    if($foundInLineCount) {
+                        if($this->caseSensitive) {
+                            if(strpos($oldLineContent, $this->searchKey) === FALSE) {
+                                user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+                            }
+                        } else {
+                            if(stripos($oldLineContent, $this->searchKey) === FALSE) {
+                                user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+                            }
+                        }
+                        $foundCount += $foundInLineCount;
+                        if ($this->isReplacingEnabled) {
+                            $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
+                            if($fullComment = $this->getFullComment()) {
+                                $newFileContentArray[] = $fullComment;
+                            }
                         }
                     } else {
-                        if(stripos($oldLineContent, $this->searchKey) === FALSE) {
-                            user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
-                        }
-                    }
-                    $foundCount += $foundInLineCount;
-                    if ($this->isReplacingEnabled) {
-                        if($oldLineContent === 'class DynamicCache extends Object implements Flushable'.PHP_EOL) {
-                            user_error('gotcha');
-                        }
-                        $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
-                        if($this->comment) {
-                            $newFileContentArray[] = $this->comment.PHP_EOL;
-                        }
-                    }
-                } else {
-                    if($this->caseSensitive) {
-                        if($oldLineContent === 'class DynamicCache extends Object implements Flushable'.PHP_EOL) {
-                            user_error('gotcha');
-                        }
-                        if(strpos($oldLineContent, $this->searchKey) !== FALSE) {
-                            user_error('Should have found: '.$this->searchKey);
-                        }
-                    } else {
-                        if(stripos($oldLineContent, $this->searchKey) !== FALSE) {
-                            user_error('Should have found: '.$this->searchKey);
+                        $hasError = false;
+                        if($this->caseSensitive) {
+                            if(strpos($oldLineContent, $this->searchKey) !== FALSE) {
+                                user_error('Should have found: '.$this->searchKey);
+                            }
+                        } else {
+                            if(stripos($oldLineContent, $this->searchKey) !== FALSE) {
+                                user_error('Should have found: '.$this->searchKey);
+                            }
                         }
                     }
                 }

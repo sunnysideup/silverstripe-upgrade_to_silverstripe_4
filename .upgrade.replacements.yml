@@ -71,8 +71,11 @@ SS4:
                 R: "ThemeResourceLoader::inst()->getPath('UPGRADE-FIX-REQUIRED.foo.bar')"
                 C: "Please review update and fix as required"
                 I: true
+            'Session::get_all()':
+                R: "Controller::curr()->getSession()->getAll()"
+                C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
             'Session::':
-                R: "$this->getRequest()->getSession()"
+                R: "Controller::curr()->getSession()->"
                 C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
             'SSViewer::set_source_file_comments(':
                 R: "Config::inst()->set('SSViewer', 'source_file_comments', "

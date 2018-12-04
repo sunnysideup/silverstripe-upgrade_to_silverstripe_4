@@ -72,11 +72,11 @@ SS4:
                 C: "Please review update and fix as required"
                 I: true
             'Session::get_all()':
-                R: "Controller::curr()->getSession()->getAll()"
-                C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
+                R: "Controller::curr()->getRequest()->getSession()->getAll()"
+                C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
             'Session::':
-                R: "Controller::curr()->getSession()->"
-                C: "the THIS needs to be an instance of Controller.  If this does not work, you may have access to the request itself, or use: Controller::curr()->getRequest."
+                R: "Controller::curr()->getRequest()->getSession()->"
+                C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
             'SSViewer::set_source_file_comments(':
                 R: "Config::inst()->set('SSViewer', 'source_file_comments', "
             'ReadOnlyField':

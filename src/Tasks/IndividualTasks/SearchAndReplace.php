@@ -29,7 +29,9 @@ class SearchAndReplace extends Task
 
     protected $debug = false;
 
-    private $checkReplacementIssues = false;
+    protected $checkReplacementIssues = false;
+
+    protected $replacementHeader = 'upgrade to SS4';
 
     public function setCheckReplacementIssues($b)
     {
@@ -110,7 +112,7 @@ class SearchAndReplace extends Task
                         if($comment) {
                             $textSearchMachine->setComment($comment);
                         }
-                        $this->setReplacementHeader($this->replacementHeader);
+                        $textSearchMachine->setReplacementHeader($this->replacementHeader);
                         $textSearchMachine->startSearchAndReplace();
                     }
                     $replacements = $textSearchMachine->showFormattedSearchTotals();

@@ -246,6 +246,7 @@ class SearchAndReplaceAPI
         $this->searchKey        = $searchKey;
         $this->caseSensitive    = $caseSensitive;
         $this->replacementType  = $replacementType;
+        $this->comment          = '';
 
         return $this;
     }
@@ -275,24 +276,24 @@ class SearchAndReplaceAPI
     }
 
     /**
-     *
+     * makes a comment into a PHP proper comment (like this one)
      * @return string
      */
     public function getFullComment()
     {
         $string = '';
         if($this->comment) {
-            $string =
+            $string .=
             PHP_EOL.
                 '/**'.PHP_EOL.
                 '  * '.$this->startMarker.PHP_EOL;
             if($this->replacementHeader) {
                 $string .= '  * WHY: '.$this->replacementHeader.PHP_EOL;
             }
-            $string =
+            $string .=
                 '  * OLD: '.$this->searchKey.' ('.($this->caseSensitive ? 'case sensitive' : 'ignore case').')' . PHP_EOL.
                 '  * NEW: '.$this->replacementKey.($this->replacementType ? ' ('.$this->replacementType.')' : '').PHP_EOL.
-                '  * EXP: '.$comment.PHP_EOL.
+                '  * EXP: '.$this->comment.PHP_EOL.
                 '  * '.$this->endMarker.PHP_EOL.
                 '  */'.
                 PHP_EOL;
@@ -442,18 +443,18 @@ class SearchAndReplaceAPI
                 $pattern = "/$searchKey/Ui";
             }
             $foundCount = 0;
-            $outsidePreviousComment = false;
+            $insidePreviousReplaceComment = false;
             foreach($oldFileContentArray as $key => $oldLineContent)  {
                 $newLineContent = $oldLineContent;
 
                 //check if it is actually already replaced ...
                 if(strpos($oldLineContent, $this->startMarker) !== FALSE) {
-                    $outsidePreviousComment = false;
+                    $insidePreviousReplaceComment = true;
                 }
                 if(strpos($oldLineContent, $this->endMarker) !== FALSE) {
-                    $outsidePreviousComment = true;
+                    $insidePreviousReplaceComment = false;
                 }
-                if($outsidePreviousComment) {
+                if(! $insidePreviousReplaceComment) {
                     $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
                     if($foundInLineCount) {
                         if($this->caseSensitive) {

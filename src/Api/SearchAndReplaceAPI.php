@@ -246,6 +246,7 @@ class SearchAndReplaceAPI
         $this->searchKey        = $searchKey;
         $this->caseSensitive    = $caseSensitive;
         $this->replacementType  = $replacementType;
+        //reset comment
         $this->comment          = '';
 
         return $this;

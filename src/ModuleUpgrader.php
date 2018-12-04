@@ -190,16 +190,23 @@ class ModuleUpgrader
 
     /**
      * start the upgrade sequence at a particular task
-     * @var string task to start the upgrade sequence from
+     * @var string
      */
     protected $startFrom = '';
 
 
     /**
      * end the upgrade sequence after a particular task
-     * @var string task to end the upgrade sequence on
+     * @var string
      */
     protected $endWith = '';
+
+
+    /**
+     * only run this task ...
+     * @var string
+     */
+    protected $onlyRun = '';
 
     /**
      * Is this the last TASK we are running?
@@ -800,6 +807,9 @@ Log dir is not set so we continue without log! ';
      */
     protected function shouldWeRunIt($name) : bool
     {
+        if($this->onlyRun) {
+            return $name === $this->onlyRun ? true : false;
+        }
         if ($this->isLastMethod) {
             $runMe = false;
         } else {

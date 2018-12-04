@@ -383,16 +383,25 @@ class SearchAndReplaceAPI
         if ($this->replacementKey) {
             $oldFileContentArray = file($file);
             $newFileContentArray = [];
-            if ($this->caseSensitive) {
-                $pattern    = "/$searchKey/U";
-            } else {
-                $pattern    = "/$searchKey/Ui";
+            $pattern = "/$searchKey/U";
+            if (! $this->caseSensitive) {
+                $pattern = "/$searchKey/Ui";
             }
             $foundCount = 0;
             foreach($oldFileContentArray as $key => $oldLineContent)  {
+
                 $newLineContent = $oldLineContent;
                 $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
                 if($foundInLineCount) {
+                    if($this->caseSensitive) {
+                        if(strpos($oldLineContent, $this->searchKey) === FALSE) {
+                            user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+                        }
+                    } else {
+                        if(stripos($oldLineContent, $this->searchKey) === FALSE) {
+                            user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+                        }
+                    }
                     $foundCount += $foundInLineCount;
                     if ($this->isReplacingEnabled) {
                         $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
@@ -400,6 +409,16 @@ class SearchAndReplaceAPI
                             if($this->comment) {
                                 $newFileContentArray[] = $this->comment;
                             }
+                        }
+                    }
+                } else {
+                    if($this->caseSensitive) {
+                        if(strpos($oldLineContent, $this->searchKey) !== FALSE) {
+                            user_error('Should have found: '.$this->searchKey);
+                        }
+                    } else {
+                        if(stripos($oldLineContent, $this->searchKey) !== FALSE) {
+                            user_error('Should have found: '.$this->searchKey);
                         }
                     }
                 }

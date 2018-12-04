@@ -37,7 +37,6 @@ SS4:
             'mysite/images/':
                 R: "ModuleLoader::getModule('mysite')->getResource('images/UPGRADE-FIX-REQUIRED.png')->getRelativePath()"
                 C: "Please review update and fix as required"
-
             ' extends Object':
                 R: " extends ViewableData"
                 C: "This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable"
@@ -97,7 +96,7 @@ SS4:
             "$result->error(":
                 R: "$result->addError("
             "Object::use_custom_class":
-                R: ""
+                R: "Object::use_custom_class"
                 C: "You need to move this code to yml, using SilverStripe\\Core\\Injector\\Injector\n  OldClass: NewClass"
             "_Controller extends PageController":
                 R: "Controller extends PageController"

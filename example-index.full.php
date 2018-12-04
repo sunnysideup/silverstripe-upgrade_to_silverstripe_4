@@ -33,7 +33,7 @@ $obj = ModuleUpgrader::create()
     //             'Package' => 'silverstripe/framework',
     //             'NewVersion' => '~4.0'
     //         ],
-    //         'Recompose' => [],
+    //         'RecomposeHomeBrew' => [],
     //         'UpdateComposerRequirements-2' => [
     //             'Package' => 'silverstripe/cms',
     //             'ReplacementPackage' => 'silverstripe/recipe-cms',
@@ -52,6 +52,7 @@ $obj = ModuleUpgrader::create()
     //         // 'WebRootUpdate' => []
     //     ]
     // )
-    ->setStartFrom('')
-    ->setEndWith('')
+    // ->setStartFrom('RecomposeHomeBrew')
+    // ->setEndWith('SearchAndReplace')
+    // ->setOnlyRun('SearchAndReplace')
     ->run();

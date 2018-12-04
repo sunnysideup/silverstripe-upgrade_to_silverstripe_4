@@ -404,15 +404,19 @@ class SearchAndReplaceAPI
                     }
                     $foundCount += $foundInLineCount;
                     if ($this->isReplacingEnabled) {
+                        if($oldLineContent === 'class DynamicCache extends Object implements Flushable'.PHP_EOL) {
+                            user_error('gotcha');
+                        }
                         $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
-                        if($oldLineContent !== $newLineContent) {
-                            if($this->comment) {
-                                $newFileContentArray[] = $this->comment;
-                            }
+                        if($this->comment) {
+                            $newFileContentArray[] = $this->comment.PHP_EOL;
                         }
                     }
                 } else {
                     if($this->caseSensitive) {
+                        if($oldLineContent === 'class DynamicCache extends Object implements Flushable'.PHP_EOL) {
+                            user_error('gotcha');
+                        }
                         if(strpos($oldLineContent, $this->searchKey) !== FALSE) {
                             user_error('Should have found: '.$this->searchKey);
                         }
@@ -427,7 +431,7 @@ class SearchAndReplaceAPI
             if($foundCount) {
                 $oldFileContent = implode($oldFileContentArray);
                 $newFileContent = implode($newFileContentArray);
-                if ($newFileContent === $oldFileContent) {
+                if ($newFileContent !== $oldFileContent) {
                     $this->writeToFile($file, $newFileContent);
 
                     //stats

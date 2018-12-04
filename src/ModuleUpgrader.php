@@ -108,16 +108,16 @@ class ModuleUpgrader
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
         'AddUpgradeBranch' => [],
-        'UpdateComposerRequirements-1' => [
-            'package' => 'silverstripe/framework',
-            'newVersion' => '~4.0'
-        ],
-        'Recompose' => [],
-        'UpdateComposerRequirements-2' => [
-            'package' => 'silverstripe/cms',
-            'replacementPackage' => 'silverstripe/recipe-cms',
-            'newVersion' => '~1'
-        ],
+        // 'UpdateComposerRequirements-1' => [
+        //     'package' => 'silverstripe/framework',
+        //     'newVersion' => '~4.0'
+        // ],
+        'RecomposeHomeBrew' => [],
+        // 'UpdateComposerRequirements-2' => [
+        //     'package' => 'silverstripe/cms',
+        //     'replacementPackage' => 'silverstripe/recipe-cms',
+        //     'newVersion' => '~1'
+        // ],
         'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
         'ComposerInstallProject' => [],
@@ -269,7 +269,7 @@ class ModuleUpgrader
      *          'VendorNamespace' => 'A',
      *          'PackageName' => 'Package1',
      *          'PackageNamespace' => 'Package1',
-     *          'GitLinkg' => 'git@github.com:foor/bar-1.git',
+     *          'GitLink' => 'git@github.com:foor/bar-1.git',
      *          'UpgradeAsFork' => false
      *      ],
      *      [
@@ -339,10 +339,16 @@ class ModuleUpgrader
     protected $packageName = '';
 
     /**
+    * e.g. install folder for package in SS3.
+    * @var string
+    */
+    protected $packageFolderNameForInstall = '';
+
+    /**
      * e.g. sunnysideup/my-cool-module
      * @var string
      */
-    protected $vendorAndPackageAsLocation = '';
+    protected $vendorAndPackageFolderNameForInstall = '';
 
     /**
      *Name space for the modules package
@@ -351,10 +357,25 @@ class ModuleUpgrader
     protected $packageNamespace = '';
 
     /**
-     * git link for the module
+     * git link for the module in ssh form
+     * e.g. git@github.com:sunnysideup/silverstripe-dynamiccache.git
      * @var string
      */
     protected $gitLink = '';
+
+    /**
+     * git link for the module in https form
+     * e.g. https://github.com/sunnysideup/silverstripe-dynamiccache/
+     * @var string
+     */
+    protected $gitLinkAsHTTPS = '';
+
+    /**
+     * git link for the module in raw https form
+     * e.g. https://raw.githubusercontent.com/sunnysideup/silverstripe-dynamiccache/
+     * @var string
+     */
+    protected $gitLinkAsRawHTTPS = '';
 
     /**
      * Should the upgrade to this module create a fork
@@ -688,21 +709,36 @@ class ModuleUpgrader
             $this->packageNamespace = $this->camelCase($this->packageName);
         }
 
-        //GitLink
-        $this->moduleDirLocation = $this->webRootDirLocation . '/' . $this->packageName;
-
-        $this->vendorAndPackageAsLocation = strtolower($this->vendorName . '/' . $this->packageName);
-
-        if (isset($moduleDetails['VendorAndPackageAsLocation'])) {
-            $this->vendorAndPackageAsLocation = $moduleDetails['VendorAndPackageAsLocation'];
-        } else {
-            $this->vendorAndPackageAsLocation = strtolower($this->vendorName . '/' . $this->packageName);
-        }
-
         if (isset($moduleDetails['GitLink'])) {
             $this->gitLink = $moduleDetails['GitLink'];
         } else {
-            $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName;
+            $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName.'.git';
+        }
+        $this->gitLinkAsHTTPS = rtrim(str_replace('git@github.com:', 'https://github.com/', $this->gitLink), '.git');
+        $this->gitLinkAsRawHTTPS = rtrim(str_replace('git@github.com:', 'https://raw.githubusercontent.com/', $this->gitLink), '.git');
+
+        //packageFolderNameForInstall
+        $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
+        $json = file_get_contents($jsonFile);
+        $array = json_decode($json, true);
+        if(isset($array['extra']['installer-name'])) {
+            $this->packageFolderNameForInstall = $array['extra']['installer-name'];
+        } else {
+            $this->packageFolderNameForInstall = $this->packageName;
+        }
+        if (isset($moduleDetails['PackageFolderNameForInstall'])) {
+            $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
+        }
+
+        //moduleDirLocation
+        $this->moduleDirLocation = $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall;
+
+
+        //ss4 location
+        if (isset($moduleDetails['VendorAndPackageFolderNameForInstall'])) {
+            $this->vendorAndPackageFolderNameForInstall = $moduleDetails['VendorAndPackageFolderNameForInstall'];
+        } else {
+            $this->vendorAndPackageFolderNameForInstall = strtolower($this->vendorName . '/' . $this->packageName);
         }
 
         //UpgradeAsFork
@@ -742,14 +778,16 @@ Log dir is not set so we continue without log! ';
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
-        $this->colourPrint('Vendor Name: '.$this->vendorName, 'light_cyan');
-        $this->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
-        $this->colourPrint('Package Name: '.$this->packageName, 'light_cyan');
-        $this->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_cyan');
-        $this->colourPrint('Module Dir: '.$this->moduleDirLocation, 'light_cyan');
-        $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
-        $this->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
-        $this->colourPrint('Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
+        $this->colourPrint('- Vendor Name: '.$this->vendorName, 'light_cyan');
+        $this->colourPrint('- Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
+        $this->colourPrint('- Package Name: '.$this->packageName, 'light_cyan');
+        $this->colourPrint('- Package Namespace: '.$this->packageNamespace, 'light_cyan');
+        $this->colourPrint('- Module Dir: '.$this->moduleDirLocation, 'light_cyan');
+        $this->colourPrint('- Git Repository Link (SSH): '.$this->gitLink, 'light_cyan');
+        $this->colourPrint('- Git Repository Link (HTTPS): '.$this->gitLinkAsHTTPS, 'light_cyan');
+        $this->colourPrint('- Git Repository Link (RAW): '.$this->gitLinkAsRawHTTPS, 'light_cyan');
+        $this->colourPrint('- Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
     }
 

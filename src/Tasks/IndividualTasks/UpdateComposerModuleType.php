@@ -25,21 +25,15 @@ class UpdateComposerModuleType extends Task
 
     public function runActualTask($params = [])
     {
-        $location = $this->mu()->getModuleDirLocation().'/composer.json';
-
-        $this->mu()->execMe(
+        $command =
+        'if(isset($data["type"]) && $data["type"] === "silverstripe-module") { '
+        .'    $data["type"] = "silverstripe-vendormodule";'
+        .'}';
+        $comment = 'Update composer module type from silverstripe-module to silverstripe-vendormodule';
+        $this->updateJSONViaCommandLine(
             $this->mu()->getModuleDirLocation(),
-            'php -r  \''
-                .'$jsonString = file_get_contents("'.$location.'"); '
-                .'$data = json_decode($jsonString, true); '
-                .'if(isset($data["type"]) && $data["type"] === "silverstripe-module") { '
-                .'    $data["type"] = "silverstripe-vendormodule";'
-                .'}'
-                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
-                .'file_put_contents("'.$location.'", $newJsonString); '
-                .'\'',
-            'Removing extra.installer-name variable from composer.json',
-            false
+            $command,
+            $comment
         );
         $this->setCommitMessage('MAJOR: '.$this->getTitle());
     }

@@ -109,14 +109,14 @@ class FixRequirements extends Task
                         //Requirements::javascript(moduledirfolder/bla);
                         //Requirements::javascript(vpl: bla);
                         $findWithPackageName = $find.strtolower($this->mu()->getPackageName());
-                        $vendorAndPackageAsLocation = $this->mu()->getVendorAndPackageAsLocation();
+                        $vendorAndPackageFolderNameForInstall = $this->mu()->getVendorAndPackageFolderNameForInstall();
                         if (!$find) {
                             user_error("no find is specified, replace is: $replace");
                         }
                         $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
 
                         foreach(['\'', '"'] as $quoteMark) {
-                            $finalReplace = $find.$quoteMark.$vendorAndPackageAsLocation.': ';
+                            $finalReplace = $find.$quoteMark.$vendorAndPackageFolderNameForInstall.': ';
                             if (!$finalReplace) {
                                 user_error("no replace is specified, find is: $find");
                             }
@@ -139,7 +139,7 @@ class FixRequirements extends Task
                     //silverstripe/admin: only
                     foreach(['cms', 'admin', 'framework', 'assets'] as $ssModule) {
                         $isStraightReplace = true;
-                        $finalFind = $vendorAndPackageAsLocation.': silverstripe/'.$ssModule.': ';
+                        $finalFind = $vendorAndPackageFolderNameForInstall.': silverstripe/'.$ssModule.': ';
                         $finalReplace = 'silverstripe/'.$ssModule.': ';
                         $this->mu()->colourPrint(
                             '    --- FIND: '.$finalFind."\n".

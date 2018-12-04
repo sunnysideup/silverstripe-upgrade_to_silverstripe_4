@@ -37,23 +37,20 @@ class UpdateComposerRequirements extends Task
 
         $newPackage = $this->getReplacementPackage();
 
-        $location = $this->mu()->getModuleDirLocation().'/composer.json';
+        $command =
+        'if(isset($data["require"]["'.$package.'"])) { '
+        .'    unset($data["require"]["'.$package.'"]);'
+        .'    $data["require"]["'.$newPackage.'"] = "'.$newVersion.'"; '
+        .'}';
 
-        $this->mu()->execMe(
+        $comment = 'replace the require for '.$package.' with '.$newPackage.':'.$newVersion;
+
+        $this->updateJSONViaCommandLine(
             $this->mu()->getModuleDirLocation(),
-            'php -r  \''
-                .'$jsonString = file_get_contents("'.$location.'"); '
-                .'$data = json_decode($jsonString, true); '
-                .'if(isset($data["require"]["'.$package.'"])) { '
-                .'    unset($data["require"]["'.$package.'"]);'
-                .'    $data["require"]["'.$newPackage.'"] = "'.$newVersion.'"; '
-                .'}'
-                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
-                .'file_put_contents("'.$location.'", $newJsonString); '
-                .'\'',
-            'replace in '.$location.' the require for '.$package.' with '.$newPackage.':'.$newVersion,
-            false
+            $command,
+            $comment
         );
+
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - updating core requirements');
     }
 

@@ -412,7 +412,7 @@ class SearchAndReplaceAPI
                     $this->writeToFile($file, $newFileContent);
 
                     //stats
-                    $this->totalFound += $foundInLine;
+                    $this->totalFound += $foundInLineCount;
                     if (!isset(self::$search_key_totals[$this->searchKey])) {
                         self::$search_key_totals[$this->searchKey] = 0;
                     }

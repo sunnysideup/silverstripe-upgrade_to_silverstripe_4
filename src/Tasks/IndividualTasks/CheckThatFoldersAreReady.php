@@ -28,7 +28,6 @@ class CheckThatFoldersAreReady extends Task
      */
     public function runActualTask($params = [])
     {
-
         $abovewebdir = $this->mu()->getAboveWebRootDirLocation();
         //check dir above web dir exists
         if(! file_exists($abovewebdir)){

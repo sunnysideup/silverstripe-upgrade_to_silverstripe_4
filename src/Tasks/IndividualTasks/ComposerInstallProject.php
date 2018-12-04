@@ -43,7 +43,7 @@ class ComposerInstallProject extends Task
 
         $this->mu()->execMe(
             $this->mu()->getModuleDirLocation(),
-            ' git branch -a ',
+            'git branch -a ',
             'check branch exists',
             false
         );
@@ -57,7 +57,7 @@ class ComposerInstallProject extends Task
 
         $this->mu()->execMe(
             $this->mu()->getModuleDirLocation(),
-            'git branch ',
+            'git branch',
             'confirm branch',
             false
         );

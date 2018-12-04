@@ -24,7 +24,7 @@ class Recompose extends Task
 
     protected $runDir = '';
 
-    protected $param1 = '';
+    protected $param1 = '--recipe-core-constraint="4.1"';
 
     protected $param2 = '';
 

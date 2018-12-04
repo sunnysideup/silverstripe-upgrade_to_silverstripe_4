@@ -21,26 +21,36 @@ class AddVendorExposeDataToComposer extends Task
             By default we expose all the client related files (images, css and javascript)';
     }
 
+    protected $toExpose = [
+        'javascript',
+        'images',
+        'img',
+        'css',
+        'fonts',
+        'js'
+    ];
+
     public function runActualTask($params = [])
     {
+        $expose = [];
+        foreach($this->toExpose as $folder) {
+            if(file_exists($this->mu()->getModuleDirLocation().'/'.$folder)) {
+                $expose[] = $folder;
+            }
+        }
+        if(count($expose)) {
+            $command =
+            'if(!isset($data["extra"]["expose"])) { '
+            .'    $data["extra"]["expose"] = ["'.implode('", "', $expose).'"]; '
+            .'}';
+            $this->updateJSONViaCommandLine(
+                $this->mu()->getModuleDirLocation(),
+                $command,
+                'exposing javascript, images and css'
+            );
 
-        $location = $this->mu()->getModuleDirLocation().'/composer.json';
-
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'php -r  \''
-                .'$jsonString = file_get_contents("'.$location.'"); '
-                .'$data = json_decode($jsonString, true); '
-                .'if(!isset($data["extra"]["expose"])) { '
-                .'    $data["extra"]["expose"] = ["javascript","images","css"]; '
-                .'}'
-                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
-                .'file_put_contents("'.$location.'", $newJsonString); '
-                .'\'',
-            'exposing javascript, images and css in '.$location,
-            false
-        );
-        $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - updating core requirements');
+            $this->setCommitMessage('MAJOR: exposing folders'.implode(',', $expose));
+        }
     }
 
 }

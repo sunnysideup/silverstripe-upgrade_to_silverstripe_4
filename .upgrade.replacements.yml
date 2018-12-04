@@ -113,12 +113,9 @@ SS4:
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
             "THIRDPARTY_DIR.'/jquery/jquery.js'":
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
-        'yml':
-            Director:
-                R: "SilverStripe\\Control\\Director"
-# example of a path specific one
-    'code/View/Requirements_Backend_For_Webpack.php':
-        php:
             'public function includeInHTML($templateFile, $content)':
                 R: "public function includeInHTML($content)"
                 I: true
+        'yml':
+            Director:
+                R: "SilverStripe\\Control\\Director"

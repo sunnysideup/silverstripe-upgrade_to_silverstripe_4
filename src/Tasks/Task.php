@@ -220,7 +220,12 @@ abstract class Task
         $this->mu()->execMe(
             $this->mu()->getModuleDirLocation(),
             // 'if ! git diff --quiet; then git commit . -m "'.addslashes($message).'"; fi;',
-            'git commit . -m "'.addslashes($message).'"',
+            '
+            if [ -z "$(git status --porcelain)" ]; then
+                echo \'OKI DOKI - Nothing to commit\';
+            else
+                git commit . -m "'.addslashes($message).'"
+            fi',
             'commit changes: '.$message,
             false
         );

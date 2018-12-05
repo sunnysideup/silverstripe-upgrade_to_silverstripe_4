@@ -74,6 +74,9 @@ SS4:
             'Session::get_all()':
                 R: "Controller::curr()->getRequest()->getSession()->getAll()"
                 C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
+            'Session::clear_all()':
+                R: "Controller::curr()->getRequest()->getSession()->clearAll()"
+                C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
             'Session::':
                 R: "Controller::curr()->getRequest()->getSession()->"
                 C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
@@ -84,18 +87,6 @@ SS4:
             '->setError':
                 R: "->setCustomValidationMessage"
                 C: "This needs further investigation, see: https://github.com/silverstripe/silverstripe-framework/issues/8225"
-            "Cache::factory(":
-               R: "Injector::inst()->get("
-               C: "ADD TO TOP OF CLASS: use Psr\\SimpleCache\\CacheInterface; add to key: CacheInterface::class.'.'"
-            "$cache->load(":
-                R: "$cache->get("
-                C: "Check carefully and add some stuff to yml: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
-            "$cache->save(":
-                R: "$cache->set("
-                C: "Check carefully KEY AND VALUE NEED TO BE SWAPPED: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
-            "$cache->remove(":
-                R: "$cache->delete("
-                C: "Check carefully: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache"
             "$result->error(":
                 R: "$result->addError("
             "Object::use_custom_class":
@@ -118,6 +109,45 @@ SS4:
             'public function includeInHTML($templateFile, $content)':
                 R: "public function includeInHTML($content)"
                 I: true
+            'Cache::factory(':
+                R: 'SilverStripe\Core\Injector\Injector:::inst()->get(Psr\SimpleCache\CacheInterface::class . '
+                C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->load(':
+                R: '$cache->has('
+                C: 'See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->set(':
+                R: '$cache->set('
+                C: 'Cache key and value need to be swapped. Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->save(':
+                R: '$cache->set('
+                C: 'Cache key and value need to be swapped. Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->load(':
+                R: '$cache->get('
+                C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->remove(':
+                R: '$cache->delete('
+                C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->clean(':
+                R: '$cache->clear('
+                C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$this->owner->class]':
+                R: 'get_class($this->owner)]'
+            '$this->owner->class)':
+                R: 'get_class($this->owner))'
+            '$this->owner->class;':
+                R: 'get_class($this->owner);'
+            '$this->owner->class':
+                R: '$this->owner->class'
+                C: 'See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#object-replace'
+            '$this->class]':
+                R: 'get_class($this)]'
+            '$this->class)':
+                R: 'get_class($this))'
+            '$this->class;':
+                R: 'get_class($this);'
+            'request_contains_session_id(':
+                R: 'requestContainsSessionId('
+
         'yml':
             Director:
                 R: "SilverStripe\\Control\\Director"

@@ -108,10 +108,9 @@ class ModuleUpgrader
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
         'AddUpgradeBranch' => [],
-        // 'UpdateComposerRequirements-1' => [
-        //     'package' => 'silverstripe/framework',
-        //     'newVersion' => '~4.0'
-        // ],
+        'RemoveComposerRequirements' => [
+            'package' => 'silverstripe/framework'
+        ],
         'RecomposeHomeBrew' => [],
         // 'UpdateComposerRequirements-2' => [
         //     'package' => 'silverstripe/cms',

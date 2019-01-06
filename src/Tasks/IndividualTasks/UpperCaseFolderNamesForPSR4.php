@@ -40,7 +40,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
                     if($name === $newName) {
                         $this->mu()->colourPrint('No need to move '.str_replace($codeDir, '', $name).' as it is already in CamelCase', 'dark_gray');
                     } else {
-                        $this->mu()->colourPrint('New name for directory: ' . $newName , 'red');
+                        $this->mu()->colourPrint('New name for directory: ' . $newName , 'green');
                         $this->mu()->execMe(
                             $this->mu()->getWebRootDirLocation(),
                             'mv '.$name.' '.$newName,

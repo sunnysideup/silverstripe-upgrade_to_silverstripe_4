@@ -46,7 +46,8 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                     git checkout '.$branchName.'
                     git pull origin '.$branchName.'
                     git checkout master
-                    git merge '.$branchName.'
+                    git merge --squash '.$branchName.'
+                    git commit . -m "MAJOR: upgrade to Silverstripe 4"
                     git push origin master
                     git branch -D '.$branchName.'
                     git push origin --delete '.$branchName.'

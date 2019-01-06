@@ -806,6 +806,8 @@ Log dir is not set so we continue without log! ';
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Run Irreversibly: '.($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
     }

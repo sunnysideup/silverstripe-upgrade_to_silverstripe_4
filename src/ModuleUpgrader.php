@@ -134,7 +134,8 @@ class ModuleUpgrader
         'AddVendorExposeDataToComposer' => [],
         // 'WebRootUpdate' => [],
         'FinalDevBuild' => [],
-        'InspectAPIChanges-2' => []
+        'InspectAPIChanges-2' => [],
+        'FinaliseUpgradeWithMergeIntoMaster' => []
     ];
 
     /**
@@ -206,6 +207,13 @@ class ModuleUpgrader
      * @var string
      */
     protected $onlyRun = '';
+
+
+    /**
+     * finish the run with a merge into master.
+     * @var boolean
+     */
+    protected $runIrreversibly = false;
 
     /**
      * Is this the last TASK we are running?

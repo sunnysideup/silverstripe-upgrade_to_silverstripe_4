@@ -42,7 +42,7 @@ class CreateClientFolder extends Task
             'img',
             'css'
         ];
-        foreach($foldersToMoveName as $folderToMoveName) {
+        foreach ($foldersToMoveName as $folderToMoveName) {
             $folderToMove = $this->mu()->getModuleDirLocation().'/'.$folderToMoveName.'/ ';
             $this->mu()->execMe(
                 $this->mu()->getModuleDirLocation(),

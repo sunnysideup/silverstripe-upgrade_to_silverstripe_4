@@ -33,12 +33,12 @@ class AddVendorExposeDataToComposer extends Task
     public function runActualTask($params = [])
     {
         $expose = [];
-        foreach($this->toExpose as $folder) {
-            if(file_exists($this->mu()->getModuleDirLocation().'/'.$folder)) {
+        foreach ($this->toExpose as $folder) {
+            if (file_exists($this->mu()->getModuleDirLocation().'/'.$folder)) {
                 $expose[] = $folder;
             }
         }
-        if(count($expose)) {
+        if (count($expose)) {
             $command =
             'if(!isset($data["extra"]["expose"])) { '
             .'    $data["extra"]["expose"] = ["'.implode('", "', $expose).'"]; '
@@ -52,5 +52,4 @@ class AddVendorExposeDataToComposer extends Task
             $this->setCommitMessage('MAJOR: exposing folders'.implode(',', $expose));
         }
     }
-
 }

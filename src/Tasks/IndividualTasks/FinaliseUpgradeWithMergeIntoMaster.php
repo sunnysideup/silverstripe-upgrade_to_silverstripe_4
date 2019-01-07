@@ -11,7 +11,7 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
 {
     public function getTitle()
     {
-        if($this->mu()->getRunIrreversibly()) {
+        if ($this->mu()->getRunIrreversibly()) {
             return 'Finalise Upgrade with merge into Master.';
         } else {
             return 'Finalise Upgrade with merge into Master (TURNED OFF)';
@@ -20,7 +20,7 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
 
     public function getDescription()
     {
-        if($this->mu()->getRunIrreversibly()) {
+        if ($this->mu()->getRunIrreversibly()) {
             return '
                 CAREFUL - THIS STEP CAN NOT BE UNDONE. IT IS NOT RECOMMENDED!
                 You should only run this upgrade task if you are 100% sure.
@@ -38,7 +38,7 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
     public function runActualTask($params = [])
     {
         $branchName = $this->mu()->getNameOfTempBranch();
-        if($this->mu()->getRunIrreversibly()) {
+        if ($this->mu()->getRunIrreversibly()) {
             $this->mu()->execMe(
                 $this->mu()->getModuleDirLocation(),
                 '

@@ -30,27 +30,24 @@ class CheckThatFoldersAreReady extends Task
     {
         $abovewebdir = $this->mu()->getAboveWebRootDirLocation();
         //check dir above web dir exists
-        if(! file_exists($abovewebdir)){
+        if (! file_exists($abovewebdir)) {
             $this->mu()->colourPrint('Above web dir does not exists: ' . $abovewebdir, 'red');
             return 'No point in running tool with directory not ready';
         } else {
             //Directory exists, now check if writable.
-            if(! is_writable($abovewebdir)) {
+            if (! is_writable($abovewebdir)) {
                 //Not writable send warning
                 $this->mu()->colourPrint('Above web dir is not writable: ' . $abovewebdir, 'red');
                 return 'No point in running tool with directory not ready';
-            } else{
+            } else {
                 //It has been found and is writable; Success!
                 $this->mu()->colourPrint('Found and checked above web dir ✔', 'green');
             }
-
         }
-
     }
 
     public function hasCommitAndPush()
     {
         return false;
     }
-
 }

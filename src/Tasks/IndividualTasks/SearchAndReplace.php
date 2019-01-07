@@ -109,7 +109,7 @@ class SearchAndReplace extends Task
 
                         $textSearchMachine->setSearchKey($find, $caseSensitive, $replaceKey);
                         $textSearchMachine->setReplacementKey($fullReplacement);
-                        if($comment) {
+                        if ($comment) {
                             $textSearchMachine->setComment($comment);
                         }
                         $textSearchMachine->setReplacementHeader($this->replacementHeader);

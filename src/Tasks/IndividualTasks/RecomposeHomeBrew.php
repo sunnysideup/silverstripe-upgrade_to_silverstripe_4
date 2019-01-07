@@ -33,7 +33,7 @@ class RecomposeHomeBrew extends Task
         'unset($data["require"]["silverstripe/cms"]);'.
         'unset($data["require"]["silverstripe/recipe-cms"]);'.
         'unset($data["require"]["composer/installers"]);';
-        foreach($this->requireLinesToAdd as $key => $value) {
+        foreach ($this->requireLinesToAdd as $key => $value) {
             $command .=
         '$data["require"]["'.$key.'"] = "'.$value.'"; ';
         };

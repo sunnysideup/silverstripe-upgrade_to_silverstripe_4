@@ -37,6 +37,4 @@ class UpdateComposerModuleType extends Task
         );
         $this->setCommitMessage('MAJOR: '.$this->getTitle());
     }
-
-
 }

@@ -34,7 +34,7 @@ class ModuleUpgrader
     public function __construct()
     {
         $this->startPHP2CommandLine();
-        if(!$this->locationOfUpgradeModule) {
+        if (!$this->locationOfUpgradeModule) {
             $this->locationOfUpgradeModule = dirname(__DIR__) .'/vendor/silverstripe/upgrader/bin/upgrade-code';
         }
     }
@@ -74,7 +74,6 @@ class ModuleUpgrader
                     } else {
                         return $this->$var;
                     }
-
                 } elseif ($getOrSet === 'set') {
                     $this->$var = $args[0];
 
@@ -510,7 +509,7 @@ class ModuleUpgrader
     public function findCodeDir()
     {
         $codeDir = '';
-        if($this->getRunImmediately()) {
+        if ($this->getRunImmediately()) {
             if (file_exists($this->moduleDirLocation . '/code')) {
                 $codeDir = $this->moduleDirLocation . '/code';
             } elseif (file_exists($this->moduleDirLocation . '/src')) {
@@ -618,7 +617,7 @@ class ModuleUpgrader
     public function run()
     {
         $this->startPHP2CommandLine();
-        for($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             $this->colourPrint(
                 '.',
                 'light_red',
@@ -653,7 +652,7 @@ class ModuleUpgrader
                     $this->colourPrint('# --------------------', 'yellow');
                     $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
                     $this->colourPrint('# --------------------', 'yellow');
-                    if($runItNow) {
+                    if ($runItNow) {
                         $obj->run();
                     } else {
                         $this->colourPrint('# skipped', 'light_green');
@@ -735,7 +734,7 @@ class ModuleUpgrader
         $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
         $json = file_get_contents($jsonFile);
         $array = json_decode($json, true);
-        if(isset($array['extra']['installer-name'])) {
+        if (isset($array['extra']['installer-name'])) {
             $this->packageFolderNameForInstall = $array['extra']['installer-name'];
         } else {
             $this->packageFolderNameForInstall = $this->packageName;
@@ -762,12 +761,12 @@ class ModuleUpgrader
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {
             //check that log dir is exists
-            if(! file_exists($this->logFolderDirLocation)){
+            if (! file_exists($this->logFolderDirLocation)) {
                 die('
 Log dir not exists: ' . $this->logFolderDirLocation);
             } else {
                 //Directory exists, now check if writable.
-                if(! is_writable($this->logFolderDirLocation)){
+                if (! is_writable($this->logFolderDirLocation)) {
                     die('
 Log dir: ' . $this->logFolderDirLocation. ' is not writable');
                     return 'No point in running tool with directory not ready';
@@ -783,8 +782,6 @@ Log dir: ' . $this->logFolderDirLocation. ' is not writable');
             echo '
 
 Log dir is not set so we continue without log! ';
-
-
         }
 
 
@@ -821,7 +818,7 @@ Log dir is not set so we continue without log! ';
      */
     protected function shouldWeRunIt($name) : bool
     {
-        if($this->onlyRun) {
+        if ($this->onlyRun) {
             return $name === $this->onlyRun ? true : false;
         }
         if ($this->isLastMethod) {
@@ -844,6 +841,4 @@ Log dir is not set so we continue without log! ';
 
         return $runMe;
     }
-
-
 }

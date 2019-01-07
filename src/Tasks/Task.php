@@ -83,7 +83,7 @@ abstract class Task
 
     public function mu()
     {
-        if(! $this->mu) {
+        if (! $this->mu) {
             $this->mu = ModuleUpgrader::create();
         }
 
@@ -126,7 +126,7 @@ abstract class Task
     {
         $this->starter($this->params);
         $error = $this->runActualTask($this->params);
-        if(is_string($error) && strlen($error) > 0 ) {
+        if (is_string($error) && strlen($error) > 0) {
             die('FATAL ERROR: '.$error);
         }
         $this->ender($this->params);
@@ -262,7 +262,6 @@ abstract class Task
 
     public function isFour()
     {
-
     }
 
     public function getJSON($dir)
@@ -295,5 +294,4 @@ abstract class Task
             false
         );
     }
-
 }

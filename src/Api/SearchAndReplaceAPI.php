@@ -283,12 +283,12 @@ class SearchAndReplaceAPI
     public function getFullComment()
     {
         $string = '';
-        if($this->comment) {
+        if ($this->comment) {
             $string .=
             PHP_EOL.
                 '/**'.PHP_EOL.
                 '  * '.$this->startMarker.PHP_EOL;
-            if($this->replacementHeader) {
+            if ($this->replacementHeader) {
                 $string .= '  * WHY: '.$this->replacementHeader.PHP_EOL;
             }
             $string .=
@@ -301,7 +301,6 @@ class SearchAndReplaceAPI
         }
 
         return $string;
-
     }
 
 
@@ -445,43 +444,43 @@ class SearchAndReplaceAPI
             }
             $foundCount = 0;
             $insidePreviousReplaceComment = false;
-            foreach($oldFileContentArray as $key => $oldLineContent)  {
+            foreach ($oldFileContentArray as $key => $oldLineContent) {
                 $newLineContent = $oldLineContent;
 
                 //check if it is actually already replaced ...
-                if(strpos($oldLineContent, $this->startMarker) !== FALSE) {
+                if (strpos($oldLineContent, $this->startMarker) !== false) {
                     $insidePreviousReplaceComment = true;
                 }
-                if(strpos($oldLineContent, $this->endMarker) !== FALSE) {
+                if (strpos($oldLineContent, $this->endMarker) !== false) {
                     $insidePreviousReplaceComment = false;
                 }
-                if(! $insidePreviousReplaceComment) {
+                if (! $insidePreviousReplaceComment) {
                     $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
-                    if($foundInLineCount) {
-                        if($this->caseSensitive) {
-                            if(strpos($oldLineContent, $this->searchKey) === FALSE) {
+                    if ($foundInLineCount) {
+                        if ($this->caseSensitive) {
+                            if (strpos($oldLineContent, $this->searchKey) === false) {
                                 user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
                             }
                         } else {
-                            if(stripos($oldLineContent, $this->searchKey) === FALSE) {
+                            if (stripos($oldLineContent, $this->searchKey) === false) {
                                 user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
                             }
                         }
                         $foundCount += $foundInLineCount;
                         if ($this->isReplacingEnabled) {
                             $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
-                            if($fullComment = $this->getFullComment()) {
+                            if ($fullComment = $this->getFullComment()) {
                                 $newFileContentArray[] = $fullComment;
                             }
                         }
                     } else {
                         $hasError = false;
-                        if($this->caseSensitive) {
-                            if(strpos($oldLineContent, $this->searchKey) !== FALSE) {
+                        if ($this->caseSensitive) {
+                            if (strpos($oldLineContent, $this->searchKey) !== false) {
                                 user_error('Should have found: '.$this->searchKey);
                             }
                         } else {
-                            if(stripos($oldLineContent, $this->searchKey) !== FALSE) {
+                            if (stripos($oldLineContent, $this->searchKey) !== false) {
                                 user_error('Should have found: '.$this->searchKey);
                             }
                         }
@@ -489,7 +488,7 @@ class SearchAndReplaceAPI
                 }
                 $newFileContentArray[] = $newLineContent;
             }
-            if($foundCount) {
+            if ($foundCount) {
                 $oldFileContent = implode($oldFileContentArray);
                 $newFileContent = implode($newFileContentArray);
                 if ($newFileContent !== $oldFileContent) {

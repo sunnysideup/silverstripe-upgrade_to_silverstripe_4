@@ -37,10 +37,10 @@ class UpperCaseFolderNamesForPSR4 extends Task
                 if ($fio->isDir()) {
                     //If its a directory then
                     $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->mu()->camelCase($fio->getFilename());
-                    if($name === $newName) {
+                    if ($name === $newName) {
                         $this->mu()->colourPrint('No need to move '.str_replace($codeDir, '', $name).' as it is already in CamelCase', 'dark_gray');
                     } else {
-                        $this->mu()->colourPrint('New name for directory: ' . $newName , 'green');
+                        $this->mu()->colourPrint('New name for directory: ' . $newName, 'green');
                         $this->mu()->execMe(
                             $this->mu()->getWebRootDirLocation(),
                             'mv '.$name.' '.$newName,

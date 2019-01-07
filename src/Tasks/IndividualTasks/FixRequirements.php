@@ -115,7 +115,7 @@ class FixRequirements extends Task
                         }
                         $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
 
-                        foreach(['\'', '"'] as $quoteMark) {
+                        foreach (['\'', '"'] as $quoteMark) {
                             $finalReplace = $find.$quoteMark.$vendorAndPackageFolderNameForInstall.': ';
                             if (!$finalReplace) {
                                 user_error("no replace is specified, find is: $find");
@@ -137,7 +137,7 @@ class FixRequirements extends Task
                     //vendor/packagename: silverstripe/admin
                     //to
                     //silverstripe/admin: only
-                    foreach(['cms', 'admin', 'framework', 'assets'] as $ssModule) {
+                    foreach (['cms', 'admin', 'framework', 'assets'] as $ssModule) {
                         $isStraightReplace = true;
                         $finalFind = $vendorAndPackageFolderNameForInstall.': silverstripe/'.$ssModule.': ';
                         $finalReplace = 'silverstripe/'.$ssModule.': ';
@@ -162,6 +162,4 @@ class FixRequirements extends Task
             }
         }
     }
-
-
 }

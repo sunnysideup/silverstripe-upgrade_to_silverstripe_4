@@ -44,13 +44,13 @@ class AddPSR4Autoloading extends Task
                         '',
                         $fullLocation
                     );
-                    if(! in_array($shortLocation, $listOfAutoLoads)) {
-                        $nameSpace = rtrim($nameSpace ,'.php');
-                        $nameSpace = rtrim($nameSpace ,'/');
-                        $nameSpace = ltrim($nameSpace ,'/');
-                        $nameSpace = ltrim($nameSpace ,'code/');
-                        $nameSpace = ltrim($nameSpace ,'src/');
-                        $nameSpace = ltrim($nameSpace ,'/');
+                    if (! in_array($shortLocation, $listOfAutoLoads)) {
+                        $nameSpace = rtrim($nameSpace, '.php');
+                        $nameSpace = rtrim($nameSpace, '/');
+                        $nameSpace = ltrim($nameSpace, '/');
+                        $nameSpace = ltrim($nameSpace, 'code/');
+                        $nameSpace = ltrim($nameSpace, 'src/');
+                        $nameSpace = ltrim($nameSpace, '/');
                         $nameSpace = str_replace('/', "\\\\", $nameSpace);
                         $nameSpace .= "\\\\";
                         $this->mu()->colourPrint('Adding to Autoload PSR-4: ' . $shortLocation, 'green');
@@ -59,7 +59,7 @@ class AddPSR4Autoloading extends Task
                 }
             }
         }
-        if(count($listOfAutoLoads)) {
+        if (count($listOfAutoLoads)) {
             $command =
             '
 if(! isset($data["autoload"])) {
@@ -69,7 +69,7 @@ if(! isset($data["autoload"]["psr-4"])) {
     $data["autoload"]["psr-4"] = [];
 }
             ';
-            foreach($listOfAutoLoads as $key => $value) {
+            foreach ($listOfAutoLoads as $key => $value) {
                 $command .= '
 $data["autoload"]["psr-4"]["'.$key.'"] = "'.$value.'";';
             }
@@ -84,12 +84,10 @@ Adding autoload psr-4 details:
             );
         }
         $this->setCommitMessage('MAJOR: remove composer requirements to SS4 - removing requirements for: '.$this->package);
-
     }
 
     protected function hasCommitAndPush()
     {
         return true;
     }
-
 }

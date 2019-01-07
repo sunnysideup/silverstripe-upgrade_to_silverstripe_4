@@ -37,5 +37,4 @@ class ApplyPSR2 extends Task
     {
         return true;
     }
-    
 }

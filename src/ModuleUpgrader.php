@@ -126,6 +126,7 @@ class ModuleUpgrader
         'FixRequirements' => [],
         'UpperCaseFolderNamesForPSR4' => [],
         'AddNamespace' => [],
+        'AddPSR4Autoloading' => [],
         'Upgrade' => [],
         'InspectAPIChanges-1' => [],
         'Reorganise' => [],

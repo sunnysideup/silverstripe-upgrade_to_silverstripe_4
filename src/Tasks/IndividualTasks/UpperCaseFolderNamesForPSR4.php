@@ -53,4 +53,9 @@ class UpperCaseFolderNamesForPSR4 extends Task
             }
         }
     }
+
+    protected function hasCommitAndPush()
+    {
+        return true;
+    }
 }

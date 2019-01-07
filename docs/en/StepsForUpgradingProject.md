@@ -9,3 +9,5 @@
 5. FieldHolder() -> FieldHolder($properties = [])
 
 6. search for use statements without \ - this indicates issues
+
+7. $icon = 'app/images -> $icon = 'app: images

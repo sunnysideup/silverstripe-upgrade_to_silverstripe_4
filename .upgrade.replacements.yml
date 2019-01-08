@@ -18,8 +18,18 @@ SS4:
             'Mysite':
                 R: "App"
         php:
+            'canCreate($member = null)':
+                R: 'canCreate($member = null, $context = [])'
+            'canDelete($member = null)':
+                R: 'canDelete($member = null, $context = [])'
+            'canEdit($member = null)':
+                R: 'canEdit($member = null, $context = [])'
+            'canView($member = null)':
+                R: 'canView($member = null, $context = [])'
             ' implements flushable':
                 R: ' implements Flushable'
+            'Textfield':
+                R: 'TextField'
             'HtmlEditorField':
                 R: 'HTMLEditorField'
             '$this->process_combined_files();':

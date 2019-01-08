@@ -64,11 +64,11 @@ SS4:
                 C: "Please review update and fix as required"
                 I: true
             'SSViewer::get_theme_folder()':
-                R: "SilverStripe\\View\\ThemeResourceLoader::inst()->findThemedResource('UPGRADE-FIX-REQUIRED/styles.css', SilverStripe\\View\\SSViewer::get_themes())"
-                C: "Please review update and fix as required"
+                R: "ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')"
+                C: "Please review update and fix as required. Note: $themesFilePath = ThemeResourceLoader::inst()->findThemedResource('css/styles.css');"
                 I: true
             'THEMES_DIR':
-                R: "ThemeResourceLoader::inst()->getPath('UPGRADE-FIX-REQUIRED.foo.bar')"
+                R: "ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')"
                 C: "Please review update and fix as required"
                 I: true
             'Session::get_all()':

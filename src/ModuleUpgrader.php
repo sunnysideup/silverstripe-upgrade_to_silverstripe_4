@@ -103,8 +103,9 @@ class ModuleUpgrader
      */
     protected $listOfTasks = [
         'CheckThatFoldersAreReady' => [],
-        'FindFilesWithMoreThanOneClass' => [],
         'ResetWebRootDir-1' => [],
+        'CheckoutDevMaster' => [],
+        'FindFilesWithMoreThanOneClass' => [],
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
         'AddUpgradeBranch' => [],
@@ -653,7 +654,7 @@ class ModuleUpgrader
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     $this->colourPrint('# --------------------', 'yellow', 3);
-                    $this->colourPrint('# '.$obj->getTitle(), 'yellow');
+                    $this->colourPrint('# '.$obj->getTitle(). ' ('.$shortClassCode.')', 'yellow');
                     $this->colourPrint('# --------------------', 'yellow');
                     $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
                     $this->colourPrint('# --------------------', 'yellow');

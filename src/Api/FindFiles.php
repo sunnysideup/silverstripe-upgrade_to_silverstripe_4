@@ -12,6 +12,8 @@ class FindFiles
 
     private $searchPath                = '';
 
+    private $relevantFolders           = [];
+
     private $defaultIgnoreFolderArray  = [
         ".svn",
         ".git"
@@ -158,13 +160,25 @@ class FindFiles
                         $this->flatFileArray = [$this->searchPath];
                     } else {
                         $multiDimensionalArray = $this->getFileArray($this->basePath);
-                        //flatten it!
-                        $this->flatFileArray = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($multiDimensionalArray));
+                        foreach($multiDimensionalArray as $folder => $arrayOfFiles) {
+                            if(count($arrayOfFiles)) {
+                                $this->relevantFolders[$folder] = $folder;
+                            }
+                            foreach($arrayOfFiles as $file) {
+                                $myArray[$file] = $file;
+                            }
+                        }
+                        // //flatten it!
+                        // $this->flatFileArray = new \RecursiveIteratorIterator(
+                        //     new \RecursiveArrayIterator($multiDimensionalArray)
+                        // );
+                        // print_r($this->flatFileArray);
                     }
                 } else {
                     return 'SKIPPED: can not find: '.$this->searchPath."\n";
                 }
             }
+            $this->flatFileArray = array_values($myArray);
         }
 
         return $this->flatFileArray;

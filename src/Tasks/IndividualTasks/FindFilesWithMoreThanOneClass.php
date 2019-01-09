@@ -48,7 +48,7 @@ class FindFilesWithMoreThanOneClass extends Task
                         }
                         if(count($classNames) > 1) {
                             $this->mu()->colourPrint('Found more than one class in '.$path.': '.implode(',', $classNames).'. Please fix before we proceed!', 'red');
-                            die('------------------- EXIT WITH ERROR -------------------------');
+                            die("\n\n".'------------------- EXIT WITH ERROR -------------------------');
                         }
                     }
                 } else {
@@ -63,6 +63,6 @@ class FindFilesWithMoreThanOneClass extends Task
 
     public function hasCommitAndPush()
     {
-        return true;
+        return false;
     }
 }

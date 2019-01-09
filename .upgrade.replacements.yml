@@ -159,5 +159,27 @@ SS4:
                 R: 'requestContainsSessionId('
 
         'yml':
-            Director:
+            '_Controller'
+                R: "Controller"
+            'Director:'
                 R: "SilverStripe\\Control\\Director"
+            'SiteTree:'
+                R: "SilverStripe\\CMS\\Model\\SiteTree:"
+            'AssetAdmin:'
+                R: "SilverStripe\\AssetAdmin\\Controller\\AssetAdmin:"
+            'LeftAndMain:'
+                R: "SilverStripe\\Admin\\LeftAndMain:"
+            'DateField:'
+                R: "SilverStripe\\Forms\\DateField:"
+            'ContentController:'
+                R: "SilverStripe\\CMS\\Controllers\\ContentController:"
+            'Member:'
+                R: "SilverStripe\\Security\\Member:"
+            'SiteConfig:'
+                R: "SilverStripe\\SiteConfig\\SiteConfig:"
+        'css':
+            'url(/themes)'
+                R: 'url(/resources/themes)'
+        'scss':
+            'url(/themes)'
+                R: 'url(/resources/themes)'

@@ -134,6 +134,7 @@ class ModuleUpgrader
         'AddVendorExposeDataToComposer' => [],
         // 'WebRootUpdate' => [],
         'FinalDevBuild' => [],
+        'RunImageTask' => [],
         'InspectAPIChanges-2' => [],
         'FinaliseUpgradeWithMergeIntoMaster' => []
     ];

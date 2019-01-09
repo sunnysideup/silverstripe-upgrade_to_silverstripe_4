@@ -327,8 +327,8 @@ class SearchAndReplaceAPI
             //do nothing
         } else {
             $flatArray = $this->fileFinder->getFlatFileArray();
-            if(!is_array($flatArray)) {
-                $this->addToOutput("\n".'SKIPPED: can not find: '.$this->searchPath."\n");
+            if($flatArray && ! is_array($flatArray)) {
+                $this->addToOutput("\n".$flatArray."\n");
             } else {
                 $this->addToOutput("\n------------------------------------\nFiles Searched\n------------------------------------\n");
                 foreach ($flatArray as $file) {

@@ -63,27 +63,27 @@ class ComposerInstallProject extends Task
         );
 
         //
-            // $this->mu()->execMe(
-            //     $this->mu()->getWebRootDirLocation(),
-            //     'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-'.$this->mu()->getNameOfTempBranch().' --prefer-source', //--prefer-source --keep-vcs
-            //     'add '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-'.$this->mu()->getNameOfTempBranch().' to install',
-            //     false
-            // );
-            //
-            // $this->mu()->getModuleDirLocation() = $this->checkIfPathExistsAndCleanItUp($this->mu()->getModuleDirLocation());
-            // $this->mu()->execMe(
-            //     $this->mu()->getWebRootDirLocation(),
-            //     'rm '.$this->mu()->getModuleDirLocation().' -rf',
-            //     'we will remove the item again: '.$this->mu()->getModuleDirLocation().' so that we can reinstall with vcs data.',
-            //     false
-            // );
-            //
-            // $this->mu()->execMe(
-            //     $this->mu()->getWebRootDirLocation(),
-            //     'composer update --prefer-source',
-            //     'lets retrieve the module again to make sure we have the vcs data with it!',
-            //     false
-            // );
+        // $this->mu()->execMe(
+        //     $this->mu()->getWebRootDirLocation(),
+        //     'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-'.$this->mu()->getNameOfTempBranch().' --prefer-source', //--prefer-source --keep-vcs
+        //     'add '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-'.$this->mu()->getNameOfTempBranch().' to install',
+        //     false
+        // );
+        //
+        // $this->mu()->getModuleDirLocation() = $this->checkIfPathExistsAndCleanItUp($this->mu()->getModuleDirLocation());
+        // $this->mu()->execMe(
+        //     $this->mu()->getWebRootDirLocation(),
+        //     'rm '.$this->mu()->getModuleDirLocation().' -rf',
+        //     'we will remove the item again: '.$this->mu()->getModuleDirLocation().' so that we can reinstall with vcs data.',
+        //     false
+        // );
+        //
+        // $this->mu()->execMe(
+        //     $this->mu()->getWebRootDirLocation(),
+        //     'composer update --prefer-source',
+        //     'lets retrieve the module again to make sure we have the vcs data with it!',
+        //     false
+        // );
     }
 
     protected function hasCommitAndPush()

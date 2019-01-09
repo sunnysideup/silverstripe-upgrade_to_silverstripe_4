@@ -34,13 +34,6 @@ class AddLegacyBranch extends Task
     public function runActualTask($params = [])
     {
         $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source',
-            'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
-            false
-        );
-
-        $this->mu()->execMe(
             $this->mu()->getModuleDirLocation(),
             '
             if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->nameOfLegacyBranch . "'" . '); then

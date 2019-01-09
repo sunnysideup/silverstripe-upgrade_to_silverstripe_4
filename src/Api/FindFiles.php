@@ -154,6 +154,7 @@ class FindFiles
     public function getFlatFileArray()
     {
         if (count($this->flatFileArray) === 0) {
+            $myArray = [];
             if ($this->searchPath) {
                 if (file_exists($this->searchPath)) {
                     if (is_file($this->searchPath)) {

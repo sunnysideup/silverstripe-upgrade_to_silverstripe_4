@@ -104,10 +104,13 @@ class ModuleUpgrader
     protected $listOfTasks = [
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
-        'CheckoutDevMaster' => [],
+
+        'CheckoutDevMaster-1' => [],
         'FindFilesWithMoreThanOneClass' => [],
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
+
+        'CheckoutDevMaster-2' => [],
         'AddUpgradeBranch' => [],
         'RemoveComposerRequirements' => [
             'package' => 'silverstripe/framework'
@@ -120,6 +123,7 @@ class ModuleUpgrader
         // ],
         'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
+
         'ComposerInstallProject' => [],
         'ChangeEnvironment' => [],
         'MoveCodeToSRC' => [],
@@ -238,14 +242,6 @@ class ModuleUpgrader
         return array_search($s, $this->listOfTasks);
     }
 
-    /**
-     * Set the command line exec to run immediately rather than outputting the bash script
-     * @return bool
-     */
-    public function getRunImmediately()
-    {
-        return $this->commandLineExec->getRunImmediately();
-    }
 
     /**
      * @param bool $b
@@ -515,15 +511,13 @@ class ModuleUpgrader
     public function findCodeDir()
     {
         $codeDir = '';
-        if ($this->getRunImmediately()) {
-            if (file_exists($this->moduleDirLocation . '/code')) {
-                $codeDir = $this->moduleDirLocation . '/code';
-            } elseif (file_exists($this->moduleDirLocation . '/src')) {
-                $codeDir = $this->moduleDirLocation . '/src';
-            } else {
-                user_error('Can not find code dir for '.$this->moduleDirLocation, E_USER_NOTICE);
-                return;
-            }
+        if (file_exists($this->moduleDirLocation . '/code')) {
+            $codeDir = $this->moduleDirLocation . '/code';
+        } elseif (file_exists($this->moduleDirLocation . '/src')) {
+            $codeDir = $this->moduleDirLocation . '/src';
+        } else {
+            user_error('Can not find code dir for '.$this->moduleDirLocation, E_USER_NOTICE);
+            return;
         }
 
         return $codeDir;

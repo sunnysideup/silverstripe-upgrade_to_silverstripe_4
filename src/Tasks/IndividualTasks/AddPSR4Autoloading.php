@@ -28,7 +28,7 @@ class AddPSR4Autoloading extends Task
     {
         $listOfAutoLoads = [];
         $codeDir = $this->mu()->findCodeDir();
-        if ($this->mu()->getRunImmediately() && file_exists($codeDir)) {
+        if (file_exists($codeDir)) {
             $di = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($codeDir, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST
@@ -38,14 +38,17 @@ class AddPSR4Autoloading extends Task
             foreach ($di as $name => $fio) {
                 if ($fio->isDir()) {
                     //If its a directory then
-                    $fullLocation = $fio->getPath();
+                    $fullLocation = $fio->getPathname();
                     $shortLocation = str_replace(
                         $this->mu()->getModuleDirLocation(),
                         '',
                         $fullLocation
                     );
+                    $this->mu()->colourPrint('found dir: '.$name);
+                    $this->mu()->colourPrint('full location: '.$fullLocation);
+                    $this->mu()->colourPrint('short location location: '.$shortLocation);
                     if (! in_array($shortLocation, $listOfAutoLoads)) {
-                        $nameSpace = rtrim($nameSpace, '.php');
+                        $nameSpace = rtrim($shortLocation, '.php');
                         $nameSpace = rtrim($nameSpace, '/');
                         $nameSpace = ltrim($nameSpace, '/');
                         $nameSpace = ltrim($nameSpace, 'code/');
@@ -53,11 +56,19 @@ class AddPSR4Autoloading extends Task
                         $nameSpace = ltrim($nameSpace, '/');
                         $nameSpace = str_replace('/', "\\\\", $nameSpace);
                         $nameSpace .= "\\\\";
+                        $nameSpace =
+                            $this->mu()->getVendorNamespace().
+                            '\\\\'.
+                            $this->mu()->getPackageNamespace().
+                            '\\\\'.
+                            $nameSpace;
                         $this->mu()->colourPrint('Adding to Autoload PSR-4: ' . $shortLocation, 'green');
                         $listOfAutoLoads[$nameSpace] = $shortLocation;
                     }
                 }
             }
+        } else {
+            $this->mu()->colourPrint('Code Folder can not be found: '.$codeDir, 'red');
         }
         if (count($listOfAutoLoads)) {
             $command =
@@ -82,8 +93,10 @@ Adding autoload psr-4 details:
                 $command,
                 $comment
             );
+        } else {
+            $this->mu()->colourPrint('No namespaces could be located in: '.$codeDir, 'red');
         }
-        $this->setCommitMessage('MAJOR: remove composer requirements to SS4 - removing requirements for: '.$this->package);
+        $this->setCommitMessage('MAJOR: adding psr-4 autoload');
     }
 
     protected function hasCommitAndPush()

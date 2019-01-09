@@ -12,6 +12,12 @@ SS4:
 
     '.':
 
+        'md':
+            'mysite':
+                R: "app"
+            'Mysite':
+                R: "App"
+
         '*':
             'mysite':
                 R: "app"
@@ -159,27 +165,27 @@ SS4:
                 R: 'requestContainsSessionId('
 
         'yml':
-            '_Controller'
+            '_Controller':
                 R: "Controller"
-            'Director:'
+            'Director:':
                 R: "SilverStripe\\Control\\Director"
-            'SiteTree:'
+            'SiteTree:':
                 R: "SilverStripe\\CMS\\Model\\SiteTree:"
-            'AssetAdmin:'
+            'AssetAdmin:':
                 R: "SilverStripe\\AssetAdmin\\Controller\\AssetAdmin:"
-            'LeftAndMain:'
+            'LeftAndMain:':
                 R: "SilverStripe\\Admin\\LeftAndMain:"
-            'DateField:'
+            'DateField:':
                 R: "SilverStripe\\Forms\\DateField:"
-            'ContentController:'
+            'ContentController:':
                 R: "SilverStripe\\CMS\\Controllers\\ContentController:"
-            'Member:'
+            'Member:':
                 R: "SilverStripe\\Security\\Member:"
-            'SiteConfig:'
+            'SiteConfig:':
                 R: "SilverStripe\\SiteConfig\\SiteConfig:"
         'css':
-            'url(/themes)'
+            'url(/themes)':
                 R: 'url(/resources/themes)'
         'scss':
-            'url(/themes)'
+            'url(/themes)':
                 R: 'url(/resources/themes)'

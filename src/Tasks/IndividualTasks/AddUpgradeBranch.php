@@ -25,13 +25,6 @@ class AddUpgradeBranch extends Task
     public function runActualTask($params = [])
     {
         $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source',
-            'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
-            false
-        );
-
-        $this->mu()->execMe(
             $this->mu()->getModuleDirLocation(),
             'if git show-ref --quiet refs/heads/'.$this->mu()->getNameOfTempBranch().'; then git branch -d '.$this->mu()->getNameOfTempBranch().'; git push origin --delete '.$this->mu()->getNameOfTempBranch().'; fi',
             'delete upgrade branch ('.$this->mu()->getNameOfTempBranch().') locally',

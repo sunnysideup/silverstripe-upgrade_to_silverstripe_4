@@ -103,6 +103,7 @@ class ModuleUpgrader
      */
     protected $listOfTasks = [
         'CheckThatFoldersAreReady' => [],
+        'FindFilesWithMoreThanOneClass' => [],
         'ResetWebRootDir-1' => [],
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
@@ -132,6 +133,8 @@ class ModuleUpgrader
         'Reorganise' => [],
         'UpdateComposerModuleType' => [],
         'AddVendorExposeDataToComposer' => [],
+        'AddTableNamePrivateStatic' => [],
+        'DatabaseMigrationLegacyYML' => [],
         // 'WebRootUpdate' => [],
         'FinalDevBuild' => [],
         'RunImageTask' => [],

@@ -327,10 +327,14 @@ class SearchAndReplaceAPI
             //do nothing
         } else {
             $flatArray = $this->fileFinder->getFlatFileArray();
-            $this->addToOutput("\n------------------------------------\nFiles Searched\n------------------------------------\n");
-            foreach ($flatArray as $file) {
-                $strippedFile = str_replace($this->basePath, "", $file);
-                $this->addToOutput($strippedFile."\n");
+            if(!is_array($flatArray)) {
+                $this->addToOutput("\n".'SKIPPED: can not find: '.$this->searchPath."\n");
+            } else {
+                $this->addToOutput("\n------------------------------------\nFiles Searched\n------------------------------------\n");
+                foreach ($flatArray as $file) {
+                    $strippedFile = str_replace($this->basePath, "", $file);
+                    $this->addToOutput($strippedFile."\n");
+                }
             }
             $folderSimpleTotals = [];
             $realBase = realpath($this->basePath);

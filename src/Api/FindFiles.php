@@ -146,8 +146,8 @@ class FindFiles
     }
 
     /**
-     *
-     * @return array
+     * string is error!
+     * @return array|string
      */
     public function getFlatFileArray()
     {
@@ -155,16 +155,14 @@ class FindFiles
             if ($this->searchPath) {
                 if (file_exists($this->searchPath)) {
                     if (is_file($this->searchPath)) {
-                        $this->flatFileArray = [
-                            $this->searchPath
-                        ];
+                        $this->flatFileArray = [$this->searchPath];
                     } else {
                         $multiDimensionalArray = $this->getFileArray($this->basePath);
                         //flatten it!
                         $this->flatFileArray = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($multiDimensionalArray));
                     }
                 } else {
-                    $this->addToOutput("\n".'SKIPPED: can not find: '.$this->searchPath."\n");
+                    return 'SKIPPED: can not find: '.$this->searchPath."\n";
                 }
             }
         }

@@ -6,7 +6,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 
-class FindFilesWithMoreThanOneClass extends Task
+class FindFilesWithSimpleUseStatements extends Task
 {
     public function getTitle()
     {
@@ -22,8 +22,8 @@ class FindFilesWithMoreThanOneClass extends Task
 
     public function runActualTask($params = [])
     {
-        $fileFinder = new FindFiles($this->mu()->getModuleDirLocation());
         $errors = [];
+        $fileFinder = new FindFiles($this->mu()->getModuleDirLocation());
         foreach(['code', 'src'] as $folder) {
             $searchPath = $this->mu()->getModuleDirLocation().'/'.$folder;
             if(file_exists($searchPath)) {
@@ -42,14 +42,17 @@ class FindFilesWithMoreThanOneClass extends Task
                             if (!isset($tokens[$index][0])) {
                                 continue;
                             }
-                            if (T_CLASS === $tokens[$index][0] && T_WHITESPACE === $tokens[$index + 1][0] && T_STRING === $tokens[$index + 2][0]) {
+                            if (
+                                T_USE === $tokens[$index][0] &&
+                                T_WHITESPACE === $tokens[$index + 1][0] &&
+                                T_STRING === $tokens[$index + 2][0]
+                            ) {
+                                $testPhrase = ltrim($tokens[$index + 2][0], '\\');
+                                if(!strpos($testPhrase, '\\')) {
+                                    $errors[] = $path.': '.$tokens[$index][0] . $tokens[$index + 1][0] . $tokens[$index + 2][0];
+                                }
                                 $index += 2; // Skip class keyword and whitespace
-                                $classNames[] = $tokens[$index][1];
                             }
-                        }
-                        if(count($classNames) > 1) {
-                            $errors[] = $path.': '.implode(', ', $classNames);
-                            die("\n\n".'------------------- EXIT WITH ERROR -------------------------');
                         }
                     }
                 } else {
@@ -60,7 +63,7 @@ class FindFilesWithMoreThanOneClass extends Task
             }
         }
         if(count($errors)) {
-            $this->mu()->colourPrint('Found files with multiple classes: '.implode("\n\n ---\n\n", $errors).'', 'red');
+            $this->mu()->colourPrint('Found errors in use statements: '.implode("\n\n ---\n\n", $errors).'', 'red');
             die("\n\n".'------------------- EXIT WITH ERROR -------------------------');
         }
 

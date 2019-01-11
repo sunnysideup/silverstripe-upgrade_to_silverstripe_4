@@ -33,6 +33,18 @@ SS4:
             '.CroppedImage(':
                 R: '.Fill('
                 I: true
+            '/fonts/':
+                R: '/client/fonts/'
+                C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
+            '/images/':
+                R: '/client/images/'
+                C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
+            '/css/':
+                R: '/client/css/'
+                C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
+            '/js/':
+                R: '/client/js/'
+                C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
         '*':
             'mysite':
                 R: "app"

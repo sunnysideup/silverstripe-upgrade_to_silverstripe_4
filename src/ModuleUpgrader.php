@@ -132,6 +132,7 @@ class ModuleUpgrader
         'FixRequirements' => [],
         'UpperCaseFolderNamesForPSR4' => [],
         'AddNamespace' => [],
+        'FindFilesWithSimpleUseStatements' => [],
         'AddPSR4Autoloading' => [],
         'Upgrade' => [],
         'InspectAPIChanges-1' => [],

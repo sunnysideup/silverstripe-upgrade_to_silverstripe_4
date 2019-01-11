@@ -17,13 +17,30 @@ SS4:
                 R: "app"
             'Mysite':
                 R: "App"
-
+        'ss':
+            '.setWidth(':
+                R: '.ScaleWidth('
+                I: true
+            '.setHeight(':
+                R: '.ScaleHeight('
+                I: true
+            '.SetSize(':
+                R: '.Padd('
+                I: true
+            '.PaddedImage(':
+                R: '.Padd('
+                I: true
+            '.CroppedImage(':
+                R: '.Fill('
+                I: true
         '*':
             'mysite':
                 R: "app"
             'Mysite':
                 R: "App"
         php:
+            'Config::inst()->update(':
+                R: 'Config::modify()->update('
             'canCreate($member = null)':
                 R: 'canCreate($member = null, $context = [])'
             'canDelete($member = null)':
@@ -97,7 +114,7 @@ SS4:
                 R: "Controller::curr()->getRequest()->getSession()->"
                 C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
             'SSViewer::set_source_file_comments(':
-                R: "Config::inst()->set('SSViewer', 'source_file_comments', "
+                R: "Config::modify()->update('SSViewer', 'source_file_comments', "
             'ReadOnlyField':
                 R: "ReadonlyField"
             '->setError':
@@ -163,6 +180,21 @@ SS4:
                 R: 'get_class($this);'
             'request_contains_session_id(':
                 R: 'requestContainsSessionId('
+            '->setWidth(':
+                R: '->ScaleWidth('
+                I: true
+            '->setHeight(':
+                R: '->ScaleHeight('
+                I: true
+            '->SetSize(':
+                R: '->Padd('
+                I: true
+            '->PaddedImage(':
+                R: '->Padd('
+                I: true
+            '->CroppedImage(':
+                R: '->Fill('
+                I: true
 
         'yml':
             '_Controller':
@@ -183,6 +215,7 @@ SS4:
                 R: "SilverStripe\\Security\\Member:"
             'SiteConfig:':
                 R: "SilverStripe\\SiteConfig\\SiteConfig:"
+
         'css':
             'url(/themes)':
                 R: 'url(/resources/themes)'

@@ -20,7 +20,7 @@ class WebRootUpdate extends Task
     {
         return '
             Runs the silverstripe/upgrade task "webroot". See:
-            https://github.com/silverstripe/silverstripe-runActualTask#webroot.
+            https://github.com/silverstripe/silverstripe-upgrader#webroot.
             Configure your project to use the public web root structure
             introduced with SilverStripe 4.1' ;
     }

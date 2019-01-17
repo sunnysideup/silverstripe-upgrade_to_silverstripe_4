@@ -89,19 +89,37 @@ class ModuleUpgrader
 
 
 
-
     #########################################
     # TASKS
     #########################################
 
-
+    /**
+     * A list of task groups
+     *
+     * @var array
+     */
+    protected $taskSteps = [
+        's00' => 'Generic',
+        's10' => 'Prepare Codebase',
+        's20' => 'Upgrade Structure',
+        's30' => 'Prepare Code',
+        's40' => 'Upgrade Code',
+        's50' => 'Upgrade Fixes',
+        's60' => 'Check',
+        's70' => 'Finalise',
+        's99' => 'ERROR!'
+    ];
 
     /**
      * An array of all the 'taskName's of the tasks that you wish to run during the execution of this upgrader task.
      * This array can be overriden in the example-index.php file that you create.
-     * @var string[] of taskName
+     * You can enter a full name space if you need to.
+     * The final -x will be removed.  We add -1 or -2 to run the same task multiple times.
+     *
+     * @var array
      */
     protected $listOfTasks = [
+        //Step1: Prepare
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
 
@@ -124,29 +142,42 @@ class ModuleUpgrader
         'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
 
+        //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
+
+        //Step3: FixBeforeStart
         'ChangeEnvironment' => [],
         'MoveCodeToSRC' => [],
         'CreateClientFolder' => [],
         'SearchAndReplace' => [],
         'FixRequirements' => [],
         'UpperCaseFolderNamesForPSR4' => [],
+
+        //Step4: CoreUpgrade
         'AddNamespace' => [],
-        'FindFilesWithSimpleUseStatements' => [],
-        'AddPSR4Autoloading' => [],
         'Upgrade' => [],
+
+        //Step5: FixUpgrade
         'InspectAPIChanges-1' => [],
+        'AddTableNamePrivateStatic' => [],
+        'DatabaseMigrationLegacyYML' => [],
         'Reorganise' => [],
         'UpdateComposerModuleType' => [],
         'AddVendorExposeDataToComposer' => [],
-        'AddTableNamePrivateStatic' => [],
-        'DatabaseMigrationLegacyYML' => [],
+        'AddPSR4Autoloading' => [],
+        'InspectAPIChanges-2' => [],
         // 'WebRootUpdate' => [],
+        //step6: Check
+        'ApplyPSR2' => [],
         'FinalDevBuild' => [],
         'RunImageTask' => [],
-        'InspectAPIChanges-2' => [],
+        'DoMigrateSiteTreeLinkingTask' => [],
+        'FindFilesWithSimpleUseStatements' => [],
+        //step7: Lock-in
         'FinaliseUpgradeWithMergeIntoMaster' => []
     ];
+
+    protected $frameworkComposerRestraint = '^4.3';
 
     /**
      * Removes the given task from the list of tasks to execute
@@ -191,6 +222,12 @@ class ModuleUpgrader
         }
         return $this;
     }
+
+    /**
+     * are we upgrading a module or a whole project?
+     * @var bool
+     */
+    protected $isModuleUpgrade = true;
 
     /**
     * The default namespace for all tasks
@@ -464,9 +501,43 @@ class ModuleUpgrader
 
     /**
      * Directory that holds the module
-     * @var string
+     * or project.
+     *
+     * This is an array because a project can hold more than one
+     * folder (e.g. mysite or app and specialstuff)
+     *
+     * a module is only one folder
+     *
+     * @var array
      */
-    private $moduleDirLocation = '';
+    private $moduleDirLocations = [];
+
+    /**
+     * returns an array of existing paths
+     *
+     * @return array
+     */
+    public function getExistingModuleDirLocations()
+    {
+        $array = [];
+        foreach($this->moduleDirLocations as $location) {
+            if($location = $this->mu->checkIfPathExistsAndCleanItUp($location)) {
+                $array[$location] = $location;
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * returns path for module
+     *
+     * @return string
+     */
+    public function getExistingFirstModuleDirLocation()
+    {
+        return array_shift(array_values($this->getExistingModuleDirLocations()));
+    }
 
     ###############################
     # HELPERS
@@ -507,23 +578,56 @@ class ModuleUpgrader
      *
      * If it can be found returns the location otherwise it errors
      *
-     * @return string codedirlocation
+     * @return array codedirlocation
      */
-    public function findCodeDir()
+    public function findNameSpaceAndCodeDirs()
     {
-        $codeDir = '';
-        if (file_exists($this->moduleDirLocation . '/code')) {
-            $codeDir = $this->moduleDirLocation . '/code';
-        } elseif (file_exists($this->moduleDirLocation . '/src')) {
-            $codeDir = $this->moduleDirLocation . '/src';
-        } else {
-            user_error('Can not find code dir for '.$this->moduleDirLocation, E_USER_NOTICE);
-            return;
+        $codeDirs = [];
+        $locations = $this->getExistingModuleDirLocations();
+        foreach($locations as $location) {
+            $codeDir = $this->findMyCodeDir($location);
+            if($codeDir) {
+                if($this->getIsModuleUpgrade()) {
+                    $baseNameSpace = $this->mu()->getVendorNamespace().'\\'.$this->mu()->getPackageNamespace();
+                } else {
+                    $nameSpaceKey = ucwords(basename($location));
+                    if($nameSpaceKey === 'App' || $nameSpaceKey === 'Mysite') {
+                        $nameSpaceKey = $this->mu()->getPackageNamespace();
+                    }
+                    $baseNameSpace = $this->mu()->getVendorNamespace().'\\'.$nameSpaceKey;
+                }
+                $codeDirs[$baseNameSpace] = $codeDir;
+            }
         }
 
-        return $codeDir;
+        return $codeDirs;
     }
 
+    public function findMyCodeDir($moduleDir)
+    {
+        if (file_exists($location . '/code') && file_exists($location . '/src')) {
+            user_error('There is a code and a src dir for '.$location, E_USER_NOTICE);
+        }
+        elseif (file_exists($location . '/src')) {
+            return $location . '/code';
+        }
+        elseif (file_exists($location . '/src')) {
+            return $location . '/src';
+        } else {
+            user_error('Can not find code/src dir for '.$location, E_USER_NOTICE);
+        }
+    }
+
+    public function getGitRootDir()
+    {
+        if($this->mu()->getIsModuleUpgrade()) {
+            $location = $this->mu->getExistingFirstModuleDirLocation();
+        } else {
+            $location = $this->mu()->getWebRootDirLocation();
+        }
+
+        return $location;
+    }
 
     /**
      * Cleans an input string and returns a more natural human readable version
@@ -578,6 +682,7 @@ class ModuleUpgrader
         $html = '<h1>List of Tasks in run order</h1>';
         $count = 0;
         $totalCount = count($this->listOfTasks);
+        $previousStep = '';
         foreach ($this->listOfTasks as $class => $params) {
             $properClass = current(explode('-', $class));
             $nameSpacesArray = explode('\\', $class);
@@ -590,17 +695,29 @@ class ModuleUpgrader
                 $runItNow = $this->shouldWeRunIt($shortClassCode);
                 $params['taskName'] = $shortClassCode;
                 $obj = $properClass::create($this, $params);
+                if($obj->getTaskName()) {
+                    $params['taskName'] = $obj->getTaskName();
+                }
                 $reflectionClass = new \ReflectionClass($properClass);
                 $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
                 $path .=  str_replace('\\', '/', $reflectionClass->getName()).'.php';
                 $path =  str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
-
-                $html .= '<h3>Step '.$count.' / '.$totalCount.': '.$obj->getTitle().'</h3>';
+                $currentStepCode = $obj->getTaskStepCode();
+                $currentStep = $obj->getTaskStep($currentStepCode);
+                if($currentStepCode === 's00'){
+                    //do nothing when it is an anytime step
+                } else {
+                    if($previousStep !== $currentStep) {
+                        $html .= '<h2>'.$currentStep.'</h2>';
+                    }
+                    $previousStep = $currentStep;
+                }
+                $html .= '<h4>'.$count.' / '.$totalCount.': '.$obj->getTitle().'</h4>';
                 $html .= '<p>'.$obj->getDescription().'<br />';
                 $html .= '<strong>Code: </strong>'.$class;
                 $html .= '<br /><strong>Class Name: </strong><a href="'.$path.'">'. $reflectionClass->getShortName() .'</a>';
                 $html .= '</p>';
-                $obj = $properClass::delete($params);
+                $obj = $properClass::deleteTask($params);
             } else {
                 user_error($properClass.' could not be found as class', E_USER_ERROR);
             }
@@ -648,8 +765,11 @@ class ModuleUpgrader
                     $runItNow = $this->shouldWeRunIt($shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
+                    if($obj->getTaskName()) {
+                        $params['taskName'] = $obj->getTaskName();
+                    }
                     $this->colourPrint('# --------------------', 'yellow', 3);
-                    $this->colourPrint('# '.$obj->getTitle(). ' ('.$shortClassCode.')', 'yellow');
+                    $this->colourPrint('# '.$obj->getTitle(). ' ('.$params['taskName'].')', 'yellow');
                     $this->colourPrint('# --------------------', 'yellow');
                     $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
                     $this->colourPrint('# --------------------', 'yellow');
@@ -660,9 +780,9 @@ class ModuleUpgrader
                         $this->colourPrint('# --------------------', 'yellow');
                         //important!
                     }
-                    $obj = $properClass::delete($params);
+                    $obj = $properClass::deleteTask($params);
                 } else {
-                    user_error($properClass.' could not be found as class', E_USER_ERROR);
+                    user_error($properClass.' could not be found as class. You can add namespacing to include your own classes.', E_USER_ERROR);
                 }
             }
         }
@@ -745,7 +865,15 @@ class ModuleUpgrader
         }
 
         //moduleDirLocation
-        $this->moduleDirLocation = $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall;
+        if($this->getIsModuleUpgrade()) {
+            $this->moduleDirLocations = [
+                $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall
+            ];
+        } else {
+            foreach($this->moduleDirLocations as $key => $location) {
+                $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
+            }
+        }
 
 
         //ss4 location
@@ -796,7 +924,12 @@ Log dir is not set so we continue without log! ';
         $this->colourPrint('- Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
         $this->colourPrint('- Package Namespace: '.$this->packageNamespace, 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Module Dir: '.$this->moduleDirLocation, 'light_cyan');
+        $this->colourPrint('- Module / Project Dir(s): '.implode(', ', $this->moduleDirLocations, 1), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Code Dir(s): '.implode(', ', $this->findNameSpaceAndCodeDirs()), 'light_cyan');
+        $this->colourPrint('- Name Space(s): '.implode(', ', array_keys($this->findNameSpaceAndCodeDirs())), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Git and Composer Root Dir: '.$this->getGitRootDir(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Git Repository Link (SSH): '.$this->gitLink, 'light_cyan');
         $this->colourPrint('- Git Repository Link (HTTPS): '.$this->gitLinkAsHTTPS, 'light_cyan');

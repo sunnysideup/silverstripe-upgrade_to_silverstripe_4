@@ -6,10 +6,12 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Runs the silverstripe upgrade task 'upgrade'.
- * More information on this task at https://github.com/silverstripe/silverstripe-runActualTask#upgrade
+ * More information on this task at https://github.com/silverstripe/silverstripe-upgrader#upgrade
  */
 class Upgrade extends Task
 {
+    protected $taskStep = 's40';
+
     public function getTitle()
     {
         return 'Update Code';
@@ -21,7 +23,7 @@ class Upgrade extends Task
         return '
             Runs the silverstripe/upgrade task "upgrade". See:
             Upgrade a variety of stuff (e.g. update reference with namespaces)
-            https://github.com/silverstripe/silverstripe-runActualTask#upgrade' ;
+            https://github.com/silverstripe/silverstripe-upgrader#upgrade' ;
     }
 
     protected $runDir = '';
@@ -48,5 +50,10 @@ class Upgrade extends Task
             $this->settings
         );
         $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 1 (upgrade)');
+    }
+    
+    protected function hasCommitAndPush()
+    {
+        return true;
     }
 }

@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class RemoveComposerRequirements extends Task
 {
+    protected $taskStep = 's20';
+
     public function getTitle()
     {
         return 'Remove composer.json requirements';
@@ -43,5 +45,10 @@ class RemoveComposerRequirements extends Task
         );
 
         $this->setCommitMessage('MAJOR: remove composer requirements to SS4 - removing requirements for: '.$this->package);
+    }
+
+    protected function hasCommitAndPush()
+    {
+        return true;
     }
 }

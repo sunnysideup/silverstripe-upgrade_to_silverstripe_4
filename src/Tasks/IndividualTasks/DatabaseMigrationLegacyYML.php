@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class DatabaseMigrationLegacyYML extends Task
 {
+    protected $taskStep = 's50';
+
     public function getTitle()
     {
         return 'Copy legacy data to database migration file';
@@ -28,48 +30,50 @@ class DatabaseMigrationLegacyYML extends Task
      */
     public function runActualTask($params = [])
     {
-        $oldFile = $this->mu()->getModuleDirLocation().'/.upgrade.yml ';
-        $newFile = $this->mu()->getModuleDirLocation().'/_config/legacy.yml';
-        $tmpFile = $this->mu()->getModuleDirLocation().'/_config/legacy.yml.tmp';
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'if test -f '.$oldFile.'; then cp -vn '.$oldFile.' '.$newFile.'; fi;',
-            'moving '.$oldFile.' to '.$newFile.' -v is verbose, -n is only if destination does not exists',
-            false
-        );
-        if(! file_exists($newFile)) {
-            die('error!');
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $oldFile = $moduleDir.'/.upgrade.yml ';
+            $newFile = $moduleDir.'/_config/legacy.yml';
+            $tmpFile = $moduleDir.'/_config/legacy.yml.tmp';
+            $this->mu()->execMe(
+                $moduleDir,
+                'if test -f '.$oldFile.'; then cp -vn '.$oldFile.' '.$newFile.'; fi;',
+                'moving '.$oldFile.' to '.$newFile.' -v is verbose, -n is only if destination does not exists',
+                false
+            );
+            if(! file_exists($newFile)) {
+                return 'error! Could not find: '.$newFile;
+            }
+            $this->mu()->execMe(
+                $moduleDir,
+                'sed \'1d\' '.$newFile.' > '.$tmpFile,
+                'removing the first line and placing into temp file',
+                false
+            );
+            $this->mu()->execMe(
+                $moduleDir,
+                'mv '.$tmpFile.' '.$newFile,
+                'moving temp file back to original file',
+                false
+            );
+            $this->mu()->execMe(
+                $moduleDir,
+                'sed -i -e \'s/^/  /\' '.$newFile,
+                'adding two additional spaces to the start of each line',
+                false
+            );
+            $this->mu()->execMe(
+                $moduleDir,
+                'echo \'  classname_value_remapping:\' | cat - '.$newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile,
+                'adding `  classname_value_remapping:` to the start of '.$newFile,
+                false
+            );
+            $this->mu()->execMe(
+                $moduleDir,
+                'echo \'SilverStripe\ORM\DatabaseAdmin:\' | cat - '.$newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile,
+                'adding `SilverStripe\ORM\DatabaseAdmin:` to the start of '.$newFile,
+                false
+            );
         }
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'sed \'1d\' '.$newFile.' > '.$tmpFile,
-            'removing the first line and placing into temp file',
-            false
-        );
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'mv '.$tmpFile.' '.$newFile,
-            'moving temp file back to original file',
-            false
-        );
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'sed -i -e \'s/^/  /\' '.$newFile,
-            'adding two additional spaces to the start of each line',
-            false
-        );
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'echo \'  classname_value_remapping:\' | cat - '.$newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile,
-            'adding `  classname_value_remapping:` to the start of '.$newFile,
-            false
-        );
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'echo \'SilverStripe\ORM\DatabaseAdmin:\' | cat - '.$newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile,
-            'adding `SilverStripe\ORM\DatabaseAdmin:` to the start of '.$newFile,
-            false
-        );
     }
 
     protected function hasCommitAndPush()

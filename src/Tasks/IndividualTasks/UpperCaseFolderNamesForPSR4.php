@@ -11,6 +11,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class UpperCaseFolderNamesForPSR4 extends Task
 {
+    protected $taskStep = 's30';
+
     public function getTitle()
     {
         return 'Fix Folder Case';

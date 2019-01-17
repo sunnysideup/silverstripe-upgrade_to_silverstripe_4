@@ -10,43 +10,33 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  * You can use this command to migrate an SilverStripe 3 _ss_environment.php
  * file to the .env format used by SilverStripe 4.'
  */
-class ChangeEnvironment extends Task
+class DoctorTask extends Task
 {
-    protected $taskStep = 's20';
+    protected $taskStep = 's30';
 
     public function getTitle()
     {
-        return 'Change Environment File';
+        return 'Fix up .htaccess and index.html';
     }
 
     public function getDescription()
     {
         return '
-            Runs the silverstripe/upgrade task "environment". See:
-            https://github.com/silverstripe/silverstripe-upgrader#environment.
-            You can use this command to migrate a SilverStripe 3 _ss_environment.php
-            file to the Silverstripe 4 .env format.' ;
+            Runs the silverstripe/upgrade task "doctor". See:
+            https://github.com/silverstripe/silverstripe-upgrader#doctor.
+            CAREFUL: will remove any customisations!' ;
     }
 
     protected $runDir = '';
 
-    protected $param1 = '';
-
-    protected $param2 = '';
-
-    protected $settings = '';
-
     public function runActualTask($params = [])
     {
         if($this->getIsModuleUpgrade()) {
-            //do nothing
+            //do nothing ...
         } else {
             $this->runSilverstripeUpgradeTask(
-                'environment',
-                $this->runDir,
-                $this->param1,
-                $this->param2,
-                $this->settings
+                'doctor',
+                $rootDir = $this->mu()->getWebRootDirLocation()
             );
             $this->setCommitMessage('MAJOR: changing environment file(s)');
         }

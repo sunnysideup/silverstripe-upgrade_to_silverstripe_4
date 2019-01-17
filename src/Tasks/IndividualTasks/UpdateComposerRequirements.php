@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class UpdateComposerRequirements extends Task
 {
+    protected $taskStep = 's20';
+
     public function getTitle()
     {
         return 'Update composer.json requirements';
@@ -46,7 +48,7 @@ class UpdateComposerRequirements extends Task
         $comment = 'replace the require for '.$package.' with '.$newPackage.':'.$newVersion;
 
         $this->updateJSONViaCommandLine(
-            $this->mu()->getModuleDirLocation(),
+            $this->mu()->getGitRootDir(),
             $command,
             $comment
         );

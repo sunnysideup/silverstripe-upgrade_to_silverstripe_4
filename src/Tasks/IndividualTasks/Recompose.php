@@ -6,7 +6,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Runs the silverstripe/upgrade task "recompose". See:
- * https://github.com/silverstripe/silverstripe-runActualTask#recompose'
+ * https://github.com/silverstripe/silverstripe-upgrader#recompose'
  */
 class Recompose extends Task
 {
@@ -19,12 +19,12 @@ class Recompose extends Task
     {
         return '
             Runs the silverstripe/upgrade task "recompose". See:
-            https://github.com/silverstripe/silverstripe-runActualTask#recompose' ;
+            https://github.com/silverstripe/silverstripe-upgrader#recompose' ;
     }
 
     protected $runDir = '';
 
-    protected $param1 = '--recipe-core-constraint="4.1"';
+    protected $param1 = '';
 
     protected $param2 = '';
 
@@ -33,8 +33,11 @@ class Recompose extends Task
 
     public function runActualTask($params = [])
     {
+        if(! $this->param1) {
+            $this->param1 = '--recipe-core-constraint="'.$this->getFrameworkComposerRestraint().'"';
+        }
         if (empty($this->runDir)) {
-            $this->runDir = $this->mu()->getModuleDirLocation();
+            $this->runDir = $this->mu()->getGitRootDir();
         }
         $this->runSilverstripeUpgradeTask(
             'recompose',

@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class RemoveInstallerFolder extends Task
 {
+    protected $taskStep = 's20';
+
     public function getTitle()
     {
         return 'Remove installer-name from composer.json';
@@ -36,10 +38,15 @@ class RemoveInstallerFolder extends Task
         .'}';
         $comment = 'Removing extra.installer-name variable';
         $this->updateJSONViaCommandLine(
-            $this->mu()->getModuleDirLocation(),
+            $this->mu()->getGitRootDir(),
             $command,
             $comment
         );
         $this->setCommitMessage('MAJOR: Removing extra.installer-name variable');
+    }
+
+    protected function hasCommitAndPush()
+    {
+        return true;
     }
 }

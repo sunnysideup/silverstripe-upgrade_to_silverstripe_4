@@ -6,7 +6,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Runs the silverstripe/upgrade task "inpect". See:
- * https://github.com/silverstripe/silverstripe-runActualTask#inspect.
+ * https://github.com/silverstripe/silverstripe-upgrader#inspect.
  * Once a project has all class names migrated, and is brought up to a
  * "loadable" state (that is, where all classes reference or extend real classes)
  * then the inspect command can be run to perform additional automatic code rewrites.
@@ -14,6 +14,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class InspectAPIChanges extends Task
 {
+    protected $taskStep = 's50';
+
     public function getTitle()
     {
         return 'After load fixes (inspect)';
@@ -23,7 +25,7 @@ class InspectAPIChanges extends Task
     {
         return '
             Runs the silverstripe/upgrade task "inpect". See:
-            https://github.com/silverstripe/silverstripe-runActualTask#inspect.
+            https://github.com/silverstripe/silverstripe-upgrader#inspect.
             Once a project has all class names migrated, and is brought up to a
             "loadable" state (that is, where all classes reference or extend real classes)
             then the inspect command can be run to perform additional automatic code rewrites.
@@ -61,5 +63,10 @@ class InspectAPIChanges extends Task
             $this->settings
         );
         $this->setCommitMessage('MAJOR: core upgrade to SS4: INSPECT');
+    }
+    
+    protected function hasCommitAndPush()
+    {
+        return true;
     }
 }

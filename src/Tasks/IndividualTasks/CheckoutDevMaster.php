@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class CheckoutDevMaster extends Task
 {
+    protected $taskStep = 's00';
+
     public function getTitle()
     {
         return 'Checkout the dev-master of this module.';
@@ -27,12 +29,21 @@ class CheckoutDevMaster extends Task
      */
     public function runActualTask($params = [])
     {
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source',
-            'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
-            false
-        );
+        if($this->getIsModuleUpgrade()) {
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source',
+                'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
+                false
+            );
+        } else {
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'git clone '.$this->mu()->getGitLink().' '.$this->mu()->getGitRootDir(),
+                'checkout dev-master of '.$this->mu()->getGitLink(),
+                false
+            );
+        }
     }
 
     protected function hasCommitAndPush()

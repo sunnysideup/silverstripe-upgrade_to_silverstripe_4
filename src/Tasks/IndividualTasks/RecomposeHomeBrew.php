@@ -6,29 +6,34 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Runs the silverstripe/upgrade task "recompose". See:
- * https://github.com/silverstripe/silverstripe-runActualTask#recompose'
+ * https://github.com/silverstripe/silverstripe-upgrader#recompose'
  */
 class RecomposeHomeBrew extends Task
 {
+    protected $taskStep = 's20';
+
     public function getTitle()
     {
-        return 'Update composer.json from 3 to 4 without any extras';
+        return 'Update composer.json to '.$this->mu()->getFrameworkComposerRestraint().'';
     }
 
     public function getDescription()
     {
         return '
-            Updates the requirements in the composer.json file.' ;
+            Updates the requirements in the composer.json file without any extras.' ;
     }
 
     protected $requireLinesToAdd = [
         'composer/installers' => '^1.6',
-        'silverstripe/recipe-cms' => '^4.2'
+        'silverstripe/recipe-cms' => ''
     ];
 
 
     public function runActualTask($params = [])
     {
+        if(! $this->requireLinesToAdd['silverstripe/recipe-cms']) {
+            $this->requireLinesToAdd['silverstripe/recipe-cms'] = $this->mu()->getFrameworkComposerRestraint();
+        }
         $command =
         'unset($data["require"]["silverstripe/cms"]);'.
         'unset($data["require"]["silverstripe/recipe-cms"]);'.
@@ -38,10 +43,15 @@ class RecomposeHomeBrew extends Task
         '$data["require"]["'.$key.'"] = "'.$value.'"; ';
         };
         $this->updateJSONViaCommandLine(
-            $this->mu()->getModuleDirLocation(),
+            $this->mu()->getGitRootDir(),
             $command,
             'exposing javascript, images and css'
         );
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 ');
+    }
+
+    protected function hasCommitAndPush()
+    {
+        return true;
     }
 }

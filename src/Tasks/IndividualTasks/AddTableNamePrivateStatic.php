@@ -8,6 +8,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class AddTableNamePrivateStatic extends Task
 {
+    protected $taskStep = 's50';
+
     public function getTitle()
     {
         return 'Add private static table_name';
@@ -30,9 +32,9 @@ class AddTableNamePrivateStatic extends Task
 
     public function runActualTask($params = [])
     {
-        $fileFinder = new FindFiles($this->mu()->getModuleDirLocation());
-        foreach(['code', 'src'] as $folder) {
-            $searchPath = $this->mu()->getModuleDirLocation().'/'.$folder;
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $fileFinder = new FindFiles($moduleDir);
+            $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if(file_exists($searchPath)) {
                 $flatArray = $fileFinder
                     ->setSearchPath($searchPath)
@@ -71,7 +73,7 @@ class AddTableNamePrivateStatic extends Task
         }
     }
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return true;
     }

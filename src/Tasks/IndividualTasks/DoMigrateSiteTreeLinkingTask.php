@@ -9,6 +9,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class DoMigrateSiteTreeLinkingTask extends Task
 {
+    protected $taskStep = 's60';
+
     public function getTitle()
     {
         return 'Run dev/tasks/MigrateSiteTreeLinkingTask';
@@ -30,7 +32,7 @@ class DoMigrateSiteTreeLinkingTask extends Task
         );
     }
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return false;
     }

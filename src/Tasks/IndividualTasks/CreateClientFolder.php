@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class CreateClientFolder extends Task
 {
+    protected $taskStep = 's30';
+
     public function getTitle()
     {
         return 'Move front-end stuff to a client folder';
@@ -28,28 +30,30 @@ class CreateClientFolder extends Task
      */
     public function runActualTask($params = [])
     {
-        $newClientFolder = $this->mu()->getModuleDirLocation().'/client/ ';
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'mkdir -v '.$newClientFolder,
-            'creating new client folder '.$newClientFolder,
-            false
-        );
-        $foldersToMoveName = [
-            'javascript',
-            'js',
-            'images',
-            'img',
-            'css'
-        ];
-        foreach ($foldersToMoveName as $folderToMoveName) {
-            $folderToMove = $this->mu()->getModuleDirLocation().'/'.$folderToMoveName.'/ ';
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $newClientFolder = $moduleDir.'/client/ ';
             $this->mu()->execMe(
-                $this->mu()->getModuleDirLocation(),
-                'if test -d '.$folderToMove.'; then mv -vn '.$folderToMove.' '.$newClientFolder.'; fi;',
-                'moving '.$folderToMove.' to '.$newClientFolder.' -v is verbose, -n is only if does not exists already.',
+                $moduleDir,
+                'mkdir -v '.$newClientFolder,
+                'creating new client folder '.$newClientFolder,
                 false
             );
+            $foldersToMoveName = [
+                'javascript',
+                'js',
+                'images',
+                'img',
+                'css'
+            ];
+            foreach ($foldersToMoveName as $folderToMoveName) {
+                $folderToMove = $moduleDir.'/'.$folderToMoveName.'/ ';
+                $this->mu()->execMe(
+                    $$moduleDir,
+                    'if test -d '.$folderToMove.'; then mv -vn '.$folderToMove.' '.$newClientFolder.'; fi;',
+                    'moving '.$folderToMove.' to '.$newClientFolder.' -v is verbose, -n is only if does not exists already.',
+                    false
+                );
+            }
         }
     }
 

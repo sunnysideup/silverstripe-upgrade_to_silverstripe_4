@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class AddLegacyBranch extends Task
 {
+    protected $taskStep = 's10';
+
     public function getTitle()
     {
         return 'Add Legacy Branch';
@@ -19,7 +21,8 @@ class AddLegacyBranch extends Task
     {
         return '
             Creates a legacy branch: "'.$this->nameOfLegacyBranch.'" of your module so that you
-            can keep making bugfixes to older versions.';
+            can keep making bugfixes to older versions.
+            You can set the name of the legacy branch as you see fit.';
     }
 
     /**
@@ -33,8 +36,9 @@ class AddLegacyBranch extends Task
      */
     public function runActualTask($params = [])
     {
+        $gitRootDir = $this->mu()->getGitRootDir();
         $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
+            $gitRootDir,
             '
             if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->nameOfLegacyBranch . "'" . '); then
                     echo branch exists
@@ -43,7 +47,7 @@ class AddLegacyBranch extends Task
                     git push origin '.$this->nameOfLegacyBranch.';
 
             fi',
-            'create legacy branch: '.$this->nameOfLegacyBranch,
+            'create legacy branch: '.$this->nameOfLegacyBranch.' in '.$location,
             false
         );
     }

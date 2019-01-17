@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class UpdateComposerModuleType extends Task
 {
+    protected $taskStep = 's50';
+
     public function getTitle()
     {
         return 'Update composer type to silverstripe-vendormodule ';
@@ -31,10 +33,15 @@ class UpdateComposerModuleType extends Task
         .'}';
         $comment = 'Update composer module type from silverstripe-module to silverstripe-vendormodule';
         $this->updateJSONViaCommandLine(
-            $this->mu()->getModuleDirLocation(),
+            $this->mu()->getGitRootDir(),
             $command,
             $comment
         );
         $this->setCommitMessage('MAJOR: '.$this->getTitle());
+    }
+
+    protected function hasCommitAndPush()
+    {
+        return true;
     }
 }

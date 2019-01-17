@@ -8,6 +8,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class FindFilesWithSimpleUseStatements extends Task
 {
+    protected $taskStep = 's60';
+
     public function getTitle()
     {
         return 'Finds files with more than one class';
@@ -22,10 +24,10 @@ class FindFilesWithSimpleUseStatements extends Task
 
     public function runActualTask($params = [])
     {
-        $errors = [];
-        $fileFinder = new FindFiles($this->mu()->getModuleDirLocation());
-        foreach(['code', 'src'] as $folder) {
-            $searchPath = $this->mu()->getModuleDirLocation().'/'.$folder;
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $fileFinder = new FindFiles($moduleDir);
+            $errors = [];
+            $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if(file_exists($searchPath)) {
                 $flatArray = $fileFinder
                     ->setSearchPath($searchPath)
@@ -63,14 +65,13 @@ class FindFilesWithSimpleUseStatements extends Task
             }
         }
         if(count($errors)) {
-            $this->mu()->colourPrint('Found errors in use statements: '.implode("\n\n ---\n\n", $errors).'', 'red');
-            die("\n\n".'------------------- EXIT WITH ERROR -------------------------');
+            return 'Found errors in use statements: '.implode("\n\n ---\n\n", $errors);
         }
 
     }
 
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return false;
     }

@@ -18,6 +18,9 @@ SS4:
             'Mysite':
                 R: "App"
         'ss':
+            '$ClassName':
+                R: '$ClassName'
+                C: 'Check if the class name can still be used as such'
             '.setWidth(':
                 R: '.ScaleWidth('
                 I: true
@@ -207,7 +210,15 @@ SS4:
             '->CroppedImage(':
                 R: '->Fill('
                 I: true
-
+            '$this->ClassName':
+                R: '$this->ClassName'
+                C: 'Check if the class name can still be used as such'
+            '$this->class':
+                R: '$this->class'
+                C: 'Check if the class name can still be used as such'
+            '$className':
+                R: '$className'
+                C: 'Check if the class name can still be used as such'
         'yml':
             '_Controller':
                 R: "Controller"

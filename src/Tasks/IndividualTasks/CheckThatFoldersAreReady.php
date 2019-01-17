@@ -9,6 +9,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class CheckThatFoldersAreReady extends Task
 {
+    protected $taskStep = 's10';
+
     public function getTitle()
     {
         return 'Check Folders Are Ready';
@@ -46,7 +48,7 @@ class CheckThatFoldersAreReady extends Task
         }
     }
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return false;
     }

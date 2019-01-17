@@ -8,6 +8,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class FindFilesWithMoreThanOneClass extends Task
 {
+    protected $taskStep = 's10';
+
     public function getTitle()
     {
         return 'Finds files with more than one class';
@@ -22,10 +24,10 @@ class FindFilesWithMoreThanOneClass extends Task
 
     public function runActualTask($params = [])
     {
-        $fileFinder = new FindFiles($this->mu()->getModuleDirLocation());
-        $errors = [];
-        foreach(['code', 'src'] as $folder) {
-            $searchPath = $this->mu()->getModuleDirLocation().'/'.$folder;
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $fileFinder = new FindFiles($moduleDir);
+            $errors = [];
+            $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if(file_exists($searchPath)) {
                 $flatArray = $fileFinder
                     ->setSearchPath($searchPath)
@@ -49,7 +51,6 @@ class FindFilesWithMoreThanOneClass extends Task
                         }
                         if(count($classNames) > 1) {
                             $errors[] = $path.': '.implode(', ', $classNames);
-                            die("\n\n".'------------------- EXIT WITH ERROR -------------------------');
                         }
                     }
                 } else {
@@ -60,14 +61,13 @@ class FindFilesWithMoreThanOneClass extends Task
             }
         }
         if(count($errors)) {
-            $this->mu()->colourPrint('Found files with multiple classes: '.implode("\n\n ---\n\n", $errors).'', 'red');
-            die("\n\n".'------------------- EXIT WITH ERROR -------------------------');
+            return 'Found files with multiple classes: '.implode("\n\n ---\n\n", $errors);
         }
 
     }
 
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return false;
     }

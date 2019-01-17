@@ -9,6 +9,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class FinaliseUpgradeWithMergeIntoMaster extends Task
 {
+    protected $taskStep = 's70';
+
     public function getTitle()
     {
         if ($this->mu()->getRunIrreversibly()) {
@@ -40,9 +42,9 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
         $branchName = $this->mu()->getNameOfTempBranch();
         if ($this->mu()->getRunIrreversibly()) {
             $this->mu()->execMe(
-                $this->mu()->getModuleDirLocation(),
+                $this->mu()->getGitRootDir(),
                 '
-                    cd '.$this->mu()->getModuleDirLocation().'
+                    cd '.$this->mu()->getGitRootDir().'
                     git checkout '.$branchName.'
                     git pull origin '.$branchName.'
                     git checkout master
@@ -52,7 +54,7 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                     git branch -D '.$branchName.'
                     git push origin --delete '.$branchName.'
                 ',
-                'merging '.$branchName.' into master',
+                'merging '.$branchName.' into master in '.$this->mu->getGitRootDir(),
                 false
             );
         }

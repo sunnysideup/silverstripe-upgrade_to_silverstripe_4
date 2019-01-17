@@ -111,14 +111,17 @@ class LoadReplacementData
 
     protected function getPaths()
     {
-        $array = [
-            $this->mu->getModuleDirLocation(),
-        ];
+        $array = [];
+        foreach($this->mu->getExistingModuleDirLocations() as $moduleDir) {
+            $array[$moduleDir] = $moduleDir;
+        }
         $globalFixes = $this->mu->checkIfPathExistsAndCleanItUp(__DIR__.'/../../');
         if ($globalFixes) {
-            $array[] = $globalFixes;
+            $array[$globalFixes] = $globalFixes;
         }
         $this->paths = array_unique($array);
+
+        return $this->paths;
     }
 
     protected function getData()

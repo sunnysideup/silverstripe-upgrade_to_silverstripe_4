@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class AddVendorExposeDataToComposer extends Task
 {
+    protected $taskStep = 's50';
+
     public function getTitle()
     {
         return 'Adds vendor expose data to composer';
@@ -27,29 +29,48 @@ class AddVendorExposeDataToComposer extends Task
         'img',
         'css',
         'fonts',
-        'js'
+        'js',
+        'client/javascript',
+        'client/images',
+        'client/img',
+        'client/css',
+        'client/fonts',
+        'client/js'
     ];
 
     public function runActualTask($params = [])
     {
         $expose = [];
-        foreach ($this->toExpose as $folder) {
-            if (file_exists($this->mu()->getModuleDirLocation().'/'.$folder)) {
-                $expose[] = $folder;
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir){
+            foreach ($this->toExpose as $folder) {
+                if (file_exists($moduleDir.'/'.$folder)) {
+                    if($this->mu()->getIsModuleUpgrade()){
+                        //expose "javascript"
+                        $expose[] = $folder;
+                    } else {
+                        //expose "app/javascript"
+                        $expose[] = basename($moduleDir).'/'.$folder;
+                    }
+                }
             }
         }
         if (count($expose)) {
             $command =
             'if(!isset($data["extra"]["expose"])) { '
-            .'    $data["extra"]["expose"] = ["'.implode('", "', $expose).'"]; '
-            .'}';
+                .'    $data["extra"]["expose"] = ["'.implode('", "', $expose).'"]; '
+                .'}';
             $this->updateJSONViaCommandLine(
-                $this->mu()->getModuleDirLocation(),
+                $this->mu()->getGitRootDir(),
                 $command,
-                'exposing javascript, images and css'
+                'exposing: '.implode(', ', $expose)
             );
 
             $this->setCommitMessage('MAJOR: exposing folders'.implode(',', $expose));
         }
+    }
+
+    protected function hasCommitAndPush()
+    {
+        return true;
     }
 }

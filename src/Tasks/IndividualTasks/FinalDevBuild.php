@@ -9,6 +9,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class FinalDevBuild extends Task
 {
+    protected $taskStep = 's60';
+
     public function getTitle()
     {
         return 'Run dev/build';
@@ -30,7 +32,7 @@ class FinalDevBuild extends Task
         );
     }
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return false;
     }

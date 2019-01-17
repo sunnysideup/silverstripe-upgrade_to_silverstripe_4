@@ -9,6 +9,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class ApplyPSR2 extends Task
 {
+    protected $taskStep = 's60';
+
     public function getTitle()
     {
         return 'Apply PSR2 Cleanup.';
@@ -22,15 +24,17 @@ class ApplyPSR2 extends Task
 
     public function runActualTask($params = [])
     {
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            '
-                cd '.$this->mu()->getModuleDirLocation().'
-                vendor/bin/php-cs-fixer fix ./src --using-cache=no --rules=@PSR2
-            ',
-            'Apply PSR-2 to '.$this->mu()->getModuleDirLocation().'/src',
-            false
-        );
+        foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+            $this->mu()->execMe(
+                $codeDir,
+                '
+                    cd '.$codeDir.'
+                    vendor/bin/php-cs-fixer fix ./ --using-cache=no --rules=@PSR2
+                ',
+                'Apply PSR-2 to '.$codeDir.' ('.$baseNameSpace.')',
+                false
+            );
+        }
     }
 
     protected function hasCommitAndPush()

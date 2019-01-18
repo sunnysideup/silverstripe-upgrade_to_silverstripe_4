@@ -621,7 +621,7 @@ class ModuleUpgrader
             if (file_exists($moduleDir . '/code') && file_exists($moduleDir . '/src')) {
                 user_error('There is a code and a src dir for '.$moduleDir, E_USER_NOTICE);
             }
-            elseif (file_exists($moduleDir . '/src')) {
+            elseif (file_exists($moduleDir . '/code')) {
                 return $moduleDir . '/code';
             }
             elseif (file_exists($moduleDir . '/src')) {
@@ -933,6 +933,8 @@ class ModuleUpgrader
         $this->colourPrint('- Git Repository Link (RAW): '.$this->gitLinkAsRawHTTPS, 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Run Interactively: '.($this->runInteractively ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Run Irreversibly: '.($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');

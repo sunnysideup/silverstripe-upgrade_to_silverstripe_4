@@ -9,7 +9,7 @@ $obj = ModuleUpgrader::create()
     ->setLogFolderDirLocation('/var/www/logdir')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('__upgradeto4__')
-    ->runInteractively(true)
+    ->setRunInteractively(true)
     ->setArrayOfModules(
         [
             1 => [

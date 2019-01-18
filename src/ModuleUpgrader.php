@@ -957,12 +957,17 @@ class ModuleUpgrader
                                 $this->onlyRun = $this->listOfTasks[$arrayKeys[$index + 1]];
                             } else {
                                 $this->deleteSession();
+                                die('
+==========================================
+Session has completed.
+==========================================
+                                ')
                             }
                         }
                     }
                 } else {
                     reset($this->listOfTasks);
-                    key($this->listOfTasks);
+                    $this->onlyRun = key($this->listOfTasks);
                 }
             }
         }

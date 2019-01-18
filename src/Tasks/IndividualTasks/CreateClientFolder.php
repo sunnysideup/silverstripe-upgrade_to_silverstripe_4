@@ -35,7 +35,7 @@ class CreateClientFolder extends Task
             $this->mu()->execMe(
                 $moduleDir,
                 'mkdir -v '.$newClientFolder,
-                'creating new client folder '.$newClientFolder,
+                'Creating new client folder: '.$newClientFolder,
                 false
             );
             $foldersToMoveName = [
@@ -48,9 +48,9 @@ class CreateClientFolder extends Task
             foreach ($foldersToMoveName as $folderToMoveName) {
                 $folderToMove = $moduleDir.'/'.$folderToMoveName.'/ ';
                 $this->mu()->execMe(
-                    $$moduleDir,
+                    $moduleDir,
                     'if test -d '.$folderToMove.'; then mv -vn '.$folderToMove.' '.$newClientFolder.'; fi;',
-                    'moving '.$folderToMove.' to '.$newClientFolder.' -v is verbose, -n is only if does not exists already.',
+                    'Moving '.$folderToMove.' to '.$newClientFolder.' -v is verbose, -n is only if does not exists already.',
                     false
                 );
             }

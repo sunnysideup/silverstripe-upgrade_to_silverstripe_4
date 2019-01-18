@@ -21,7 +21,7 @@ class UpdateComposerRequirements extends Task
     {
         return '
             Change requirements in composer.json file from
-            '.($this->package ?: 'an Old Package').' to '.($this->getReplacementPackage() ?: 'a New Package').':'.($this->newVersion ?: ' (and New Version)').'
+            '.($this->package ?: 'an Old Package').' to '.($this->mu()->getReplacementPackage() ?: 'a New Package').':'.($this->newVersion ?: ' (and New Version)').'
             For example, we upgrade silverstripe/framework requirement from 3 to 4.';
     }
 
@@ -37,7 +37,7 @@ class UpdateComposerRequirements extends Task
 
         $newVersion = $this->newVersion;
 
-        $newPackage = $this->getReplacementPackage();
+        $newPackage = $this->mu()->getReplacementPackage();
 
         $command =
         'if(isset($data["require"]["'.$package.'"])) { '

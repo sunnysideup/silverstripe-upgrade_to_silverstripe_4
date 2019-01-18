@@ -27,6 +27,7 @@ class UpdateComposerModuleType extends Task
 
     public function runActualTask($params = [])
     {
+        if($this->mu()->getIsModuleUpgrade())
         $command =
         'if(isset($data["type"]) && $data["type"] === "silverstripe-module") { '
         .'    $data["type"] = "silverstripe-vendormodule";'

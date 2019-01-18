@@ -26,7 +26,7 @@ class FinalDevBuild extends Task
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'php vendor/silverstripe/framework/cli-script.php dev/build flush=all',
+            'vendor/bin/sake dev/build flush=all',
             'It is time for a dev/build',
             false
         );

@@ -33,7 +33,7 @@ class ComposerInstallProject extends Task
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
         $cloneDir = $this->mu()->getGitRootDir();
-        if($this->getIsModuleUpgrade()) {
+        if($this->mu()->getIsModuleUpgrade()) {
             $this->mu()->execMe(
                 $this->mu()->getAboveWebRootDirLocation(),
                 $this->mu()->getComposerEnvironmentVars().' composer create-project silverstripe/installer '.$this->mu()->getWebRootDirLocation().' '.$this->versionToLoad,

@@ -34,6 +34,7 @@ class DatabaseMigrationLegacyYML extends Task
             $oldFile = $moduleDir.'/.upgrade.yml ';
             $newFile = $moduleDir.'/_config/legacy.yml';
             $tmpFile = $moduleDir.'/_config/legacy.yml.tmp';
+            $mvStatement = $newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile;
             $this->mu()->execMe(
                 $moduleDir,
                 'if test -f '.$oldFile.'; then cp -vn '.$oldFile.' '.$newFile.'; fi;',
@@ -45,31 +46,25 @@ class DatabaseMigrationLegacyYML extends Task
             }
             $this->mu()->execMe(
                 $moduleDir,
-                'sed \'1d\' '.$newFile.' > '.$tmpFile,
+                'sed \'1d\' ' . $mvStatement,
                 'removing the first line and placing into temp file',
                 false
             );
             $this->mu()->execMe(
                 $moduleDir,
-                'mv '.$tmpFile.' '.$newFile,
-                'moving temp file back to original file',
-                false
-            );
-            $this->mu()->execMe(
-                $moduleDir,
-                'sed -i -e \'s/^/  /\' '.$newFile,
+                'sed -i -e \'s/^/  /\' ' . $mvStatement,
                 'adding two additional spaces to the start of each line',
                 false
             );
             $this->mu()->execMe(
                 $moduleDir,
-                'echo \'  classname_value_remapping:\' | cat - '.$newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile,
+                'echo \'  classname_value_remapping:\' | cat - '. $mvStatement,
                 'adding `  classname_value_remapping:` to the start of '.$newFile,
                 false
             );
             $this->mu()->execMe(
                 $moduleDir,
-                'echo \'SilverStripe\ORM\DatabaseAdmin:\' | cat - '.$newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile,
+                'echo \'SilverStripe\ORM\DatabaseAdmin:\' | cat - ' . $mvStatement,
                 'adding `SilverStripe\ORM\DatabaseAdmin:` to the start of '.$newFile,
                 false
             );

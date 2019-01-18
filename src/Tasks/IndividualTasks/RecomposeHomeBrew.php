@@ -20,11 +20,11 @@ class RecomposeHomeBrew extends Task
     public function getDescription()
     {
         return '
-            Updates the requirements in the composer.json file without any extras.' ;
+            Updates the requirements in the composer.json file without any extras.
+            We may need to look at "project-files" here and make sure they do not get muddled up.' ;
     }
 
     protected $requireLinesToAdd = [
-        'composer/installers' => '^1.6',
         'silverstripe/recipe-cms' => ''
     ];
 
@@ -36,6 +36,9 @@ class RecomposeHomeBrew extends Task
         }
         $command =
         'unset($data["require"]["silverstripe/cms"]);'.
+        'unset($data["require"]["silverstripe/framework"]);'.
+        'unset($data["require"]["silverstripe/reports"]);'.
+        'unset($data["require"]["silverstripe/siteconfig"]);'.
         'unset($data["require"]["silverstripe/recipe-cms"]);'.
         'unset($data["require"]["composer/installers"]);';
         foreach ($this->requireLinesToAdd as $key => $value) {
@@ -45,7 +48,7 @@ class RecomposeHomeBrew extends Task
         $this->updateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),
             $command,
-            'exposing javascript, images and css'
+            'adding framework via recipes'
         );
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 ');
     }

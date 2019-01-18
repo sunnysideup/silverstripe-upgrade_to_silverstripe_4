@@ -26,32 +26,29 @@ class Upgrade extends Task
             https://github.com/silverstripe/silverstripe-upgrader#upgrade' ;
     }
 
-    protected $runDir = '';
-
     protected $param1 = '';
 
     protected $param2 = '';
+
+    protected $rootDirForCommand = '';
 
     protected $settings = '';
 
     public function runActualTask($params = [])
     {
-        if (empty($this->runDir)) {
-            $this->runDir = $this->mu()->getWebRootDirLocation();
+        foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+            $this->param1 = $codeDir;
+            $this->runSilverstripeUpgradeTask(
+                'upgrade',
+                $this->param1,
+                $this->param2,
+                $this->rootDirForCommand,
+                $this->settings
+            );
+            $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 1 (upgrade) on '.$codeDir);
         }
-        if (empty($this->param1)) {
-            $this->param1 = $this->mu()->findCodeDir();
-        }
-        $this->runSilverstripeUpgradeTask(
-            'upgrade',
-            $this->runDir,
-            $this->param1,
-            $this->param2,
-            $this->settings
-        );
-        $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 1 (upgrade)');
     }
-    
+
     protected function hasCommitAndPush()
     {
         return true;

@@ -5,17 +5,19 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 $obj = ModuleUpgrader::create()
     ->setRunImmediately(true)
+    ->setIsModuleUpgrade(true)
     ->setLogFolderDirLocation('/var/www/logdir')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('__upgradeto4__')
+    ->runInteractively(true)
     ->setArrayOfModules(
         [
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'cleaner_tinymce_config',
-              'PackageNamespace' => 'CleanerTinyMCEConfig',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-cleaner_tinymce_config.git',
+              'PackageName' => 'frontendeditor',
+              'PackageNamespace' => 'FrontendEditor',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-frontendeditor.git',
               'UpgradeAsFork' => false
             ]
         ]

@@ -236,6 +236,15 @@ class ModuleUpgrader
     protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
 
     /**
+     * if set to true it will run each step and then stop.
+     * It was save the last step.
+     * When your run it again, it will start on the next step.
+     *
+     * @var bool
+     */
+    protected $runInteractively = false;
+
+    /**
      * start the upgrade sequence at a particular task
      * @var string
      */
@@ -521,7 +530,7 @@ class ModuleUpgrader
     {
         $array = [];
         foreach($this->moduleDirLocations as $location) {
-            if($location = $this->mu->checkIfPathExistsAndCleanItUp($location)) {
+            if($location = $this->checkIfPathExistsAndCleanItUp($location)) {
                 $array[$location] = $location;
             }
         }
@@ -536,7 +545,10 @@ class ModuleUpgrader
      */
     public function getExistingFirstModuleDirLocation()
     {
-        return array_shift(array_values($this->getExistingModuleDirLocations()));
+        $locations = array_values($this->getExistingModuleDirLocations());
+        $firstLocation = array_shift($locations);
+
+        return $firstLocation;
     }
 
     ###############################
@@ -588,13 +600,13 @@ class ModuleUpgrader
             $codeDir = $this->findMyCodeDir($location);
             if($codeDir) {
                 if($this->getIsModuleUpgrade()) {
-                    $baseNameSpace = $this->mu()->getVendorNamespace().'\\'.$this->mu()->getPackageNamespace();
+                    $baseNameSpace = $this->getVendorNamespace().'\\'.$this->getPackageNamespace();
                 } else {
                     $nameSpaceKey = ucwords(basename($location));
                     if($nameSpaceKey === 'App' || $nameSpaceKey === 'Mysite') {
-                        $nameSpaceKey = $this->mu()->getPackageNamespace();
+                        $nameSpaceKey = $this->getPackageNamespace();
                     }
-                    $baseNameSpace = $this->mu()->getVendorNamespace().'\\'.$nameSpaceKey;
+                    $baseNameSpace = $this->getVendorNamespace().'\\'.$nameSpaceKey;
                 }
                 $codeDirs[$baseNameSpace] = $codeDir;
             }
@@ -605,25 +617,27 @@ class ModuleUpgrader
 
     public function findMyCodeDir($moduleDir)
     {
-        if (file_exists($location . '/code') && file_exists($location . '/src')) {
-            user_error('There is a code and a src dir for '.$location, E_USER_NOTICE);
-        }
-        elseif (file_exists($location . '/src')) {
-            return $location . '/code';
-        }
-        elseif (file_exists($location . '/src')) {
-            return $location . '/src';
-        } else {
-            user_error('Can not find code/src dir for '.$location, E_USER_NOTICE);
+        if(file_exists($moduleDir)) {
+            if (file_exists($moduleDir . '/code') && file_exists($moduleDir . '/src')) {
+                user_error('There is a code and a src dir for '.$moduleDir, E_USER_NOTICE);
+            }
+            elseif (file_exists($moduleDir . '/src')) {
+                return $moduleDir . '/code';
+            }
+            elseif (file_exists($moduleDir . '/src')) {
+                return $moduleDir . '/src';
+            } else {
+                user_error('Can not find code/src dir for '.$moduleDir, E_USER_NOTICE);
+            }
         }
     }
 
     public function getGitRootDir()
     {
-        if($this->mu()->getIsModuleUpgrade()) {
-            $location = $this->mu->getExistingFirstModuleDirLocation();
+        if($this->getIsModuleUpgrade()) {
+            $location = $this->getExistingFirstModuleDirLocation();
         } else {
-            $location = $this->mu()->getWebRootDirLocation();
+            $location = $this->getWebRootDirLocation();
         }
 
         return $location;
@@ -734,6 +748,7 @@ class ModuleUpgrader
      */
     public function run()
     {
+        $this->workOutMethodsToRun();
         $this->startPHP2CommandLine();
         for ($i = 0; $i < 500; $i++) {
             $this->colourPrint(
@@ -783,6 +798,9 @@ class ModuleUpgrader
                     $obj = $properClass::deleteTask($params);
                 } else {
                     user_error($properClass.' could not be found as class. You can add namespacing to include your own classes.', E_USER_ERROR);
+                }
+                if($this->runInteractively) {
+                    $this->setSessionValue('Completed', $class);
                 }
             }
         }
@@ -889,28 +907,10 @@ class ModuleUpgrader
         //LogFileLocation
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {
-            //check that log dir is exists
-            if (! file_exists($this->logFolderDirLocation)) {
-                die('
-Log dir not exists: ' . $this->logFolderDirLocation);
-            } else {
-                //Directory exists, now check if writable.
-                if (! is_writable($this->logFolderDirLocation)) {
-                    die('
-Log dir: ' . $this->logFolderDirLocation. ' is not writable');
-                    return 'No point in running tool with directory not ready';
-                } else {
-                    //all ok
-                }
-            }
             $this->logFileLocation = $this->logFolderDirLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
             $this->commandLineExec->setLogFileLocation($this->logFileLocation);
         } else {
-            $this->logFileLocation = '';
             $this->commandLineExec->setLogFileLocation('');
-            echo '
-
-Log dir is not set so we continue without log! ';
         }
 
 
@@ -924,10 +924,7 @@ Log dir is not set so we continue without log! ';
         $this->colourPrint('- Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
         $this->colourPrint('- Package Namespace: '.$this->packageNamespace, 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Module / Project Dir(s): '.implode(', ', $this->moduleDirLocations, 1), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Code Dir(s): '.implode(', ', $this->findNameSpaceAndCodeDirs()), 'light_cyan');
-        $this->colourPrint('- Name Space(s): '.implode(', ', array_keys($this->findNameSpaceAndCodeDirs())), 'light_cyan');
+        $this->colourPrint('- Module / Project Dir(s): '.implode(', ', $this->moduleDirLocations), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Git and Composer Root Dir: '.$this->getGitRootDir(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
@@ -941,6 +938,32 @@ Log dir is not set so we continue without log! ';
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
+    }
+
+    protected function workOutMethodsToRun()
+    {
+        if($this->runInteractively) {
+            if($this->startFrom || $this->endWith || $this->onlyRun) {
+                die('In interactive mode you can not set StartFrom / EndWith / OnlyRun.');
+            } else {
+                $lastMethod = $this->getSessionValue('Completed');
+                if($lastMethod) {
+                    $arrayKeys = array_keys($this->listOfTasks);
+                    foreach($arrayKeys as $index => $key) {
+                        if($key === $lastMethod) {
+                            if(isset($this->listOfTasks[$arrayKeys[$index + 1]])) {
+                                $this->onlyRun = $this->listOfTasks[$arrayKeys[$index + 1]];
+                            } else {
+                                $this->deleteSession();
+                            }
+                        }
+                    }
+                } else {
+                    reset($this->listOfTasks);
+                    key($this->listOfTasks);
+                }
+            }
+        }
     }
 
     /**
@@ -975,4 +998,63 @@ Log dir is not set so we continue without log! ';
 
         return $runMe;
     }
+
+    protected $sessionFileName = '.upgrade.session.for';
+
+    protected function getSessionFileLocation()
+    {
+        $this->getAboveWebRootDirLocation().
+        '/'.
+        $this->sessionFileName.
+        '.'.
+        basename($this->getWebRootDirLocation());
+    }
+
+    protected function initSession()
+    {
+        if(! file_exists($this->getSessionFileName())) {
+            $this->setSessionData([]);
+        }
+    }
+
+    protected function deleteSession()
+    {
+        unlink($this->getSessionFileName());
+    }
+
+    protected function getSessionValue($key)
+    {
+        $this->initSession();
+        $session = $this->getSessionData();
+        if(isset($session[$key])) {
+            return $session[$key];
+        } else {
+            return null;
+        }
+    }
+
+    protected function getSessionData()
+    {
+        $this->initSession();
+        $data = file_get_contents($this->getSessionFileName());
+
+        return unserialize($data);
+    }
+
+    /**
+     * @param array $session
+     */
+    protected function setSessionData($session)
+    {
+        $data = serialize($session);
+        file_put_contents($this->getSessionFileName(), $data);
+    }
+
+    protected function setSessionValue($key, $value)
+    {
+        $session = $this->getSessionData();
+        $session[$key] = $value;
+        $this->setSessionData($session);
+    }
+
 }

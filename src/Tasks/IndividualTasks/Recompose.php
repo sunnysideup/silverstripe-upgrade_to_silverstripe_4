@@ -22,11 +22,11 @@ class Recompose extends Task
             https://github.com/silverstripe/silverstripe-upgrader#recompose' ;
     }
 
-    protected $runDir = '';
-
     protected $param1 = '';
 
     protected $param2 = '';
+
+    protected $rootDirForCommand = '';
 
     protected $settings = '';
 
@@ -34,16 +34,16 @@ class Recompose extends Task
     public function runActualTask($params = [])
     {
         if(! $this->param1) {
-            $this->param1 = '--recipe-core-constraint="'.$this->getFrameworkComposerRestraint().'"';
+            $this->param1 = '--recipe-core-constraint="'.$this->mu()->getFrameworkComposerRestraint().'"';
         }
-        if (empty($this->runDir)) {
-            $this->runDir = $this->mu()->getGitRootDir();
+        if (empty($this->rootDirForCommand)) {
+            $this->rootDirForCommand = $this->mu()->getGitRootDir();
         }
         $this->runSilverstripeUpgradeTask(
             'recompose',
-            $this->runDir,
             $this->param1,
             $this->param2,
+            $this->rootDirForCommand,
             $this->settings
         );
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - STEP 2');

@@ -28,7 +28,7 @@ class ChangeEnvironment extends Task
             file to the Silverstripe 4 .env format.' ;
     }
 
-    protected $runDir = '';
+    protected $rootDirForCommand = '';
 
     protected $param1 = '';
 
@@ -38,14 +38,14 @@ class ChangeEnvironment extends Task
 
     public function runActualTask($params = [])
     {
-        if($this->getIsModuleUpgrade()) {
+        if($this->mu()->getIsModuleUpgrade()) {
             //do nothing
         } else {
             $this->runSilverstripeUpgradeTask(
                 'environment',
-                $this->runDir,
                 $this->param1,
                 $this->param2,
+                $this->rootDirForCommand,
                 $this->settings
             );
             $this->setCommitMessage('MAJOR: changing environment file(s)');
@@ -54,7 +54,7 @@ class ChangeEnvironment extends Task
 
     protected function hasCommitAndPush()
     {
-        if($this->getIsModuleUpgrade()) {
+        if($this->mu()->getIsModuleUpgrade()) {
             return false;
         } else {
             return true;

@@ -3,18 +3,11 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 /**
-* Class : TextSearch
-*
-* @author  :  MA Razzaque Rupom <rupom_315@yahoo.com>, <rupom.bd@gmail.com>
-*             Moderator, phpResource Group(http://groups.yahoo.com/group/phpresource/)
-*             URL: http://rupom.wordpress.com
-*
-* HEAVILY MODIFIED BY SUNNY SIDE UP
-*
-* @version :  1.0
-* Date     :  06/25/2006
-* Purpose  :  Searching and replacing text within files of specified path
-*/
+ *
+ * @BasedOn  :  MA Razzaque Rupom <rupom_315@yahoo.com>, <rupom.bd@gmail.com>
+ *             Moderator, phpResource Group(http://groups.yahoo.com/group/phpresource/)
+ *             URL: http://rupom.wordpress.com
+ */
 
 class SearchAndReplaceAPI
 {
@@ -199,6 +192,9 @@ class SearchAndReplaceAPI
         return $this;
     }
 
+
+
+
     //================================================
     // Setters Before Every Search
     //================================================
@@ -271,6 +267,9 @@ class SearchAndReplaceAPI
 
         return $string;
     }
+
+
+
 
 
     //================================================
@@ -373,6 +372,9 @@ class SearchAndReplaceAPI
         //return total
         return $totalSearches;
     }
+
+
+
 
 
 

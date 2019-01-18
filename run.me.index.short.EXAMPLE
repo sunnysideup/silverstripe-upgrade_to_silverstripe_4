@@ -14,9 +14,9 @@ $obj = ModuleUpgrader::create()
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'cleaner_tinymce_config',
-              'PackageNamespace' => 'CleanerTinyMCEConfig',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-cleaner_tinymce_config.git'
+              'PackageName' => 'frontendeditor',
+              'PackageNamespace' => 'FrontendEditor',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-frontendeditor.git'
             ]
         ]
     )

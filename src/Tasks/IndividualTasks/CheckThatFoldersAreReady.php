@@ -46,6 +46,22 @@ class CheckThatFoldersAreReady extends Task
                 $this->mu()->colourPrint('Found and checked above web dir ✔', 'green');
             }
         }
+
+        //LogFileLocation
+        $logDir = $this->mu()->getLogFolderDirLocation();
+        if ($logDir) {
+            //check that log dir is exists
+            if (! file_exists($logDir)) {
+                return 'Log dir not exists: ' . $logDir . ' set your log dir to an empty string if you prefer to continue without a log.';
+            } else {
+                //Directory exists, now check if writable.
+                if (! is_writable($logDir)) {
+                    return  $logDir. ' is not writable'. '. Set the log dir to an empty string or provide a writable directory. ';
+                } else {
+                    //all ok
+                }
+            }
+        } 
     }
 
     protected function hasCommitAndPush()

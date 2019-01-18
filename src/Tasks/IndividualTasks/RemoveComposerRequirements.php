@@ -31,15 +31,12 @@ class RemoveComposerRequirements extends Task
     {
         $package = $this->package;
 
-        $command =
-        'if(isset($data["require"]["'.$package.'"])) { '
-        .'    unset($data["require"]["'.$package.'"]);'
-        .'}';
+        $command = 'unset($data["require"]["'.$package.'"]);';
 
-        $comment = 'remove the requirement for '.$package;
+        $comment = 'remove the requirement for '.$package.' from '.$this->mu()->getGitRootDir();
 
         $this->updateJSONViaCommandLine(
-            $this->mu()->getModuleDirLocation(),
+            $this->mu()->getGitRootDir(),
             $command,
             $comment
         );

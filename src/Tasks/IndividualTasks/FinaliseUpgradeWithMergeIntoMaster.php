@@ -54,7 +54,7 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                     git branch -D '.$branchName.'
                     git push origin --delete '.$branchName.'
                 ',
-                'merging '.$branchName.' into master in '.$this->mu->getGitRootDir(),
+                'merging '.$branchName.' into master in '.$this->mu()->getGitRootDir(),
                 false
             );
         }

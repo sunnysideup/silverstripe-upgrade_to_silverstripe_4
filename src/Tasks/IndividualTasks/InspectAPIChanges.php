@@ -32,11 +32,11 @@ class InspectAPIChanges extends Task
             This step will also warn of any upgradable code issues that may prevent a succesful upgrade.' ;
     }
 
-    protected $runDir = '';
-
     protected $param1 = '';
 
     protected $param2 = '';
+
+    protected $rootDirForCommand = '';
 
     protected $settings = '';
 
@@ -45,26 +45,23 @@ class InspectAPIChanges extends Task
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'composer dump-autoload',
-            'run composer dump-autoload',
+            'run composer dump-autoload to create autoload classes',
             false
         );
 
-        if (empty($this->runDir)) {
-            $this->runDir = $this->mu()->getWebRootDirLocation();
+        foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+            $this->param1 = $codeDir;
+            $this->runSilverstripeUpgradeTask(
+                'inspect',
+                $this->param1,
+                $this->param2,
+                $this->rootDirForCommand,
+                $this->settings
+            );
+            $this->setCommitMessage('MAJOR: core upgrade to SS4: INSPECT');
         }
-        if (empty($this->param1)) {
-            $this->param1 = $this->mu()->findCodeDir();
-        }
-        $this->runSilverstripeUpgradeTask(
-            'inspect',
-            $this->runDir,
-            $this->param1,
-            $this->param2,
-            $this->settings
-        );
-        $this->setCommitMessage('MAJOR: core upgrade to SS4: INSPECT');
     }
-    
+
     protected function hasCommitAndPush()
     {
         return true;

@@ -2,9 +2,6 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
-use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
-
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -139,7 +136,7 @@ class FixRequirements extends Task
                         //vendor/packagename: silverstripe/admin
                         //to
                         //silverstripe/admin: only
-                        foreach (['cms', 'admin', 'framework', 'assets'] as $ssModule) {
+                        foreach (['cms', 'framework', 'siteconfig', 'reports'] as $ssModule) {
                             $isStraightReplace = true;
                             $finalFind = $vendorAndPackageFolderNameForInstall.': silverstripe/'.$ssModule.': ';
                             $finalReplace = 'silverstripe/'.$ssModule.': ';
@@ -147,15 +144,14 @@ class FixRequirements extends Task
                                 '    --- FIND: '.$finalFind."\n".
                                 '    --- REPLACE: '.$finalReplace."\n"
                             );
-                            $textSearchMachine->setSearchKey($finalFind, $isStraightReplace, 'silverstripe/'.$ssModule.'/double-up');
+                            $textSearchMachine->setSearchKey($finalFind, $isStraightReplace, 'silverstripe/'.$ssModule.'/@@@@double-up@@@@');
                             $textSearchMachine->setReplacementKey($finalReplace);
                             $textSearchMachine->startSearchAndReplace();
                         }
 
                         //SHOW TOTALS
                         $replacements = $textSearchMachine->showFormattedSearchTotals();
-                        if ($replacements) {
-                        } else {
+                        if (! $replacements) {
                             //flush output anyway!
                             $this->mu()->colourPrint("No replacements for  $extension");
                         }

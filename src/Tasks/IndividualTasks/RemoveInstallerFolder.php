@@ -32,21 +32,23 @@ class RemoveInstallerFolder extends Task
 
     public function runActualTask($params = [])
     {
-        $command =
-        'if(isset($data["extra"]["installer-name"])) { '
-        .'    unset($data["extra"]["installer-name"]);'
-        .'}';
-        $comment = 'Removing extra.installer-name variable';
-        $this->updateJSONViaCommandLine(
-            $this->mu()->getGitRootDir(),
-            $command,
-            $comment
-        );
-        $this->setCommitMessage('MAJOR: Removing extra.installer-name variable');
+        if($this->mu()->getIsModuleUpgrade()) {
+            $command =
+            'if(isset($data["extra"]["installer-name"])) { '
+            .'    unset($data["extra"]["installer-name"]);'
+            .'}';
+            $comment = 'Removing extra.installer-name variable';
+            $this->updateJSONViaCommandLine(
+                $this->mu()->getGitRootDir(),
+                $command,
+                $comment
+            );
+            $this->setCommitMessage('MAJOR: Removing extra.installer-name variable');
+        }
     }
 
     protected function hasCommitAndPush()
     {
-        return true;
+        return $this->mu()->getIsModuleUpgrade();
     }
 }

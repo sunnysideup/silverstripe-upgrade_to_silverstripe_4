@@ -27,16 +27,22 @@ class DoctorTask extends Task
             CAREFUL: will remove any customisations!' ;
     }
 
-    protected $runDir = '';
+    protected $param1 = '';
+
+    protected $param2 = '';
+
+    protected $rootDirForCommand = '';
 
     public function runActualTask($params = [])
     {
-        if($this->getIsModuleUpgrade()) {
+        if($this->mu()->getIsModuleUpgrade()) {
             //do nothing ...
         } else {
             $this->runSilverstripeUpgradeTask(
                 'doctor',
-                $rootDir = $this->mu()->getWebRootDirLocation()
+                $this->param1,
+                $this->param2,
+                $this->rootDirForCommand
             );
             $this->setCommitMessage('MAJOR: changing environment file(s)');
         }
@@ -44,7 +50,7 @@ class DoctorTask extends Task
 
     protected function hasCommitAndPush()
     {
-        if($this->getIsModuleUpgrade()) {
+        if($this->mu()->getIsModuleUpgrade()) {
             return false;
         } else {
             return true;

@@ -52,7 +52,7 @@ class AddNamespace extends Task
                         $nameSpace = implode('\\', $nameSpaceArrayNew);
                         $this->mu()->execMe(
                             $codeDir,
-                            'php '.$this->mu()->getLocationOfUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mu()->getWebRootDirLocation().' --write --psr4 -vvv',
+                            'php '.$this->mu()->getLocationOfUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mu()->getWebRootDirLocation().' --write --psr4 -r -vvv',
                             'adding namespace: '.$nameSpace.' to '.$dirName,
                             false
                         );
@@ -78,7 +78,7 @@ class AddNamespace extends Task
             // }
             $this->mu()->execMe(
                 $codeDir,
-                'php '.$this->mu()->getLocationOfUpgradeModule().' add-namespace "'.$baseNameSpace.'" '.$codeDir.' --root-dir='.$this->mu()->getWebRootDirLocation().' --write --psr4 -vvv',
+                'php '.$this->mu()->getLocationOfUpgradeModule().' add-namespace "'.$baseNameSpace.'" '.$codeDir.' --root-dir='.$this->mu()->getWebRootDirLocation().' --write --psr4 -r -vvv',
                 'adding namespace: '.$baseNameSpace.' to '.$codeDir,
                 false
             );

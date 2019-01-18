@@ -24,12 +24,16 @@ class DoMigrateSiteTreeLinkingTask extends Task
 
     public function runActualTask($params = [])
     {
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'php vendor/silverstripe/framework/cli-script.php dev/tasks/MigrateSiteTreeLinkingTask flush=all',
-            'MigrateSiteTreeLinkingTask is running',
-            false
-        );
+        if($this->mu()->getIsModuleUpgrade()) {
+            return false;
+        } else {
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'php vendor/silverstripe/framework/cli-script.php dev/tasks/MigrateSiteTreeLinkingTask flush=all',
+                'MigrateSiteTreeLinkingTask is running',
+                false
+            );
+        }
     }
 
     protected function hasCommitAndPush()

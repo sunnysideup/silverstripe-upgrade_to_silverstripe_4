@@ -31,11 +31,16 @@ class MoveCodeToSRC extends Task
     public function runActualTask($params = [])
     {
         foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-            $old = $moduleDir.'/code/ ';
-            $new = $moduleDir.'/src/';
+            $old = './code/';
+            $new = './src/';
             $this->mu()->execMe(
-                $this->mu()->getModuleDirLocation(),
-                'if test -d '.$old.'; then mv -vn '.$old.' '.$new.'; fi;',
+                $moduleDir,
+                '
+if test -d '.$old.'; then
+    mv -vn '.$old.' '.$new.';
+else
+    echo \' !!!!!!!!! Error in moving '.$moduleDir.'/.'.$old.' to '.$moduleDir.'/.'.$new.' !!!!!!!!! \';
+fi;',
                 'moving '.$old.' to '.$new.' -v is verbose, -n is only if destination does not exists',
                 false
             );

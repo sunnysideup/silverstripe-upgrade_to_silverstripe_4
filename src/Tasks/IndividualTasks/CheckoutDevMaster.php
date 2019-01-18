@@ -29,18 +29,42 @@ class CheckoutDevMaster extends Task
      */
     public function runActualTask($params = [])
     {
-        if($this->getIsModuleUpgrade()) {
+        if($this->mu()->getIsModuleUpgrade()) {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source',
+                'composer init -s dev -n',
+                'Start composer - setting it to dev means that it is more likely to install dependencies that do not have tags',
+                false
+            );
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source --update-no-dev --prefer-stable ',
                 'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
+                false
+            );
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'composer info '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
+                'show information about installed package',
                 false
             );
         } else {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
                 'git clone '.$this->mu()->getGitLink().' '.$this->mu()->getGitRootDir(),
-                'checkout dev-master of '.$this->mu()->getGitLink(),
+                'clone '.$this->mu()->getGitLink(),
+                false
+            );
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'git checkout master',
+                'checkout dev-master',
+                false
+            );
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'composer info --self',
+                'show information about installed project',
                 false
             );
         }

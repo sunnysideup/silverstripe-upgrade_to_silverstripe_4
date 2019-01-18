@@ -3,7 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
-use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
+use Sunnysideup\UpgradeToSilverstripe4\ReplacementData\LoadReplacementData;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -42,13 +42,22 @@ class SearchAndReplace extends Task
         return $this;
     }
 
-    private $ignoreFolderArray = [
+    protected $ignoreFolderArray = [
         ".git"
     ];
 
     public function setIgnoreFolderArray($a)
     {
         $this->ignoreFolderArray = $a;
+
+        return $this;
+    }
+
+    protected $alternativePathForReplacementData = '';
+
+    public function setAlternativePathForReplacementData($s)
+    {
+        $this->alternativePathForReplacementData = $s;
 
         return $this;
     }
@@ -60,7 +69,11 @@ class SearchAndReplace extends Task
         }
 
         //replacement data
-        $replacementDataObject = new LoadReplacementData($this->mu(), $this->params);
+        $replacementDataObject = new LoadReplacementData(
+            $this->mu(),
+            $this->alternativePathForReplacementData,
+            $this->params
+        );
         $replacementArray = $replacementDataObject->getReplacementArrays();
 
         if ($this->debug) {
@@ -68,7 +81,7 @@ class SearchAndReplace extends Task
         }
 
         //replace API
-        foreach($this->getExistingModuleDirLocations() as $moduleDir) {
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $textSearchMachine = new SearchAndReplaceAPI($moduleDir);
             $textSearchMachine->setIsReplacingEnabled(true);
             $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);

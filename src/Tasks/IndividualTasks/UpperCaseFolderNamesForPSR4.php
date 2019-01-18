@@ -27,8 +27,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
 
     public function runActualTask($params = [])
     {
-        $codeDir = $this->mu()->findCodeDir();
-        if (file_exists($codeDir)) {
+        foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $di = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($codeDir, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST

@@ -266,20 +266,26 @@ abstract class Task
     /**
      * Runs the SilverStripe made upgrader
      * @param  string $task     [description]
-     * @param  string $rootDir  modules root directory
      * @param  string $param1   [description]
      * @param  string $param2   [description]
+     * @param  string $rootDirForCommand  modules root directory
      * @param  string $settings [description]
      * @return [type]           [description]
      */
-    protected function runSilverstripeUpgradeTask($task, $rootDir = '', $param1 = '', $param2 = '', $settings = '')
+    protected function runSilverstripeUpgradeTask(
+        $task,
+        $param1 = '',
+        $param2 = '',
+        $rootDirForCommand = '',
+        $settings = ''
+    )
     {
-        if (! $rootDir) {
-            $rootDir = $this->mu()->getWebRootDirLocation();
+        if (! $rootDirForCommand) {
+            $rootDirForCommand = $this->mu()->getWebRootDirLocation();
         }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'php '.$this->mu()->getLocationOfUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDir.' --write -vvv '.$settings,
+            'php '.$this->mu()->getLocationOfUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDirForCommand.' --write -vvv '.$settings,
             'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
             false
         );

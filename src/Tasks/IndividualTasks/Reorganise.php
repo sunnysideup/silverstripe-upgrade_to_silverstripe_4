@@ -31,28 +31,36 @@ class Reorganise extends Task
             ' ;
     }
 
-    protected $runDir = '';
-
     protected $param1 = '';
 
     protected $param2 = '';
+
+    protected $rootDirForCommand = '';
 
     protected $settings = '';
 
     public function runActualTask($params = [])
     {
-        $this->runSilverstripeUpgradeTask(
-            'reorganise',
-            $this->runDir,
-            $this->param1,
-            $this->param2,
-            $this->settings
-        );
-        $this->setCommitMessage('MAJOR: re-organising files');
+        if($this->mu()->getIsModuleUpgrade()) {
+
+        } else {
+            $this->runSilverstripeUpgradeTask(
+                'reorganise',
+                $this->param1,
+                $this->param2,
+                $this->rootDirForCommand,
+                $this->settings
+            );
+            $this->setCommitMessage('MAJOR: re-organising files');
+        }
     }
-    
+
     protected function hasCommitAndPush()
     {
+        if($this->mu()->getIsModuleUpgrade()) {
+            return false;
+        }
+
         return true;
     }
 }

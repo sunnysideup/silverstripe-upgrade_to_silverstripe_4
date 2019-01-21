@@ -153,7 +153,7 @@ abstract class Task
             $this->mu()->colourPrint("\n\n".'------------------- EXIT WITH ERROR -------------------------', 'red');
             $this->mu()->colourPrint($error, 'red');
             $this->mu()->colourPrint("\n\n".'------------------- EXIT WITH ERROR -------------------------', 'red');
-            die('---');
+            die("\n\n\n---");
         }
         $this->ender($this->params);
     }

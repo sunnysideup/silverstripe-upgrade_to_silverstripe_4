@@ -223,6 +223,13 @@ class ModuleUpgrader
         return $this;
     }
 
+    public function restartInteractive()
+    {
+        $this->deleteSession();
+
+        return $this;
+    }
+
     /**
      * are we upgrading a module or a whole project?
      * @var bool
@@ -243,6 +250,12 @@ class ModuleUpgrader
      * @var bool
      */
     protected $runInteractively = false;
+
+    /**
+     * Show ALL the information or just a little bit.
+     * @var bool
+     */
+    protected $verbose = false;
 
     /**
      * start the upgrade sequence at a particular task
@@ -275,7 +288,7 @@ class ModuleUpgrader
      * Is this the last TASK we are running?
      * @var bool
      */
-    private $isLastMethod = false;
+    private $lastMethodHasBeenRun = false;
 
     /**
      * What is the index of given task within the sequence
@@ -748,7 +761,6 @@ class ModuleUpgrader
      */
     public function run()
     {
-        $this->workOutMethodsToRun();
         $this->startPHP2CommandLine();
         for ($i = 0; $i < 500; $i++) {
             $this->colourPrint(
@@ -768,7 +780,7 @@ class ModuleUpgrader
         $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation.'/'.$this->webRootName);
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
-
+            $this->workOutMethodsToRun();
             foreach ($this->listOfTasks as $class => $params) {
                 $properClass = current(explode('-', $class));
                 $nameSpacesArray = explode('\\', $class);
@@ -783,24 +795,28 @@ class ModuleUpgrader
                     if($obj->getTaskName()) {
                         $params['taskName'] = $obj->getTaskName();
                     }
-                    $this->colourPrint('# --------------------', 'yellow', 3);
-                    $this->colourPrint('# '.$obj->getTitle(). ' ('.$params['taskName'].')', 'yellow');
-                    $this->colourPrint('# --------------------', 'yellow');
-                    $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
-                    $this->colourPrint('# --------------------', 'yellow');
                     if ($runItNow) {
-                        $obj->run();
-                    } else {
-                        $this->colourPrint('# skipped', 'light_green');
+                        $this->colourPrint('# --------------------', 'yellow', 3);
+                        $this->colourPrint('# '.$obj->getTitle(). ' ('.$params['taskName'].')', 'yellow');
                         $this->colourPrint('# --------------------', 'yellow');
-                        //important!
+                        $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
+                        $this->colourPrint('# --------------------', 'dark_grey');
+                        $obj->run();
+                        if($this->runInteractively) {
+                            $this->setSessionValue('Completed', $class);
+                        }
+                    } else {
+                        if(! $this->runInteractively) {
+                            $this->colourPrint('# --------------------', 'yellow', 3);
+                            $this->colourPrint('# '.$obj->getTitle(). ' ('.$params['taskName'].')', 'yellow');
+                            $this->colourPrint('# --------------------', 'yellow');
+                            $this->colourPrint('# skipped', 'light_green');
+                            $this->colourPrint('# --------------------', 'yellow');
+                        }
                     }
                     $obj = $properClass::deleteTask($params);
                 } else {
                     user_error($properClass.' could not be found as class. You can add namespacing to include your own classes.', E_USER_ERROR);
-                }
-                if($this->runInteractively) {
-                    $this->setSessionValue('Completed', $class);
                 }
             }
         }
@@ -870,17 +886,17 @@ class ModuleUpgrader
         $this->gitLinkAsRawHTTPS = rtrim(str_replace('git@github.com:', 'https://raw.githubusercontent.com/', $this->gitLink), '.git');
 
         //packageFolderNameForInstall
-        $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
-        $json = file_get_contents($jsonFile);
-        $array = json_decode($json, true);
-        if (isset($array['extra']['installer-name'])) {
-            $this->packageFolderNameForInstall = $array['extra']['installer-name'];
-        } else {
-            $this->packageFolderNameForInstall = $this->packageName;
-        }
-        if (isset($moduleDetails['PackageFolderNameForInstall'])) {
-            $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
-        }
+        // $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
+        // $json = file_get_contents($jsonFile);
+        // $array = json_decode($json, true);
+        // if (isset($array['extra']['installer-name'])) {
+        //     $this->packageFolderNameForInstall = $array['extra']['installer-name'];
+        // } else {
+        //     $this->packageFolderNameForInstall = $this->packageName;
+        // }
+        // if (isset($moduleDetails['PackageFolderNameForInstall'])) {
+        //     $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
+        // }
 
         //moduleDirLocation
         if($this->getIsModuleUpgrade()) {
@@ -936,6 +952,10 @@ class ModuleUpgrader
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Run Interactively: '.($this->runInteractively ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Session file: '.($this->getSessionFileLocation()), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Last Step: '.$this->getSessionValue('Completed'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Run Irreversibly: '.($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
@@ -946,29 +966,39 @@ class ModuleUpgrader
     {
         if($this->runInteractively) {
             if($this->startFrom || $this->endWith || $this->onlyRun) {
-                die('In interactive mode you can not set StartFrom / EndWith / OnlyRun.');
-            } else {
-                $lastMethod = $this->getSessionValue('Completed');
-                if($lastMethod) {
-                    $arrayKeys = array_keys($this->listOfTasks);
-                    foreach($arrayKeys as $index => $key) {
-                        if($key === $lastMethod) {
+                user_error('In interactive mode you can not set StartFrom / EndWith / OnlyRun.');
+            }
+            $lastMethod = $this->getSessionValue('Completed');
+            if($lastMethod) {
+                $this->verbose = false;
+                $arrayKeys = array_keys($this->listOfTasks);
+                $found = false;
+                foreach($arrayKeys as $index => $key) {
+                    if($key === $lastMethod) {
+                        $found = true;
+                        if(isset($arrayKeys[$index + 1])) {
                             if(isset($this->listOfTasks[$arrayKeys[$index + 1]])) {
-                                $this->onlyRun = $this->listOfTasks[$arrayKeys[$index + 1]];
+                                $this->onlyRun = $arrayKeys[$index + 1];
                             } else {
-                                $this->deleteSession();
-                                die('
+                                user_error('Can not find next task: '.$arrayKeys[$index + 1]);
+                            }
+                        } else {
+                            $this->deleteSession();
+                            die('
 ==========================================
 Session has completed.
 ==========================================
-                                ')
-                            }
+                            ');
                         }
                     }
-                } else {
-                    reset($this->listOfTasks);
-                    $this->onlyRun = key($this->listOfTasks);
                 }
+                if(! $found) {
+                    user_error('Did not find next step.');
+                }
+            } else {
+                $this->verbose = true;
+                reset($this->listOfTasks);
+                $this->onlyRun = key($this->listOfTasks);
             }
         }
     }
@@ -982,23 +1012,24 @@ Session has completed.
      */
     protected function shouldWeRunIt($name) : bool
     {
+        $runMe = true;
         if ($this->onlyRun) {
             return $name === $this->onlyRun ? true : false;
         }
-        if ($this->isLastMethod) {
+        if ($this->lastMethodHasBeenRun) {
             $runMe = false;
         } else {
             if ($this->startFrom) {
+                $runMe = false;
                 if ($name === $this->startFrom) {
                     $this->startFrom = '';
                 }
             }
             if ($this->endWith) {
                 if ($name === $this->endWith) {
-                    $this->isLastMethod = true;
+                    $this->lastMethodHasBeenRun = true;
                 }
             }
-            $runMe = $this->startFrom ? false : true;
         }
 
         //here we call the PHP2CommandLine
@@ -1006,32 +1037,36 @@ Session has completed.
         return $runMe;
     }
 
-    protected $sessionFileName = '.upgrade.session.for';
+    protected $sessionFileName = 'Session_For';
 
     protected function getSessionFileLocation()
     {
-        $this->getAboveWebRootDirLocation().
-        '/'.
-        $this->sessionFileName.
-        '.'.
-        basename($this->getWebRootDirLocation());
+        return trim(
+            $this->getAboveWebRootDirLocation().
+            '/'.
+            $this->sessionFileName.
+            '_'.
+            $this->getVendorNamespace().
+            '_'.
+            $this->getPackageNamespace().
+            '.json'
+        );
     }
 
     protected function initSession()
     {
-        if(! file_exists($this->getSessionFileName())) {
-            $this->setSessionData([]);
+        if(! file_exists($this->getSessionFileLocation())) {
+            $this->setSessionData(['Started' => date('Y-m-d h:i ')]);
         }
     }
 
     protected function deleteSession()
     {
-        unlink($this->getSessionFileName());
+        unlink($this->getSessionFileLocation());
     }
 
     protected function getSessionValue($key)
     {
-        $this->initSession();
         $session = $this->getSessionData();
         if(isset($session[$key])) {
             return $session[$key];
@@ -1043,9 +1078,11 @@ Session has completed.
     protected function getSessionData()
     {
         $this->initSession();
-        $data = file_get_contents($this->getSessionFileName());
-
-        return unserialize($data);
+        $data = file_get_contents($this->getSessionFileLocation());
+        if(! $data) {
+            user_error('Could not read from: '.$this->getSessionFileLocation());
+        }
+        return json_decode($data, true);
     }
 
     /**
@@ -1053,8 +1090,24 @@ Session has completed.
      */
     protected function setSessionData($session)
     {
-        $data = serialize($session);
-        file_put_contents($this->getSessionFileName(), $data);
+        $data = json_encode($session, JSON_PRETTY_PRINT);
+        try {
+            $file = fopen($this->getSessionFileLocation(), 'w');
+            if(false === $file) {
+                throw new \RuntimeException("Failed to open file: ".$this->getSessionFileLocation());
+            }
+            $writeOutcome = fwrite($file, $data);
+            if(false === $writeOutcome) {
+                throw new \RuntimeException("Failed to write file: ".$this->getSessionFileLocation());
+            }
+            $closeOutcome = fclose($file);
+            if(false === $closeOutcome) {
+                throw new \RuntimeException("Failed to close file: ".$this->getSessionFileLocation());
+            }
+        } catch ( Exception $e ) {
+            // send error message if you can
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
     }
 
     protected function setSessionValue($key, $value)

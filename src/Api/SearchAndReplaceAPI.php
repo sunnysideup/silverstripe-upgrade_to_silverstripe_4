@@ -38,6 +38,18 @@ class SearchAndReplaceAPI
 
     private $caseSensitive             = true;
 
+    private $ignoreFrom                = [
+        '//',
+        '#',
+        '/**'
+    ];
+
+    private $ignoreUntil               = [
+        '//',
+        '#',
+        '*/'
+    ];
+
     // files
 
     private $fileFinder                = null;
@@ -422,17 +434,23 @@ class SearchAndReplaceAPI
             }
             $foundCount = 0;
             $insidePreviousReplaceComment = false;
+            $insideIgnoreArea = false;
             foreach ($oldFileContentArray as $key => $oldLineContent) {
                 $newLineContent = $oldLineContent;
+                $testLine = trim($oldLineContent);
 
                 //check if it is actually already replaced ...
                 if (strpos($oldLineContent, $this->startMarker) !== false) {
                     $insidePreviousReplaceComment = true;
                 }
-                if (strpos($oldLineContent, $this->endMarker) !== false) {
-                    $insidePreviousReplaceComment = false;
+                foreach($this->ignoreFrom as $ignoreStarter) {
+                    if(strpos($testLine, $ignoreStarter) === 0) {
+                        $insideIgnoreArea = true;
+                    }
                 }
-                if (! $insidePreviousReplaceComment) {
+                if ($insidePreviousReplaceComment || $insideIgnoreArea) {
+                    //do nothing ...
+                } else {
                     $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
                     if ($foundInLineCount) {
                         if ($this->caseSensitive) {
@@ -465,6 +483,15 @@ class SearchAndReplaceAPI
                     }
                 }
                 $newFileContentArray[] = $newLineContent;
+                if (strpos($oldLineContent, $this->endMarker) !== false) {
+                    $insidePreviousReplaceComment = false;
+                }
+                foreach($this->ignoreUntil as $ignoreEnder) {
+                    if(strpos($testLine, $ignoreEnder) === 0) {
+                        $insideIgnoreArea = false;
+                    }
+                }
+
             }
             if ($foundCount) {
                 $oldFileContent = implode($oldFileContentArray);

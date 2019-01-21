@@ -65,7 +65,7 @@ class FindFilesWithSimpleUseStatements extends Task
             }
         }
         if(count($errors)) {
-            return 'Found errors in use statements: '.implode("\n\n ---\n\n", $errors);
+            return 'Found errors in use statements: '."\n---\n---\n---\n".implode("\n ---\n", $errors);
         }
 
     }

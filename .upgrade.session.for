@@ -1,1 +1,3 @@
-a:1:{s:9:"Completed";s:16:"SearchAndReplace";}
+{
+    "Completed": "CheckThatFoldersAreReady"
+}

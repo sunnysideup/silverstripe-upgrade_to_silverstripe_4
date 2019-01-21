@@ -156,6 +156,7 @@ class ModuleUpgrader
         //Step4: CoreUpgrade
         'AddNamespace' => [],
         'Upgrade' => [],
+        'AddPSR4Autoloading' => [],
 
         //Step5: FixUpgrade
         'FixBadUseStatements' => [],
@@ -165,7 +166,6 @@ class ModuleUpgrader
         'Reorganise' => [],
         'UpdateComposerModuleType' => [],
         'AddVendorExposeDataToComposer' => [],
-        'AddPSR4Autoloading' => [],
         'InspectAPIChanges-2' => [],
         // 'WebRootUpdate' => [],
         //step6: Check

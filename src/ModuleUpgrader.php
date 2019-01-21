@@ -885,18 +885,22 @@ class ModuleUpgrader
         $this->gitLinkAsHTTPS = rtrim(str_replace('git@github.com:', 'https://github.com/', $this->gitLink), '.git');
         $this->gitLinkAsRawHTTPS = rtrim(str_replace('git@github.com:', 'https://raw.githubusercontent.com/', $this->gitLink), '.git');
 
-        //packageFolderNameForInstall
-        // $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
-        // $json = file_get_contents($jsonFile);
-        // $array = json_decode($json, true);
-        // if (isset($array['extra']['installer-name'])) {
-        //     $this->packageFolderNameForInstall = $array['extra']['installer-name'];
-        // } else {
-        //     $this->packageFolderNameForInstall = $this->packageName;
-        // }
-        // if (isset($moduleDetails['PackageFolderNameForInstall'])) {
-        //     $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
-        // }
+        if($this->getSessionValue('PackageFolderNameForInstall')) {
+            $this->packageFolderNameForInstall = $this->getSessionValue('PackageFolderNameForInstall');
+        } else {
+            $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
+            $json = file_get_contents($jsonFile);
+            $array = json_decode($json, true);
+            if (isset($array['extra']['installer-name'])) {
+                $this->packageFolderNameForInstall = $array['extra']['installer-name'];
+            } else {
+                $this->packageFolderNameForInstall = $this->packageName;
+            }
+            if (isset($moduleDetails['PackageFolderNameForInstall'])) {
+                $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
+            }
+            $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);
+        }
 
         //moduleDirLocation
         if($this->getIsModuleUpgrade()) {
@@ -934,6 +938,8 @@ class ModuleUpgrader
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
+        $this->colourPrint('- Type: '.($this->isModuleUpgrade ? 'module' : 'project'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Name: '.$this->vendorName, 'light_cyan');
         $this->colourPrint('- Package Name: '.$this->packageName, 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');

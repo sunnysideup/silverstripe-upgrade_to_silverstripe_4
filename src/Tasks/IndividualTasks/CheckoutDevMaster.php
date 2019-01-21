@@ -38,7 +38,7 @@ class CheckoutDevMaster extends Task
             );
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source --update-no-dev --prefer-stable ',
+                'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source --update-no-dev ',
                 'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
                 false
             );

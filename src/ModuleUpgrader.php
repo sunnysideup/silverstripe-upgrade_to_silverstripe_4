@@ -158,6 +158,7 @@ class ModuleUpgrader
         'Upgrade' => [],
 
         //Step5: FixUpgrade
+        'FixBadUseStatements' => [],
         'InspectAPIChanges-1' => [],
         'AddTableNamePrivateStatic' => [],
         'DatabaseMigrationLegacyYML' => [],

@@ -113,7 +113,7 @@ class FixRequirements extends Task
                             if (!$find) {
                                 user_error("no find is specified, replace is: $replace");
                             }
-                            $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
+                            $replacementType = $isStraightReplace ? "BASIC" : "COMPLEX";
 
                             foreach (['\'', '"'] as $quoteMark) {
                                 $finalReplace = $find.$quoteMark.$vendorAndPackageFolderNameForInstall.': ';
@@ -126,7 +126,7 @@ class FixRequirements extends Task
                                     '    --- REPLACE: '.$finalReplace."\n"
                                 );
 
-                                $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replaceKey);
+                                $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
                                 $textSearchMachine->setReplacementKey($finalReplace);
                                 $textSearchMachine->startSearchAndReplace();
                             }

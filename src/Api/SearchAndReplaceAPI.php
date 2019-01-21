@@ -236,7 +236,7 @@ class SearchAndReplaceAPI
     public function setReplacementKey($replacementKey)
     {
         $this->replacementKey     = $replacementKey;
-        $this->isReplacingEnabled = true;
+        $this->setIsReplacingEnabled(true);
 
         return $this;
     }
@@ -424,8 +424,8 @@ class SearchAndReplaceAPI
      */
     private function searchFileData($file)
     {
-        $searchKey  = preg_quote($this->searchKey, '/');
-        if ($this->replacementKey) {
+        $searchKey = preg_quote($this->searchKey, '/');
+        if ($this->isReplacingEnabled) {
             $oldFileContentArray = file($file);
             $newFileContentArray = [];
             $pattern = "/$searchKey/U";

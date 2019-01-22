@@ -67,11 +67,11 @@ class SearchAndReplaceAPI
 
     // static counts
 
-    private static $search_key_totals  = [];
+    private $searchKeyTotals           = [];
 
-    private static $folder_totals      = [];
+    private $folderTotals              = [];
 
-    private static $total_total        = 0;
+    private $totalTotal                = 0;
 
     public function __construct($basePath = '')
     {
@@ -322,7 +322,7 @@ class SearchAndReplaceAPI
      */
     public function getTotalTotalSearches()
     {
-        return self::$total_total;
+        return $this->totalTotal;
     }
 
     /**
@@ -331,7 +331,7 @@ class SearchAndReplaceAPI
     public function showFormattedSearchTotals($suppressOutput = false)
     {
         $totalSearches = 0;
-        foreach (self::$search_key_totals as $searchKey => $total) {
+        foreach ($this->searchKeyTotals as $searchKey => $total) {
             $totalSearches += $total;
         }
         if ($suppressOutput) {
@@ -350,13 +350,13 @@ class SearchAndReplaceAPI
             $folderSimpleTotals = [];
             $realBase = realpath($this->basePath);
             $this->addToOutput("\n------------------------------------\nSummary: by search key\n------------------------------------\n");
-            arsort(self::$search_key_totals);
-            foreach (self::$search_key_totals as $searchKey => $total) {
+            arsort($this->searchKeyTotals);
+            foreach ($this->searchKeyTotals as $searchKey => $total) {
                 $this->addToOutput(sprintf("%d:\t %s\n", $total, $searchKey));
             }
             $this->addToOutput("\n------------------------------------\nSummary: by directory\n------------------------------------\n");
-            arsort(self::$folder_totals);
-            foreach (self::$folder_totals as $folder => $total) {
+            arsort($this->folderTotals);
+            foreach ($this->folderTotals as $folder => $total) {
                 $path = str_replace($realBase, "", realpath($folder));
                 $pathArr = explode("/", $path);
                 if (isset($pathArr[1])) {
@@ -379,7 +379,7 @@ class SearchAndReplaceAPI
             $this->addToOutput(sprintf("\n------------------------------------\nTotal replacements: %d\n------------------------------------\n", $totalSearches));
         }
         //add to total total
-        self::$total_total += $totalSearches;
+        $this->totalTotal += $totalSearches;
 
         //return total
         return $totalSearches;
@@ -501,15 +501,15 @@ class SearchAndReplaceAPI
 
                     //stats
                     $this->totalFound += $foundInLineCount;
-                    if (!isset(self::$search_key_totals[$this->searchKey])) {
-                        self::$search_key_totals[$this->searchKey] = 0;
+                    if (!isset($this->searchKeyTotals[$this->searchKey])) {
+                        $this->searchKeyTotals[$this->searchKey] = 0;
                     }
-                    self::$search_key_totals[$this->searchKey] += $foundCount;
+                    $this->searchKeyTotals[$this->searchKey] += $foundCount;
 
-                    if (!isset(self::$folder_totals[dirname($file)])) {
-                        self::$folder_totals[dirname($file)] = 0;
+                    if (!isset($this->folderTotals[dirname($file)])) {
+                        $this->folderTotals[dirname($file)] = 0;
                     }
-                    self::$folder_totals[dirname($file)] += $foundCount;
+                    $this->folderTotals[dirname($file)] += $foundCount;
 
                     //log
                     $foundStr = "-- $foundCount x";

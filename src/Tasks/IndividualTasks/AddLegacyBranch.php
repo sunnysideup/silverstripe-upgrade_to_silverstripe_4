@@ -47,7 +47,7 @@ class AddLegacyBranch extends Task
                     git push origin '.$this->nameOfLegacyBranch.';
 
             fi',
-            'create legacy branch: '.$this->nameOfLegacyBranch.' in '.$location,
+            'create legacy branch: '.$this->nameOfLegacyBranch.' in '.$gitRootDir,
             false
         );
     }

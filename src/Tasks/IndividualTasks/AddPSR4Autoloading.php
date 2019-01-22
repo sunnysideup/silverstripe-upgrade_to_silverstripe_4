@@ -28,79 +28,63 @@ class AddPSR4Autoloading extends Task
 
     public function runActualTask($params = [])
     {
+        //project composer.json
+            // - app/src/...
+            // - app2/src/...
+            // DO FOR BOTH
+        //module composor.json
+            //  ONLY FOR module
         $listOfAutoLoads = [];
-        $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
-        foreach($codeDirs as $baseNameSpace => $codeDir) {
-            if (file_exists($codeDir)) {
-                // $moduleDir = dirname($codeDir);
-                $di = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($codeDir, \FilesystemIterator::SKIP_DOTS),
-                    \RecursiveIteratorIterator::CHILD_FIRST
-                );
-
-                //For all directories
-                foreach ($di as $name => $fio) {
-                    if ($fio->isDir()) {
-                        //If its a directory then
-                        $fullLocation = $fio->getPathname();
-                        $shortLocation = str_replace(
-                            $codeDir,
-                            '',
-                            $fullLocation
-                        );
-                        $this->mu()->colourPrint('found dir: '.$name);
-                        $this->mu()->colourPrint('full location: '.$fullLocation);
-                        $this->mu()->colourPrint('short location location: '.$shortLocation);
-                        if (! in_array($shortLocation, $listOfAutoLoads)) {
-                            $nameSpace = rtrim($shortLocation, '.php');
-                            $nameSpace = rtrim($nameSpace, '/');
-                            $nameSpace = ltrim($nameSpace, '/');
-                            $nameSpace = str_replace('/', "\\\\", $nameSpace);
-                            $nameSpace .= "\\\\";
-                            $nameSpace =
-                                str_replace('\\', '\\\\', $baseNameSpace).
-                                '\\\\'.
-                                $nameSpace;
-                            $this->mu()->colourPrint('Adding to Autoload PSR-4: ' . $shortLocation, 'green');
-                            $listOfAutoLoads[$nameSpace] = $shortLocation;
-                        }
-                    }
-                }
-            } else {
-                $this->mu()->colourPrint('Code Folder can not be found: '.$codeDir, 'red');
+        $baseCommands = '
+            if(! isset($data["autoload"])) {
+                $data["autoload"] = [];
             }
-            if (count($listOfAutoLoads)) {
-                $command =
-                '
-    if(! isset($data["autoload"])) {
-        $data["autoload"] = [];
-    }
-    if(! isset($data["autoload"]["psr-4"])) {
-        $data["autoload"]["psr-4"] = [];
-    }
-                ';
-                foreach ($listOfAutoLoads as $key => $value) {
-                    $command .= '
-    $data["autoload"]["psr-4"]["'.$key.'"] = "'.$value.'";';
-                }
-                $comment = '
-    Adding autoload psr-4 details:
-    '.json_encode($listOfAutoLoads, true);
-
+            if(! isset($data["autoload"]["psr-4"])) {
+                $data["autoload"]["psr-4"] = [];
+            }
+                        ';
+        $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
+        $webRootLocation = $this->mu()->getWebRootDirLocation();
+        foreach($codeDirs as $baseNameSpace => $codeDir) {
+            $location = trim(str_replace($webRootLocation,'', $codeDir), '/').'/';
+            //update webroot composer file
+            //location:
+            $command = $baseCommands.'
+            $data["autoload"]["psr-4"]["'.$this->doubleSlash($baseNameSpace).'"] = "'.$location.'";';
+            $comment = 'Adding autoload psr-4 details in '.$webRootLocation.'/composer.json: '.$baseNameSpace.' => '.$location;
+            $this->updateJSONViaCommandLine(
+                $webRootLocation,
+                $command,
+                $comment
+            );
+            if($this->mu()->getIsModuleUpgrade()) {
+                $moduleLocation = dirname($codeDir);
+                $location = trim(basename($codeDir), '/').'/';
+                $command = $baseCommands.'
+                $data["autoload"]["psr-4"]["'.$this->doubleSlash($baseNameSpace).'"] = "'.ltrim($location, '/').'";';
+                $comment = 'Adding autoload psr-4 details in '.$moduleLocation.'/composer.json: '.$baseNameSpace.' => '.$location;
                 $this->updateJSONViaCommandLine(
-                    $this->mu()->getGitRootDir(),
+                    $moduleLocation,
                     $command,
                     $comment
                 );
-            } else {
-                $this->mu()->colourPrint('No namespaces could be located in: '.$codeDir, 'red');
             }
         }
-        $this->setCommitMessage('MAJOR: adding psr-4 autoload');
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'composer dumpautoload',
+            'run composer dumpautoload',
+            false
+        );
     }
 
     protected function hasCommitAndPush()
     {
         return true;
+    }
+
+    protected function doubleSlash($str)
+    {
+        return str_replace('\\', '\\\\', $str);
     }
 }

@@ -29,7 +29,7 @@
             "Sunnysideup\\UpgradeToSilverstripe4\\":"src/",
             "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/",
             "SilverStripe\\Upgrader\\Util\\":"vendor/silverstripe/Upgrader/src/Util/",
-            "PhpCsFixer\\": "src/"
+            "PhpCsFixer\\": "vendor/friendsofphp/php-cs-fixer/src/"
         }
     },
     "scripts": {

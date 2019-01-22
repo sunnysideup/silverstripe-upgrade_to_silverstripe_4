@@ -614,13 +614,13 @@ class ModuleUpgrader
             $codeDir = $this->findMyCodeDir($location);
             if($codeDir) {
                 if($this->getIsModuleUpgrade()) {
-                    $baseNameSpace = $this->getVendorNamespace().'\\'.$this->getPackageNamespace();
+                    $baseNameSpace = $this->getVendorNamespace().'\\'.$this->getPackageNamespace().'\\';
                 } else {
                     $nameSpaceKey = ucwords(basename($location));
-                    if($nameSpaceKey === 'App' || $nameSpaceKey === 'Mysite') {
+                    if(strtolower($nameSpaceKey) === 'app' || strtolower($nameSpaceKey) === 'mysite') {
                         $nameSpaceKey = $this->getPackageNamespace();
                     }
-                    $baseNameSpace = $this->getVendorNamespace().'\\'.$nameSpaceKey;
+                    $baseNameSpace = $this->getVendorNamespace().'\\'.$nameSpaceKey.'\\';
                 }
                 $codeDirs[$baseNameSpace] = $codeDir;
             }

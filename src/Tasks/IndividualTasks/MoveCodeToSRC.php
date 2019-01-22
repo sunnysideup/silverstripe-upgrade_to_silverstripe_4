@@ -39,7 +39,7 @@ class MoveCodeToSRC extends Task
 if test -d '.$old.'; then
     mv -vn '.$old.' '.$new.';
 else
-    echo \' !!!!!!!!! Error in moving '.$moduleDir.'/.'.$old.' to '.$moduleDir.'/.'.$new.' !!!!!!!!! \';
+    echo \' !!!!!!!!! Error in moving '.$moduleDir.'/'.$old.' to '.$moduleDir.'/'.$new.' !!!!!!!!! \';
 fi;',
                 'moving '.$old.' to '.$new.' -v is verbose, -n is only if destination does not exists',
                 false

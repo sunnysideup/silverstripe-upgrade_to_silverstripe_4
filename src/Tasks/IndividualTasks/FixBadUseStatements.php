@@ -98,16 +98,16 @@ class FixBadUseStatements extends Task
                             $isStraightReplace = true;
                             $replacementType = "BASIC";
 
-                            $this->mu()->colourPrint(
-                                "++++++++++++++++++++++++++++++++++++\n".
-                                "CHECKING\n".
-                                "IN $path\n".
-                                "FOR $extension FILES\n".
-                                "BASE ".$moduleDir."\n".
-                                "FIND '".$find."'\n".
-                                "REPLACE ''\n".
-                                "++++++++++++++++++++++++++++++++++++\n"
-                            );
+                            // $this->mu()->colourPrint(
+                            //     "++++++++++++++++++++++++++++++++++++\n".
+                            //     "CHECKING\n".
+                            //     "IN $path\n".
+                            //     "FOR $extension FILES\n".
+                            //     "BASE ".$moduleDir."\n".
+                            //     "FIND '".$find."'\n".
+                            //     "REPLACE ''\n".
+                            //     "++++++++++++++++++++++++++++++++++++\n"
+                            // );
                             $textSearchMachine->setSearchKey($find, $caseSensitive, $replacementType);
                             $textSearchMachine->setReplacementKey('');
                             $textSearchMachine->startSearchAndReplace();

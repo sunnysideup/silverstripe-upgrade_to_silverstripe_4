@@ -24,13 +24,12 @@ class ApplyPSR2 extends Task
 
     public function runActualTask($params = [])
     {
+        $execer = $this->mu()->getLocationOfThisUpgrader().'/vendor/bin/php-cs-fixer';
         foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+
             $this->mu()->execMe(
                 $codeDir,
-                '
-                    cd '.$codeDir.'
-                    vendor/bin/php-cs-fixer fix ./ --using-cache=no --rules=@PSR2
-                ',
+                $execer.' fix '.$codeDir.' --using-cache=no --rules=@PSR2',
                 'Apply PSR-2 to '.$codeDir.' ('.$baseNameSpace.')',
                 false
             );

@@ -42,7 +42,13 @@ class AddPSR4Autoloading extends Task
             if(! isset($data["autoload"]["psr-4"])) {
                 $data["autoload"]["psr-4"] = [];
             }
-                        ';
+            if(! isset($data["autoload"]["files"])) {
+                $data["autoload"]["files"] = [
+                    "app/src/Page.php",
+                    "app/src/PageController.php"
+                ];
+            }
+        ';
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
         $webRootLocation = $this->mu()->getWebRootDirLocation();
         foreach($codeDirs as $baseNameSpace => $codeDir) {

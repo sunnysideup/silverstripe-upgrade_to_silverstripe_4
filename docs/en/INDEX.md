@@ -96,7 +96,7 @@ $obj = ModuleUpgrader::create()
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
     ->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
-    ->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')
+    ->setLocationOfSSUpgradeModule('~/.composer/vendor/bin/upgrade-code')
     ->setStartFrom('Recompose')
     ->setEndWith('ComposerInstallProject');
 
@@ -175,7 +175,7 @@ All upgrade changes will be committed to this branch. **Careful!  This branch wi
 
 ### location for the Silverstripe Upgrade module
 
-`->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')`: you would have installed this already.
+`->setLocationOfSSUpgradeModule('~/.composer/vendor/bin/upgrade-code')`: you would have installed this already.
 
 
 ### include upgrading `_ss_environment` file?

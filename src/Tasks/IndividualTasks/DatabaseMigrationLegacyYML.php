@@ -32,8 +32,8 @@ class DatabaseMigrationLegacyYML extends Task
     {
         foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $oldFile = $moduleDir.'/.upgrade.yml ';
-            $newFile = $moduleDir.'/_config/legacy.yml';
-            $tmpFile = $moduleDir.'/_config/legacy.yml.tmp';
+            $newFile = $moduleDir.'/_config/database.legacy.yml';
+            $tmpFile = $moduleDir.'/_config/database.legacy.yml.tmp';
             $mvStatement = $newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile;
             $this->mu()->execMe(
                 $moduleDir,
@@ -52,7 +52,7 @@ class DatabaseMigrationLegacyYML extends Task
             );
             $this->mu()->execMe(
                 $moduleDir,
-                'sed -i -e \'s/^/  /\' ' . $mvStatement,
+                "sed -i -e 's/^/  /' ".$newFile,
                 'adding two additional spaces to the start of each line',
                 false
             );

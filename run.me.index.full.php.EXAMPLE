@@ -24,7 +24,7 @@ $obj = ModuleUpgrader::create()
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
-    ->setLocationOfUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
+    ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     // ->setListOfTasks(
     //     [
     //         'ResetWebRootDir-1' => [],

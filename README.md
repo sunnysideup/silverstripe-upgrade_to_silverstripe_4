@@ -211,7 +211,7 @@ specific stuff for your composer.
 
 ### location for the Silverstripe Upgrade module
 
-`->setLocationOfUpgradeModule('~/.composer/vendor/bin/upgrade-code')`:
+`->setLocationOfSSUpgradeModule('~/.composer/vendor/bin/upgrade-code')`:
 this module is also installed with this tool (via composer requirements)
 so, in general, there is no need to set this.
 

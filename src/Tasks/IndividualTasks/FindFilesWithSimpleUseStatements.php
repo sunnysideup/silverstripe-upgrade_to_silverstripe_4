@@ -21,6 +21,10 @@ class FindFilesWithSimpleUseStatements extends Task
             Goes through all the PHP files and makes sure that only one class is defined.  If any are found than the code exits as you should fix this first!' ;
     }
 
+    protected $listOfOKOnes = [
+        'Page',
+        'PageController',
+    ];
 
     public function runActualTask($params = [])
     {
@@ -47,13 +51,17 @@ class FindFilesWithSimpleUseStatements extends Task
                             if (
                                 T_USE === $tokens[$index][0] &&
                                 T_WHITESPACE === $tokens[$index + 1][0] &&
-                                T_STRING === $tokens[$index + 2][0]
+                                T_STRING === $tokens[$index + 2][0] &&
+                                $tokens[$index + 3] === ';'
                             ) {
-                                $testPhrase = ltrim($tokens[$index + 2][0], '\\');
-                                if(!strpos($testPhrase, '\\')) {
-                                    $errors[] = $path.': '.$tokens[$index][0] . $tokens[$index + 1][0] . $tokens[$index + 2][0];
+                                $string = $tokens[$index + 2][1];
+                                if(! in_array($string, $this->listOfOKOnes)) {
+                                    $testPhrase = ltrim($string, '\\');
+                                    if(!strpos($testPhrase, '\\')) {
+                                        $errors[] = $path.': '.$tokens[$index][1] . $tokens[$index + 1][1] . $tokens[$index + 2][1].';';
+                                    }
                                 }
-                                $index += 2; // Skip class keyword and whitespace
+                                $index += 3; // Skip checked ones ...
                             }
                         }
                     }
@@ -74,5 +82,20 @@ class FindFilesWithSimpleUseStatements extends Task
     protected function hasCommitAndPush()
     {
         return false;
+    }
+
+
+    protected function testme()
+    {
+        // $string = "<?php
+        // echo 'xxx';";
+        // /* Use tab and newline as tokenizing characters as well  */
+        // $tok = token_get_all($string);
+        //
+        // for ($index = 0; isset($tok[$index]); $index++) {
+        //     print_r($tok[$index]);
+        //     echo '-----';
+        // }
+        // die('xxx');
     }
 }

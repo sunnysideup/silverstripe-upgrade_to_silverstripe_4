@@ -154,6 +154,8 @@ SS4:
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
             "THIRDPARTY_DIR.'/jquery/jquery.js'":
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+            'THIRDPARTY_DIR."/jquery-form/jquery.form.js"':
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
             'public function includeInHTML($templateFile, $content)':
                 R: "public function includeInHTML($content)"
                 I: true
@@ -193,6 +195,9 @@ SS4:
                 R: 'get_class($this))'
             '$this->class;':
                 R: 'get_class($this);'
+            '$this->class ==':
+                R: '$this->ClassName =='
+                C: 'Check for usage of class ...'
             'request_contains_session_id(':
                 R: 'requestContainsSessionId('
             '->setWidth(':
@@ -223,7 +228,7 @@ SS4:
             '_Controller':
                 R: "Controller"
             'Director:':
-                R: "SilverStripe\\Control\\Director"
+                R: "SilverStripe\\Control\\Director:"
             'SiteTree:':
                 R: "SilverStripe\\CMS\\Model\\SiteTree:"
             'AssetAdmin:':

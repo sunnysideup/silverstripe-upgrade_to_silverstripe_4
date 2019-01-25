@@ -3,6 +3,12 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
+/**
+ * below are examples
+ * of most of the config options
+ *
+ * N.B. the individual tasks also have config options!
+ */
 $obj = ModuleUpgrader::create()
     ->setRunImmediately(true)
     ->setIsModuleUpgrade(true)
@@ -10,6 +16,8 @@ $obj = ModuleUpgrader::create()
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('__upgradeto4__')
     ->setRunInteractively(true)
+    // ->setRestartSession(true)
+    // ->setRunIrreversibly(true)
     ->setArrayOfModules(
         [
             1 => [
@@ -23,6 +31,7 @@ $obj = ModuleUpgrader::create()
         ]
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
+    ->frameworkComposerRestrain('^4.3')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     // ->setListOfTasks(
@@ -57,4 +66,12 @@ $obj = ModuleUpgrader::create()
     // ->setStartFrom('RecomposeHomeBrew')
     // ->setEndWith('SearchAndReplace')
     // ->setOnlyRun('SearchAndReplace')
+    // ->removeFromListOfTasks('SearchAndReplace')
+    // ->addToListOfTasks(
+    //      ['MyCustomTasks\\CustomNameSpace\\SearchAndReplace2'],
+    //      $beforeOrAfter = 'SearchAndReplace',
+    //      $isBefore = false
+    // )
+    // ->defaultNamespaceForTask('MyCustomisation\\CustomNameSpace\\MyTasks')
+    // ->setVerbose(false)
     ->run();

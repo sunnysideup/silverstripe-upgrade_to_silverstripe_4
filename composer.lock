@@ -1637,12 +1637,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silverstripe/silverstripe-upgrader.git",
-                "reference": "766df2a10ea3034ce3501f4e7d51a26442695f6c"
+                "reference": "c4bc6094e53f60a5069c49a8861311e33cf31e4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/766df2a10ea3034ce3501f4e7d51a26442695f6c",
-                "reference": "766df2a10ea3034ce3501f4e7d51a26442695f6c",
+                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/c4bc6094e53f60a5069c49a8861311e33cf31e4a",
+                "reference": "c4bc6094e53f60a5069c49a8861311e33cf31e4a",
                 "shasum": ""
             },
             "require": {
@@ -1692,7 +1692,7 @@
                 }
             ],
             "description": "A tool to help upgrade your code to handle API changes in packages you used.",
-            "time": "2019-01-16T04:41:16+00:00"
+            "time": "2019-01-24T01:39:39+00:00"
         },
         {
             "name": "sunnysideup/php_2_command_line",
@@ -1736,12 +1736,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d78ff9239213a6349455d08325ae2ca9b57f25c9"
+                "reference": "c195108dddab91f51b9c57f63e8b184d0a257a54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d78ff9239213a6349455d08325ae2ca9b57f25c9",
-                "reference": "d78ff9239213a6349455d08325ae2ca9b57f25c9",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c195108dddab91f51b9c57f63e8b184d0a257a54",
+                "reference": "c195108dddab91f51b9c57f63e8b184d0a257a54",
                 "shasum": ""
             },
             "require": {
@@ -1800,7 +1800,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-16T21:53:45+00:00"
+            "time": "2019-01-25T14:35:46+00:00"
         },
         {
             "name": "symfony/contracts",
@@ -2324,12 +2324,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "e9f208633ac7ef167801cf4da916e07a6149fa33"
+                "reference": "9a8319d32b6c338826f9181aadfa8865b31ed9f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/e9f208633ac7ef167801cf4da916e07a6149fa33",
-                "reference": "e9f208633ac7ef167801cf4da916e07a6149fa33",
+                "url": "https://api.github.com/repos/symfony/process/zipball/9a8319d32b6c338826f9181aadfa8865b31ed9f8",
+                "reference": "9a8319d32b6c338826f9181aadfa8865b31ed9f8",
                 "shasum": ""
             },
             "require": {
@@ -2365,7 +2365,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-16T21:53:39+00:00"
+            "time": "2019-01-24T22:35:38+00:00"
         },
         {
             "name": "symfony/stopwatch",

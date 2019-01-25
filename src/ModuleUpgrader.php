@@ -228,12 +228,11 @@ class ModuleUpgrader
         return $this;
     }
 
-    public function restartInteractive()
-    {
-        $this->deleteSession();
-
-        return $this;
-    }
+    /**
+     * Should the session details be deleted before we start?
+     * @var bool
+     */
+    protected $restartSession = false;
 
     /**
      * are we upgrading a module or a whole project?
@@ -752,7 +751,7 @@ class ModuleUpgrader
                     }
                     $previousStep = $currentStep;
                 }
-                $html .= '<h4>'.$count.' / '.$totalCount.': '.$obj->getTitle().'</h4>';
+                $html .= '<h4>'.$count.': '.$obj->getTitle().'</h4>';
                 $html .= '<p>'.$obj->getDescription().'<br />';
                 $html .= '<strong>Code: </strong>'.$class;
                 $html .= '<br /><strong>Class Name: </strong><a href="'.$path.'">'. $reflectionClass->getShortName() .'</a>';
@@ -793,6 +792,9 @@ class ModuleUpgrader
         $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation.'/'.$this->webRootName);
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
+            if($this->restartSession) {
+                $this->deleteSession();
+            }
             $this->workOutMethodsToRun();
             foreach ($this->listOfTasks as $class => $params) {
                 $properClass = current(explode('-', $class));
@@ -823,7 +825,7 @@ class ModuleUpgrader
                             $this->colourPrint('# --------------------', 'yellow', 3);
                             $this->colourPrint('# '.$obj->getTitle(). ' ('.$params['taskName'].')', 'yellow');
                             $this->colourPrint('# --------------------', 'yellow');
-                            $this->colourPrint('# skipped', 'light_green');
+                            $this->colourPrint('# skipped', 'yellow');
                             $this->colourPrint('# --------------------', 'yellow');
                         }
                     }
@@ -973,7 +975,7 @@ class ModuleUpgrader
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Session file: '.($this->getSessionFileLocation()), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Last Step: '.$this->getSessionValue('Completed'), 'light_cyan');
+        $this->colourPrint('- Last Step: '.($this->getSessionValue('Completed') ? : 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Run Irreversibly: '.($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
@@ -1125,7 +1127,10 @@ Session has completed.
             }
         } catch ( Exception $e ) {
             // send error message if you can
-            echo 'Caught exception: ',  $e->getMessage(), "\n";
+            $this->colourPrint(
+                'Caught exception: ',  $e->getMessage(), "\n",
+                'red'
+            );
         }
     }
 

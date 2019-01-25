@@ -224,6 +224,11 @@ SS4:
             '$className':
                 R: '$className'
                 C: 'Check if the class name can still be used as such'
+            'app/images/':
+                R: 'app: images/'
+                C: 'check for location'
+            'function FieldHolder':
+                R: 'function FieldHolder($properties = [])'
         'yml':
             '_Controller':
                 R: "Controller"

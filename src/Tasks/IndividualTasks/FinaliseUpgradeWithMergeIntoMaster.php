@@ -44,7 +44,6 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
             $this->mu()->execMe(
                 $this->mu()->getGitRootDir(),
                 '
-                    cd '.$this->mu()->getGitRootDir().'
                     git checkout '.$branchName.'
                     git pull origin '.$branchName.'
                     git checkout master

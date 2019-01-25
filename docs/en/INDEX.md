@@ -1,6 +1,5 @@
 This module aims to help developers upgrade SS3 modules to SS4 without doing any manual rewriting. You can provide a list of modules and run the code below.  This will create a branch in your module that is SS4 ready. After inspection you can then merge this into `dev/master` as you see fit.
 
-
 # prerequisites before you start:
 
  - module to be upgraded needs to be listed on packagist
@@ -34,6 +33,8 @@ In short, it checks out dev-master of your module / project.  Adds a branch name
 
 Next, it runs a bunch of upgrades, including the ones in the original SilverStripe
 upgrade module.
+
+To see a full list of steps in this module, please visit: <a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/edit/master/docs/en/AvailableTasks.md">Available Tasks</a> list.
 
 # installation and usage:
 

@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
  */
 $obj = ModuleUpgrader::create()
     ->setRunImmediately(true)
-    ->setIsModuleUpgrade(true)
+    ->setIsModuleUpgrade(false)
     ->setLogFolderDirLocation('/var/www/logdir')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('__upgradeto4__')
@@ -25,7 +25,7 @@ $obj = ModuleUpgrader::create()
               'VendorNamespace' => 'Sunnysideup',
               'PackageName' => 'frontendeditor',
               'PackageNamespace' => 'FrontendEditor',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-frontendeditor.git',
+              'GitLink' => 'git@bitbucket.org:sunnysideupnz/upgradesilverstripe.com.git',
               'UpgradeAsFork' => false
             ]
         ]

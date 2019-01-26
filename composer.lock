@@ -246,12 +246,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "e3f340458cc47934d77c02c73b93f064d56d4fe8"
+                "reference": "99894e46668d01fb224b2ddd86f269514fb85c00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/e3f340458cc47934d77c02c73b93f064d56d4fe8",
-                "reference": "e3f340458cc47934d77c02c73b93f064d56d4fe8",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/99894e46668d01fb224b2ddd86f269514fb85c00",
+                "reference": "99894e46668d01fb224b2ddd86f269514fb85c00",
                 "shasum": ""
             },
             "require": {
@@ -334,7 +334,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2019-01-11T16:23:22+00:00"
+            "time": "2019-01-26T18:40:28+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -714,12 +714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/di.git",
-                "reference": "a448a259faacbaf17bbcae4e5d20da1fcc2d1958"
+                "reference": "1cde060c5feb93542aa19fb2c5d9c3b2bc9862cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/di/zipball/a448a259faacbaf17bbcae4e5d20da1fcc2d1958",
-                "reference": "a448a259faacbaf17bbcae4e5d20da1fcc2d1958",
+                "url": "https://api.github.com/repos/nette/di/zipball/1cde060c5feb93542aa19fb2c5d9c3b2bc9862cc",
+                "reference": "1cde060c5feb93542aa19fb2c5d9c3b2bc9862cc",
                 "shasum": ""
             },
             "require": {
@@ -778,7 +778,7 @@
                 "nette",
                 "static"
             ],
-            "time": "2019-01-15T12:07:57+00:00"
+            "time": "2019-01-26T14:45:46+00:00"
         },
         {
             "name": "nette/finder",
@@ -2132,7 +2132,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",

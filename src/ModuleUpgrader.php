@@ -74,7 +74,7 @@ class ModuleUpgrader
             if (isset($this->$var)) {
                 if ($getOrSet === 'get') {
                     if (strpos($var, 'DirLocation') !== false || strpos($var, 'FileLocation') !== false) {
-                        return $this->checkIfPathExistsAndCleanItUp($this->$var);
+                        return $this->checkIfPathExistsAndCleanItUp($this->$var, true);
                     } else {
                         return $this->$var;
                     }
@@ -559,6 +559,12 @@ class ModuleUpgrader
                 $array[$location] = $location;
             }
         }
+        if(count($array) === 0) {
+            user_error(
+                'You need to set moduleDirLocations (setModuleDirLocations)
+                as there are currently none.
+            ');
+        }
 
         return $array;
     }
@@ -695,19 +701,19 @@ class ModuleUpgrader
      *
      * @param  string $path
      *
-     * @return string
+     * @return string | null
      */
-    public function checkIfPathExistsAndCleanItUp($path)
+    public function checkIfPathExistsAndCleanItUp($path, $returnEvenIfItDoesNotExists = false)
     {
         $originalPath = $path;
         $path = str_replace('///', '/', $path);
         $path = str_replace('//', '/', $path);
-        if (file_exists($path)) {
+        if (file_exists($path) || $returnEvenIfItDoesNotExists) {
             $path = realpath($path);
-        }
-        $path = rtrim($path, '/');
+            $path = rtrim($path, '/');
 
-        return $path;
+            return $path;
+        }
     }
 
 
@@ -789,13 +795,11 @@ class ModuleUpgrader
         );
 
         $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation);
-        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation.'/'.$this->webRootName);
+        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation.'/'.$this->webRootName, true);
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
-            if($this->restartSession) {
-                $this->deleteSession();
-            }
             $this->workOutMethodsToRun();
+            $this->printVarsForModule($moduleDetails);
             foreach ($this->listOfTasks as $class => $params) {
                 $properClass = current(explode('-', $class));
                 $nameSpacesArray = explode('\\', $class);
@@ -867,11 +871,18 @@ class ModuleUpgrader
     }
 
     /**
+     *
+     * @var string
+     */
+    protected $originComposerFileLocation = '';
+
+    /**
      * Loads in and sets all the meta data for a module from the inputed array
      * @param array $moduleDetails
      */
     protected function loadVarsForModule($moduleDetails)
     {
+
         //VendorName
         $this->vendorName = $moduleDetails['VendorName'];
 
@@ -900,19 +911,36 @@ class ModuleUpgrader
         $this->gitLinkAsHTTPS = rtrim(str_replace('git@github.com:', 'https://github.com/', $this->gitLink), '.git');
         $this->gitLinkAsRawHTTPS = rtrim(str_replace('git@github.com:', 'https://raw.githubusercontent.com/', $this->gitLink), '.git');
 
-        if($this->getSessionValue('PackageFolderNameForInstall')) {
-            $this->packageFolderNameForInstall = $this->getSessionValue('PackageFolderNameForInstall');
+
+        //Origin Composer FileLocation
+        $this->originComposerFileLocation = isset($moduleDetails['OriginComposerFileLocation']) ? $moduleDetails['OriginComposerFileLocation'] : '';
+        if($this->packageFolderNameForInstall) {
+            //do nothing
         } else {
-            $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
-            $json = file_get_contents($jsonFile);
-            $array = json_decode($json, true);
-            if (isset($array['extra']['installer-name'])) {
-                $this->packageFolderNameForInstall = $array['extra']['installer-name'];
+            if($this->getSessionValue('PackageFolderNameForInstall')) {
+                $this->packageFolderNameForInstall = $this->getSessionValue('PackageFolderNameForInstall');
             } else {
-                $this->packageFolderNameForInstall = $this->packageName;
-            }
-            if (isset($moduleDetails['PackageFolderNameForInstall'])) {
-                $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
+                if(! $this->originComposerFileLocation) {
+                    $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
+                }
+                if($this->URLExists($this->originComposerFileLocation)) {
+                    $json = file_get_contents($this->originComposerFileLocation);
+                    $array = json_decode($json, true);
+                    if (isset($array['extra']['installer-name'])) {
+                        $this->packageFolderNameForInstall = $array['extra']['installer-name'];
+                    } else {
+                        if($this->isModuleUpgrade) {
+                            $this->packageFolderNameForInstall = $this->packageName;
+                        } else {
+                            $this->packageFolderNameForInstall = 'mysite';
+                        }
+                    }
+                    if (isset($moduleDetails['PackageFolderNameForInstall'])) {
+                        $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
+                    }
+                } else {
+                    user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation');
+                }
             }
             $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);
         }
@@ -923,8 +951,13 @@ class ModuleUpgrader
                 $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall
             ];
         } else {
-            foreach($this->moduleDirLocations as $key => $location) {
-                $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
+            if(! count($this->moduleDirLocations)) {
+                $this->moduleDirLocations[] = $this->webRootDirLocation . '/mysite';
+                $this->moduleDirLocations[] = $this->webRootDirLocation . '/app';
+            } else {
+                foreach($this->moduleDirLocations as $key => $location) {
+                    $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
+                }
             }
         }
 
@@ -939,6 +972,9 @@ class ModuleUpgrader
         //UpgradeAsFork
         $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
 
+        //Is Module Upgrade
+        $this->isModuleUpgrade = isset($moduleDetails['IsModuleUpgrade']) ? $moduleDetails['IsModuleUpgrade'] : true;
+
         //LogFileLocation
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {
@@ -948,7 +984,13 @@ class ModuleUpgrader
             $this->commandLineExec->setLogFileLocation('');
         }
 
+        if($this->restartSession) {
+            $this->deleteSession();
+        }
+    }
 
+    protected function printVarsForModule()
+    {
         //output the confirmation.
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
@@ -958,26 +1000,30 @@ class ModuleUpgrader
         $this->colourPrint('- Vendor Name: '.$this->vendorName, 'light_cyan');
         $this->colourPrint('- Package Name: '.$this->packageName, 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Run Interactively: '.($this->runInteractively ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Run Irreversibly: '.($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
         $this->colourPrint('- Package Namespace: '.$this->packageNamespace, 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Package Folder Name For Install: '.$this->packageFolderNameForInstall, 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Module / Project Dir(s): '.implode(', ', $this->moduleDirLocations), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Git and Composer Root Dir: '.$this->getGitRootDir(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Origin composer file location : '.$this->originComposerFileLocation, 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Git Repository Link (SSH): '.$this->gitLink, 'light_cyan');
         $this->colourPrint('- Git Repository Link (HTTPS): '.$this->gitLinkAsHTTPS, 'light_cyan');
         $this->colourPrint('- Git Repository Link (RAW): '.$this->gitLinkAsRawHTTPS, 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Run Interactively: '.($this->runInteractively ? 'yes' : 'no'), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Session file: '.($this->getSessionFileLocation()), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Last Step: '.($this->getSessionValue('Completed') ? : 'not set'), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Run Irreversibly: '.($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
@@ -1139,6 +1185,19 @@ Session has completed.
         $session = $this->getSessionData();
         $session[$key] = $value;
         $this->setSessionData($session);
+    }
+
+    protected function URLExists($url)
+    {
+        $headers = get_headers($url);
+        if(is_array($headers) && count($headers)) {
+            foreach($headers as $header) {
+                if( substr($header, 9, 3) === "200") {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

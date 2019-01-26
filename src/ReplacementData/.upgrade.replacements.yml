@@ -227,7 +227,7 @@ SS4:
             'app/images/':
                 R: 'app: images/'
                 C: 'check for location'
-            'function FieldHolder':
+            'function FieldHolder()':
                 R: 'function FieldHolder($properties = [])'
         'yml':
             '_Controller':

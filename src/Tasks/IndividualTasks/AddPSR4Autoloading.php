@@ -42,15 +42,27 @@ class AddPSR4Autoloading extends Task
             if(! isset($data["autoload"]["psr-4"])) {
                 $data["autoload"]["psr-4"] = [];
             }
+        ';
+        $addPage = '';
+        if($this->mu()->getIsModuleUpgrade()) {
+            $addPage = '
             if(! isset($data["autoload"]["files"])) {
                 $data["autoload"]["files"] = [
                     "app/src/Page.php",
                     "app/src/PageController.php"
                 ];
-            }
-        ';
+            }';
+        } else {
+        }
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
         $webRootLocation = $this->mu()->getWebRootDirLocation();
+        $command = $baseCommands.$addPage;
+        $comment = 'Adding autoload Page and Page controller details in '.$webRootLocation.'/composer.json: '.$baseNameSpace.' => '.$location;
+        $this->updateJSONViaCommandLine(
+            $webRootLocation,
+            $command,
+            $comment
+        );
         foreach($codeDirs as $baseNameSpace => $codeDir) {
             $location = trim(str_replace($webRootLocation,'', $codeDir), '/').'/';
             //update webroot composer file

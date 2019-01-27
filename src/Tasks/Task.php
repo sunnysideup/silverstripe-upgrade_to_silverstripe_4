@@ -232,7 +232,12 @@ abstract class Task
      */
     protected function commitAndPush()
     {
-        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+        if($this->mu()->getIsModuleUpgrade()) {
+            $moduleDirs = $this->mu()->getExistingModuleDirLocations();
+        } else {
+            $moduleDirs = [$this->mu()->getWebRootDirLocation()];
+        }
+        foreach($moduleDirs as $moduleDir) {
             $message = $this->getCommitMessage();
             $this->mu()->execMe(
                 $moduleDir,

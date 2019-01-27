@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class Recompose extends Task
 {
+    protected $taskStep = 's20';
+
     public function getTitle()
     {
         return 'Update composer.json from 3 to 4';
@@ -33,19 +35,31 @@ class Recompose extends Task
 
     public function runActualTask($params = [])
     {
-        if(! $this->param1) {
-            $this->param1 = '--recipe-core-constraint="'.$this->mu()->getFrameworkComposerRestraint().'"';
+        if($this->mu()->getIsModuleUpgrade()) {
+
+        } else {
+            if(! $this->param1) {
+                $this->param1 = '--recipe-core-constraint="'.$this->mu()->getFrameworkComposerRestraint().'"';
+            }
+            if (empty($this->rootDirForCommand)) {
+                $this->rootDirForCommand = $this->mu()->getGitRootDir();
+            }
+            $this->runSilverstripeUpgradeTask(
+                'recompose',
+                $this->param1,
+                $this->param2,
+                $this->rootDirForCommand,
+                $this->settings
+            );
+            $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - STEP 2');
         }
-        if (empty($this->rootDirForCommand)) {
-            $this->rootDirForCommand = $this->mu()->getGitRootDir();
+    }
+    protected function hasCommitAndPush()
+    {
+        if($this->mu()->getIsModuleUpgrade()) {
+            return false;
+        } else {
+            return true;
         }
-        $this->runSilverstripeUpgradeTask(
-            'recompose',
-            $this->param1,
-            $this->param2,
-            $this->rootDirForCommand,
-            $this->settings
-        );
-        $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - STEP 2');
     }
 }

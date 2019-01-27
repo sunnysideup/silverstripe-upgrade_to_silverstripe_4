@@ -4,9 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
-/**
- * recompose (Mandatory, stop execution on failure)
- */
 class ModuleUpgrader
 {
 
@@ -148,6 +145,7 @@ class ModuleUpgrader
 
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
+        'Recompose' => [],
 
         //Step3: FixBeforeStart
         'ChangeEnvironment' => [],
@@ -708,8 +706,10 @@ class ModuleUpgrader
         $originalPath = $path;
         $path = str_replace('///', '/', $path);
         $path = str_replace('//', '/', $path);
-        if (file_exists($path) || $returnEvenIfItDoesNotExists) {
+        if (file_exists($path)) {
             $path = realpath($path);
+        }
+        if(file_exists($path) || $returnEvenIfItDoesNotExists) {
             $path = rtrim($path, '/');
 
             return $path;
@@ -1032,40 +1032,44 @@ class ModuleUpgrader
     protected function workOutMethodsToRun()
     {
         if($this->runInteractively) {
-            if($this->startFrom || $this->endWith || $this->onlyRun) {
+            if($this->startFrom || $this->endWith) {
                 user_error('In interactive mode you can not set StartFrom / EndWith / OnlyRun.');
             }
-            $lastMethod = $this->getSessionValue('Completed');
-            if($lastMethod) {
-                $this->verbose = false;
-                $arrayKeys = array_keys($this->listOfTasks);
-                $found = false;
-                foreach($arrayKeys as $index => $key) {
-                    if($key === $lastMethod) {
-                        $found = true;
-                        if(isset($arrayKeys[$index + 1])) {
-                            if(isset($this->listOfTasks[$arrayKeys[$index + 1]])) {
-                                $this->onlyRun = $arrayKeys[$index + 1];
+            if($this->onlyRun) {
+
+            } else {
+                $lastMethod = $this->getSessionValue('Completed');
+                if($lastMethod) {
+                    $this->verbose = false;
+                    $arrayKeys = array_keys($this->listOfTasks);
+                    $found = false;
+                    foreach($arrayKeys as $index => $key) {
+                        if($key === $lastMethod) {
+                            $found = true;
+                            if(isset($arrayKeys[$index + 1])) {
+                                if(isset($this->listOfTasks[$arrayKeys[$index + 1]])) {
+                                    $this->onlyRun = $arrayKeys[$index + 1];
+                                } else {
+                                    user_error('Can not find next task: '.$arrayKeys[$index + 1]);
+                                }
                             } else {
-                                user_error('Can not find next task: '.$arrayKeys[$index + 1]);
-                            }
-                        } else {
-                            $this->deleteSession();
-                            die('
+                                $this->deleteSession();
+                                die('
 ==========================================
 Session has completed.
 ==========================================
-                            ');
+                                ');
+                            }
                         }
                     }
+                    if(! $found) {
+                        user_error('Did not find next step.');
+                    }
+                } else {
+                    $this->verbose = true;
+                    reset($this->listOfTasks);
+                    $this->onlyRun = key($this->listOfTasks);
                 }
-                if(! $found) {
-                    user_error('Did not find next step.');
-                }
-            } else {
-                $this->verbose = true;
-                reset($this->listOfTasks);
-                $this->onlyRun = key($this->listOfTasks);
             }
         }
     }

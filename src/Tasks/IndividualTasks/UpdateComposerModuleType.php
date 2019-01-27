@@ -27,22 +27,23 @@ class UpdateComposerModuleType extends Task
 
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade())
-        $command =
-        'if(isset($data["type"]) && $data["type"] === "silverstripe-module") { '
-        .'    $data["type"] = "silverstripe-vendormodule";'
-        .'}';
-        $comment = 'Update composer module type from silverstripe-module to silverstripe-vendormodule';
-        $this->updateJSONViaCommandLine(
-            $this->mu()->getGitRootDir(),
-            $command,
-            $comment
-        );
-        $this->setCommitMessage('MAJOR: '.$this->getTitle());
+        if($this->mu()->getIsModuleUpgrade()) {
+            $command =
+            'if(isset($data["type"]) && $data["type"] === "silverstripe-module") { '
+            .'    $data["type"] = "silverstripe-vendormodule";'
+            .'}';
+            $comment = 'Update composer module type from silverstripe-module to silverstripe-vendormodule';
+            $this->updateJSONViaCommandLine(
+                $this->mu()->getGitRootDir(),
+                $command,
+                $comment
+            );
+            $this->setCommitMessage('MAJOR: '.$this->getTitle());
+        }
     }
 
     protected function hasCommitAndPush()
     {
-        return true;
+        return $this->mu()->getIsModuleUpgrade();
     }
 }

@@ -558,10 +558,12 @@ class ModuleUpgrader
             }
         }
         if(count($array) === 0) {
-            user_error(
-                'You need to set moduleDirLocations (setModuleDirLocations)
-                as there are currently none.
-            ');
+            if(! $this->getIsModuleUpgrade()) {
+                user_error(
+                    'You need to set moduleDirLocations (setModuleDirLocations)
+                    as there are currently none.'
+                );
+            }
         }
 
         return $array;
@@ -665,6 +667,9 @@ class ModuleUpgrader
     {
         if($this->getIsModuleUpgrade()) {
             $location = $this->getExistingFirstModuleDirLocation();
+            if(! $location) {
+                return $this->moduleDirLocations[0];
+            }
         } else {
             $location = $this->getWebRootDirLocation();
         }
@@ -921,7 +926,7 @@ class ModuleUpgrader
                 $this->packageFolderNameForInstall = $this->getSessionValue('PackageFolderNameForInstall');
             } else {
                 if(! $this->originComposerFileLocation) {
-                    $jsonFile = $this->gitLinkAsRawHTTPS. '/master/composer.json';
+                    $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS. '/master/composer.json';
                 }
                 if($this->URLExists($this->originComposerFileLocation)) {
                     $json = file_get_contents($this->originComposerFileLocation);
@@ -1015,7 +1020,7 @@ class ModuleUpgrader
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Git and Composer Root Dir: '.$this->getGitRootDir(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Origin composer file location : '.$this->originComposerFileLocation, 'light_cyan');
+        $this->colourPrint('- Origin composer file location: '.$this->originComposerFileLocation, 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Git Repository Link (SSH): '.$this->gitLink, 'light_cyan');
         $this->colourPrint('- Git Repository Link (HTTPS): '.$this->gitLinkAsHTTPS, 'light_cyan');
@@ -1187,17 +1192,19 @@ Session has completed.
     protected function setSessionValue($key, $value)
     {
         $session = $this->getSessionData();
-        $session[$key] = $value;
+        $session[$key] = trim($value);
         $this->setSessionData($session);
     }
 
     protected function URLExists($url)
     {
-        $headers = get_headers($url);
-        if(is_array($headers) && count($headers)) {
-            foreach($headers as $header) {
-                if( substr($header, 9, 3) === "200") {
-                    return true;
+        if($url) {
+            $headers = get_headers($url);
+            if(is_array($headers) && count($headers)) {
+                foreach($headers as $header) {
+                    if( substr($header, 9, 3) === "200") {
+                        return true;
+                    }
                 }
             }
         }

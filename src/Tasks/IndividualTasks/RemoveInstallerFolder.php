@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class RemoveInstallerFolder extends Task
 {
+    protected $taskStep = 's20';
+
     public function getTitle()
     {
         return 'Remove installer-name from composer.json';
@@ -30,22 +32,23 @@ class RemoveInstallerFolder extends Task
 
     public function runActualTask($params = [])
     {
-        $location = $this->mu()->getModuleDirLocation().'/composer.json';
+        if($this->mu()->getIsModuleUpgrade()) {
+            $command =
+            'if(isset($data["extra"]["installer-name"])) { '
+            .'    unset($data["extra"]["installer-name"]);'
+            .'}';
+            $comment = 'Removing extra.installer-name variable';
+            $this->updateJSONViaCommandLine(
+                $this->mu()->getGitRootDir(),
+                $command,
+                $comment
+            );
+            $this->setCommitMessage('MAJOR: Removing extra.installer-name variable');
+        }
+    }
 
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'php -r  \''
-                .'$jsonString = file_get_contents("'.$location.'"); '
-                .'$data = json_decode($jsonString, true); '
-                .'if(isset($data["extra"]["installer-name"])) { '
-                .'    unset($data["extra"]["installer-name"]);'
-                .'}'
-                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
-                .'file_put_contents("'.$location.'", $newJsonString); '
-                .'\'',
-            'Removing extra.installer-name variable from composer.json',
-            false
-        );
-        $this->setCommitMessage('MAJOR: Removing extra.installer-name variable from composer.json ');
+    protected function hasCommitAndPush()
+    {
+        return $this->mu()->getIsModuleUpgrade();
     }
 }

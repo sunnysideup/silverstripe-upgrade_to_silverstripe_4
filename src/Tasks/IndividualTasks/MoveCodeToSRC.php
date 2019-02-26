@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class MoveCodeToSRC extends Task
 {
+    protected $taskStep = 's30';
+
     public function getTitle()
     {
         return 'Move code to src folder';
@@ -28,14 +30,21 @@ class MoveCodeToSRC extends Task
      */
     public function runActualTask($params = [])
     {
-        $old = $this->mu()->getModuleDirLocation().'/code/ ';
-        $new = $this->mu()->getModuleDirLocation().'/src/';
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'if test -d '.$old.'; then mv -vn '.$old.' '.$new.'; fi;',
-            'moving '.$old.' to '.$new.' -v is verbose, -n is only if destination does not exists',
-            false
-        );
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $old = './code/';
+            $new = './src/';
+            $this->mu()->execMe(
+                $moduleDir,
+                '
+if test -d '.$old.'; then
+    mv -vn '.$old.' '.$new.';
+else
+    echo \' !!!!!!!!! Error in moving '.$moduleDir.'/'.$old.' to '.$moduleDir.'/'.$new.' !!!!!!!!! \';
+fi;',
+                'moving '.$old.' to '.$new.' -v is verbose, -n is only if destination does not exists',
+                false
+            );
+        }
     }
 
     protected function hasCommitAndPush()

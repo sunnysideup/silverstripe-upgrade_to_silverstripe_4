@@ -4,9 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
-/**
- * recompose (Mandatory, stop execution on failure)
- */
 class ModuleUpgrader
 {
 
@@ -34,8 +31,12 @@ class ModuleUpgrader
     public function __construct()
     {
         $this->startPHP2CommandLine();
-        if(!$this->locationOfUpgradeModule) {
-            $this->locationOfUpgradeModule = dirname(__DIR__) .'/vendor/silverstripe/upgrader/bin/upgrade-code';
+        if (! $this->locationOfThisUpgrader) {
+            $this->locationOfThisUpgrader = dirname(__DIR__) ;
+        }
+        if (!$this->locationOfSSUpgradeModule) {
+            $this->locationOfSSUpgradeModule = $this->locationOfThisUpgrader .
+                '/vendor/silverstripe/upgrader/bin/upgrade-code';
         }
     }
 
@@ -70,11 +71,10 @@ class ModuleUpgrader
             if (isset($this->$var)) {
                 if ($getOrSet === 'get') {
                     if (strpos($var, 'DirLocation') !== false || strpos($var, 'FileLocation') !== false) {
-                        return $this->checkIfPathExistsAndCleanItUp($this->$var);
+                        return $this->checkIfPathExistsAndCleanItUp($this->$var, true);
                     } else {
                         return $this->$var;
                     }
-
                 } elseif ($getOrSet === 'set') {
                     $this->$var = $args[0];
 
@@ -90,53 +90,97 @@ class ModuleUpgrader
 
 
 
-
     #########################################
     # TASKS
     #########################################
 
-
+    /**
+     * A list of task groups
+     *
+     * @var array
+     */
+    protected $taskSteps = [
+        's00' => 'Generic',
+        's10' => 'Prepare Codebase',
+        's20' => 'Upgrade Structure',
+        's30' => 'Prepare Code',
+        's40' => 'Upgrade Code',
+        's50' => 'Upgrade Fixes',
+        's60' => 'Check',
+        's70' => 'Finalise',
+        's99' => 'ERROR!'
+    ];
 
     /**
      * An array of all the 'taskName's of the tasks that you wish to run during the execution of this upgrader task.
      * This array can be overriden in the example-index.php file that you create.
-     * @var string[] of taskName
+     * You can enter a full name space if you need to.
+     * The final -x will be removed.  We add -1 or -2 to run the same task multiple times.
+     *
+     * @var array
      */
     protected $listOfTasks = [
+        //Step1: Prepare
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
+
+        'CheckoutDevMaster-1' => [],
+        'FindFilesWithMoreThanOneClass' => [],
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
+
+        'CheckoutDevMaster-2' => [],
         'AddUpgradeBranch' => [],
-        'UpdateComposerRequirements-1' => [
-            'package' => 'silverstripe/framework',
-            'newVersion' => '~4.0'
+        'RemoveComposerRequirements' => [
+            'package' => 'silverstripe/framework'
         ],
-        'Recompose' => [],
-        'UpdateComposerRequirements-2' => [
-            'package' => 'silverstripe/cms',
-            'replacementPackage' => 'silverstripe/recipe-cms',
-            'newVersion' => '~1'
-        ],
+        'RecomposeHomeBrew' => [],
+        // 'UpdateComposerRequirements-2' => [
+        //     'package' => 'silverstripe/cms',
+        //     'replacementPackage' => 'silverstripe/recipe-cms',
+        //     'newVersion' => '~1'
+        // ],
         'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
+
+        //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
+        'Recompose' => [],
+
+        //Step3: FixBeforeStart
         'ChangeEnvironment' => [],
         'MoveCodeToSRC' => [],
         'CreateClientFolder' => [],
         'SearchAndReplace' => [],
         'FixRequirements' => [],
         'UpperCaseFolderNamesForPSR4' => [],
+
+        //Step4: CoreUpgrade
         'AddNamespace' => [],
         'Upgrade' => [],
+        'AddPSR4Autoloading' => [],
+
+        //Step5: FixUpgrade
+        'FixBadUseStatements' => [],
         'InspectAPIChanges-1' => [],
+        'AddTableNamePrivateStatic' => [],
+        'DatabaseMigrationLegacyYML' => [],
         'Reorganise' => [],
         'UpdateComposerModuleType' => [],
         'AddVendorExposeDataToComposer' => [],
+        'InspectAPIChanges-2' => [],
         // 'WebRootUpdate' => [],
+        //step6: Check
+        'ApplyPSR2' => [],
         'FinalDevBuild' => [],
-        'InspectAPIChanges-2' => []
+        'RunImageTask' => [],
+        'DoMigrateSiteTreeLinkingTask' => [],
+        'FindFilesWithSimpleUseStatements' => [],
+        //step7: Lock-in
+        'FinaliseUpgradeWithMergeIntoMaster' => []
     ];
+
+    protected $frameworkComposerRestraint = '^4.3';
 
     /**
      * Removes the given task from the list of tasks to execute
@@ -183,29 +227,70 @@ class ModuleUpgrader
     }
 
     /**
+     * Should the session details be deleted before we start?
+     * @var bool
+     */
+    protected $restartSession = false;
+
+    /**
+     * are we upgrading a module or a whole project?
+     * @var bool
+     */
+    protected $isModuleUpgrade = true;
+
+    /**
     * The default namespace for all tasks
     * @var string
     */
     protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
 
     /**
+     * if set to true it will run each step and then stop.
+     * It was save the last step.
+     * When your run it again, it will start on the next step.
+     *
+     * @var bool
+     */
+    protected $runInteractively = false;
+
+    /**
+     * Show ALL the information or just a little bit.
+     * @var bool
+     */
+    protected $verbose = false;
+
+    /**
      * start the upgrade sequence at a particular task
-     * @var string task to start the upgrade sequence from
+     * @var string
      */
     protected $startFrom = '';
 
 
     /**
      * end the upgrade sequence after a particular task
-     * @var string task to end the upgrade sequence on
+     * @var string
      */
     protected $endWith = '';
+
+
+    /**
+     * only run this task ...
+     * @var string
+     */
+    protected $onlyRun = '';
+
+
+    /**
+     * finish the run with a merge into master.
+     * @var boolean
+     */
+    protected $runIrreversibly = false;
 
     /**
      * Is this the last TASK we are running?
      * @var bool
      */
-    private $isLastMethod = false;
+    private $lastMethodHasBeenRun = false;
 
     /**
      * What is the index of given task within the sequence
@@ -219,14 +304,6 @@ class ModuleUpgrader
         return array_search($s, $this->listOfTasks);
     }
 
-    /**
-     * Set the command line exec to run immediately rather than outputting the bash script
-     * @return bool
-     */
-    public function getRunImmediately()
-    {
-        return $this->commandLineExec->getRunImmediately();
-    }
 
     /**
      * @param bool $b
@@ -269,7 +346,7 @@ class ModuleUpgrader
      *          'VendorNamespace' => 'A',
      *          'PackageName' => 'Package1',
      *          'PackageNamespace' => 'Package1',
-     *          'GitLinkg' => 'git@github.com:foor/bar-1.git',
+     *          'GitLink' => 'git@github.com:foor/bar-1.git',
      *          'UpgradeAsFork' => false
      *      ],
      *      [
@@ -339,10 +416,16 @@ class ModuleUpgrader
     protected $packageName = '';
 
     /**
+    * e.g. install folder for package in SS3.
+    * @var string
+    */
+    protected $packageFolderNameForInstall = '';
+
+    /**
      * e.g. sunnysideup/my-cool-module
      * @var string
      */
-    protected $vendorAndPackageAsLocation = '';
+    protected $vendorAndPackageFolderNameForInstall = '';
 
     /**
      *Name space for the modules package
@@ -351,10 +434,25 @@ class ModuleUpgrader
     protected $packageNamespace = '';
 
     /**
-     * git link for the module
+     * git link for the module in ssh form
+     * e.g. git@github.com:sunnysideup/silverstripe-dynamiccache.git
      * @var string
      */
     protected $gitLink = '';
+
+    /**
+     * git link for the module in https form
+     * e.g. https://github.com/sunnysideup/silverstripe-dynamiccache/
+     * @var string
+     */
+    protected $gitLinkAsHTTPS = '';
+
+    /**
+     * git link for the module in raw https form
+     * e.g. https://raw.githubusercontent.com/sunnysideup/silverstripe-dynamiccache/
+     * @var string
+     */
+    protected $gitLinkAsRawHTTPS = '';
 
     /**
      * Should the upgrade to this module create a fork
@@ -412,7 +510,15 @@ class ModuleUpgrader
      * //e.g. '/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code'
      * @var string
      */
-    protected $locationOfUpgradeModule = '';
+    protected $locationOfThisUpgrader = '';
+
+    /**
+     * //e.g. 'upgrade-code'
+     * //e.g. '~/.composer/vendor/bin/upgrade-code'
+     * //e.g. '/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code'
+     * @var string
+     */
+    protected $locationOfSSUpgradeModule = '';
 
     /**
      * @var string
@@ -427,9 +533,54 @@ class ModuleUpgrader
 
     /**
      * Directory that holds the module
-     * @var string
+     * or project.
+     *
+     * This is an array because a project can hold more than one
+     * folder (e.g. mysite or app and specialstuff)
+     *
+     * a module is only one folder
+     *
+     * @var array
      */
-    private $moduleDirLocation = '';
+    private $moduleDirLocations = [];
+
+    /**
+     * returns an array of existing paths
+     *
+     * @return array
+     */
+    public function getExistingModuleDirLocations()
+    {
+        $array = [];
+        foreach($this->moduleDirLocations as $location) {
+            if($location = $this->checkIfPathExistsAndCleanItUp($location)) {
+                $array[$location] = $location;
+            }
+        }
+        if(count($array) === 0) {
+            if(! $this->getIsModuleUpgrade()) {
+                user_error(
+                    'You need to set moduleDirLocations (setModuleDirLocations)
+                    as there are currently none.'
+                );
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * returns path for module
+     *
+     * @return string
+     */
+    public function getExistingFirstModuleDirLocation()
+    {
+        $locations = array_values($this->getExistingModuleDirLocations());
+        $firstLocation = array_shift($locations);
+
+        return $firstLocation;
+    }
 
     ###############################
     # HELPERS
@@ -470,25 +621,61 @@ class ModuleUpgrader
      *
      * If it can be found returns the location otherwise it errors
      *
-     * @return string codedirlocation
+     * @return array codedirlocation
      */
-    public function findCodeDir()
+    public function findNameSpaceAndCodeDirs()
     {
-        $codeDir = '';
-        if($this->getRunImmediately()) {
-            if (file_exists($this->moduleDirLocation . '/code')) {
-                $codeDir = $this->moduleDirLocation . '/code';
-            } elseif (file_exists($this->moduleDirLocation . '/src')) {
-                $codeDir = $this->moduleDirLocation . '/src';
-            } else {
-                user_error('Can not find code dir for '.$this->moduleDirLocation, E_USER_NOTICE);
-                return;
+        $codeDirs = [];
+        $locations = $this->getExistingModuleDirLocations();
+        foreach($locations as $location) {
+            $codeDir = $this->findMyCodeDir($location);
+            if($codeDir) {
+                if($this->getIsModuleUpgrade()) {
+                    $baseNameSpace = $this->getVendorNamespace().'\\'.$this->getPackageNamespace().'\\';
+                } else {
+                    $nameSpaceKey = ucwords(basename($location));
+                    if(strtolower($nameSpaceKey) === 'app' || strtolower($nameSpaceKey) === 'mysite') {
+                        $nameSpaceKey = $this->getPackageNamespace();
+                    }
+                    $baseNameSpace = $this->getVendorNamespace().'\\'.$nameSpaceKey.'\\';
+                }
+                $codeDirs[$baseNameSpace] = $codeDir;
             }
         }
 
-        return $codeDir;
+        return $codeDirs;
     }
 
+    public function findMyCodeDir($moduleDir)
+    {
+        if(file_exists($moduleDir)) {
+            if (file_exists($moduleDir . '/code') && file_exists($moduleDir . '/src')) {
+                user_error('There is a code and a src dir for '.$moduleDir, E_USER_NOTICE);
+            }
+            elseif (file_exists($moduleDir . '/code')) {
+                return $moduleDir . '/code';
+            }
+            elseif (file_exists($moduleDir . '/src')) {
+                return $moduleDir . '/src';
+            } else {
+                user_error('Can not find code/src dir for '.$moduleDir, E_USER_NOTICE);
+            }
+        }
+    }
+
+    public function getGitRootDir()
+    {
+        if($this->getIsModuleUpgrade()) {
+            $location = $this->getExistingFirstModuleDirLocation();
+            if(! $location) {
+                return $this->moduleDirLocations[0];
+            }
+        } else {
+            $location = $this->getWebRootDirLocation();
+        }
+
+        return $location;
+    }
 
     /**
      * Cleans an input string and returns a more natural human readable version
@@ -517,9 +704,9 @@ class ModuleUpgrader
      *
      * @param  string $path
      *
-     * @return string
+     * @return string | null
      */
-    public function checkIfPathExistsAndCleanItUp($path)
+    public function checkIfPathExistsAndCleanItUp($path, $returnEvenIfItDoesNotExists = false)
     {
         $originalPath = $path;
         $path = str_replace('///', '/', $path);
@@ -527,9 +714,11 @@ class ModuleUpgrader
         if (file_exists($path)) {
             $path = realpath($path);
         }
-        $path = rtrim($path, '/');
+        if(file_exists($path) || $returnEvenIfItDoesNotExists) {
+            $path = rtrim($path, '/');
 
-        return $path;
+            return $path;
+        }
     }
 
 
@@ -543,6 +732,7 @@ class ModuleUpgrader
         $html = '<h1>List of Tasks in run order</h1>';
         $count = 0;
         $totalCount = count($this->listOfTasks);
+        $previousStep = '';
         foreach ($this->listOfTasks as $class => $params) {
             $properClass = current(explode('-', $class));
             $nameSpacesArray = explode('\\', $class);
@@ -555,17 +745,29 @@ class ModuleUpgrader
                 $runItNow = $this->shouldWeRunIt($shortClassCode);
                 $params['taskName'] = $shortClassCode;
                 $obj = $properClass::create($this, $params);
+                if($obj->getTaskName()) {
+                    $params['taskName'] = $obj->getTaskName();
+                }
                 $reflectionClass = new \ReflectionClass($properClass);
                 $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
                 $path .=  str_replace('\\', '/', $reflectionClass->getName()).'.php';
                 $path =  str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
-
-                $html .= '<h3>Step '.$count.' / '.$totalCount.': '.$obj->getTitle().'</h3>';
+                $currentStepCode = $obj->getTaskStepCode();
+                $currentStep = $obj->getTaskStep($currentStepCode);
+                if($currentStepCode === 's00'){
+                    //do nothing when it is an anytime step
+                } else {
+                    if($previousStep !== $currentStep) {
+                        $html .= '<h2>'.$currentStep.'</h2>';
+                    }
+                    $previousStep = $currentStep;
+                }
+                $html .= '<h4>'.$count.': '.$obj->getTitle().'</h4>';
                 $html .= '<p>'.$obj->getDescription().'<br />';
                 $html .= '<strong>Code: </strong>'.$class;
                 $html .= '<br /><strong>Class Name: </strong><a href="'.$path.'">'. $reflectionClass->getShortName() .'</a>';
                 $html .= '</p>';
-                $obj = $properClass::delete($params);
+                $obj = $properClass::deleteTask($params);
             } else {
                 user_error($properClass.' could not be found as class', E_USER_ERROR);
             }
@@ -583,7 +785,7 @@ class ModuleUpgrader
     public function run()
     {
         $this->startPHP2CommandLine();
-        for($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             $this->colourPrint(
                 '.',
                 'light_red',
@@ -598,10 +800,11 @@ class ModuleUpgrader
         );
 
         $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation);
-        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation.'/'.$this->webRootName);
+        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation.'/'.$this->webRootName, true);
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
-
+            $this->workOutMethodsToRun();
+            $this->printVarsForModule($moduleDetails);
             foreach ($this->listOfTasks as $class => $params) {
                 $properClass = current(explode('-', $class));
                 $nameSpacesArray = explode('\\', $class);
@@ -613,21 +816,31 @@ class ModuleUpgrader
                     $runItNow = $this->shouldWeRunIt($shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
-                    $this->colourPrint('# --------------------', 'yellow', 3);
-                    $this->colourPrint('# '.$obj->getTitle(), 'yellow');
-                    $this->colourPrint('# --------------------', 'yellow');
-                    $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
-                    $this->colourPrint('# --------------------', 'yellow');
-                    if($runItNow) {
-                        $obj->run();
-                    } else {
-                        $this->colourPrint('# skipped', 'light_green');
-                        $this->colourPrint('# --------------------', 'yellow');
-                        //important!
+                    if($obj->getTaskName()) {
+                        $params['taskName'] = $obj->getTaskName();
                     }
-                    $obj = $properClass::delete($params);
+                    if ($runItNow) {
+                        $this->colourPrint('# --------------------', 'yellow', 3);
+                        $this->colourPrint('# '.$obj->getTitle(). ' ('.$params['taskName'].')', 'yellow');
+                        $this->colourPrint('# --------------------', 'yellow');
+                        $this->colourPrint('# '.$obj->getDescriptionNice(), 'dark_grey');
+                        $this->colourPrint('# --------------------', 'dark_grey');
+                        $obj->run();
+                        if($this->runInteractively) {
+                            $this->setSessionValue('Completed', $class);
+                        }
+                    } else {
+                        if(! $this->runInteractively) {
+                            $this->colourPrint('# --------------------', 'yellow', 3);
+                            $this->colourPrint('# '.$obj->getTitle(). ' ('.$params['taskName'].')', 'yellow');
+                            $this->colourPrint('# --------------------', 'yellow');
+                            $this->colourPrint('# skipped', 'yellow');
+                            $this->colourPrint('# --------------------', 'yellow');
+                        }
+                    }
+                    $obj = $properClass::deleteTask($params);
                 } else {
-                    user_error($properClass.' could not be found as class', E_USER_ERROR);
+                    user_error($properClass.' could not be found as class. You can add namespacing to include your own classes.', E_USER_ERROR);
                 }
             }
         }
@@ -663,11 +876,18 @@ class ModuleUpgrader
     }
 
     /**
+     *
+     * @var string
+     */
+    protected $originComposerFileLocation = '';
+
+    /**
      * Loads in and sets all the meta data for a module from the inputed array
      * @param array $moduleDetails
      */
     protected function loadVarsForModule($moduleDetails)
     {
+
         //VendorName
         $this->vendorName = $moduleDetails['VendorName'];
 
@@ -688,69 +908,175 @@ class ModuleUpgrader
             $this->packageNamespace = $this->camelCase($this->packageName);
         }
 
-        //GitLink
-        $this->moduleDirLocation = $this->webRootDirLocation . '/' . $this->packageName;
-
-        $this->vendorAndPackageAsLocation = strtolower($this->vendorName . '/' . $this->packageName);
-
-        if (isset($moduleDetails['VendorAndPackageAsLocation'])) {
-            $this->vendorAndPackageAsLocation = $moduleDetails['VendorAndPackageAsLocation'];
-        } else {
-            $this->vendorAndPackageAsLocation = strtolower($this->vendorName . '/' . $this->packageName);
-        }
-
         if (isset($moduleDetails['GitLink'])) {
             $this->gitLink = $moduleDetails['GitLink'];
         } else {
-            $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName;
+            $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName.'.git';
+        }
+        $this->gitLinkAsHTTPS = rtrim(str_replace('git@github.com:', 'https://github.com/', $this->gitLink), '.git');
+        $this->gitLinkAsRawHTTPS = rtrim(str_replace('git@github.com:', 'https://raw.githubusercontent.com/', $this->gitLink), '.git');
+
+
+        //Origin Composer FileLocation
+        $this->originComposerFileLocation = isset($moduleDetails['OriginComposerFileLocation']) ? $moduleDetails['OriginComposerFileLocation'] : '';
+        if($this->packageFolderNameForInstall) {
+            //do nothing
+        } else {
+            if($this->getSessionValue('PackageFolderNameForInstall')) {
+                $this->packageFolderNameForInstall = $this->getSessionValue('PackageFolderNameForInstall');
+            } else {
+                if(! $this->originComposerFileLocation) {
+                    $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS. '/master/composer.json';
+                }
+                if($this->URLExists($this->originComposerFileLocation)) {
+                    $json = file_get_contents($this->originComposerFileLocation);
+                    $array = json_decode($json, true);
+                    if (isset($array['extra']['installer-name'])) {
+                        $this->packageFolderNameForInstall = $array['extra']['installer-name'];
+                    } else {
+                        if($this->isModuleUpgrade) {
+                            $this->packageFolderNameForInstall = $this->packageName;
+                        } else {
+                            $this->packageFolderNameForInstall = 'mysite';
+                        }
+                    }
+                    if (isset($moduleDetails['PackageFolderNameForInstall'])) {
+                        $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
+                    }
+                } else {
+                    user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation');
+                }
+            }
+            $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);
+        }
+
+        //moduleDirLocation
+        if($this->getIsModuleUpgrade()) {
+            $this->moduleDirLocations = [
+                $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall
+            ];
+        } else {
+            if(! count($this->moduleDirLocations)) {
+                $this->moduleDirLocations[] = $this->webRootDirLocation . '/mysite';
+                $this->moduleDirLocations[] = $this->webRootDirLocation . '/app';
+            } else {
+                foreach($this->moduleDirLocations as $key => $location) {
+                    $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
+                }
+            }
+        }
+
+
+        //ss4 location
+        if (isset($moduleDetails['VendorAndPackageFolderNameForInstall'])) {
+            $this->vendorAndPackageFolderNameForInstall = $moduleDetails['VendorAndPackageFolderNameForInstall'];
+        } else {
+            $this->vendorAndPackageFolderNameForInstall = strtolower($this->vendorName . '/' . $this->packageName);
         }
 
         //UpgradeAsFork
         $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
 
+        //Is Module Upgrade
+        $this->isModuleUpgrade = isset($moduleDetails['IsModuleUpgrade']) ? $moduleDetails['IsModuleUpgrade'] : true;
+
         //LogFileLocation
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {
-            //check that log dir is exists
-            if(! file_exists($this->logFolderDirLocation)){
-                die('
-Log dir not exists: ' . $this->logFolderDirLocation);
-            } else {
-                //Directory exists, now check if writable.
-                if(! is_writable($this->logFolderDirLocation)){
-                    die('
-Log dir: ' . $this->logFolderDirLocation. ' is not writable');
-                    return 'No point in running tool with directory not ready';
-                } else {
-                    //all ok
-                }
-            }
             $this->logFileLocation = $this->logFolderDirLocation.'/'.$this->packageName.'-upgrade-log.'.time().'.txt';
             $this->commandLineExec->setLogFileLocation($this->logFileLocation);
         } else {
-            $this->logFileLocation = '';
             $this->commandLineExec->setLogFileLocation('');
-            echo '
-
-Log dir is not set so we continue without log! ';
-
-
         }
 
+        if($this->restartSession) {
+            $this->deleteSession();
+        }
+    }
 
+    protected function printVarsForModule()
+    {
         //output the confirmation.
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
-        $this->colourPrint('Vendor Name: '.$this->vendorName, 'light_cyan');
-        $this->colourPrint('Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
-        $this->colourPrint('Package Name: '.$this->packageName, 'light_cyan');
-        $this->colourPrint('Package Namespace: '.$this->packageNamespace, 'light_cyan');
-        $this->colourPrint('Module Dir: '.$this->moduleDirLocation, 'light_cyan');
-        $this->colourPrint('Git Repository Link: '.$this->gitLink, 'light_cyan');
-        $this->colourPrint('Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
-        $this->colourPrint('Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
+        $this->colourPrint('- Type: '.($this->isModuleUpgrade ? 'module' : 'project'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Vendor Name: '.$this->vendorName, 'light_cyan');
+        $this->colourPrint('- Package Name: '.$this->packageName, 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Run Interactively: '.($this->runInteractively ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Run Irreversibly: '.($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
+        $this->colourPrint('- Package Namespace: '.$this->packageNamespace, 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Package Folder Name For Install: '.$this->packageFolderNameForInstall, 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Module / Project Dir(s): '.implode(', ', $this->moduleDirLocations), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Git and Composer Root Dir: '.$this->getGitRootDir(), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Origin composer file location: '.$this->originComposerFileLocation, 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Git Repository Link (SSH): '.$this->gitLink, 'light_cyan');
+        $this->colourPrint('- Git Repository Link (HTTPS): '.$this->gitLinkAsHTTPS, 'light_cyan');
+        $this->colourPrint('- Git Repository Link (RAW): '.$this->gitLinkAsRawHTTPS, 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Session file: '.($this->getSessionFileLocation()), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Last Step: '.($this->getSessionValue('Completed') ? : 'not set'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
+    }
+
+    protected function workOutMethodsToRun()
+    {
+        if($this->runInteractively) {
+            if($this->startFrom || $this->endWith) {
+                user_error('In interactive mode you can not set StartFrom / EndWith / OnlyRun.');
+            }
+            if($this->onlyRun) {
+
+            } else {
+                $lastMethod = $this->getSessionValue('Completed');
+                if($lastMethod) {
+                    $this->verbose = false;
+                    $arrayKeys = array_keys($this->listOfTasks);
+                    $found = false;
+                    foreach($arrayKeys as $index => $key) {
+                        if($key === $lastMethod) {
+                            $found = true;
+                            if(isset($arrayKeys[$index + 1])) {
+                                if(isset($this->listOfTasks[$arrayKeys[$index + 1]])) {
+                                    $this->onlyRun = $arrayKeys[$index + 1];
+                                } else {
+                                    user_error('Can not find next task: '.$arrayKeys[$index + 1]);
+                                }
+                            } else {
+                                $this->deleteSession();
+                                die('
+==========================================
+Session has completed.
+==========================================
+                                ');
+                            }
+                        }
+                    }
+                    if(! $found) {
+                        user_error('Did not find next step.');
+                    }
+                } else {
+                    $this->verbose = true;
+                    reset($this->listOfTasks);
+                    $this->onlyRun = key($this->listOfTasks);
+                }
+            }
+        }
     }
 
     /**
@@ -762,20 +1088,24 @@ Log dir is not set so we continue without log! ';
      */
     protected function shouldWeRunIt($name) : bool
     {
-        if ($this->isLastMethod) {
+        $runMe = true;
+        if ($this->onlyRun) {
+            return $name === $this->onlyRun ? true : false;
+        }
+        if ($this->lastMethodHasBeenRun) {
             $runMe = false;
         } else {
             if ($this->startFrom) {
+                $runMe = false;
                 if ($name === $this->startFrom) {
                     $this->startFrom = '';
                 }
             }
             if ($this->endWith) {
                 if ($name === $this->endWith) {
-                    $this->isLastMethod = true;
+                    $this->lastMethodHasBeenRun = true;
                 }
             }
-            $runMe = $this->startFrom ? false : true;
         }
 
         //here we call the PHP2CommandLine
@@ -783,5 +1113,102 @@ Log dir is not set so we continue without log! ';
         return $runMe;
     }
 
+    protected $sessionFileName = 'Session_For';
+
+    protected function getSessionFileLocation()
+    {
+        return trim(
+            $this->getAboveWebRootDirLocation().
+            '/'.
+            $this->sessionFileName.
+            '_'.
+            $this->getVendorNamespace().
+            '_'.
+            $this->getPackageNamespace().
+            '.json'
+        );
+    }
+
+    protected function initSession()
+    {
+        if(! file_exists($this->getSessionFileLocation())) {
+            $this->setSessionData(['Started' => date('Y-m-d h:i ')]);
+        }
+    }
+
+    protected function deleteSession()
+    {
+        unlink($this->getSessionFileLocation());
+    }
+
+    protected function getSessionValue($key)
+    {
+        $session = $this->getSessionData();
+        if(isset($session[$key])) {
+            return $session[$key];
+        } else {
+            return null;
+        }
+    }
+
+    protected function getSessionData()
+    {
+        $this->initSession();
+        $data = file_get_contents($this->getSessionFileLocation());
+        if(! $data) {
+            user_error('Could not read from: '.$this->getSessionFileLocation());
+        }
+        return json_decode($data, true);
+    }
+
+    /**
+     * @param array $session
+     */
+    protected function setSessionData($session)
+    {
+        $data = json_encode($session, JSON_PRETTY_PRINT);
+        try {
+            $file = fopen($this->getSessionFileLocation(), 'w');
+            if(false === $file) {
+                throw new \RuntimeException("Failed to open file: ".$this->getSessionFileLocation());
+            }
+            $writeOutcome = fwrite($file, $data);
+            if(false === $writeOutcome) {
+                throw new \RuntimeException("Failed to write file: ".$this->getSessionFileLocation());
+            }
+            $closeOutcome = fclose($file);
+            if(false === $closeOutcome) {
+                throw new \RuntimeException("Failed to close file: ".$this->getSessionFileLocation());
+            }
+        } catch ( Exception $e ) {
+            // send error message if you can
+            $this->colourPrint(
+                'Caught exception: ',  $e->getMessage(), "\n",
+                'red'
+            );
+        }
+    }
+
+    protected function setSessionValue($key, $value)
+    {
+        $session = $this->getSessionData();
+        $session[$key] = trim($value);
+        $this->setSessionData($session);
+    }
+
+    protected function URLExists($url)
+    {
+        if($url) {
+            $headers = get_headers($url);
+            if(is_array($headers) && count($headers)) {
+                foreach($headers as $header) {
+                    if( substr($header, 9, 3) === "200") {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 }

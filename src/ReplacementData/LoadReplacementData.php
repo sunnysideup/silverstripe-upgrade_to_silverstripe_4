@@ -4,12 +4,16 @@
  * loads yml data if strings to replace in
  * code.
  *
- * Replacement data can be found in the following places:
  *
- * 1. root of this module:
+ * The replacements should be in the same folder as this class.
+ *
+ * Alternatively, you can specify another folderContainingLocationData in the
+ * construct method.
+ *
+ * It will also search the root folders for any packages / projects being upgraded.
  */
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+namespace Sunnysideup\UpgradeToSilverstripe4\ReplacementData;
 
 use SilverStripe\Upgrader\Util\ConfigFile;
 
@@ -27,8 +31,13 @@ class LoadReplacementData
      */
     protected $mu = null;
 
-    public function __construct($mu, $params = [])
+    protected $params = '';
+
+    protected $folderContainingLocationData = '';
+
+    public function __construct($mu, $folderContainingLocationData = '', $params = [])
     {
+        $this->folderContainingLocationData = $folderContainingLocationData ? : __DIR__;
         $this->params = $params;
         $this->mu = $mu;
         $this->fullArray = $this->getData();
@@ -39,7 +48,7 @@ class LoadReplacementData
                 foreach ($pathArray as $language => $languageArray) {
                     $this->languages[$language] = $language;
                     foreach ($languageArray as $findKey => $findKeyArray) {
-                        if(!isset($findKeyArray['R'])) {
+                        if (!isset($findKeyArray['R'])) {
                             user_error('replacement key not set: '.print_r($findKeyArray, 1));
                         }
                         $replaceKey = $findKeyArray['R'];
@@ -111,14 +120,17 @@ class LoadReplacementData
 
     protected function getPaths()
     {
-        $array = [
-            $this->mu->getModuleDirLocation(),
-        ];
-        $globalFixes = $this->mu->checkIfPathExistsAndCleanItUp(__DIR__.'/../../');
-        if ($globalFixes) {
-            $array[] = $globalFixes;
+        $array = [];
+        foreach($this->mu->getExistingModuleDirLocations() as $moduleDir) {
+            $array[$moduleDir] = $moduleDir;
         }
-        $this->paths = array_unique($array);
+        $globalFixes = $this->mu->checkIfPathExistsAndCleanItUp($this->folderContainingLocationData);
+        if ($globalFixes) {
+            $array[$globalFixes] = $globalFixes;
+        }
+        $this->paths = $array;
+
+        return $this->paths;
     }
 
     protected function getData()

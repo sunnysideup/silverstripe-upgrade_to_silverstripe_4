@@ -9,6 +9,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class CheckThatFoldersAreReady extends Task
 {
+    protected $taskStep = 's10';
+
     public function getTitle()
     {
         return 'Check Folders Are Ready';
@@ -28,30 +30,42 @@ class CheckThatFoldersAreReady extends Task
      */
     public function runActualTask($params = [])
     {
-
         $abovewebdir = $this->mu()->getAboveWebRootDirLocation();
         //check dir above web dir exists
-        if(! file_exists($abovewebdir)){
+        if (! file_exists($abovewebdir)) {
             $this->mu()->colourPrint('Above web dir does not exists: ' . $abovewebdir, 'red');
             return 'No point in running tool with directory not ready';
         } else {
             //Directory exists, now check if writable.
-            if(! is_writable($abovewebdir)) {
+            if (! is_writable($abovewebdir)) {
                 //Not writable send warning
                 $this->mu()->colourPrint('Above web dir is not writable: ' . $abovewebdir, 'red');
                 return 'No point in running tool with directory not ready';
-            } else{
+            } else {
                 //It has been found and is writable; Success!
                 $this->mu()->colourPrint('Found and checked above web dir ✔', 'green');
             }
-
         }
 
+        //LogFileLocation
+        $logDir = $this->mu()->getLogFolderDirLocation();
+        if ($logDir) {
+            //check that log dir is exists
+            if (! file_exists($logDir)) {
+                return 'Log dir not exists: ' . $logDir . ' set your log dir to an empty string if you prefer to continue without a log.';
+            } else {
+                //Directory exists, now check if writable.
+                if (! is_writable($logDir)) {
+                    return  $logDir. ' is not writable'. '. Set the log dir to an empty string or provide a writable directory. ';
+                } else {
+                    //all ok
+                }
+            }
+        } 
     }
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return false;
     }
-
 }

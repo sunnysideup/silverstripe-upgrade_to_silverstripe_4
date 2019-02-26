@@ -21,13 +21,15 @@
     },
     "require": {
         "silverstripe/upgrader":            "dev-master",
-        "sunnysideup/php_2_command_line":   "dev-master"
+        "sunnysideup/php_2_command_line":   "dev-master",
+        "friendsofphp/php-cs-fixer":        "*"
     },
     "autoload": {
         "psr-4": {
             "Sunnysideup\\UpgradeToSilverstripe4\\":"src/",
             "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/",
-            "SilverStripe\\Upgrader\\Util\\":"vendor/silverstripe/Upgrader/src/Util/"
+            "SilverStripe\\Upgrader\\Util\\":"vendor/silverstripe/Upgrader/src/Util/",
+            "PhpCsFixer\\": "vendor/friendsofphp/php-cs-fixer/src/"
         }
     },
     "scripts": {

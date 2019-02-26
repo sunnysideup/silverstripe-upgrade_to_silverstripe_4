@@ -10,22 +10,44 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 abstract class Task
 {
     /**
-     * Are we running in debug mode
+     * Are we running in debug mode?
      * @var bool
      */
     protected $debug = false;
 
     /**
-     * code name for task
+     * A static array for holding all the different Tasks that are running
+     * @var Task[]
+     */
+    private static $_singletons = [];
+
+    /**
+     * set a specific task name if needed
      * @var string
      */
     protected $taskName = '';
 
-    /**
-     * A static array for holding all the different Tasks that are running
-     * @var Task[]
-     */
-    private static $_singleton = [];
+    public function getTaskName()
+    {
+        return $this->taskName;
+    }
+
+    protected $taskStep = 's99';
+
+    public function getTaskStepCode()
+    {
+        return $this->taskStep;
+    }
+
+    public function getTaskStep($currentStepCode = '')
+    {
+        $taskSteps = $this->mu()->getTaskSteps();
+        if(! $currentStepCode) {
+            $currentStepCode = $this->getTaskStepCode();
+        }
+
+        return $taskSteps[$currentStepCode];
+    }
 
     /**
      * Creates all the singletons and puts them in the array of singletons. Depending on if they exist already or not.
@@ -38,22 +60,23 @@ abstract class Task
     public static function create($mu, $params = [])
     {
         $className = get_called_class();
-        if (empty(self::$_singleton[$params['taskName']])) {
-            self::$_singleton[$params['taskName']] = new $className($mu, $params);
+        if (empty(self::$_singletons[$params['taskName']])) {
+            self::$_singletons[$params['taskName']] = new $className($mu, $params);
         }
 
-        return self::$_singleton[$params['taskName']];
+        return self::$_singletons[$params['taskName']];
     }
 
     /**
      * Deletes reference to given task and removes it from list of tasks
      * @param array $params array containing the 'taskName' of target task to delete
+     *
      * @return null
      */
-    public static function delete($params)
+    public static function deleteTask($params)
     {
-        self::$_singleton[$params['taskName']] = null;
-        unset(self::$_singleton[$params['taskName']]);
+        self::$_singletons[$params['taskName']] = null;
+        unset(self::$_singletons[$params['taskName']]);
 
         return null;
     }
@@ -83,7 +106,7 @@ abstract class Task
 
     public function mu()
     {
-        if(! $this->mu) {
+        if (! $this->mu) {
             $this->mu = ModuleUpgrader::create();
         }
 
@@ -126,8 +149,11 @@ abstract class Task
     {
         $this->starter($this->params);
         $error = $this->runActualTask($this->params);
-        if(is_string($error) && strlen($error) > 0 ) {
-            die('FATAL ERROR: '.$error);
+        if (is_string($error) && strlen($error) > 0) {
+            $this->mu()->colourPrint("\n\n".'------------------- EXIT WITH ERROR -------------------------', 'red');
+            $this->mu()->colourPrint($error, 'red');
+            $this->mu()->colourPrint("\n\n".'------------------- EXIT WITH ERROR -------------------------', 'red');
+            die("\n\n\n---");
         }
         $this->ender($this->params);
     }
@@ -173,10 +199,7 @@ abstract class Task
      * Does the task require the module changes to be committed after the task has run.
      * @return bool Defaults to true
      */
-    protected function hasCommitAndPush()
-    {
-        return true;
-    }
+    abstract protected function hasCommitAndPush();
 
     /**
      * What to write in the commit message after the task is run, only useful if hasCommitAndPush() returns true
@@ -209,48 +232,98 @@ abstract class Task
      */
     protected function commitAndPush()
     {
-        $message = $this->getCommitMessage();
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'git add . -A',
-            'git add all',
-            false
-        );
+        if($this->mu()->getIsModuleUpgrade()) {
+            $moduleDirs = $this->mu()->getExistingModuleDirLocations();
+        } else {
+            $moduleDirs = [$this->mu()->getWebRootDirLocation()];
+        }
+        foreach($moduleDirs as $moduleDir) {
+            $message = $this->getCommitMessage();
+            $this->mu()->execMe(
+                $moduleDir,
+                'git add . -A',
+                'git add all',
+                false
+            );
 
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            // 'if ! git diff --quiet; then git commit . -m "'.addslashes($message).'"; fi;',
-            'git commit . -m "'.addslashes($message).'"',
-            'commit changes: '.$message,
-            false
-        );
+            $this->mu()->execMe(
+                $moduleDir,
+                // 'if ! git diff --quiet; then git commit . -m "'.addslashes($message).'"; fi;',
+                '
+                if [ -z "$(git status --porcelain)" ]; then
+                    echo \'OKI DOKI - Nothing to commit\';
+                else
+                    git commit . -m "'.addslashes($message).'"
+                fi',
+                'commit changes: '.$message,
+                false
+            );
 
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'git push origin '.$this->mu()->getNameOfTempBranch(),
-            'pushing changes to origin on the '.$this->mu()->getNameOfTempBranch().' branch',
-            false
-        );
+            $this->mu()->execMe(
+                $moduleDir,
+                'git push origin '.$this->mu()->getNameOfTempBranch(),
+                'pushing changes to origin on the '.$this->mu()->getNameOfTempBranch().' branch',
+                false
+            );
+        }
     }
 
     /**
      * Runs the SilverStripe made upgrader
      * @param  string $task     [description]
-     * @param  string $rootDir  modules root directory
      * @param  string $param1   [description]
      * @param  string $param2   [description]
+     * @param  string $rootDirForCommand  modules root directory
      * @param  string $settings [description]
      * @return [type]           [description]
      */
-    protected function runSilverstripeUpgradeTask($task, $rootDir = '', $param1 = '', $param2 = '', $settings = '')
+    protected function runSilverstripeUpgradeTask(
+        $task,
+        $param1 = '',
+        $param2 = '',
+        $rootDirForCommand = '',
+        $settings = ''
+    )
     {
-        if (! $rootDir) {
-            $rootDir = $this->mu()->getWebRootDirLocation();
+        if (! $rootDirForCommand) {
+            $rootDirForCommand = $this->mu()->getWebRootDirLocation();
         }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'php '.$this->mu()->getLocationOfUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDir.' --write -vvv '.$settings,
+            'php '.$this->mu()->getLocationOfSSUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDirForCommand.' --write -vvv '.$settings,
             'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
+            false
+        );
+    }
+
+
+    public function getJSON($dir)
+    {
+        $location = $dir.'/composer.json';
+        return json_decode($jsonString, true);
+    }
+
+    public function setJSON($dir, $data)
+    {
+        $location = $dir.'/composer.json';
+        $newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents("'.$location.'", $newJsonString);
+        return $this;
+    }
+
+    public function updateJSONViaCommandLine($dir, $code, $comment)
+    {
+        $location = $dir.'/composer.json';
+        $this->mu()->execMe(
+            $dir,
+            'php -r  \''
+                .'$jsonString = file_get_contents("'.$location.'"); '
+                .'$data = json_decode($jsonString, true); '
+                .$code
+                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
+                .'file_put_contents("'.$location.'", $newJsonString); '
+                .'\'',
+            $comment . ' --- in '.$location,
             false
         );
     }

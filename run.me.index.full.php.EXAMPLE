@@ -3,26 +3,39 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
+/**
+ * below are examples
+ * of most of the config options
+ *
+ * N.B. the individual tasks also have config options!
+ */
 $obj = ModuleUpgrader::create()
     ->setRunImmediately(true)
     ->setLogFolderDirLocation('/var/www/logdir')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('__upgradeto4__')
+    ->setRunInteractively(true)
+    // ->setRestartSession(true)
+    // ->setRunIrreversibly(true)
     ->setArrayOfModules(
         [
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'cleaner_tinymce_config',
-              'PackageNamespace' => 'CleanerTinyMCEConfig',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-cleaner_tinymce_config.git',
-              'UpgradeAsFork' => false
+              'PackageName' => 'frontendeditor',
+              'PackageNamespace' => 'FrontendEditor',
+              'PackageFolderNameForInstall' => 'frontendeditor',
+              'GitLink' => 'git@bitbucket.org:sunnysideupnz/upgradesilverstripe.com.git',
+              'UpgradeAsFork' => false,
+              'OriginComposerFileLocation' => 'https://bitbucket.org/vendor/project.com/src/master/composer.json',
+              'IsModuleUpgrade' => false
             ]
         ]
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
+    ->frameworkComposerRestrain('^4.3')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
-    ->setLocationOfUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
+    ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     // ->setListOfTasks(
     //     [
     //         'ResetWebRootDir-1' => [],
@@ -33,7 +46,7 @@ $obj = ModuleUpgrader::create()
     //             'Package' => 'silverstripe/framework',
     //             'NewVersion' => '~4.0'
     //         ],
-    //         'Recompose' => [],
+    //         'RecomposeHomeBrew' => [],
     //         'UpdateComposerRequirements-2' => [
     //             'Package' => 'silverstripe/cms',
     //             'ReplacementPackage' => 'silverstripe/recipe-cms',
@@ -52,6 +65,15 @@ $obj = ModuleUpgrader::create()
     //         // 'WebRootUpdate' => []
     //     ]
     // )
-    ->setStartFrom('')
-    ->setEndWith('')
+    // ->setStartFrom('RecomposeHomeBrew')
+    // ->setEndWith('SearchAndReplace')
+    // ->setOnlyRun('SearchAndReplace')
+    // ->removeFromListOfTasks('SearchAndReplace')
+    // ->addToListOfTasks(
+    //      ['MyCustomTasks\\CustomNameSpace\\SearchAndReplace2'],
+    //      $beforeOrAfter = 'SearchAndReplace',
+    //      $isBefore = false
+    // )
+    // ->defaultNamespaceForTask('MyCustomisation\\CustomNameSpace\\MyTasks')
+    // ->setVerbose(false)
     ->run();

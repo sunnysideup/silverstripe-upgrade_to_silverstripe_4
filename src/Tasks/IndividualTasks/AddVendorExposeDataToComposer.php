@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class AddVendorExposeDataToComposer extends Task
 {
+    protected $taskStep = 's50';
+
     public function getTitle()
     {
         return 'Adds vendor expose data to composer';
@@ -21,26 +23,54 @@ class AddVendorExposeDataToComposer extends Task
             By default we expose all the client related files (images, css and javascript)';
     }
 
+    protected $toExpose = [
+        'javascript',
+        'images',
+        'img',
+        'css',
+        'fonts',
+        'js',
+        'client/javascript',
+        'client/images',
+        'client/img',
+        'client/css',
+        'client/fonts',
+        'client/js'
+    ];
+
     public function runActualTask($params = [])
     {
+        $expose = [];
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir){
+            foreach ($this->toExpose as $folder) {
+                if (file_exists($moduleDir.'/'.$folder)) {
+                    if($this->mu()->getIsModuleUpgrade()){
+                        //expose "javascript"
+                        $expose[] = $folder;
+                    } else {
+                        //expose "app/javascript"
+                        $expose[] = basename($moduleDir).'/'.$folder;
+                    }
+                }
+            }
+        }
+        if (count($expose)) {
+            $command =
+            'if(!isset($data["extra"]["expose"])) { '
+                .'    $data["extra"]["expose"] = ["'.implode('", "', $expose).'"]; '
+                .'}';
+            $this->updateJSONViaCommandLine(
+                $this->mu()->getGitRootDir(),
+                $command,
+                'exposing: '.implode(', ', $expose)
+            );
 
-        $location = $this->mu()->getModuleDirLocation().'/composer.json';
-
-        $this->mu()->execMe(
-            $this->mu()->getModuleDirLocation(),
-            'php -r  \''
-                .'$jsonString = file_get_contents("'.$location.'"); '
-                .'$data = json_decode($jsonString, true); '
-                .'if(!isset($data["extra"]["expose"])) { '
-                .'    $data["extra"]["expose"] = ["javascript","images","css"]; '
-                .'}'
-                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
-                .'file_put_contents("'.$location.'", $newJsonString); '
-                .'\'',
-            'exposing javascript, images and css in '.$location,
-            false
-        );
-        $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - updating core requirements');
+            $this->setCommitMessage('MAJOR: exposing folders'.implode(',', $expose));
+        }
     }
 
+    protected function hasCommitAndPush()
+    {
+        return true;
+    }
 }

@@ -3,8 +3,6 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
-use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
-
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -14,6 +12,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class FixRequirements extends Task
 {
+    protected $taskStep = 's30';
+
     public function getTitle()
     {
         return 'Finds requirements (Requirements::) and fixes them to be exposed properly';
@@ -70,98 +70,101 @@ class FixRequirements extends Task
         if ($this->debug) {
             $this->mu()->colourPrint(print_r($replacementArray, 1));
         }
+        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            //Start search machine from the module location. replace API
+            $textSearchMachine = new SearchAndReplaceAPI($moduleDir);
+            $textSearchMachine->setIsReplacingEnabled(true);
+            $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
 
-        //Start search machine from the module location. replace API
-        $textSearchMachine = new SearchAndReplaceAPI($this->mu()->getModuleDirLocation());
-        $textSearchMachine->setIsReplacingEnabled(true);
-        $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
+            /*For all the different patterns listed in the replacement array
+            * iterate over them such that the $path would be 'src' and $patharray would be 'php'
+            * together making it ['src']['php']
+            */
+            foreach ($replacementArray as $path => $pathArray) {
+                $path = $moduleDir  . '/'.$path ? : '' ;
+                $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
+                if (! file_exists($path)) {
+                    $this->mu()->colourPrint("SKIPPING $path as it does not exist.");
+                } else {
+                    $textSearchMachine->setSearchPath($path);
+                    foreach ($pathArray as $extension => $extensionArray) {
+                        $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
+                        $this->mu()->colourPrint(
+                            "++++++++++++++++++++++++++++++++++++\n".
+                            "CHECKING\n".
+                            "IN $path\n".
+                            "FOR $extension FILES\n".
+                            "BASE ".$moduleDir."\n".
+                            "++++++++++++++++++++++++++++++++++++\n"
+                        );
+                        foreach ($extensionArray as $find => $findDetails) {
+                            $replace = isset($findDetails['R'])       ? $findDetails['R'] : $find;
+                            $comment = isset($findDetails['C'])       ? $findDetails['C'] : '';
+                            $ignoreCase = true;
+                            $caseSensitive = ! $ignoreCase;
 
-        /*For all the different patterns listed in the replacement array
-        * iterate over them such that the $path would be 'src' and $patharray would be 'php'
-        * together making it ['src']['php']
-        */
-        foreach ($replacementArray as $path => $pathArray) {
-            $path = $this->mu()->getModuleDirLocation()  . '/'.$path ? : '' ;
-            $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
-            if (!file_exists($path)) {
-                $this->mu()->colourPrint("SKIPPING $path");
-            } else {
-                $textSearchMachine->setSearchPath($path);
-                foreach ($pathArray as $extension => $extensionArray) {
-                    $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
-                    $this->mu()->colourPrint(
-                        "++++++++++++++++++++++++++++++++++++\n".
-                        "CHECKING\n".
-                        "IN $path\n".
-                        "FOR $extension FILES\n".
-                        "BASE ".$this->mu()->getModuleDirLocation()."\n".
-                        "++++++++++++++++++++++++++++++++++++\n"
-                    );
-                    foreach ($extensionArray as $find => $findDetails) {
-                        $replace = isset($findDetails['R'])       ? $findDetails['R'] : $find;
-                        $comment = isset($findDetails['C'])       ? $findDetails['C'] : '';
-                        $ignoreCase = true;
-                        $caseSensitive = ! $ignoreCase;
+                            $isStraightReplace = true;
 
-                        $isStraightReplace = true;
-
-                        // REPLACMENT PATTERN!
-                        //Requirements::javascript(moduledirfolder/bla);
-                        //Requirements::javascript(vpl: bla);
-                        $findWithPackageName = $find.strtolower($this->mu()->getPackageName());
-                        $vendorAndPackageAsLocation = $this->mu()->getVendorAndPackageAsLocation();
-                        if (!$find) {
-                            user_error("no find is specified, replace is: $replace");
-                        }
-                        $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
-
-                        foreach(['\'', '"'] as $quoteMark) {
-                            $finalReplace = $find.$quoteMark.$vendorAndPackageAsLocation.': ';
-                            if (!$finalReplace) {
-                                user_error("no replace is specified, find is: $find");
+                            // REPLACMENT PATTERN!
+                            //Requirements::javascript(moduledirfolder/bla);
+                            //Requirements::javascript(vpl: bla);
+                            $findWithPackageName = $find.strtolower($this->mu()->getPackageName());
+                            $vendorAndPackageFolderNameForInstall = $this->mu()->getVendorAndPackageFolderNameForInstall();
+                            if (!$find) {
+                                user_error("no find is specified, replace is: $replace");
                             }
-                            $finalFind = $find.$quoteMark;
+                            $replacementType = $isStraightReplace ? "BASIC" : "COMPLEX";
+
+                            foreach (['\'', '"'] as $quoteMark) {
+                                $finalReplace = $find.$quoteMark.$vendorAndPackageFolderNameForInstall.': ';
+                                if (!$finalReplace) {
+                                    user_error("no replace is specified, find is: $find");
+                                }
+                                $finalFind = $find.$quoteMark;
+                                $this->mu()->colourPrint(
+                                    '    --- FIND: '.$finalFind."\n".
+                                    '    --- REPLACE: '.$finalReplace."\n"
+                                );
+
+                                $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
+                                $textSearchMachine->setReplacementKey($finalReplace);
+                                $textSearchMachine->startSearchAndReplace();
+                            }
+                        }
+
+                        //fix double-ups
+                        //fixes things like
+                        //vendor/packagename: silverstripe/admin
+                        //to
+                        //silverstripe/admin: only
+                        foreach (['cms', 'framework', 'siteconfig', 'reports'] as $ssModule) {
+                            $isStraightReplace = true;
+                            $finalFind = $vendorAndPackageFolderNameForInstall.': silverstripe/'.$ssModule.': ';
+                            $finalReplace = 'silverstripe/'.$ssModule.': ';
                             $this->mu()->colourPrint(
                                 '    --- FIND: '.$finalFind."\n".
                                 '    --- REPLACE: '.$finalReplace."\n"
                             );
-
-                            $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replaceKey);
+                            $textSearchMachine->setSearchKey($finalFind, $isStraightReplace, 'silverstripe/'.$ssModule.'/@@@@double-up@@@@');
                             $textSearchMachine->setReplacementKey($finalReplace);
                             $textSearchMachine->startSearchAndReplace();
                         }
-                    }
 
-                    //fix double-ups
-                    //fixes things like
-                    //vendor/packagename: silverstripe/admin
-                    //to
-                    //silverstripe/admin: only
-                    foreach(['cms', 'admin', 'framework', 'assets'] as $ssModule) {
-                        $isStraightReplace = true;
-                        $finalFind = $vendorAndPackageAsLocation.': silverstripe/'.$ssModule.': ';
-                        $finalReplace = 'silverstripe/'.$ssModule.': ';
-                        $this->mu()->colourPrint(
-                            '    --- FIND: '.$finalFind."\n".
-                            '    --- REPLACE: '.$finalReplace."\n"
-                        );
-                        $textSearchMachine->setSearchKey($finalFind, $isStraightReplace, 'silverstripe/'.$ssModule.'/double-up');
-                        $textSearchMachine->setReplacementKey($finalReplace);
-                        $textSearchMachine->startSearchAndReplace();
+                        //SHOW TOTALS
+                        $replacements = $textSearchMachine->showFormattedSearchTotals();
+                        if (! $replacements) {
+                            //flush output anyway!
+                            $this->mu()->colourPrint("No replacements for  $extension");
+                        }
+                        $this->mu()->colourPrint($textSearchMachine->getOutput());
                     }
-
-                    //SHOW TOTALS
-                    $replacements = $textSearchMachine->showFormattedSearchTotals();
-                    if ($replacements) {
-                    } else {
-                        //flush output anyway!
-                        $this->mu()->colourPrint("No replacements for  $extension");
-                    }
-                    $this->mu()->colourPrint($textSearchMachine->getOutput());
                 }
             }
         }
     }
 
-
+    protected function hasCommitAndPush()
+    {
+        return true;
+    }
 }

@@ -8,31 +8,29 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  * Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.
  * This means your module will be installed in the vendor folder after this upgrade.
  */
-class UpdateComposerModuleType extends Task
+class AddLicenceToProjectForRecomposeTask extends Task
 {
     protected $taskStep = 's50';
 
     public function getTitle()
     {
-        return 'Update composer type to silverstripe-vendormodule ';
+        return 'Add license to project to ensure recompose works.';
     }
 
     public function getDescription()
     {
         return '
-            Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.
-            This means your module will be installed in the vendor folder after this upgrade.';
+            Adds the license = proprietary to the composer file to ensure the recompose task works.';
     }
 
 
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if(! $this->mu()->getIsModuleUpgrade()) {
             $command =
-            'if(isset($data["type"]) && $data["type"] === "silverstripe-module") { '
-            .'    $data["type"] = "silverstripe-vendormodule";'
+            'if(! isset($data["license"])) { '
+            .'    $data["license"] = proprietary";'
             .'}';
-            $comment = 'Update composer module type from silverstripe-module to silverstripe-vendormodule';
             $this->updateJSONViaCommandLine(
                 $this->mu()->getGitRootDir(),
                 $command,
@@ -44,6 +42,6 @@ class UpdateComposerModuleType extends Task
 
     protected function hasCommitAndPush()
     {
-        return $this->mu()->getIsModuleUpgrade();
+        return $this->mu()->getIsModuleUpgrade() ? false : true ;
     }
 }

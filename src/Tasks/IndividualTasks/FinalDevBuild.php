@@ -9,6 +9,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class FinalDevBuild extends Task
 {
+    protected $taskStep = 's60';
+
     public function getTitle()
     {
         return 'Run dev/build';
@@ -24,13 +26,13 @@ class FinalDevBuild extends Task
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'php vendor/silverstripe/framework/cli-script.php dev/build flush=all',
+            'vendor/bin/sake dev/build flush=all',
             'It is time for a dev/build',
             false
         );
     }
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return false;
     }

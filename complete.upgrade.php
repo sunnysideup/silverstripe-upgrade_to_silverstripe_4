@@ -14,12 +14,18 @@ $obj = ModuleUpgrader::create()
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'cleaner_tinymce_config',
-              'PackageNamespace' => 'CleanerTinyMCEConfig',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-cleaner_tinymce_config.git'
+              'PackageName' => 'mysites',
+              'PackageNamespace' => 'SilverstripeUpgrade',
+              'PackageFolderNameForInstall' => 'upgradenow',
+              'GitLink' => 'git@bitbucket.org:sunnysideupnz/upgradesilverstripe.com.git',
+              'IsModuleUpgrade' => false,
+              'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/upgradesilverstripe.com/raw/a88492066701dfa7fbb8685c4b923587de8ff0c2/composer.json'
             ]
         ]
     )
+    ->setRunInteractively(false)
+    ->setRunIrreversibly(true)
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setLogFolderDirLocation('/var/www/logdir')
+    ->setOnlyRun('FinaliseUpgradeWithMergeIntoMaster')
     ->run();

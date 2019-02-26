@@ -3,18 +3,11 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 /**
-* Class : TextSearch
-*
-* @author  :  MA Razzaque Rupom <rupom_315@yahoo.com>, <rupom.bd@gmail.com>
-*             Moderator, phpResource Group(http://groups.yahoo.com/group/phpresource/)
-*             URL: http://rupom.wordpress.com
-*
-* HEAVILY MODIFIED BY SUNNY SIDE UP
-*
-* @version :  1.0
-* Date     :  06/25/2006
-* Purpose  :  Searching and replacing text within files of specified path
-*/
+ *
+ * @BasedOn  :  MA Razzaque Rupom <rupom_315@yahoo.com>, <rupom.bd@gmail.com>
+ *             Moderator, phpResource Group(http://groups.yahoo.com/group/phpresource/)
+ *             URL: http://rupom.wordpress.com
+ */
 
 class SearchAndReplaceAPI
 {
@@ -24,19 +17,6 @@ class SearchAndReplaceAPI
     private $debug                     = false;
 
     private $basePath                  = '';
-
-    private $searchPath                = '';
-
-    private $defaultIgnoreFolderArray  = [
-        ".svn",
-        ".git"
-    ];
-
-    private $ignoreFolderArray         = [];
-
-    private $extensions                = ["php", "ss", "yml", "yaml", "json", "js", "md"];
-
-    private $findAllExts               = false;
 
     private $isReplacingEnabled        = false;
 
@@ -48,20 +28,31 @@ class SearchAndReplaceAPI
 
     private $comment                   = '';
 
-    private $replacementType           = '';
+    private $startMarker               =  '### @@@@ START REPLACEMENT @@@@ ###';
 
+    private $endMarker                 =  '### @@@@ STOP REPLACEMENT @@@@ ###';
+
+    private $replacementHeader         =  '';
+
+    private $replacementType           = '';
 
     private $caseSensitive             = true;
 
+    private $ignoreFrom                = [
+        '//',
+        '#',
+        '/**'
+    ];
+
+    private $ignoreUntil               = [
+        '//',
+        '#',
+        '*/'
+    ];
+
     // files
 
-    /**
-    * array of all the files we are searching
-    * @var array
-    */
-    private $fileArray                 = [];
-
-    private $flatFileArray             = [];
+    private $fileFinder                = null;
 
     //stats and reporting
 
@@ -76,15 +67,16 @@ class SearchAndReplaceAPI
 
     // static counts
 
-    private static $search_key_totals  = [];
+    private $searchKeyTotals           = [];
 
-    private static $folder_totals      = [];
+    private $folderTotals              = [];
 
-    private static $total_total        = 0;
+    private $totalTotal                = 0;
 
     public function __construct($basePath = '')
     {
         $this->basePath = $basePath;
+        $this->fileFinder = new FindFiles($basePath);
     }
 
 
@@ -122,12 +114,7 @@ class SearchAndReplaceAPI
      */
     public function setIgnoreFolderArray($ignoreFolderArray = [])
     {
-        if ($this->ignoreFolderArray === $ignoreFolderArray) {
-            //do nothing
-        } else {
-            $this->ignoreFolderArray = $ignoreFolderArray;
-            $this->resetFileCache();
-        }
+        $this->fileFinder->setIgnoreFolderArray($ignoreFolderArray);
 
         return $this;
     }
@@ -139,16 +126,7 @@ class SearchAndReplaceAPI
      */
     public function addToIgnoreFolderArray($ignoreFolderArray = [])
     {
-        $oldIgnoreFolderArray = $this->ignoreFolderArray;
-        $this->ignoreFolderArray = array_unique(
-            array_merge(
-                $ignoreFolderArray,
-                $this->defaultIgnoreFolderArray
-            )
-        );
-        if ($oldIgnoreFolderArray !== $this->ignoreFolderArray) {
-            $this->resetFileCache();
-        }
+        $this->fileFinder->addToIgnoreFolderArray($ignoreFolderArray);
 
         return $this;
     }
@@ -158,8 +136,7 @@ class SearchAndReplaceAPI
      */
     public function resetIgnoreFolderArray()
     {
-        $this->ignoreFolderArray = [];
-        $this->resetFileCache();
+        $this->fileFinder->resetIgnoreFolderArray();
 
         return $this;
     }
@@ -170,7 +147,7 @@ class SearchAndReplaceAPI
     public function setBasePath($pathLocation)
     {
         $this->basePath = $pathLocation;
-        $this->resetFileCache();
+        $this->fileFinder->setBasePath($pathLocation);
 
         return $this;
     }
@@ -179,10 +156,7 @@ class SearchAndReplaceAPI
      */
     public function setSearchPath($pathLocation)
     {
-        if ($pathLocation !== $this->searchPath) {
-            $this->searchPath = $pathLocation;
-            $this->resetFileCache();
-        }
+        $this->fileFinder->setSearchPath($pathLocation);
 
         return $this;
     }
@@ -193,16 +167,45 @@ class SearchAndReplaceAPI
      */
     public function setExtensions($extensions = [])
     {
-        $this->extensions = $extensions;
-        if (count($this->extensions)) {
-            $this->findAllExts = false;
-        } else {
-            $this->findAllExts = true;
-        }
-        $this->resetFileCache();
+        $this->fileFinder->setExtensions($extensions);
 
         return $this;
     }
+
+    /**
+     *   Sets extensions to look
+     *   @param bool $boolean
+     */
+    public function setFindAllExts($boolean = true)
+    {
+        $this->fileFinder->setFindAllExts($boolean);
+
+        return $this;
+    }
+
+    public function setStartMarker($s)
+    {
+        $this->startMarker = $s;
+
+        return $this;
+    }
+
+    public function setEndMarker($s)
+    {
+        $this->endMarker = $s;
+
+        return $this;
+    }
+
+    public function setReplacementHeader($s)
+    {
+        $this->replacementHeader = $s;
+
+        return $this;
+    }
+
+
+
 
     //================================================
     // Setters Before Every Search
@@ -220,6 +223,8 @@ class SearchAndReplaceAPI
         $this->searchKey        = $searchKey;
         $this->caseSensitive    = $caseSensitive;
         $this->replacementType  = $replacementType;
+        //reset comment
+        $this->comment          = '';
 
         return $this;
     }
@@ -231,7 +236,7 @@ class SearchAndReplaceAPI
     public function setReplacementKey($replacementKey)
     {
         $this->replacementKey     = $replacementKey;
-        $this->isReplacingEnabled = true;
+        $this->setIsReplacingEnabled(true);
 
         return $this;
     }
@@ -247,6 +252,36 @@ class SearchAndReplaceAPI
 
         return $this;
     }
+
+    /**
+     * makes a comment into a PHP proper comment (like this one)
+     * @return string
+     */
+    public function getFullComment()
+    {
+        $string = '';
+        if ($this->comment) {
+            $string .=
+            PHP_EOL.
+                '/**'.PHP_EOL.
+                '  * '.$this->startMarker.PHP_EOL;
+            if ($this->replacementHeader) {
+                $string .= '  * WHY: '.$this->replacementHeader.PHP_EOL;
+            }
+            $string .=
+                '  * OLD: '.$this->searchKey.' ('.($this->caseSensitive ? 'case sensitive' : 'ignore case').')' . PHP_EOL.
+                '  * NEW: '.$this->replacementKey.($this->replacementType ? ' ('.$this->replacementType.')' : '').PHP_EOL.
+                '  * EXP: '.$this->comment.PHP_EOL.
+                '  * '.$this->endMarker.PHP_EOL.
+                '  */'.
+                PHP_EOL;
+        }
+
+        return $string;
+    }
+
+
+
 
 
     //================================================
@@ -287,7 +322,7 @@ class SearchAndReplaceAPI
      */
     public function getTotalTotalSearches()
     {
-        return self::$total_total;
+        return $this->totalTotal;
     }
 
     /**
@@ -296,28 +331,32 @@ class SearchAndReplaceAPI
     public function showFormattedSearchTotals($suppressOutput = false)
     {
         $totalSearches = 0;
-        foreach (self::$search_key_totals as $searchKey => $total) {
+        foreach ($this->searchKeyTotals as $searchKey => $total) {
             $totalSearches += $total;
         }
         if ($suppressOutput) {
             //do nothing
         } else {
-            $flatArray = $this->getFlatFileArray();
-            $this->addToOutput("\n------------------------------------\nFiles Searched\n------------------------------------\n");
-            foreach ($flatArray as $file) {
-                $strippedFile = str_replace($this->basePath, "", $file);
-                $this->addToOutput($strippedFile."\n");
+            $flatArray = $this->fileFinder->getFlatFileArray();
+            if($flatArray && ! is_array($flatArray)) {
+                $this->addToOutput("\n".$flatArray."\n");
+            } else {
+                $this->addToOutput("\n------------------------------------\nFiles Searched\n------------------------------------\n");
+                foreach ($flatArray as $file) {
+                    $strippedFile = str_replace($this->basePath, "", $file);
+                    $this->addToOutput($strippedFile."\n");
+                }
             }
             $folderSimpleTotals = [];
             $realBase = realpath($this->basePath);
             $this->addToOutput("\n------------------------------------\nSummary: by search key\n------------------------------------\n");
-            arsort(self::$search_key_totals);
-            foreach (self::$search_key_totals as $searchKey => $total) {
+            arsort($this->searchKeyTotals);
+            foreach ($this->searchKeyTotals as $searchKey => $total) {
                 $this->addToOutput(sprintf("%d:\t %s\n", $total, $searchKey));
             }
             $this->addToOutput("\n------------------------------------\nSummary: by directory\n------------------------------------\n");
-            arsort(self::$folder_totals);
-            foreach (self::$folder_totals as $folder => $total) {
+            arsort($this->folderTotals);
+            foreach ($this->folderTotals as $folder => $total) {
                 $path = str_replace($realBase, "", realpath($folder));
                 $pathArr = explode("/", $path);
                 if (isset($pathArr[1])) {
@@ -340,10 +379,14 @@ class SearchAndReplaceAPI
             $this->addToOutput(sprintf("\n------------------------------------\nTotal replacements: %d\n------------------------------------\n", $totalSearches));
         }
         //add to total total
-        self::$total_total += $totalSearches;
+        $this->totalTotal += $totalSearches;
+
         //return total
         return $totalSearches;
     }
+
+
+
 
 
 
@@ -359,7 +402,7 @@ class SearchAndReplaceAPI
      */
     public function startSearchAndReplace()
     {
-        $flatArray = $this->getFlatFileArray();
+        $flatArray = $this->fileFinder->getFlatFileArray();
         foreach ($flatArray as $file) {
             $this->searchFileData($file);
         }
@@ -369,6 +412,8 @@ class SearchAndReplaceAPI
         if ($this->errorText!= '') {
             $this->addToOutput("\t Error-----".$this->errorText);
         }
+
+        return $this;
     }
 
 
@@ -379,49 +424,92 @@ class SearchAndReplaceAPI
      */
     private function searchFileData($file)
     {
-        $searchKey  = preg_quote($this->searchKey, '/');
-        if ($this->replacementKey) {
+        $searchKey = preg_quote($this->searchKey, '/');
+        if ($this->isReplacingEnabled) {
             $oldFileContentArray = file($file);
             $newFileContentArray = [];
-            if ($this->caseSensitive) {
-                $pattern    = "/$searchKey/U";
-            } else {
-                $pattern    = "/$searchKey/Ui";
+            $pattern = "/$searchKey/U";
+            if (! $this->caseSensitive) {
+                $pattern = "/$searchKey/Ui";
             }
             $foundCount = 0;
-            foreach($oldFileContentArray as $key => $oldLineContent)  {
+            $insidePreviousReplaceComment = false;
+            $insideIgnoreArea = false;
+            foreach ($oldFileContentArray as $key => $oldLineContent) {
                 $newLineContent = $oldLineContent;
-                $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
-                if($foundInLineCount) {
-                    $foundCount += $foundInLineCount;
-                    if ($this->isReplacingEnabled) {
-                        $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
-                        if($oldLineContent !== $newLineContent) {
-                            if($this->comment) {
-                                $newFileContentArray[] = $this->comment;
+                $testLine = trim($oldLineContent);
+
+                //check if it is actually already replaced ...
+                if (strpos($oldLineContent, $this->startMarker) !== false) {
+                    $insidePreviousReplaceComment = true;
+                }
+                foreach($this->ignoreFrom as $ignoreStarter) {
+                    if(strpos($testLine, $ignoreStarter) === 0) {
+                        $insideIgnoreArea = true;
+                    }
+                }
+                if ($insidePreviousReplaceComment || $insideIgnoreArea) {
+                    //do nothing ...
+                } else {
+                    $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
+                    if ($foundInLineCount) {
+                        if ($this->caseSensitive) {
+                            if (strpos($oldLineContent, $this->searchKey) === false) {
+                                user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+                            }
+                        } else {
+                            if (stripos($oldLineContent, $this->searchKey) === false) {
+                                user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+                            }
+                        }
+                        $foundCount += $foundInLineCount;
+                        if ($this->isReplacingEnabled) {
+                            $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
+                            if ($fullComment = $this->getFullComment()) {
+                                $newFileContentArray[] = $fullComment;
+                            }
+                        }
+                    } else {
+                        $hasError = false;
+                        if ($this->caseSensitive) {
+                            if (strpos($oldLineContent, $this->searchKey) !== false) {
+                                user_error('Should have found: '.$this->searchKey);
+                            }
+                        } else {
+                            if (stripos($oldLineContent, $this->searchKey) !== false) {
+                                user_error('Should have found: '.$this->searchKey);
                             }
                         }
                     }
                 }
                 $newFileContentArray[] = $newLineContent;
+                if (strpos($oldLineContent, $this->endMarker) !== false) {
+                    $insidePreviousReplaceComment = false;
+                }
+                foreach($this->ignoreUntil as $ignoreEnder) {
+                    if(strpos($testLine, $ignoreEnder) === 0) {
+                        $insideIgnoreArea = false;
+                    }
+                }
+
             }
-            if($foundCount) {
+            if ($foundCount) {
                 $oldFileContent = implode($oldFileContentArray);
                 $newFileContent = implode($newFileContentArray);
-                if ($newFileContent === $oldFileContent) {
+                if ($newFileContent !== $oldFileContent) {
                     $this->writeToFile($file, $newFileContent);
 
                     //stats
-                    $this->totalFound += $foundInLine;
-                    if (!isset(self::$search_key_totals[$this->searchKey])) {
-                        self::$search_key_totals[$this->searchKey] = 0;
+                    $this->totalFound += $foundInLineCount;
+                    if (!isset($this->searchKeyTotals[$this->searchKey])) {
+                        $this->searchKeyTotals[$this->searchKey] = 0;
                     }
-                    self::$search_key_totals[$this->searchKey] += $foundCount;
+                    $this->searchKeyTotals[$this->searchKey] += $foundCount;
 
-                    if (!isset(self::$folder_totals[dirname($file)])) {
-                        self::$folder_totals[dirname($file)] = 0;
+                    if (!isset($this->folderTotals[dirname($file)])) {
+                        $this->folderTotals[dirname($file)] = 0;
                     }
-                    self::$folder_totals[dirname($file)] += $foundCount;
+                    $this->folderTotals[dirname($file)] += $foundCount;
 
                     //log
                     $foundStr = "-- $foundCount x";
@@ -451,117 +539,6 @@ class SearchAndReplaceAPI
         }
     }
 
-
-
-
-    //FIND FILES
-
-    private function resetFileCache()
-    {
-        $this->fileArray = null;
-        $this->fileArray = [];
-        $this->flatFileArray = null;
-        $this->flatFileArray = [];
-        //cleanup other data
-    }
-
-
-    /**
-     * loads all the applicable files
-     * @param String $path (e.g. "." or "/var/www/mysite.co.nz")
-     * @param Boolean $innerLoop - is the method calling itself???
-     *
-     *
-     */
-    private function getFileArray($path, $runningInnerLoop = false)
-    {
-        if ($runningInnerLoop || !count($this->fileArray)) {
-            $dir = opendir($path);
-            while ($file = readdir($dir)) {
-                $fullPath = $path.'/'.$file;
-                if (($file == ".") || ($file == "..") || (__FILE__ == $fullPath) || ($path == "." && basename(__FILE__) == $file)) {
-                    continue;
-                }
-                //ignore hidden files and folders
-                if (substr($file, 0, 1) == ".") {
-                    continue;
-                }
-                //ignore folders with _manifest_exclude in them!
-                if ($file == "_manifest_exclude") {
-                    $this->ignoreFolderArray[] = $path;
-                    unset($this->fileArray[$path]);
-                    break;
-                }
-                if (filetype($fullPath) == "dir") {
-                    if (
-                        (in_array($file, $this->ignoreFolderArray) && ($path == "." || $path == $this->searchPath)) ||
-                        (in_array($path, $this->ignoreFolderArray))
-                    ) {
-                        continue;
-                    }
-                    $this->getFileArray($fullPath, $runningInnerLoop = true); //recursive traversing here
-                } elseif ($this->matchedExtension($file)) { //checks extension if we need to search this file
-                    if (filesize($fullPath)) {
-                        $this->fileArray[$path][] = $fullPath; //search file data
-                    }
-                }
-            } //End of while
-            closedir($dir);
-        }
-        return $this->fileArray;
-    }
-
-    private function getFlatFileArray()
-    {
-        if (count($this->flatFileArray) === 0) {
-            if ($this->searchPath) {
-                if (file_exists($this->searchPath)) {
-                    if (is_file($this->searchPath)) {
-                        $this->flatFileArray = [
-                            $this->searchPath
-                        ];
-                    } else {
-                        $multiDimensionalArray = $this->getFileArray($this->basePath);
-                        //flatten it!
-                        $this->flatFileArray = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($multiDimensionalArray));
-                    }
-                } else {
-                    $this->addToOutput("\n".'SKIPPED: can not find: '.$this->searchPath."\n");
-                }
-            }
-        }
-        return $this->flatFileArray;
-    }
-
-    /**
-     * Finds extension of a file
-     * @param filename
-     * @return file extension
-     */
-    private function findExtension($file)
-    {
-        $fileArray = explode(".", $file);
-
-        return array_pop($fileArray);
-    }
-
-    /**
-     * Checks if a file extension is one of the extensions we are going to search
-     * @param String $filename
-     * @return Boolean
-     */
-    private function matchedExtension($file)
-    {
-        $fileExtension = $this->findExtension($file);
-        if ($this->findAllExts) {
-            return true;
-        } elseif (in_array('*', $this->extensions)) {
-            return true;
-        } elseif (in_array($fileExtension, $this->extensions)) {
-            return true;
-        }
-        return false;
-    }
 
 
     /**

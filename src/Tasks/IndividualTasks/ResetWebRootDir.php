@@ -9,6 +9,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class ResetWebRootDir extends Task
 {
+    protected $taskStep = 's00';
+
     public function getTitle()
     {
         return 'Remove and reset Web Root';
@@ -37,7 +39,7 @@ class ResetWebRootDir extends Task
         );
     }
 
-    public function hasCommitAndPush()
+    protected function hasCommitAndPush()
     {
         return false;
     }

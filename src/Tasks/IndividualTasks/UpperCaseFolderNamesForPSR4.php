@@ -11,6 +11,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class UpperCaseFolderNamesForPSR4 extends Task
 {
+    protected $taskStep = 's30';
+
     public function getTitle()
     {
         return 'Fix Folder Case';
@@ -25,8 +27,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
 
     public function runActualTask($params = [])
     {
-        $codeDir = $this->mu()->findCodeDir();
-        if ($this->mu()->getRunImmediately() && file_exists($codeDir)) {
+        foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $di = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($codeDir, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST
@@ -37,10 +38,10 @@ class UpperCaseFolderNamesForPSR4 extends Task
                 if ($fio->isDir()) {
                     //If its a directory then
                     $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->mu()->camelCase($fio->getFilename());
-                    if($name === $newName) {
+                    if ($name === $newName) {
                         $this->mu()->colourPrint('No need to move '.str_replace($codeDir, '', $name).' as it is already in CamelCase', 'dark_gray');
                     } else {
-                        $this->mu()->colourPrint('New name for directory: ' . $newName , 'red');
+                        $this->mu()->colourPrint('New name for directory: ' . $newName, 'green');
                         $this->mu()->execMe(
                             $this->mu()->getWebRootDirLocation(),
                             'mv '.$name.' '.$newName,
@@ -52,5 +53,10 @@ class UpperCaseFolderNamesForPSR4 extends Task
                 }
             }
         }
+    }
+
+    protected function hasCommitAndPush()
+    {
+        return true;
     }
 }

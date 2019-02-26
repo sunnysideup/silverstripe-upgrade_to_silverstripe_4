@@ -20,16 +20,16 @@ class WebRootUpdate extends Task
     {
         return '
             Runs the silverstripe/upgrade task "webroot". See:
-            https://github.com/silverstripe/silverstripe-runActualTask#webroot.
+            https://github.com/silverstripe/silverstripe-upgrader#webroot.
             Configure your project to use the public web root structure
             introduced with SilverStripe 4.1' ;
     }
 
-    protected $runDir = '';
-
     protected $param1 = '';
 
     protected $param2 = '';
+
+    protected $rootDirForCommand = '';
 
     protected $settings = '';
 
@@ -37,9 +37,9 @@ class WebRootUpdate extends Task
     {
         $this->runSilverstripeUpgradeTask(
             'webroot',
-            $this->runDir,
             $this->param1,
             $this->param2,
+            $this->rootDirForCommand,
             $this->settings
         );
         $this->setCommitMessage('MAJOR: adding webroot concept');

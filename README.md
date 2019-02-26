@@ -22,7 +22,7 @@ Here is what this module does, AUTOMAGICALLY:
 
 Once that has completed you an MANUALLY:
  * review and fix any outstanding issues (many of them clearly marked) OR rerun full process (it is repeatable).
- * merge your upgrade branch into your master (and delete it) 
+ * merge your upgrade branch into your master (and delete it)
  * you are now SS4 ready
 
 # prerequisites before you start:
@@ -34,7 +34,7 @@ Once that has completed you an MANUALLY:
 You do not need to use title case for the folder names as this will be fixed by the upgrade tool.
 
 - Separate MyPage and MyPageController into separate classes and move them into Pages and Control folder
-``` 
+```
 /code/MyPage1.php (contains class MyPage1 AND MyPage1_Controller)
 /code/MyPage2.php (contains class MyPage2 AND MyPage2_Controller)
 ```
@@ -101,9 +101,9 @@ To customise your list of tasks, please see config options below.
 
 1. Merge upgrade branch into master.
 
-2. Add $private static $table_name for every class that extends DataObject, including pages (e.g private static $table_name = 'WebPortfolioPage';). 
-    
-3. Check for use statements WITHOUT name spacing - as these may need attention. 
+2. Add $private static $table_name for every class that extends DataObject, including pages (e.g private static $table_name = 'WebPortfolioPage';).
+
+3. Check for use statements WITHOUT name spacing - as these may need attention.
 
 
 # main config options:
@@ -125,7 +125,7 @@ This should be a folder where you usually save your websites locally so that you
 
 ### upgrade directory
 
-`->setUpgradeDirName('upgradeto4')`:
+`->setWebRootName('upgradeto4')`:
 This is the name of the directory that is created in the root dir where the upgrade takes place.
 That is, your actual module will be cloned in the `[rootdir]/[upgrade directory]` and when completed, this directory will be deleted.
 **Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**

@@ -50,7 +50,7 @@ class InspectAPIChanges extends Task
         );
 
         foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
-            $this->param1 = $codeDir;
+            $this->param1 = dirname($codeDir);
             $this->runSilverstripeUpgradeTask(
                 'inspect',
                 $this->param1,
@@ -58,7 +58,7 @@ class InspectAPIChanges extends Task
                 $this->rootDirForCommand,
                 $this->settings
             );
-            $this->setCommitMessage('MAJOR: core upgrade to SS4: INSPECT');
+            $this->setCommitMessage('MAJOR: core upgrade to SS4: running INSPECT on '.$this->param1);
         }
     }
 

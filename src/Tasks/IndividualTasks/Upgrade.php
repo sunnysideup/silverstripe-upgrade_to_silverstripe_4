@@ -32,7 +32,7 @@ class Upgrade extends Task
 
     protected $rootDirForCommand = '';
 
-    protected $settings = '---prompt';
+    protected $settings = '--prompt';
 
     public function runActualTask($params = [])
     {

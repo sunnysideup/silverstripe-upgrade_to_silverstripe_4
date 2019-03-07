@@ -32,12 +32,13 @@ class Upgrade extends Task
 
     protected $rootDirForCommand = '';
 
-    protected $settings = '';
+    protected $settings = '---prompt';
 
     public function runActualTask($params = [])
     {
         foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
-            $this->param1 = $codeDir;
+            $actualDir = dirname($codeDir);
+            $this->param1 = $actualDir;
             $this->runSilverstripeUpgradeTask(
                 'upgrade',
                 $this->param1,
@@ -45,7 +46,7 @@ class Upgrade extends Task
                 $this->rootDirForCommand,
                 $this->settings
             );
-            $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 1 (upgrade) on '.$codeDir);
+            $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 1 (upgrade) on '.$actualDir);
         }
     }
 

@@ -913,9 +913,10 @@ class ModuleUpgrader
         } else {
             $this->gitLink = 'git@github.com:'.$this->vendorName.'/silverstripe-'.$this->packageName.'.git';
         }
-        $this->gitLinkAsHTTPS = rtrim(str_replace('git@github.com:', 'https://github.com/', $this->gitLink), '.git');
-        $this->gitLinkAsRawHTTPS = rtrim(str_replace('git@github.com:', 'https://raw.githubusercontent.com/', $this->gitLink), '.git');
-
+        //see: https://stackoverflow.com/questions/5573334/remove-a-part-of-a-string-but-only-when-it-is-at-the-end-of-the-string
+        $gitLinkWithoutExtension = preg_replace('/'. preg_quote('.git', '/') . '$/', '', $this->gitLink);
+        $this->gitLinkAsHTTPS = str_replace('git@github.com:', 'https://github.com/', $gitLinkWithoutExtension);
+        $this->gitLinkAsRawHTTPS = str_replace('git@github.com:', 'https://raw.githubusercontent.com/', $gitLinkWithoutExtension);
 
         //Origin Composer FileLocation
         $this->originComposerFileLocation = isset($moduleDetails['OriginComposerFileLocation']) ? $moduleDetails['OriginComposerFileLocation'] : '';
@@ -944,7 +945,7 @@ class ModuleUpgrader
                         $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
                     }
                 } else {
-                    user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation');
+                    user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation. Could not find: '.$this->originComposerFileLocation);
                 }
             }
             $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);

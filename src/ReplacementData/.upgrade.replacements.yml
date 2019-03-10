@@ -160,7 +160,7 @@ SS4:
                 R: "public function includeInHTML($content)"
                 I: true
             'Cache::factory(':
-                R: 'SilverStripe\Core\Injector\Injector:::inst()->get(Psr\SimpleCache\CacheInterface::class . '
+                R: 'SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class . '
                 C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
             '$cache->load(':
                 R: '$cache->has('

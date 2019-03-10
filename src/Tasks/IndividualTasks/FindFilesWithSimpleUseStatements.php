@@ -12,13 +12,13 @@ class FindFilesWithSimpleUseStatements extends Task
 
     public function getTitle()
     {
-        return 'Finds files with more than one class';
+        return 'Finds files simple use statements (may indicate error!)';
     }
 
     public function getDescription()
     {
         return '
-            Goes through all the PHP files and makes sure that only one class is defined.  If any are found than the code exits as you should fix this first!' ;
+            Goes through all the PHP files and makes sure that there are no simple use statements, apart from things like use \\page;. ' ;
     }
 
     protected $listOfOKOnes = [
@@ -72,8 +72,11 @@ class FindFilesWithSimpleUseStatements extends Task
                 $this->mu()->colourPrint("Could not find ".$searchPath, 'blue');
             }
         }
-        if(count($errors)) {
-            return 'Found errors in use statements: '."\n---\n---\n---\n".implode("\n ---\n", $errors);
+        $error = 'Found errors in use statements: '."\n---\n---\n---\n".implode("\n ---\n", $errors);
+        if(count($errors) > 10) {
+            return $error;
+        } else {
+            $this->mu()->colourPrint($error, 'red');
         }
 
     }

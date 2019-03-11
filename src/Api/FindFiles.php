@@ -7,6 +7,7 @@ class FindFiles
 
     //generic search settings
 
+    private $needToFillFileCache      = true;
 
     private $basePath                  = '';
 
@@ -102,6 +103,7 @@ class FindFiles
     public function setFindAllExts($boolean = true)
     {
         $this->findAllExts = $boolean;
+        $this->resetFileCache();
 
         return $this;
     }
@@ -153,14 +155,14 @@ class FindFiles
      */
     public function getFlatFileArray()
     {
-        if (count($this->flatFileArray) === 0) {
+        if ($this->needToFillFileCache) {
             $myArray = [];
             if ($this->searchPath) {
                 if (file_exists($this->searchPath)) {
                     if (is_file($this->searchPath)) {
                         $this->flatFileArray = [$this->searchPath];
                     } else {
-                        $multiDimensionalArray = $this->getFileArray($this->basePath);
+                        $multiDimensionalArray = $this->getFileArray($this->searchPath);
                         foreach($multiDimensionalArray as $folder => $arrayOfFiles) {
                             if(count($arrayOfFiles)) {
                                 $this->relevantFolders[$folder] = $folder;
@@ -180,6 +182,7 @@ class FindFiles
                 }
             }
             $this->flatFileArray = array_values($myArray);
+            $this->needToFillFileCache = false;
         }
 
         return $this->flatFileArray;
@@ -195,7 +198,7 @@ class FindFiles
      */
     protected function getFileArray($path, $runningInnerLoop = false)
     {
-        if ($runningInnerLoop || !count($this->fileArray)) {
+        if ($runningInnerLoop || $this->needToFillFileCache) {
             $dir = opendir($path);
             while ($file = readdir($dir)) {
                 $fullPath = $path.'/'.$file;
@@ -228,6 +231,7 @@ class FindFiles
             } //End of while
             closedir($dir);
         }
+
         return $this->fileArray;
     }
 
@@ -242,6 +246,7 @@ class FindFiles
         $this->fileArray = [];
         $this->flatFileArray = null;
         $this->flatFileArray = [];
+        $this->needToFillFileCache = true;
         //cleanup other data
     }
 

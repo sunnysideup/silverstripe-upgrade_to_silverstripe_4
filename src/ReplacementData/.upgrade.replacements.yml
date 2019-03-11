@@ -107,6 +107,9 @@ SS4:
             '->getFullPath()':
                 R: '->getFilename()'
                 C: 'You may need to add Director::baseFolder()."/" in front of this ...'
+            'fulltext':
+                R: 'fulltext'
+                C: 'See https://docs.silverstripe.org/en/4/developer_guides/search/fulltextsearch/ and check implementation!'
             ' extends Extension':
                 R: " extends Extension"
                 C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"

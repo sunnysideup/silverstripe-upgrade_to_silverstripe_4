@@ -164,13 +164,13 @@ SS4:
                 C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
             '$cache->load(':
                 R: '$cache->has('
-                C: 'See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+                C: 'See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache, you may also need to add $cache->get( !!!'
             '$cache->set(':
                 R: '$cache->set('
-                C: 'Cache key and value need to be swapped. Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+                C: 'Cache key and value need to be swapped!!! Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
             '$cache->save(':
                 R: '$cache->set('
-                C: 'Cache key and value need to be swapped. Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+                C: 'Cache key and value need to be swapped!!! Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
             '$cache->load(':
                 R: '$cache->get('
                 C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'

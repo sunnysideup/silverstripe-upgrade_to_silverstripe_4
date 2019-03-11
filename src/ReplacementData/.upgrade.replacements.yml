@@ -56,6 +56,8 @@ SS4:
         php:
             'Config::inst()->update(':
                 R: 'Config::modify()->update('
+            '= array();':
+                R: '= [];'
             'canCreate($member = null)':
                 R: 'canCreate($member = null, $context = [])'
             'canDelete($member = null)':
@@ -70,9 +72,15 @@ SS4:
                 R: 'TextField'
             'HtmlEditorField':
                 R: 'HTMLEditorField'
+            'private static $db =':
+                R: 'private static $db ='
+                C: 'Make sure to add a private static $table_name!'
+            'private static $has_one =':
+                R: 'private static $has_one ='
+                C: 'Make sure to add a private static $table_name!'
             '$this->process_combined_files();':
                 R: '$this->processCombinedFiles();'
-                C: this is likely to be part of the Requirements_Backend calls'
+                C: 'this is likely to be part of the Requirements_Backend calls'
             '$this->path_for_file();':
                 R: '$this->pathForFile();'
                 C: this is likely to be part of the Requirements_Backend calls'
@@ -96,6 +104,9 @@ SS4:
             ' implements flushable':
                 R: " implements Flushable"
                 I: true
+            '->getFullPath()':
+                R: '->getFilename()'
+                C: 'You may need to add Director::baseFolder()."/" in front of this ...'
             ' extends Extension':
                 R: " extends Extension"
                 C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"

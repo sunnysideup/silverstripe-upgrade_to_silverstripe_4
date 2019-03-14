@@ -111,22 +111,22 @@ SS4:
                 R: '->getFilename()'
                 C: 'You may need to add Director::baseFolder()."/" in front of this ...'
             '->db()':
-                R: '->stat('db')'
+                R: '->Config()->get('db')'
                 C: 'Check implementation'
             '->has_one()':
-                R: '->stat('has_one')'
+                R: '->Config()->get('has_one')'
                 C: 'Check implementation'
             '->has_many()':
-                R: '->stat('has_many')'
+                R: '->Config()->get('has_many')'
                 C: 'Check implementation'
             '->many_many()':
-                R: '->stat('many_many')'
+                R: '->Config()->get('many_many')'
                 C: 'Check implementation'
             '->belongs_many_many()':
-                R: '->stat('belongs_many_many')'
+                R: '->Config()->get('belongs_many_many')'
                 C: 'Check implementation'
             '->belongs()':
-                R: '->stat('belongs')'
+                R: '->Config()->get('belongs')'
                 C: 'Check implementation'
             'fulltext':
                 R: 'fulltext'

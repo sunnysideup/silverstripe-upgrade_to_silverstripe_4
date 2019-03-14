@@ -72,6 +72,9 @@ SS4:
                 R: 'TextField'
             'HtmlEditorField':
                 R: 'HTMLEditorField'
+            '->dontEscape':
+                R: '->dontEscape'
+                C: 'dontEscape is not longer in use for form fields, please use HTMLReadonlyField (or similar) instead.'
             'private static $db =':
                 R: 'private static $db ='
                 C: 'Make sure to add a private static $table_name!'
@@ -139,7 +142,11 @@ SS4:
                 R: " extends DataExtension"
                 C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
                 I: true
-
+            'DB::getConn()':
+                'DB::get_conn()'
+            '->tableList()':
+                R: '->tableList()'
+                C: 'SUGGESTION ... DB::get_conn()->tableList() ... WITH ... DataObject::getSchema()->getTableNames()'
             'BASE_PATH':
                 R: "Director::baseFolder()"
             'FRAMEWORK_DIR':

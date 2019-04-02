@@ -646,16 +646,20 @@ class ModuleUpgrader
         return $codeDirs;
     }
 
+
+
     public function findMyCodeDir($moduleDir)
     {
         if(file_exists($moduleDir)) {
-            if (file_exists($moduleDir . '/code') && file_exists($moduleDir . '/src')) {
+            $test1 = $moduleDir . '/code';
+            $test2 = $moduleDir . '/src';
+            if (file_exists($test1) && file_exists($test2)) {
                 user_error('There is a code and a src dir for '.$moduleDir, E_USER_NOTICE);
             }
-            elseif (file_exists($moduleDir . '/code')) {
+            elseif (file_exists($test1)) {
                 return $moduleDir . '/code';
             }
-            elseif (file_exists($moduleDir . '/src')) {
+            elseif (file_exists($test2)) {
                 return $moduleDir . '/src';
             } else {
                 user_error('Can not find code/src dir for '.$moduleDir, E_USER_NOTICE);
@@ -945,7 +949,7 @@ class ModuleUpgrader
                         $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
                     }
                 } else {
-                    user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation. Could not find: '.$this->originComposerFileLocation);
+                    //user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation. Could not find: '.$this->originComposerFileLocation);
                 }
             }
             $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);

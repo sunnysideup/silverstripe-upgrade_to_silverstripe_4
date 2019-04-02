@@ -35,6 +35,9 @@ class DatabaseMigrationLegacyYML extends Task
             $newFile = $moduleDir.'/_config/database.legacy.yml';
             $tmpFile = $moduleDir.'/_config/database.legacy.yml.tmp';
             $mvStatement = $newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile;
+            if(! file_exists($oldFile)) {
+                continue;
+            }
             $this->mu()->execMe(
                 $moduleDir,
                 'if test -f '.$oldFile.'; then cp -vn '.$oldFile.' '.$newFile.'; fi;',
@@ -42,7 +45,7 @@ class DatabaseMigrationLegacyYML extends Task
                 false
             );
             if(! file_exists($newFile)) {
-                return 'error! Could not find: '.$newFile;
+                return 'Could not copy file from '.$oldFile.' to '.$newFile;
             }
             $this->mu()->execMe(
                 $moduleDir,

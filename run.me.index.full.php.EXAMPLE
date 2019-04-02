@@ -33,7 +33,7 @@ $obj = ModuleUpgrader::create()
         ]
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
-    ->frameworkComposerRestrain('^4.3')
+    ->setFrameworkComposerRestraint('^4.3')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     // ->setListOfTasks(

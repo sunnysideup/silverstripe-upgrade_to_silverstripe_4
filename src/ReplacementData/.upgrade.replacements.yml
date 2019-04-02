@@ -271,6 +271,12 @@ SS4:
                 C: 'check for location'
             'function FieldHolder()':
                 R: 'function FieldHolder($properties = [])'
+            'private static $icon = array(':
+                R: 'private static $icon = array('
+                C: 'Icons can no longer be arrays, please check'
+            'private static $icon = [':
+                R: 'private static $icon = ['
+                C: 'Icons can no longer be arrays, please check'
         'yml':
             '_Controller':
                 R: "Controller"

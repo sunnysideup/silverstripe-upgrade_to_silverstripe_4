@@ -186,8 +186,8 @@ SS4:
                 R: "Controller extends PageController"
                 C: "Remove the underscore in your classname - check all references!"
             "_Controller extends Page_Controller":
-                R: "Controller extends Page_Controller"
-                C: "Remove the underscore in your classname - check all references!"
+                R: "Controller extends PageController"
+                C: "Remove the underscores in your classname - check all references!"
             'THIRDPARTY_DIR."/jquery/jquery.js"':
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
             'THIRDPARTY_DIR . "/jquery/jquery.js"':

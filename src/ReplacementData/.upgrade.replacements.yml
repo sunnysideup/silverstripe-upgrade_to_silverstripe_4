@@ -109,7 +109,7 @@ SS4:
                 I: true
             '->getFullPath()':
                 R: '->getFilename()'
-                C: 'You may need to add Director::baseFolder()."/" in front of this ...'
+                C: 'You may need to add ASSETS_PATH."/" in front of this ...'
             '->db()':
                 R: "->Config()->get('db')"
                 C: 'Check implementation'

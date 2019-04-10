@@ -14,14 +14,16 @@ class CheckoutDevMaster extends Task
 
     public function getTitle()
     {
-        return 'Checkout the dev-master of this module.';
+        return 'Checkout the '.$this->branchToUse.' of this module.';
     }
 
     public function getDescription()
     {
         return '
-            Checks out dev-master and hopes that framework, etc... will be loaded with it.';
+            Checks out '.$this->branchToUse.' of project/module using composer for a module or git checkout for a project';
     }
+
+    protected $branchToUse = 'dev-master';
 
     /**
      *
@@ -38,8 +40,8 @@ class CheckoutDevMaster extends Task
             );
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':dev-master  --prefer-source --update-no-dev ',
-                'checkout dev-master of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
+                'composer require '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName().':'.$this->branchToUse.'  --prefer-source --update-no-dev ',
+                'checkout '.$this->branchToUse.' of '.$this->mu()->getVendorName().'/'.$this->mu()->getPackageName(),
                 false
             );
             $this->mu()->execMe(
@@ -57,8 +59,8 @@ class CheckoutDevMaster extends Task
             );
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'git checkout master',
-                'checkout dev-master',
+                'git checkout '.$this->branchToUse,
+                'checkout '.$this->branchToUse,
                 false
             );
             $this->mu()->execMe(

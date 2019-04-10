@@ -135,11 +135,7 @@ class ModuleUpgrader
             'package' => 'silverstripe/framework'
         ],
         'RecomposeHomeBrew' => [],
-        // 'UpdateComposerRequirements-2' => [
-        //     'package' => 'silverstripe/cms',
-        //     'replacementPackage' => 'silverstripe/recipe-cms',
-        //     'newVersion' => '~1'
-        // ],
+        'UpdateComposerRequirements' => [],
         'RemoveInstallerFolder' => [],
         'ResetWebRootDir-3' => [],
 
@@ -184,13 +180,35 @@ class ModuleUpgrader
 
     /**
      * Removes the given task from the list of tasks to execute
+     * @param  string $taskName name of the task
+     * @param  strihg $variableName name of the task
+     * @param  mixed $variableValue name of the task
+     *
+     * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader for chaining
+     */
+    public function setVariableForTask($taskName, $variableName, $variableValue)
+    {
+        $key = $this->positionForTask($taskName);
+        if ($key !== false) {
+            $this->listOfTasks[$taskName][$variableName] = $variableValue;
+        } else {
+            user_error('Could not find '.$taskName.'. Choose from '.implode(', ', array_keys($this->listOfTasks)));
+        }
+
+        return $this;
+    }
+    /**
+     * Removes the given task from the list of tasks to execute
      * @param  string $s name of the task to remove
      * @return Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader for chaining
      */
     public function removeFromListOfTasks($s)
     {
-        if ($key = $this->positionForTask($s) !== false) {
-            unset($messages[$key]);
+        $key = $this->positionForTask($s);
+        if ($key !== false) {
+            unset($this->listOfTasks[$key]);
+        } else {
+            user_error('Removing non existent task '.$key.'. Choose from '.implode(', ', $this->listOfTasks));
         }
 
         return $this;
@@ -301,6 +319,9 @@ class ModuleUpgrader
      */
     protected function positionForTask($s)
     {
+        if(isset($this->listOfTasks[$s])) {
+            return $s;
+        }
         return array_search($s, $this->listOfTasks);
     }
 
@@ -892,6 +913,11 @@ class ModuleUpgrader
     protected function loadVarsForModule($moduleDetails)
     {
 
+
+        //Is Module Upgrade
+        //do this first as a lot of other functions rely on it ...
+        $this->isModuleUpgrade = isset($moduleDetails['IsModuleUpgrade']) ? $moduleDetails['IsModuleUpgrade'] : true;
+
         //VendorName
         $this->vendorName = $moduleDetails['VendorName'];
 
@@ -956,7 +982,7 @@ class ModuleUpgrader
         }
 
         //moduleDirLocation
-        if($this->getIsModuleUpgrade()) {
+        if($this->isModuleUpgrade) {
             $this->moduleDirLocations = [
                 $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall
             ];
@@ -982,9 +1008,6 @@ class ModuleUpgrader
         //UpgradeAsFork
         $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
 
-        //Is Module Upgrade
-        $this->isModuleUpgrade = isset($moduleDetails['IsModuleUpgrade']) ? $moduleDetails['IsModuleUpgrade'] : true;
-
         //LogFileLocation
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {
@@ -1006,6 +1029,7 @@ class ModuleUpgrader
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('- Type: '.($this->isModuleUpgrade ? 'module' : 'project'), 'light_cyan');
+        $this->colourPrint('- Type: '.($this->getIsModuleUpgrade() ? 'module' : 'project'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Name: '.$this->vendorName, 'light_cyan');
         $this->colourPrint('- Package Name: '.$this->packageName, 'light_cyan');
@@ -1013,6 +1037,7 @@ class ModuleUpgrader
         $this->colourPrint('- Upgrade as Fork: '.($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- Run Interactively: '.($this->runInteractively ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- Run Irreversibly: '.($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
+        $this->colourPrint('- Is Module Upgrade: '.($this->isModuleUpgrade ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Namespace: '.$this->vendorNamespace, 'light_cyan');
         $this->colourPrint('- Package Namespace: '.$this->packageNamespace, 'light_cyan');
@@ -1032,6 +1057,8 @@ class ModuleUpgrader
         $this->colourPrint('- Last Step: '.($this->getSessionValue('Completed') ? : 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: '.($this->logFileLocation ? $this->logFileLocation : 'not logged'), 'light_cyan');
+        $this->colourPrint('- ---', 'light_cyan');
+        $this->colourPrint('- List of Steps: '.$this->newLine().' -'.implode($this->newLine().' -', array_keys($this->listOfTasks)), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
     }
 
@@ -1210,6 +1237,15 @@ Session has completed.
             }
         }
         return false;
+    }
+
+
+    protected function newLine() {
+        if(PHP_SAPI === 'cli'){
+           return PHP_EOL;
+        } else {
+           return nl2br("\n");
+        }
     }
 
 }

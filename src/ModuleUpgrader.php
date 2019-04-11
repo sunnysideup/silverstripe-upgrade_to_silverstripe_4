@@ -344,6 +344,14 @@ class ModuleUpgrader
     {
         return $this->commandLineExec->getBreakOnAllErrors();
     }
+    /**
+     * Whether execution should come to a halt when an error is reached
+     * @return bool
+     */
+    public function getIsProjectUpgrade()
+    {
+        return $this->isModuleUpgrade ? false : true;
+    }
 
     /**
      * @param bool $b
@@ -1105,6 +1113,11 @@ Session has completed.
                 }
             }
         }
+    }
+
+    protected function nextStep()
+    {
+
     }
 
     /**

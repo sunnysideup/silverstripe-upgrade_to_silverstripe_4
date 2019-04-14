@@ -126,6 +126,7 @@ class ModuleUpgrader
 
         'CheckoutDevMaster-1' => [],
         'FindFilesWithMoreThanOneClass' => [],
+        'AddTableName' => [],
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
 
@@ -137,6 +138,7 @@ class ModuleUpgrader
         'RecomposeHomeBrew' => [],
         'UpdateComposerRequirements' => [],
         'RemoveInstallerFolder' => [],
+        'CreatePublicFolder' => [],
         'ResetWebRootDir-3' => [],
 
         //Step2: MoveToNewVersion

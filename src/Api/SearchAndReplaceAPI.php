@@ -44,10 +44,18 @@ class SearchAndReplaceAPI
         '/**'
     ];
 
+    private $fileReplacementMaxCount   = 0;
+
     private $ignoreUntil               = [
         '//',
         '#',
         '*/'
+    ];
+
+    // special stuff
+
+    private static $magicReplacers      = [
+        '[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]' => 'classNameOfFile'
     ];
 
     // files
@@ -200,6 +208,13 @@ class SearchAndReplaceAPI
     public function setReplacementHeader($s)
     {
         $this->replacementHeader = $s;
+
+        return $this;
+    }
+
+    public function setFileReplacementMaxCount($i)
+    {
+        $this->fileReplacementMaxCount = $i;
 
         return $this;
     }
@@ -424,8 +439,15 @@ class SearchAndReplaceAPI
      */
     private function searchFileData($file)
     {
+        $myReplacementKey = $this->replacementKey;
         $searchKey = preg_quote($this->searchKey, '/');
         if ($this->isReplacingEnabled) {
+            //get magic data
+            $classNameOfFile = $this->getClassNameOfFile($file);
+            foreach($this->magicReplacers as $magicReplacerFind => $magicReplacerReplaceVariable) {
+                $myReplacementKey = str_replace($magicReplacerFind, $$magicReplacerReplaceVariable, $myReplacementKey);
+
+            }
             $oldFileContentArray = file($file);
             $newFileContentArray = [];
             $pattern = "/$searchKey/U";
@@ -491,7 +513,9 @@ class SearchAndReplaceAPI
                         $insideIgnoreArea = false;
                     }
                 }
-
+                if($this->fileReplacementMaxCount > 0 && $foundCount >= $this->fileReplacementMaxCount) {
+                    break;
+                }
             }
             if ($foundCount) {
                 $oldFileContent = implode($oldFileContentArray);
@@ -513,9 +537,12 @@ class SearchAndReplaceAPI
 
                     //log
                     $foundStr = "-- $foundCount x";
+                    if($this->fileReplacementMaxCount) {
+                        $foundStr .= ' limited to '.$this->fileReplacementMaxCount;
+                    }
                     $this->appendToLog($file, $foundStr);
                 } else {
-                    $this->appendToLog($file, "********** NO REPLACEMENT DESPITE MATCHES - searched for: ".$pattern." AND REPLACED WITH ".$this->replacementKey." \n");
+                    $this->appendToLog($file, "********** ERROR: NO REPLACEMENT DESPITE MATCHES - searched for: ".$pattern." and replaced with ".$this->replacementKey." \n");
                 }
             }
         } else {
@@ -566,5 +593,43 @@ class SearchAndReplaceAPI
     private function addToOutput($s)
     {
         $this->output .= $s;
+    }
+
+    /**
+    * magic replacement functions
+    */
+
+    private static $_class_name_cache = [];
+
+    private function getClassNameOfFile($filePath)
+    {
+        if(! isset(self::$_class_name_cache[$filePath])) {
+            $fp = fopen($filePath, 'r');
+            $class = $buffer = '';
+            $i = 0;
+            while (!$class) {
+                if (feof($fp)) {
+                    break;
+                }
+
+                $buffer .= fread($fp, 512);
+                $tokens = token_get_all($buffer);
+
+                if (strpos($buffer, '{') === false) continue;
+
+                for (;$i<count($tokens);$i++) {
+                    if ($tokens[$i][0] === T_CLASS) {
+                        for ($j=$i+1;$j<count($tokens);$j++) {
+                            if ($tokens[$j] === '{') {
+                                $class = $tokens[$i+2][1];
+                                break 2;
+                            }
+                        }
+                    }
+                }
+            }
+            self::$_class_name_cache[$filePath] = $class;
+        }
+        return self::$_class_name_cache[$filePath];
     }
 }

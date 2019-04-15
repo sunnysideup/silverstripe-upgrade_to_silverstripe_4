@@ -26,7 +26,7 @@ class AddLicenceToProjectForRecomposeTask extends Task
 
     public function runActualTask($params = [])
     {
-        if(! $this->mu()->getIsModuleUpgrade()) {
+        if($this->mu()->getIsProjectUpgrade()) {
             $command =
             'if(! isset($data["license"])) { '
             .'    $data["license"] = proprietary";'

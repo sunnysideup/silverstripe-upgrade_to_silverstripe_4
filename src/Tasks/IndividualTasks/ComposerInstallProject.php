@@ -69,10 +69,10 @@ class ComposerInstallProject extends Task
             'confirm branch',
             false
         );
-        if(! $this->mu()->getIsModuleUpgrade()) {
+        if($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $cloneDir,
-                'composer update',
+                'composer update --no-dev -vvv',
                 'run composer update',
                 false
             );

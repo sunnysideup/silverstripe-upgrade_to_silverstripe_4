@@ -21,41 +21,95 @@ class UpdateComposerRequirements extends Task
     {
         return '
             Change requirements in composer.json file from
-            '.($this->package ?: 'an Old Package').' to '.($this->mu()->getReplacementPackage() ?: 'a New Package').':'.($this->newVersion ?: ' (and New Version)').'
+            '.($this->package ?: 'an Old Package').' to '.($this->getReplacementPackage() ?: 'a New Package').':'.($this->newVersion ?: ' (and New Version)').'
             For example, we upgrade silverstripe/framework requirement from 3 to 4.';
     }
 
     protected $package = '';
 
-    protected $newVersion = '';
+    protected $newVersion = 'error';
 
     protected $replacementPackage = '';
 
+    protected $isObsolete = false;
+
+    protected $isNew = false;
+
+    protected $replacementArray = [];
+
+    protected $runCommit = false;
+
     public function runActualTask($params = [])
     {
-        $package = $this->package;
-
-        $newVersion = $this->newVersion;
-
-        $newPackage = $this->mu()->getReplacementPackage();
-
-        $command =
-        'if(isset($data["require"]["'.$package.'"])) { '
-        .'    unset($data["require"]["'.$package.'"]);'
-        .'    $data["require"]["'.$newPackage.'"] = "'.$newVersion.'"; '
-        .'}';
-
-        $comment = 'replace the require for '.$package.' with '.$newPackage.':'.$newVersion;
-
-        $this->updateJSONViaCommandLine(
-            $this->mu()->getGitRootDir(),
-            $command,
-            $comment
-        );
+        if(is_array($this->replacementArray) && count($this->replacementArray)) {
+            foreach($this->replacementArray as $replacementDetails) {
+                $this->package = $replacementDetails['package'];
+                $this->newVersion = isset($replacementDetails['newVersion']) ? $replacementDetails['newVersion'] : 'error';
+                $this->isObsolete = isset($replacementDetails['isObsolete']) ? $replacementDetails['isObsolete'] : false;
+                $this->isNew = isset($replacementDetails['isNew']) ? $replacementDetails['isNew'] : false;
+                $this->replacementPackage = isset($replacementDetails['replacementPackage'])  ? $replacementDetails['replacementPackage'] : '';
+                $this->runActualTaskInner();
+            }
+        } else {
+            $this->runActualTaskInner();
+        }
 
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - updating core requirements');
     }
 
+    protected function runActualTaskInner()
+    {
+        $package = $this->package;
+
+        // it is possible to run without any changes ....
+        //
+        if($package) {
+
+            $this->runCommit = true;
+
+            $newVersion = $this->newVersion;
+
+            $newPackage = $this->getReplacementPackage();
+
+            if($this->isObsolete) {
+                $command =
+                    'if(isset($data["require"]["'.$package.'"])) { '
+                    .'    unset($data["require"]["'.$package.'"]);'
+                    .'}';
+                $comment = 'removing the requirement for '.$package;
+            } elseif($this->isNew) {
+                $command =
+                    'if(isset($data["require"]["'.$package.'"])) { '
+                    .'    $data["require"]["'.$newPackage.'"] = "'.$newVersion.'"; '
+                    .'}';
+
+                $comment = 'replace the require for '.$package.' with '.$newPackage.':'.$newVersion;
+
+            } else {
+                $command =
+                    'if(isset($data["require"]["'.$package.'"])) { '
+                    .'    unset($data["require"]["'.$package.'"]);'
+                    .'    $data["require"]["'.$newPackage.'"] = "'.$newVersion.'"; '
+                    .'}';
+
+                $comment = 'replace the require for '.$package.' with '.$newPackage.':'.$newVersion;
+            }
+
+
+            $this->updateJSONViaCommandLine(
+                $this->mu()->getGitRootDir(),
+                $command,
+                $comment
+            );
+        }
+
+    }
+
+
+    protected function hasCommitAndPush()
+    {
+        return $this->runCommit;
+    }
 
     public function getReplacementPackage()
     {

@@ -8,7 +8,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class AddTableNamePrivateStatic extends Task
 {
-    protected $taskStep = 's50';
+    protected $taskStep = 's10';
 
     public function getTitle()
     {
@@ -45,8 +45,8 @@ class AddTableNamePrivateStatic extends Task
                         $tableName = basename($path, '.php');
                         $newLine = 'private static $table_name = \''.$tableName.'\';';
                         $filecontent = file_get_contents($path);
-                        $hasNewLine = strpos($filecontent, $newLine);
-                        if(! $newLine) {
+                        $hasNewLine = strpos($filecontent, 'private static $table_name');
+                        if(! $hasNewLine) {
                             $positionOfPrivateStatic = 0;
                             foreach($this->listToSearchFor as $item) {
                                 $positionOfPrivateStatic = strpos($filecontent, $item);

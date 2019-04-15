@@ -60,12 +60,16 @@ SS4:
                 R: '= [];'
             'canCreate($member = null)':
                 R: 'canCreate($member = null, $context = [])'
+                I: true
             'canDelete($member = null)':
                 R: 'canDelete($member = null, $context = [])'
+                I: true
             'canEdit($member = null)':
                 R: 'canEdit($member = null, $context = [])'
+                I: true
             'canView($member = null)':
                 R: 'canView($member = null, $context = [])'
+                I: true
             ' implements flushable':
                 R: ' implements Flushable'
             'Textfield':
@@ -290,8 +294,23 @@ SS4:
                 R: 'findExistingObject($record, $columnMap = [])'
                 C: 'Check that your class extends SilverStripe\Dev\CsvBulkLoader, in that case, an additional parameter is required.'
             'require_once "Zend/Date.php";':
-                R: 'try to use: zf1/zend-date (packagist repository)'
-                C: 'The class should be autoloaded so as long as you have a use statement, it should work.'
+                R: '//require_once "Zend/Date.php";'
+                C: 'Try to use: zf1/zend-date (packagist repository)The class should be autoloaded so as long as you have a use statement, it should work.'
+            "include_once '":
+                R: "include_once '"
+                C: 'This should probably be replaced by PSR-4 autoloading!'
+            'include_once "':
+                R: 'include_once "'
+                C: 'This should probably be replaced by PSR-4 autoloading!'
+            'require_once "':
+                R: 'require_once "'
+                C: 'This should probably be replaced by PSR-4 autoloading!'
+            "require_once '":
+                R: "require_once '"
+                C: 'This should probably be replaced by PSR-4 autoloading!'
+            'UserDefinedForm_Controller "':
+                R: 'UserDefinedFormController "'
+
         'yml':
             '_Controller':
                 R: "Controller"

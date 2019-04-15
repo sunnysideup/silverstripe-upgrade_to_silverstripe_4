@@ -133,6 +133,7 @@ class ModuleUpgrader
         'AddUpgradeBranch' => [],
         'CreatePublicFolder' => [],
         'AddTableName' => [],
+        'ChangeControllerInitToProtected' => [],
         // 'AddTableNamePrivateStatic' => [],
         'RemoveComposerRequirements' => [
             'package' => 'silverstripe/framework'

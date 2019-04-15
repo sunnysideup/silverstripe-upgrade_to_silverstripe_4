@@ -287,8 +287,11 @@ SS4:
                 R: 'ModelAdmin'
                 C: 'We assume that Versioning is now managed by SS Core in terms of Model Admin'
             'findExistingObject($record)':
-                R: 'findExistingObject($record, $columnMap = Array)'
+                R: 'findExistingObject($record, $columnMap = [])'
                 C: 'Check that your class extends SilverStripe\Dev\CsvBulkLoader, in that case, an additional parameter is required.'
+            'require_once "Zend/Date.php";':
+                R: 'try to use: zf1/zend-date (packagist repository)'
+                C: 'The class should be autoloaded so as long as you have a use statement, it should work.'
         'yml':
             '_Controller':
                 R: "Controller"

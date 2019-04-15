@@ -2,27 +2,23 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
+use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
-/**
- * Replaces a bunch of code snippets in preparation of the upgrade.
- * Controversial replacements will be replaced with a comment
- * next to it so you can review replacements easily.
- */
-class AddTableName extends Task
+
+class ChangeControllerInitToProtected extends Task
 {
     protected $taskStep = 's10';
 
     public function getTitle()
     {
-        return 'Add the table name ';
+        return 'Change Controller::init function to protected';
     }
 
     public function getDescription()
     {
         return '
-            Finds $db and $has_one and adds the private static $table_name for the class...' ;
+            Look for all init functions in Controllers (based on file name) and change to protected functions.' ;
     }
 
     private $ignoreFolderArray = [
@@ -43,12 +39,10 @@ class AddTableName extends Task
 
 
     private $findArray = [
-        'private static $db',
-        'private static $has_one'.
-        'private static $belongs_to =',
-        'private static $has_many =',
-        'private static $many_many =',
-        'private static $belongs_many_many ='
+        '    public function init()',
+        "\t".'public function init()',
+        '    function init()',
+        "\t".'function init()'
     ];
 
     public function setFindArray($a)
@@ -72,7 +66,7 @@ class AddTableName extends Task
             $textSearchMachine = new SearchAndReplaceAPI($moduleDir);
             $textSearchMachine->setIsReplacingEnabled(true);
             $textSearchMachine->setFileReplacementMaxCount(1);
-            $textSearchMachine->setIgnoreFileIfFound(['private static $table_name']);
+            $textSearchMachine->setFileNameMustContain('Controller');
             $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
             $this->mu()->colourPrint("Checking $moduleDir");
             $moduleDir = $this->mu()->checkIfPathExistsAndCleanItUp($moduleDir);
@@ -90,13 +84,10 @@ class AddTableName extends Task
                     "++++++++++++++++++++++++++++++++++++\n"
                 );
                 foreach ($this->findArray as $finalFind) {
-                    $caseSensitive = true;
+                    $caseSensitive = false;
                     $replacementType = 'COMPLEX';
-                    $comment = 'Check that is class indeed extends DataObject and that it is not a data-extension!';
-                    $finalReplace = '
-    private static $table_name = \'[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]\';
-
-    '.$finalFind;
+                    $comment = 'Controller init functions are now protected  please check that is a controller.';
+                    $finalReplace = '    protected function init()';
                     $this->mu()->colourPrint(
                         '    --- FIND: '.$finalFind."\n".
                         '    --- REPLACE: '.$finalReplace."\n"

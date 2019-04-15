@@ -285,7 +285,10 @@ SS4:
                 C: 'removed extends DateField_View_JQuery as DateField_View_JQuery no longer exists as it is replaced by native HTML5 support'
             'Heyday\VersionedDataObjects\VersionedModelAdmin':
                 R: 'ModelAdmin'
-                C: ''
+                C: 'We assume that Versioning is now managed by SS Core in terms of Model Admin'
+            'findExistingObject($record)':
+                R: 'findExistingObject($record, $columnMap = Array)'
+                C: 'Check that your class extends SilverStripe\Dev\CsvBulkLoader, in that case, an additional parameter is required.'
         'yml':
             '_Controller':
                 R: "Controller"

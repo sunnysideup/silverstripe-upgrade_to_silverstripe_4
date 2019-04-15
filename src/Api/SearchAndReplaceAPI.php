@@ -54,6 +54,8 @@ class SearchAndReplaceAPI
 
     private $ignoreFileIfFound         = [];
 
+    private $fileNameMustContain       = '';
+
     // special stuff
 
     private $magicReplacers      = [
@@ -217,6 +219,12 @@ class SearchAndReplaceAPI
     public function setIgnoreFileIfFound($a)
     {
         $this->ignoreFileIfFound = $a;
+
+        return $this;
+    }
+    public function setFileNameMustContain($a)
+    {
+        $this->fileNameMustContain = $a;
 
         return $this;
     }
@@ -451,13 +459,15 @@ class SearchAndReplaceAPI
         $myReplacementKey = $this->replacementKey;
         $searchKey = preg_quote($this->searchKey, '/');
         if ($this->isReplacingEnabled) {
-            foreach($this->ignoreFileIfFound as $ignoreString) {
-                if($this->hasStringPresentInFile($file, $ignoreString)) {
-                    $this->appendToLog($file, "********** Ignoring file, as ignore string found: ".$ignoreString);
 
-                    return;
-                }
+            //prerequisites for file and content ...
+            if($this->testMustContain($file) === false) {
+                return;
             }
+            if($this->testFileNameRequirements($file) === false) {
+                return;
+            }
+
             //get magic data
             $classNameOfFile = $this->getClassNameOfFile($file);
             foreach($this->magicReplacers as $magicReplacerFind => $magicReplacerReplaceVariable) {
@@ -663,9 +673,41 @@ class SearchAndReplaceAPI
         return self::$_class_name_cache[$filePath];
     }
 
+
+    private function testMustContain($fileName) {
+        if(is_array($this->ignoreFileIfFound) && count($this->ignoreFileIfFound)) {
+            foreach($this->ignoreFileIfFound as $ignoreString) {
+                if($this->hasStringPresentInFile($fileName, $ignoreString)) {
+                    $this->appendToLog($fileName, "********** Ignoring file, as ignore string found: ".$ignoreString);
+
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private function testFileNameRequirements($fileName)
+    {
+        if(is_array($this->fileNameMustContain) && count($this->fileNameMustContain)) {
+            $passed = false;
+            $fileBaseName = basename($fileName);
+            foreach($this->fileNameMustContain as $fileNameMustContainString) {
+                if(stripos($fileBaseName, $fileNameMustContain) !== false) {
+                    $passed = true;
+                }
+            }
+            if($passed === false) {
+                $this->appendToLog($fileName, "********** skipping file ('.$fileBaseName.'), as it does not contain one of the following: ".implode(', ', $this->fileNameMustContain));
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private function hasStringPresentInFile($fileName, $string)
     {
-
         // get the file contents, assuming the file to be readable (and exist)
         $contents = file_get_contents($fileName);
         if(strpos($contents, $string) !== false) {

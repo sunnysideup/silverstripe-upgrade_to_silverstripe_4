@@ -3,6 +3,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
+$restart = isset($argv[1]) && $argv[1] === 'restart';
+
 /**
  * below are examples
  * of most of the config options
@@ -15,7 +17,7 @@ $obj = ModuleUpgrader::create()
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('__upgradeto4__')
     ->setRunInteractively(true)
-    // ->setRestartSession(true)
+    ->setRestartSession($restart)
     // ->setRunIrreversibly(true)
     ->setArrayOfModules(
         [

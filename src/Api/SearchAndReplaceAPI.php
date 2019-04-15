@@ -52,9 +52,11 @@ class SearchAndReplaceAPI
         '*/'
     ];
 
+    private $ignoreFileIfFound         = [];
+
     // special stuff
 
-    private static $magicReplacers      = [
+    private $magicReplacers      = [
         '[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]' => 'classNameOfFile'
     ];
 
@@ -208,6 +210,13 @@ class SearchAndReplaceAPI
     public function setReplacementHeader($s)
     {
         $this->replacementHeader = $s;
+
+        return $this;
+    }
+
+    public function setIgnoreFileIfFound($a)
+    {
+        $this->ignoreFileIfFound = $a;
 
         return $this;
     }
@@ -442,6 +451,13 @@ class SearchAndReplaceAPI
         $myReplacementKey = $this->replacementKey;
         $searchKey = preg_quote($this->searchKey, '/');
         if ($this->isReplacingEnabled) {
+            foreach($this->ignoreFileIfFound as $ignoreString) {
+                if($this->hasStringPresentInFile($file, $ignoreString)) {
+                    $this->appendToLog($file, "********** Ignoring file, as ignore string found: ".$ignoreString);
+
+                    return;
+                }
+            }
             //get magic data
             $classNameOfFile = $this->getClassNameOfFile($file);
             foreach($this->magicReplacers as $magicReplacerFind => $magicReplacerReplaceVariable) {
@@ -457,65 +473,70 @@ class SearchAndReplaceAPI
             $foundCount = 0;
             $insidePreviousReplaceComment = false;
             $insideIgnoreArea = false;
+            $completedTask = false;
             foreach ($oldFileContentArray as $key => $oldLineContent) {
                 $newLineContent = $oldLineContent;
-                $testLine = trim($oldLineContent);
 
-                //check if it is actually already replaced ...
-                if (strpos($oldLineContent, $this->startMarker) !== false) {
-                    $insidePreviousReplaceComment = true;
-                }
-                foreach($this->ignoreFrom as $ignoreStarter) {
-                    if(strpos($testLine, $ignoreStarter) === 0) {
-                        $insideIgnoreArea = true;
+                if($completedTask === false) {
+                    $testLine = trim($oldLineContent);
+
+                    //check if it is actually already replaced ...
+                    if (strpos($oldLineContent, $this->startMarker) !== false) {
+                        $insidePreviousReplaceComment = true;
                     }
-                }
-                if ($insidePreviousReplaceComment || $insideIgnoreArea) {
-                    //do nothing ...
-                } else {
-                    $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
-                    if ($foundInLineCount) {
-                        if ($this->caseSensitive) {
-                            if (strpos($oldLineContent, $this->searchKey) === false) {
-                                user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
-                            }
-                        } else {
-                            if (stripos($oldLineContent, $this->searchKey) === false) {
-                                user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
-                            }
+                    foreach($this->ignoreFrom as $ignoreStarter) {
+                        if(strpos($testLine, $ignoreStarter) === 0) {
+                            $insideIgnoreArea = true;
                         }
-                        $foundCount += $foundInLineCount;
-                        if ($this->isReplacingEnabled) {
-                            $newLineContent = preg_replace($pattern, $this->replacementKey, $oldLineContent);
-                            if ($fullComment = $this->getFullComment()) {
-                                $newFileContentArray[] = $fullComment;
-                            }
-                        }
+                    }
+                    if ($insidePreviousReplaceComment || $insideIgnoreArea) {
+                        //do nothing ...
                     } else {
-                        $hasError = false;
-                        if ($this->caseSensitive) {
-                            if (strpos($oldLineContent, $this->searchKey) !== false) {
-                                user_error('Should have found: '.$this->searchKey);
+                        $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
+                        if ($foundInLineCount) {
+                            if ($this->caseSensitive) {
+                                if (strpos($oldLineContent, $this->searchKey) === false) {
+                                    user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+                                }
+                            } else {
+                                if (stripos($oldLineContent, $this->searchKey) === false) {
+                                    user_error('Regex found it, but phrase does not exist: '.$this->searchKey);
+                                }
+                            }
+                            $foundCount += $foundInLineCount;
+                            if ($this->isReplacingEnabled) {
+                                $newLineContent = preg_replace($pattern, $myReplacementKey, $oldLineContent);
+                                if ($fullComment = $this->getFullComment()) {
+                                    $newFileContentArray[] = $fullComment;
+                                }
                             }
                         } else {
-                            if (stripos($oldLineContent, $this->searchKey) !== false) {
-                                user_error('Should have found: '.$this->searchKey);
+                            $hasError = false;
+                            if ($this->caseSensitive) {
+                                if (strpos($oldLineContent, $this->searchKey) !== false) {
+                                    user_error('Should have found: '.$this->searchKey);
+                                }
+                            } else {
+                                if (stripos($oldLineContent, $this->searchKey) !== false) {
+                                    user_error('Should have found: '.$this->searchKey);
+                                }
                             }
                         }
                     }
-                }
-                $newFileContentArray[] = $newLineContent;
-                if (strpos($oldLineContent, $this->endMarker) !== false) {
-                    $insidePreviousReplaceComment = false;
-                }
-                foreach($this->ignoreUntil as $ignoreEnder) {
-                    if(strpos($testLine, $ignoreEnder) === 0) {
-                        $insideIgnoreArea = false;
+                    if (strpos($oldLineContent, $this->endMarker) !== false) {
+                        $insidePreviousReplaceComment = false;
+                    }
+                    foreach($this->ignoreUntil as $ignoreEnder) {
+                        if(strpos($testLine, $ignoreEnder) === 0) {
+                            $insideIgnoreArea = false;
+                        }
+                    }
+                    if($this->fileReplacementMaxCount > 0 && $foundCount >= $this->fileReplacementMaxCount) {
+                        $completedTask = true;
                     }
                 }
-                if($this->fileReplacementMaxCount > 0 && $foundCount >= $this->fileReplacementMaxCount) {
-                    break;
-                }
+
+                $newFileContentArray[] = $newLineContent;
             }
             if ($foundCount) {
                 $oldFileContent = implode($oldFileContentArray);
@@ -542,7 +563,7 @@ class SearchAndReplaceAPI
                     }
                     $this->appendToLog($file, $foundStr);
                 } else {
-                    $this->appendToLog($file, "********** ERROR: NO REPLACEMENT DESPITE MATCHES - searched for: ".$pattern." and replaced with ".$this->replacementKey." \n");
+                    $this->appendToLog($file, "********** ERROR: NO REPLACEMENT DESPITE MATCHES - searched for: ".$pattern." and replaced with ".$myReplacementKey." \n");
                 }
             }
         } else {
@@ -600,36 +621,56 @@ class SearchAndReplaceAPI
     */
 
     private static $_class_name_cache = [];
+    private static $_finder = null;
 
     private function getClassNameOfFile($filePath)
     {
+        if(! self::$_finder) {
+            self::$_finder = new FileNameToClass();
+        }
         if(! isset(self::$_class_name_cache[$filePath])) {
-            $fp = fopen($filePath, 'r');
-            $class = $buffer = '';
-            $i = 0;
-            while (!$class) {
-                if (feof($fp)) {
-                    break;
-                }
-
-                $buffer .= fread($fp, 512);
-                $tokens = token_get_all($buffer);
-
-                if (strpos($buffer, '{') === false) continue;
-
-                for (;$i<count($tokens);$i++) {
-                    if ($tokens[$i][0] === T_CLASS) {
-                        for ($j=$i+1;$j<count($tokens);$j++) {
-                            if ($tokens[$j] === '{') {
-                                $class = $tokens[$i+2][1];
-                                break 2;
-                            }
-                        }
-                    }
-                }
-            }
+            $class = self::$_finder->getClassNameFromFile($filePath);
+            //see: https://stackoverflow.com/questions/7153000/get-class-name-from-file/44654073
+            // $file = 'class.php'; # contains class Foo
+            // $class = shell_exec("php -r \"include('$file'); echo end(get_declared_classes());\"");
+            //see: https://stackoverflow.com/questions/7153000/get-class-name-from-file/44654073
+            // $fp = fopen($filePath, 'r');
+            // $class = $buffer = '';
+            // $i = 0;
+            // while (!$class) {
+            //     if (feof($fp)) {
+            //         break;
+            //     }
+            //
+            //     $buffer .= fread($fp, 512);
+            //     @$tokens = token_get_all($buffer);
+            //
+            //     if (strpos($buffer, '{') === false) continue;
+            //
+            //     for (;$i<count($tokens);$i++) {
+            //         if ($tokens[$i][0] === T_CLASS) {
+            //             for ($j=$i+1;$j<count($tokens);$j++) {
+            //                 if ($tokens[$j] === '{') {
+            //                     $class = $tokens[$i+2][1];
+            //                     break 2;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
             self::$_class_name_cache[$filePath] = $class;
         }
         return self::$_class_name_cache[$filePath];
+    }
+
+    private function hasStringPresentInFile($fileName, $string)
+    {
+
+        // get the file contents, assuming the file to be readable (and exist)
+        $contents = file_get_contents($fileName);
+        if(strpos($contents, $string) !== false) {
+            return true;
+        }
+        return false;
     }
 }

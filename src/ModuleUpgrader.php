@@ -126,13 +126,13 @@ class ModuleUpgrader
 
         'CheckoutDevMaster-1' => [],
         'FindFilesWithMoreThanOneClass' => [],
-        'AddTableName' => [],
         'AddLegacyBranch' => [],
-        'CreatePublicFolder' => [],
         'ResetWebRootDir-2' => [],
 
         'CheckoutDevMaster-2' => [],
         'AddUpgradeBranch' => [],
+        'CreatePublicFolder' => [],
+        'AddTableName' => [],
         'RemoveComposerRequirements' => [
             'package' => 'silverstripe/framework'
         ],

@@ -42,6 +42,18 @@ class AddTableName extends Task
         return $this;
     }
 
+    private $ignoreFolderArray = [
+        'extensions',
+        'Extensions'
+    ];
+
+    public function setIgnoreFolderArray($a)
+    {
+        $this->paths = $a;
+
+        return $this;
+    }
+
     private $extensionArray = [
         'php'
     ];
@@ -75,9 +87,12 @@ class AddTableName extends Task
             $this->mu()->colourPrint(print_r($replacementArray, 1));
         }
         foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $moduleDir = $this->mu()->findMyCodeDir($moduleDir);
             //Start search machine from the module location. replace API
             $textSearchMachine = new SearchAndReplaceAPI($moduleDir);
             $textSearchMachine->setIsReplacingEnabled(true);
+            $textSearchMachine->setFileReplacementMaxCount(1);
+            $textSearchMachine->setIgnoreFileIfFound(['private static $table_name']);
             $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
 
             /*For all the different patterns listed in the replacement array
@@ -86,50 +101,47 @@ class AddTableName extends Task
             */
            foreach($this->paths as $path) {
                 $path = $moduleDir  . '/'.$path ? : '' ;
+                $this->mu()->colourPrint("Checking $path");
                 $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
                 if (! file_exists($path)) {
                     $this->mu()->colourPrint("SKIPPING $path as it does not exist.");
                 } else {
                     $textSearchMachine->setSearchPath($path);
-                    foreach ($pathArray as $extension => $extensionArray) {
-                        $textSearchMachine->setExtensions($this->extensionArray); //setting extensions to search files within
-                        $this->mu()->colourPrint(
-                            "++++++++++++++++++++++++++++++++++++\n".
-                            "CHECKING\n".
-                            "IN $path\n".
-                            "FOR $extension FILES\n".
-                            "BASE ".$moduleDir."\n".
-                            "++++++++++++++++++++++++++++++++++++\n"
-                        );
-                        foreach ($this->findArray as $finalFind) {
-
-                            $ignoreCase = false;
-                            $caseSensitive = true;
-                            $isStraightReplace = true;
-                            $replacementType = 'BASIC';
-                            $finalReplace = '
+                    $textSearchMachine->setExtensions($this->extensionArray); //setting extensions to search files within
+                    $this->mu()->colourPrint(
+                        "++++++++++++++++++++++++++++++++++++\n".
+                        "CHECKING\n".
+                        "IN $path\n".
+                        "FOR ". implode(',', $this->extensionArray)." FILES\n".
+                        "BASE ".$moduleDir."\n".
+                        "++++++++++++++++++++++++++++++++++++\n"
+                    );
+                    foreach ($this->findArray as $finalFind) {
+                        $caseSensitive = true;
+                        $isStraightReplace = true;
+                        $replacementType = 'BASIC';
+                        $finalReplace = '
     private static $table_name = \'[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]\';
 
-'.$finalFind;
-                            $this->mu()->colourPrint(
-                                '    --- FIND: '.$finalFind."\n".
-                                '    --- REPLACE: '.$finalReplace."\n"
-                            );
+    '.$finalFind;
+                        $this->mu()->colourPrint(
+                            '    --- FIND: '.$finalFind."\n".
+                            '    --- REPLACE: '.$finalReplace."\n"
+                        );
 
-                            $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
-                            $textSearchMachine->setReplacementKey($finalReplace);
-                            $textSearchMachine->startSearchAndReplace();
-                        }
-
-
-                        //SHOW TOTALS
-                        $replacements = $textSearchMachine->showFormattedSearchTotals();
-                        if (! $replacements) {
-                            //flush output anyway!
-                            $this->mu()->colourPrint("No replacements for  $extension");
-                        }
-                        $this->mu()->colourPrint($textSearchMachine->getOutput());
+                        $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
+                        $textSearchMachine->setReplacementKey($finalReplace);
+                        $textSearchMachine->startSearchAndReplace();
                     }
+
+
+                    //SHOW TOTALS
+                    $replacements = $textSearchMachine->showFormattedSearchTotals();
+                    if (! $replacements) {
+                        //flush output anyway!
+                        $this->mu()->colourPrint("No replacements for  ".implode(',', $this->extensionArray));
+                    }
+                    $this->mu()->colourPrint($textSearchMachine->getOutput());
                 }
             }
         }

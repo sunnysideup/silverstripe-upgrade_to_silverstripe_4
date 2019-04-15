@@ -68,21 +68,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-<<<<<<< HEAD
-                "reference": "46d9139568ccb8d9e7cdd4539cab7347568a5e2e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/46d9139568ccb8d9e7cdd4539cab7347568a5e2e",
-                "reference": "46d9139568ccb8d9e7cdd4539cab7347568a5e2e",
-=======
                 "reference": "37e4db276f38376a63ea67e96b09571d74312779"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/composer/semver/zipball/37e4db276f38376a63ea67e96b09571d74312779",
                 "reference": "37e4db276f38376a63ea67e96b09571d74312779",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -130,11 +121,7 @@
                 "validation",
                 "versioning"
             ],
-<<<<<<< HEAD
-            "time": "2019-03-19T17:25:45+00:00"
-=======
             "time": "2019-04-14T09:35:30+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "composer/xdebug-handler",
@@ -314,21 +301,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-<<<<<<< HEAD
-                "reference": "ecaa85d41d3e34441baeb0d75769f07c93b2d4d4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/ecaa85d41d3e34441baeb0d75769f07c93b2d4d4",
-                "reference": "ecaa85d41d3e34441baeb0d75769f07c93b2d4d4",
-=======
                 "reference": "e9d66a580baf74a19c72b0457db5329a193f313c"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/e9d66a580baf74a19c72b0457db5329a193f313c",
                 "reference": "e9d66a580baf74a19c72b0457db5329a193f313c",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -408,11 +386,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-<<<<<<< HEAD
-            "time": "2019-03-29T11:45:40+00:00"
-=======
             "time": "2019-04-15T09:15:25+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -790,21 +764,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/di.git",
-<<<<<<< HEAD
-                "reference": "09247853c8477ba113ad3029231b8db4c97e102c"
+                "reference": "ade9bb52e0752c175f258ad37cc93ad9c76ceaed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/di/zipball/09247853c8477ba113ad3029231b8db4c97e102c",
-                "reference": "09247853c8477ba113ad3029231b8db4c97e102c",
-=======
-                "reference": "19d83539245aaacb59470828919182411061841f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/di/zipball/19d83539245aaacb59470828919182411061841f",
-                "reference": "19d83539245aaacb59470828919182411061841f",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
+                "url": "https://api.github.com/repos/nette/di/zipball/ade9bb52e0752c175f258ad37cc93ad9c76ceaed",
+                "reference": "ade9bb52e0752c175f258ad37cc93ad9c76ceaed",
                 "shasum": ""
             },
             "require": {
@@ -864,11 +829,7 @@
                 "nette",
                 "static"
             ],
-<<<<<<< HEAD
-            "time": "2019-04-02T02:50:06+00:00"
-=======
-            "time": "2019-04-03T19:35:46+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
+            "time": "2019-04-15T23:13:23+00:00"
         },
         {
             "name": "nette/finder",
@@ -999,21 +960,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/php-generator.git",
-<<<<<<< HEAD
-                "reference": "acff8b136fad84b860a626d133e791f95781f9f5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/acff8b136fad84b860a626d133e791f95781f9f5",
-                "reference": "acff8b136fad84b860a626d133e791f95781f9f5",
-=======
                 "reference": "3328cb69855463c446a887b832000676a7a30d6d"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/nette/php-generator/zipball/3328cb69855463c446a887b832000676a7a30d6d",
                 "reference": "3328cb69855463c446a887b832000676a7a30d6d",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -1051,7 +1003,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette PHP Generator: generates neat PHP code for you. Supports new PHP 7.3 features.",
+            "description": "🐘 Nette PHP Generator: generates neat PHP code for you. Supports new PHP 7.3 features.",
             "homepage": "https://nette.org",
             "keywords": [
                 "code",
@@ -1059,11 +1011,7 @@
                 "php",
                 "scaffolding"
             ],
-<<<<<<< HEAD
-            "time": "2019-03-15T03:41:13+00:00"
-=======
             "time": "2019-04-02T18:41:07+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "nette/robot-loader",
@@ -1133,21 +1081,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-<<<<<<< HEAD
-                "reference": "9aee7347449a617c668291dbe9a1751092566eb5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/9aee7347449a617c668291dbe9a1751092566eb5",
-                "reference": "9aee7347449a617c668291dbe9a1751092566eb5",
-=======
                 "reference": "6241d8d4da39e825dd6cb5bfbe4242912f4d7e4d"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/nette/schema/zipball/6241d8d4da39e825dd6cb5bfbe4242912f4d7e4d",
                 "reference": "6241d8d4da39e825dd6cb5bfbe4242912f4d7e4d",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -1155,10 +1094,6 @@
                 "php": ">=7.1"
             },
             "require-dev": {
-<<<<<<< HEAD
-                "nette/php-generator": "^3.2.2",
-=======
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "nette/tester": "^2.2",
                 "tracy/tracy": "^2.3"
             },
@@ -1195,11 +1130,7 @@
                 "config",
                 "nette"
             ],
-<<<<<<< HEAD
-            "time": "2019-04-02T01:15:23+00:00"
-=======
             "time": "2019-04-03T15:53:25+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "nette/utils",
@@ -1927,21 +1858,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silverstripe/silverstripe-upgrader.git",
-<<<<<<< HEAD
-                "reference": "b20846367748dad35f01f706a75623c585b7e8af"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/b20846367748dad35f01f706a75623c585b7e8af",
-                "reference": "b20846367748dad35f01f706a75623c585b7e8af",
-=======
                 "reference": "84226286c888934e145be1df5c1a678f8aa309e6"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/silverstripe/silverstripe-upgrader/zipball/84226286c888934e145be1df5c1a678f8aa309e6",
                 "reference": "84226286c888934e145be1df5c1a678f8aa309e6",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -1992,11 +1914,7 @@
                 }
             ],
             "description": "A tool to help upgrade your code to handle API changes in packages you used.",
-<<<<<<< HEAD
-            "time": "2019-03-13T06:00:38+00:00"
-=======
             "time": "2019-04-11T22:14:45+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "sunnysideup/php_2_command_line",
@@ -2040,21 +1958,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-<<<<<<< HEAD
-                "reference": "f6f44ce1c9513a37b8826ce7f3edd26d6ab7bf09"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/f6f44ce1c9513a37b8826ce7f3edd26d6ab7bf09",
-                "reference": "f6f44ce1c9513a37b8826ce7f3edd26d6ab7bf09",
-=======
                 "reference": "47b78954bea981abeccfed88eef3a9a57c15ca4d"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/console/zipball/47b78954bea981abeccfed88eef3a9a57c15ca4d",
                 "reference": "47b78954bea981abeccfed88eef3a9a57c15ca4d",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -2116,11 +2025,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2019-03-30T07:40:00+00:00"
-=======
             "time": "2019-04-09T18:49:00+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "symfony/contracts",
@@ -2128,21 +2033,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-<<<<<<< HEAD
-                "reference": "99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea",
-                "reference": "99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea",
-=======
                 "reference": "c96781d350bcf402f3ee578c4d9c7f0d2e1e4605"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/contracts/zipball/c96781d350bcf402f3ee578c4d9c7f0d2e1e4605",
                 "reference": "c96781d350bcf402f3ee578c4d9c7f0d2e1e4605",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -2200,11 +2096,7 @@
                 "interoperability",
                 "standards"
             ],
-<<<<<<< HEAD
-            "time": "2019-03-31T13:49:16+00:00"
-=======
             "time": "2019-04-15T17:24:46+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "symfony/event-dispatcher",
@@ -2212,21 +2104,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-<<<<<<< HEAD
-                "reference": "d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7",
-                "reference": "d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7",
-=======
                 "reference": "24e03676c2fa5f54c6c5b296133d39aec34d38cc"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/24e03676c2fa5f54c6c5b296133d39aec34d38cc",
                 "reference": "24e03676c2fa5f54c6c5b296133d39aec34d38cc",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -2282,11 +2165,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2019-03-31T21:15:36+00:00"
-=======
             "time": "2019-04-06T14:04:46+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "symfony/filesystem",
@@ -2344,21 +2223,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-<<<<<<< HEAD
-                "reference": "93e27e6111470949885d5486ad2fa0bd3bb3b0b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/93e27e6111470949885d5486ad2fa0bd3bb3b0b5",
-                "reference": "93e27e6111470949885d5486ad2fa0bd3bb3b0b5",
-=======
                 "reference": "5e2136f5d2caf276f7b4ba77a6be786988c1783c"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/finder/zipball/5e2136f5d2caf276f7b4ba77a6be786988c1783c",
                 "reference": "5e2136f5d2caf276f7b4ba77a6be786988c1783c",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -2394,11 +2264,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2019-03-28T11:28:31+00:00"
-=======
             "time": "2019-04-06T14:04:46+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "symfony/options-resolver",
@@ -2406,21 +2272,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-<<<<<<< HEAD
-                "reference": "60f8df525c804c66f6ea03fe121dc65b6f95a78e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/60f8df525c804c66f6ea03fe121dc65b6f95a78e",
-                "reference": "60f8df525c804c66f6ea03fe121dc65b6f95a78e",
-=======
                 "reference": "80a310dfec6393bf99e3ceda62dab72bc9dcec5e"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/options-resolver/zipball/80a310dfec6393bf99e3ceda62dab72bc9dcec5e",
                 "reference": "80a310dfec6393bf99e3ceda62dab72bc9dcec5e",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -2461,11 +2318,7 @@
                 "configuration",
                 "options"
             ],
-<<<<<<< HEAD
-            "time": "2019-03-31T11:47:13+00:00"
-=======
             "time": "2019-04-10T19:42:49+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2762,21 +2615,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-<<<<<<< HEAD
-                "reference": "483b38ff95689915ddc1feeed1cbce6422467b02"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/483b38ff95689915ddc1feeed1cbce6422467b02",
-                "reference": "483b38ff95689915ddc1feeed1cbce6422467b02",
-=======
                 "reference": "7ae5878b84fc3a41ad92848a23c30ed159a8ccb8"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/process/zipball/7ae5878b84fc3a41ad92848a23c30ed159a8ccb8",
                 "reference": "7ae5878b84fc3a41ad92848a23c30ed159a8ccb8",
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
                 "shasum": ""
             },
             "require": {
@@ -2812,11 +2656,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2019-04-01T13:29:45+00:00"
-=======
             "time": "2019-04-10T19:42:49+00:00"
->>>>>>> 7c150ec5aa1754ea2288a60eb61e0f1eb1dc1b27
         },
         {
             "name": "symfony/stopwatch",

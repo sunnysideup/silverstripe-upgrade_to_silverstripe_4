@@ -25,34 +25,10 @@ class AddTableName extends Task
             Finds $db and $has_one and adds the private static $table_name for the class...' ;
     }
 
-
-    private $paths = [
-        'Model',
-        'model',
-        'Pages',
-        'pages',
-        'PageTypes',
-        'pagetypes'
-    ];
-
-    public function setPaths($a)
-    {
-        $this->paths = $a;
-
-        return $this;
-    }
-
     private $ignoreFolderArray = [
         'extensions',
         'Extensions'
     ];
-
-    public function setIgnoreFolderArray($a)
-    {
-        $this->paths = $a;
-
-        return $this;
-    }
 
     private $extensionArray = [
         'php'
@@ -68,7 +44,11 @@ class AddTableName extends Task
 
     private $findArray = [
         'private static $db',
-        'private static $has_one'
+        'private static $has_one'.
+        'private static $belongs_to =',
+        'private static $has_many =',
+        'private static $many_many =',
+        'private static $belongs_many_many ='
     ];
 
     public function setFindArray($a)
@@ -94,55 +74,47 @@ class AddTableName extends Task
             $textSearchMachine->setFileReplacementMaxCount(1);
             $textSearchMachine->setIgnoreFileIfFound(['private static $table_name']);
             $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
-
-            /*For all the different patterns listed in the replacement array
-            * iterate over them such that the $path would be 'src' and $patharray would be 'php'
-            * together making it ['src']['php']
-            */
-           foreach($this->paths as $path) {
-                $path = $moduleDir  . '/'.$path ? : '' ;
-                $this->mu()->colourPrint("Checking $path");
-                $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
-                if (! file_exists($path)) {
-                    $this->mu()->colourPrint("SKIPPING $path as it does not exist.");
-                } else {
-                    $textSearchMachine->setSearchPath($path);
-                    $textSearchMachine->setExtensions($this->extensionArray); //setting extensions to search files within
-                    $this->mu()->colourPrint(
-                        "++++++++++++++++++++++++++++++++++++\n".
-                        "CHECKING\n".
-                        "IN $path\n".
-                        "FOR ". implode(',', $this->extensionArray)." FILES\n".
-                        "BASE ".$moduleDir."\n".
-                        "++++++++++++++++++++++++++++++++++++\n"
-                    );
-                    foreach ($this->findArray as $finalFind) {
-                        $caseSensitive = true;
-                        $isStraightReplace = true;
-                        $replacementType = 'BASIC';
-                        $finalReplace = '
+            $this->mu()->colourPrint("Checking $moduleDir");
+            $moduleDir = $this->mu()->checkIfPathExistsAndCleanItUp($moduleDir);
+            if (! file_exists($moduleDir)) {
+                $this->mu()->colourPrint("SKIPPING $moduleDir as it does not exist.");
+            } else {
+                $textSearchMachine->setSearchPath($moduleDir);
+                $textSearchMachine->setExtensions($this->extensionArray); //setting extensions to search files within
+                $this->mu()->colourPrint(
+                    "++++++++++++++++++++++++++++++++++++\n".
+                    "CHECKING\n".
+                    "IN $moduleDir\n".
+                    "FOR ". implode(',', $this->extensionArray)." FILES\n".
+                    "BASE ".$moduleDir."\n".
+                    "++++++++++++++++++++++++++++++++++++\n"
+                );
+                foreach ($this->findArray as $finalFind) {
+                    $caseSensitive = true;
+                    $isStraightReplace = true;
+                    $replacementType = 'BASIC';
+                    $finalReplace = '
     private static $table_name = \'[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]\';
 
     '.$finalFind;
-                        $this->mu()->colourPrint(
-                            '    --- FIND: '.$finalFind."\n".
-                            '    --- REPLACE: '.$finalReplace."\n"
-                        );
+                    $this->mu()->colourPrint(
+                        '    --- FIND: '.$finalFind."\n".
+                        '    --- REPLACE: '.$finalReplace."\n"
+                    );
 
-                        $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
-                        $textSearchMachine->setReplacementKey($finalReplace);
-                        $textSearchMachine->startSearchAndReplace();
-                    }
-
-
-                    //SHOW TOTALS
-                    $replacements = $textSearchMachine->showFormattedSearchTotals();
-                    if (! $replacements) {
-                        //flush output anyway!
-                        $this->mu()->colourPrint("No replacements for  ".implode(',', $this->extensionArray));
-                    }
-                    $this->mu()->colourPrint($textSearchMachine->getOutput());
+                    $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
+                    $textSearchMachine->setReplacementKey($finalReplace);
+                    $textSearchMachine->startSearchAndReplace();
                 }
+
+
+                //SHOW TOTALS
+                $replacements = $textSearchMachine->showFormattedSearchTotals();
+                if (! $replacements) {
+                    //flush output anyway!
+                    $this->mu()->colourPrint("No replacements for  ".implode(',', $this->extensionArray));
+                }
+                $this->mu()->colourPrint($textSearchMachine->getOutput());
             }
         }
     }

@@ -133,6 +133,7 @@ class ModuleUpgrader
         'AddUpgradeBranch' => [],
         'CreatePublicFolder' => [],
         'AddTableName' => [],
+        // 'AddTableNamePrivateStatic' => [],
         'RemoveComposerRequirements' => [
             'package' => 'silverstripe/framework'
         ],
@@ -161,7 +162,6 @@ class ModuleUpgrader
         //Step5: FixUpgrade
         'FixBadUseStatements' => [],
         'InspectAPIChanges-1' => [],
-        'AddTableNamePrivateStatic' => [],
         'DatabaseMigrationLegacyYML' => [],
         'Reorganise' => [],
         'UpdateComposerModuleType' => [],

@@ -143,7 +143,7 @@ SS4:
                 C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
                 I: true
             'DB::getConn()':
-                'DB::get_conn()'
+                R: 'DB::get_conn()'
             '->tableList()':
                 R: '->tableList()'
                 C: 'SUGGESTION ... DB::get_conn()->tableList() ... WITH ... DataObject::getSchema()->getTableNames()'
@@ -277,6 +277,15 @@ SS4:
             'private static $icon = [':
                 R: 'private static $icon = ['
                 C: 'Icons can no longer be arrays, please check'
+            'DateField_View_JQuery::':
+                R: 'self::'
+                C: 'DateField_View_JQuery no longer exists as it is replaced by native HTML5 support'
+            'extends DateField_View_JQuery':
+                R: ''
+                C: 'removed extends DateField_View_JQuery as DateField_View_JQuery no longer exists as it is replaced by native HTML5 support'
+            'Heyday\VersionedDataObjects\VersionedModelAdmin':
+                R: 'ModelAdmin'
+                C: ''
         'yml':
             '_Controller':
                 R: "Controller"

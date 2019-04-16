@@ -68,7 +68,7 @@ class ModuleUpgrader
         $getOrSet = substr($function, 0, 3);
         if ($getOrSet === 'set' || $getOrSet === 'get') {
             $var = lcfirst(ltrim($function, $getOrSet));
-            if (isset($this->$var)) {
+            if (property_exists($this, $var)) {
                 if ($getOrSet === 'get') {
                     if (strpos($var, 'DirLocation') !== false || strpos($var, 'FileLocation') !== false) {
                         return $this->checkIfPathExistsAndCleanItUp($this->$var, true);

@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
+use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 
@@ -20,11 +21,6 @@ class ChangeControllerInitToProtected extends Task
         return '
             Look for all init functions in Controllers (based on file name) and change to protected functions.' ;
     }
-
-    private $ignoreFolderArray = [
-        'extensions',
-        'Extensions'
-    ];
 
     private $extensionArray = [
         'php'
@@ -67,7 +63,6 @@ class ChangeControllerInitToProtected extends Task
             $textSearchMachine->setIsReplacingEnabled(true);
             $textSearchMachine->setFileReplacementMaxCount(1);
             $textSearchMachine->setFileNameMustContain('Controller');
-            $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
             $this->mu()->colourPrint("Checking $moduleDir");
             $moduleDir = $this->mu()->checkIfPathExistsAndCleanItUp($moduleDir);
             if (! file_exists($moduleDir)) {

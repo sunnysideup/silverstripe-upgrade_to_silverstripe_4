@@ -218,12 +218,19 @@ class SearchAndReplaceAPI
 
     public function setIgnoreFileIfFound($a)
     {
+        if(is_string($a)) {
+            $a = [$a];
+        }
         $this->ignoreFileIfFound = $a;
 
         return $this;
     }
+
     public function setFileNameMustContain($a)
     {
+        if(is_string($a)) {
+            $a = [$a];
+        }
         $this->fileNameMustContain = $a;
 
         return $this;

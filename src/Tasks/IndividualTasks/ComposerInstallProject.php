@@ -72,7 +72,7 @@ class ComposerInstallProject extends Task
         if($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $cloneDir,
-                'composer update --no-dev -vvv',
+                'composer update -vvv',
                 'run composer update',
                 false
             );

@@ -157,6 +157,14 @@ SS4:
                 R: "SilverStripe\\Core\\Manifest\\ModuleLoader::getModule('silverstripe/framework')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()"
                 C: "Please review update and fix as required"
                 I: true
+            'CMS_DIR':
+                R: "SilverStripe\\Core\\Manifest\\ModuleLoader::getModule('silverstripe/cms')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()"
+                C: "Please review update and fix as required"
+                I: true
+            'REPORTS_DIR':
+                R: "SilverStripe\\Core\\Manifest\\ModuleLoader::getModule('silverstripe/reports')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()"
+                C: "Please review update and fix as required"
+                I: true
             'SSViewer::get_theme_folder()':
                 R: "ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')"
                 C: "Please review update and fix as required. Note: $themesFilePath = ThemeResourceLoader::inst()->findThemedResource('css/styles.css');"

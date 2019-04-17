@@ -29,6 +29,7 @@ class FindFilesWithSimpleUseStatements extends Task
     public function runActualTask($params = [])
     {
         foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $this->mu()->colourPrint("Searching ".$moduleDir, 'grey');
             $fileFinder = new FindFiles($moduleDir);
             $errors = [];
             $searchPath = $this->mu()->findMyCodeDir($moduleDir);

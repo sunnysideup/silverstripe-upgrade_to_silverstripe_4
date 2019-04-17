@@ -318,7 +318,9 @@ SS4:
             'Email::setAdminEmail':
                 R: '//Email::setAdminEmail'
                 C: 'This should be in the YML config layer as SilverStripe\Control\Email\Email: set_admin_email'
-
+            'Requirements::combine_files':
+                R: 'Requirements::combine_files'
+                C: 'Please check for third parameter.  It used to be "screen" and may now be ["media" => "screen"]'
         'yml':
             '_Controller':
                 R: "Controller"

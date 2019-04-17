@@ -310,6 +310,9 @@ SS4:
                 C: 'This should probably be replaced by PSR-4 autoloading!'
             'UserDefinedForm_Controller "':
                 R: 'UserDefinedFormController "'
+            'Requirements::combine_files':
+                R: 'Requirements::combine_files'
+                C: 'Please check for third parameter.  It used to be "screen" and may now be ["media" => "screen"]'
 
         'yml':
             '_Controller':

@@ -78,12 +78,8 @@ class UpdateComposerRequirements extends Task
                     .'}';
                 $comment = 'removing the requirement for '.$package;
             } elseif($this->isNew) {
-                $command =
-                    'if(isset($data["require"]["'.$package.'"])) { '
-                    .'    $data["require"]["'.$newPackage.'"] = "'.$newVersion.'"; '
-                    .'}';
-
-                $comment = 'replace the require for '.$package.' with '.$newPackage.':'.$newVersion;
+                $command = '$data["require"]["'.$newPackage.'"] = "'.$newVersion.'"; ';
+                $comment = 'add a NEW package: '.$package.' with '.$newPackage.':'.$newVersion;
 
             } else {
                 $command =

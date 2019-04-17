@@ -72,11 +72,15 @@ class FindFilesWithSimpleUseStatements extends Task
                 $this->mu()->colourPrint("Could not find ".$searchPath, 'blue');
             }
         }
-        $error = 'Found errors in use statements: '."\n---\n---\n---\n".implode("\n ---\n", $errors);
-        if(count($errors) > 10) {
-            return $error;
+        if(count($errors)) {
+            $error = 'Found errors in use statements: '."\n---\n---\n---\n".implode("\n ---\n", $errors);
+            if(count($errors) > 10) {
+                return $error;
+            } else {
+                $this->mu()->colourPrint($error, 'red');
+            }
         } else {
-            $this->mu()->colourPrint($error, 'red');
+            $this->mu()->colourPrint('Clean bill of health in terms of use statements.', 'green');
         }
 
     }

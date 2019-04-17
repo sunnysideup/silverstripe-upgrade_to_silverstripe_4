@@ -54,7 +54,7 @@ class SearchAndReplaceAPI
 
     private $ignoreFileIfFound         = [];
 
-    private $fileNameMustContain       = '';
+    private $fileNameMustContain       = [];
 
     // special stuff
 
@@ -698,7 +698,8 @@ class SearchAndReplaceAPI
                 }
             }
             if($passed === false) {
-                $this->appendToLog($fileName, "********** skipping file ('.$fileBaseName.'), as it does not contain one of the following: ".implode(', ', $this->fileNameMustContain));
+                $this->appendToLog($fileName, "********** skipping file ('.$fileBaseName.'), as it does not contain any of the following: ".implode(', ', $this->fileNameMustContain));
+
                 return false;
             }
         }

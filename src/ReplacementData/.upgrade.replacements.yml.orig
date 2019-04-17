@@ -1,0 +1,355 @@
+####
+#### FORMAT
+#### VERSION;
+####    PATH (relative to root folder of module)
+####        LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
+####            FindKey
+####                R: replace with entry - you can leave empty to keep it as the find... in that case you should add a comment
+####                C: comment - this makes it a complex replacement.
+####                I: ignore case (default is case sensitive)
+
+SS4:
+
+    '.':
+
+        'md':
+            'mysite':
+                R: "app"
+            'Mysite':
+                R: "App"
+        'ss':
+            '$ClassName':
+                R: '$ClassName'
+                C: 'Check if the class name can still be used as such'
+            '.setWidth(':
+                R: '.ScaleWidth('
+                I: true
+            '.setHeight(':
+                R: '.ScaleHeight('
+                I: true
+            '.SetSize(':
+                R: '.Padd('
+                I: true
+            '.PaddedImage(':
+                R: '.Padd('
+                I: true
+            '.CroppedImage(':
+                R: '.Fill('
+                I: true
+            '/fonts/':
+                R: '/client/fonts/'
+                C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
+            '/images/':
+                R: '/client/images/'
+                C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
+            '/css/':
+                R: '/client/css/'
+                C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
+            '/js/':
+                R: '/client/js/'
+                C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
+        '*':
+            'mysite':
+                R: "app"
+            'Mysite':
+                R: "App"
+        php:
+            'Config::inst()->update(':
+                R: 'Config::modify()->update('
+            '= array();':
+                R: '= [];'
+            'canCreate($member = null)':
+                R: 'canCreate($member = null, $context = [])'
+                I: true
+            'canDelete($member = null)':
+                R: 'canDelete($member = null, $context = [])'
+                I: true
+            'canEdit($member = null)':
+                R: 'canEdit($member = null, $context = [])'
+                I: true
+            'canView($member = null)':
+                R: 'canView($member = null, $context = [])'
+                I: true
+            ' implements flushable':
+                R: ' implements Flushable'
+            'Textfield':
+                R: 'TextField'
+            'HtmlEditorField':
+                R: 'HTMLEditorField'
+            '->dontEscape':
+                R: '->dontEscape'
+                C: 'dontEscape is not longer in use for form fields, please use HTMLReadonlyField (or similar) instead.'
+            'private static $db =':
+                R: 'private static $db ='
+                C: 'Make sure to add a private static $table_name!'
+            'private static $has_one =':
+                R: 'private static $has_one ='
+                C: 'Make sure to add a private static $table_name!'
+            '$this->process_combined_files();':
+                R: '$this->processCombinedFiles();'
+                C: 'this is likely to be part of the Requirements_Backend calls'
+            '$this->path_for_file();':
+                R: '$this->pathForFile();'
+                C: this is likely to be part of the Requirements_Backend calls'
+            'mysite/css/':
+                R: "ModuleLoader::getModule('mysite')->getResource('css/UPGRADE-FIX-REQUIRED.css')->getRelativePath()"
+                C: "Please review update and fix as required"
+            'mysite/javascript/':
+                R: "ModuleLoader::getModule('mysite')->getResource('javascript/UPGRADE-FIX-REQUIRED.js')->getRelativePath()"
+                C: "Please review update and fix as required"
+            'mysite/images/':
+                R: "ModuleLoader::getModule('mysite')->getResource('images/UPGRADE-FIX-REQUIRED.png')->getRelativePath()"
+                C: "Please review update and fix as required"
+            ' extends Object':
+                R: " extends ViewableData"
+                C: "This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable"
+                I: true
+            ' extends \Object':
+                R: " extends ViewableData"
+                C: "This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable"
+                I: true
+            ' implements flushable':
+                R: " implements Flushable"
+                I: true
+            '->getFullPath()':
+                R: '->getFilename()'
+                C: 'You may need to add ASSETS_PATH."/" in front of this ...'
+            '->db()':
+                R: "->Config()->get('db')"
+                C: 'Check implementation'
+            '->has_one()':
+                R: "->Config()->get('has_one')"
+                C: 'Check implementation'
+            '->has_many()':
+                R: "->Config()->get('has_many')"
+                C: 'Check implementation'
+            '->many_many()':
+                R: "->Config()->get('many_many')"
+                C: 'Check implementation'
+            '->belongs_many_many()':
+                R: "->Config()->get('belongs_many_many')"
+                C: 'Check implementation'
+            '->belongs()':
+                R: "->Config()->get('belongs')"
+                C: 'Check implementation'
+            'fulltext':
+                R: 'fulltext'
+                C: 'See https://docs.silverstripe.org/en/4/developer_guides/search/fulltextsearch/ and check implementation!'
+            "ENGINE=MyISAM":
+                R: 'ENGINE=MyISAM - replace with: MySQLSchemaManager::ID => "ENGINE=MyISAM"'
+                C: 'See https://docs.silverstripe.org/en/4/developer_guides/search/fulltextsearch/ and check implementation!'
+            ' extends Extension':
+                R: " extends Extension"
+                C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
+                I: true
+            ' extends DataExtension':
+                R: " extends DataExtension"
+                C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
+                I: true
+            'DB::getConn()':
+                R: 'DB::get_conn()'
+            '->tableList()':
+                R: '->tableList()'
+                C: 'SUGGESTION ... DB::get_conn()->tableList() ... WITH ... DataObject::getSchema()->getTableNames()'
+            'BASE_PATH':
+                R: "Director::baseFolder()"
+            'FRAMEWORK_DIR':
+                R: "SilverStripe\\Core\\Manifest\\ModuleLoader::getModule('silverstripe/framework')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()"
+                C: "Please review update and fix as required"
+                I: true
+            'SSViewer::get_theme_folder()':
+                R: "ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')"
+                C: "Please review update and fix as required. Note: $themesFilePath = ThemeResourceLoader::inst()->findThemedResource('css/styles.css');"
+                I: true
+            'THEMES_DIR':
+                R: "ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')"
+                C: "Please review update and fix as required"
+                I: true
+            'Session::get_all()':
+                R: "Controller::curr()->getRequest()->getSession()->getAll()"
+                C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
+            'Session::clear_all()':
+                R: "Controller::curr()->getRequest()->getSession()->clearAll()"
+                C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
+            'Session::':
+                R: "Controller::curr()->getRequest()->getSession()->"
+                C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
+            'SSViewer::set_source_file_comments(':
+                R: "Config::modify()->update('SSViewer', 'source_file_comments', "
+            'ReadOnlyField':
+                R: "ReadonlyField"
+            '->setError':
+                R: "->setCustomValidationMessage"
+                C: "This needs further investigation, see: https://github.com/silverstripe/silverstripe-framework/issues/8225"
+            "$result->error(":
+                R: "$result->addError("
+            "Object::use_custom_class":
+                R: "Object::use_custom_class"
+                C: "You need to move this code to yml, using SilverStripe\\Core\\Injector\\Injector\n  OldClass: NewClass"
+            "_Controller extends PageController":
+                R: "Controller extends PageController"
+                C: "Remove the underscore in your classname - check all references!"
+            "_Controller extends Page_Controller":
+                R: "Controller extends PageController"
+                C: "Remove the underscores in your classname - check all references!"
+            'THIRDPARTY_DIR."/jquery/jquery.js"':
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
+            'THIRDPARTY_DIR . "/jquery/jquery.js"':
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
+            "THIRDPARTY_DIR . '/jquery/jquery.js'":
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
+            "THIRDPARTY_DIR.'/jquery/jquery.js'":
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
+            'THIRDPARTY_DIR."/jquery-form/jquery.form.js"':
+                R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
+            'public function includeInHTML($templateFile, $content)':
+                R: "public function includeInHTML($content)"
+                I: true
+            'Cache::factory(':
+                R: 'SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class . '
+                C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->load(':
+                R: '$cache->has('
+                C: 'See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache, you may also need to add $cache->get( !!!'
+            '$cache->set(':
+                R: '$cache->set('
+                C: 'Cache key and value need to be swapped!!! Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->save(':
+                R: '$cache->set('
+                C: 'Cache key and value need to be swapped!!! Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->load(':
+                R: '$cache->get('
+                C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->remove(':
+                R: '$cache->delete('
+                C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$cache->clean(':
+                R: '$cache->clear('
+                C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
+            '$this->owner->class]':
+                R: 'get_class($this->owner)]'
+            '$this->owner->class)':
+                R: 'get_class($this->owner))'
+            '$this->owner->class;':
+                R: 'get_class($this->owner);'
+            '$this->owner->class':
+                R: '$this->owner->class'
+                C: 'See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#object-replace'
+            '$this->class]':
+                R: 'get_class($this)]'
+            '$this->class)':
+                R: 'get_class($this))'
+            '$this->class;':
+                R: 'get_class($this);'
+            '$this->class ==':
+                R: '$this->ClassName =='
+                C: 'Check for usage of class ...'
+            'request_contains_session_id(':
+                R: 'requestContainsSessionId('
+            '->setWidth(':
+                R: '->ScaleWidth('
+                I: true
+            '->setHeight(':
+                R: '->ScaleHeight('
+                I: true
+            '->SetSize(':
+                R: '->Padd('
+                I: true
+            '->PaddedImage(':
+                R: '->Padd('
+                I: true
+            '->CroppedImage(':
+                R: '->Fill('
+                I: true
+            '$this->ClassName':
+                R: '$this->ClassName'
+                C: 'Check if the class name can still be used as such'
+            '$this->class':
+                R: '$this->class'
+                C: 'Check if the class name can still be used as such'
+            '$className':
+                R: '$className'
+                C: 'Check if the class name can still be used as such'
+            'app/images/':
+                R: 'app: images/'
+                C: 'check for location'
+            'function FieldHolder()':
+                R: 'function FieldHolder($properties = [])'
+            'private static $icon = array(':
+                R: 'private static $icon = array('
+                C: 'Icons can no longer be arrays, please check'
+            'private static $icon = [':
+                R: 'private static $icon = ['
+                C: 'Icons can no longer be arrays, please check'
+            'DateField_View_JQuery::':
+                R: 'self::'
+                C: 'DateField_View_JQuery no longer exists as it is replaced by native HTML5 support'
+            'extends DateField_View_JQuery':
+                R: ''
+                C: 'removed extends DateField_View_JQuery as DateField_View_JQuery no longer exists as it is replaced by native HTML5 support'
+            'Heyday\VersionedDataObjects\VersionedModelAdmin':
+                R: 'ModelAdmin'
+                C: 'We assume that Versioning is now managed by SS Core in terms of Model Admin'
+            'findExistingObject($record)':
+                R: 'findExistingObject($record, $columnMap = [])'
+                C: 'Check that your class extends SilverStripe\Dev\CsvBulkLoader, in that case, an additional parameter is required.'
+            'require_once "Zend/Date.php";':
+                R: '//require_once "Zend/Date.php";'
+                C: 'Try to use: zf1/zend-date (packagist repository)The class should be autoloaded so as long as you have a use statement, it should work.'
+            "include_once '":
+                R: "include_once '"
+                C: 'This should probably be replaced by PSR-4 autoloading!'
+            'include_once "':
+                R: 'include_once "'
+                C: 'This should probably be replaced by PSR-4 autoloading!'
+            'require_once "':
+                R: 'require_once "'
+                C: 'This should probably be replaced by PSR-4 autoloading!'
+            "require_once '":
+                R: "require_once '"
+                C: 'This should probably be replaced by PSR-4 autoloading!'
+<<<<<<< HEAD
+            'UserDefinedForm_Controller':
+                R: 'UserDefinedFormController'
+            'Email::setAdminEmail':
+                R: '//Email::setAdminEmail'
+                C: 'This should be in the YML config layer as SilverStripe\Control\Email\Email: set_admin_email'
+=======
+            'UserDefinedForm_Controller "':
+                R: 'UserDefinedFormController "'
+            'Requirements::combine_files':
+                R: 'Requirements::combine_files'
+                C: 'Please check for third parameter.  It used to be "screen" and may now be ["media" => "screen"]'
+>>>>>>> 2177d34ba5b43286faa0186937c363f738655bc6
+
+        'yml':
+            '_Controller':
+                R: "Controller"
+            'Director:':
+                R: "SilverStripe\\Control\\Director:"
+            'SiteTree:':
+                R: "SilverStripe\\CMS\\Model\\SiteTree:"
+            'AssetAdmin:':
+                R: "SilverStripe\\AssetAdmin\\Controller\\AssetAdmin:"
+            'LeftAndMain:':
+                R: "SilverStripe\\Admin\\LeftAndMain:"
+            'DateField:':
+                R: "SilverStripe\\Forms\\DateField:"
+            'ContentController:':
+                R: "SilverStripe\\CMS\\Controllers\\ContentController:"
+            'Member:':
+                R: "SilverStripe\\Security\\Member:"
+            'SiteConfig:':
+                R: "SilverStripe\\SiteConfig\\SiteConfig:"
+
+        'css':
+            'url(/themes)':
+                R: 'url(/resources/themes)'
+        'scss':
+            'url(/themes)':
+                R: 'url(/resources/themes)'

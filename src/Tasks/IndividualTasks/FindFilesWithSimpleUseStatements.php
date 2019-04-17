@@ -39,6 +39,7 @@ class FindFilesWithSimpleUseStatements extends Task
                     ->getFlatFileArray();
                 if(is_array($flatArray) && count($flatArray)) {
                     foreach ($flatArray as $path) {
+                        $this->mu()->colourPrint("Searching ".$path, 'grey');
                         $className = basename($path, '.php');
                         $classNames = [];
                         $content = file_get_contents($path);

@@ -194,14 +194,19 @@ SS4:
                 C: "Remove the underscores in your classname - check all references!"
             'THIRDPARTY_DIR."/jquery/jquery.js"':
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
             'THIRDPARTY_DIR . "/jquery/jquery.js"':
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
             "THIRDPARTY_DIR . '/jquery/jquery.js'":
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
             "THIRDPARTY_DIR.'/jquery/jquery.js'":
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
             'THIRDPARTY_DIR."/jquery-form/jquery.form.js"':
                 R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
+                C: 'Check for best usage and inclusion of Jquery'
             'public function includeInHTML($templateFile, $content)':
                 R: "public function includeInHTML($content)"
                 I: true

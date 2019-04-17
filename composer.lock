@@ -301,12 +301,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "e9d66a580baf74a19c72b0457db5329a193f313c"
+                "reference": "c12abbc052b9378c251914b027c0c712e2b63885"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/e9d66a580baf74a19c72b0457db5329a193f313c",
-                "reference": "e9d66a580baf74a19c72b0457db5329a193f313c",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/c12abbc052b9378c251914b027c0c712e2b63885",
+                "reference": "c12abbc052b9378c251914b027c0c712e2b63885",
                 "shasum": ""
             },
             "require": {
@@ -386,7 +386,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2019-04-15T09:15:25+00:00"
+            "time": "2019-04-17T10:18:10+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

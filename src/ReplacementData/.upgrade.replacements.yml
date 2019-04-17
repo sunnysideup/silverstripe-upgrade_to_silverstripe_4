@@ -298,7 +298,7 @@ SS4:
                 R: 'self::'
                 C: 'DateField_View_JQuery no longer exists as it is replaced by native HTML5 support'
             'extends DateField_View_JQuery':
-                R: ''
+                R: ' '
                 C: 'removed extends DateField_View_JQuery as DateField_View_JQuery no longer exists as it is replaced by native HTML5 support'
             'Heyday\VersionedDataObjects\VersionedModelAdmin':
                 R: 'ModelAdmin'

@@ -117,8 +117,8 @@ class FixRequirements extends Task
 
                             foreach (['\'', '"'] as $quoteMark) {
                                 $finalReplace = $find.$quoteMark.$vendorAndPackageFolderNameForInstall.': ';
-                                if (!$finalReplace) {
-                                    user_error("no replace is specified, find is: $find");
+                                if (!$finalReplace && $finalReplace !== ' ') {
+                                    user_error("no replace is specified, find is: $find. We suggest setting your final replace to a single space if you would like to replace with NOTHING.");
                                 }
                                 $finalFind = $find.$quoteMark;
                                 $this->mu()->colourPrint(

@@ -119,7 +119,7 @@ class SearchAndReplace extends Task
                                 user_error("no find is specified, replace is: $replace");
                             }
                             if (!$fullReplacement) {
-                                user_error("no replace is specified, find is: $find");
+                                user_error("no replace is specified, find is: $find. We suggest setting your final replace to a single space if you would like to replace with NOTHING.");
                             }
                             $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
 

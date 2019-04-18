@@ -348,6 +348,8 @@ SS4:
                 R: "SilverStripe\\Security\\Member:"
             'SiteConfig:':
                 R: "SilverStripe\\SiteConfig\\SiteConfig:"
+            'TwitterExtension':
+                R: "TractorCow\\Twitter\\Extensions\\TwitterExtension:"
 
         'css':
             'url(/themes)':

@@ -54,6 +54,8 @@ SS4:
             'Mysite':
                 R: "App"
         php:
+            "->setAllowedFileCategories('doc')":
+                R: "->setAllowedFileCategories('document')"
             'Config::inst()->update(':
                 R: 'Config::modify()->update('
             '= array();':

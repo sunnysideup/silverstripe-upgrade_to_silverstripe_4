@@ -336,6 +336,12 @@ SS4:
             'Requirements::combine_files':
                 R: 'Requirements::combine_files'
                 C: 'Please check for third parameter.  It used to be "screen" and may now be ["media" => "screen"]'
+            ' SS_Object::':
+                R: ' SilverStripe\\Core\\Injector\\Injector::inst()->'
+                C: 'Check if this is the right implementation, this is highly speculative.'
+            ' Object::':
+                R: ' SilverStripe\\Core\\Injector\\Injector::inst()->'
+                C: 'Check if this is the right implementation, this is highly speculative.'
         'yml':
             '_Controller':
                 R: "Controller"
@@ -357,12 +363,7 @@ SS4:
                 R: "SilverStripe\\SiteConfig\\SiteConfig:"
             'TwitterExtension':
                 R: "TractorCow\\Twitter\\Extensions\\TwitterExtension:"
-            ' SS_Object::':
-                R: ' SilverStripe\\Core\\Injector\\Injector::inst()->'
-                C: 'Check if this is the right implementation, this is highly speculative.'
-            ' Object::':
-                R: ' SilverStripe\\Core\\Injector\\Injector::inst()->'
-                C: 'Check if this is the right implementation, this is highly speculative.'
+
         'css':
             'url(/themes)':
                 R: 'url(/resources/themes)'

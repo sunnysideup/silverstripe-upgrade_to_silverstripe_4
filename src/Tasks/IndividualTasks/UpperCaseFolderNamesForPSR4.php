@@ -13,6 +13,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
 {
     protected $taskStep = 's30';
 
+
     public function getTitle()
     {
         return 'Fix Folder Case';
@@ -23,6 +24,16 @@ class UpperCaseFolderNamesForPSR4 extends Task
         return '
             Change your src/code folders from lowercase to TitleCase - e.g.
             yourmodule/src/model becomes yourmodule/src/Model in accordance with PSR-4 autoloading';
+    }
+
+
+    protected $nameReplacements = [
+        'interface' => 'Interfaces'
+    ];
+
+    public function setNameReplacements($a)
+    {
+        $this->nameReplacements = $a;
     }
 
     public function runActualTask($params = [])
@@ -38,6 +49,11 @@ class UpperCaseFolderNamesForPSR4 extends Task
                 if ($fio->isDir()) {
                     //If its a directory then
                     $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->mu()->camelCase($fio->getFilename());
+                    foreach($this->nameReplacements as $from => $to) {
+                        if($from === $name) {
+                            $newName = $to;
+                        }
+                    }
                     if ($name === $newName) {
                         $this->mu()->colourPrint('No need to move '.str_replace($codeDir, '', $name).' as it is already in CamelCase', 'dark_gray');
                     } else {

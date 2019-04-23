@@ -700,7 +700,7 @@ class SearchAndReplaceAPI
             $passed = false;
             $fileBaseName = basename($fileName);
             foreach($this->fileNameMustContain as $fileNameMustContainString) {
-                if(stripos($fileBaseName, $fileNameMustContain) !== false) {
+                if(stripos($fileBaseName, $fileNameMustContainString) !== false) {
                     $passed = true;
                 }
             }

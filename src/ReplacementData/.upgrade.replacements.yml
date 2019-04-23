@@ -54,6 +54,11 @@ SS4:
             'Mysite':
                 R: "App"
         php:
+
+            'private function validate()':
+                R: 'public function validate()'
+            'protected function validate()':
+                R: 'public function validate()'
             "->setAllowedFileCategories('doc')":
                 R: "->setAllowedFileCategories('document')"
             'Config::inst()->update(':
@@ -352,7 +357,12 @@ SS4:
                 R: "SilverStripe\\SiteConfig\\SiteConfig:"
             'TwitterExtension':
                 R: "TractorCow\\Twitter\\Extensions\\TwitterExtension:"
-
+            ' SS_Object::':
+                R: ' SilverStripe\\Core\\Injector\\Injector::inst()->'
+                C: 'Check if this is the right implementation, this is highly speculative.'
+            ' Object::':
+                R: ' SilverStripe\\Core\\Injector\\Injector::inst()->'
+                C: 'Check if this is the right implementation, this is highly speculative.'
         'css':
             'url(/themes)':
                 R: 'url(/resources/themes)'

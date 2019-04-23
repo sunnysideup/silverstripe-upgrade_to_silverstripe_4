@@ -17,6 +17,9 @@ SS4:
                 R: "app"
             'Mysite':
                 R: "App"
+
+
+
         'ss':
             '$ClassName':
                 R: '$ClassName'
@@ -48,11 +51,18 @@ SS4:
             '/js/':
                 R: '/client/js/'
                 C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
+
+
+
+
         '*':
             'mysite':
                 R: "app"
             'Mysite':
                 R: "App"
+
+
+
         php:
 
             'private function validate()':
@@ -342,6 +352,8 @@ SS4:
             ' Object::':
                 R: ' SilverStripe\\Core\\Injector\\Injector::inst()->'
                 C: 'Check if this is the right implementation, this is highly speculative.'
+
+
         'yml':
             '_Controller':
                 R: "Controller"
@@ -364,12 +376,17 @@ SS4:
             'TwitterExtension':
                 R: "TractorCow\\Twitter\\Extensions\\TwitterExtension:"
 
+
         'css':
             'url(/themes)':
                 R: 'url(/resources/themes)'
+
+
         'scss':
             'url(/themes)':
                 R: 'url(/resources/themes)'
+
+
         'sass':
             'url(/themes)':
                 R: 'url(/resources/themes)'

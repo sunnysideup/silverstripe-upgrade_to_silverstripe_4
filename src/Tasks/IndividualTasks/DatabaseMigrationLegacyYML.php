@@ -36,7 +36,7 @@ class DatabaseMigrationLegacyYML extends Task
             $tmpFile = $moduleDir.'/_config/database.legacy.yml.tmp';
             $mvStatement = $newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile;
             if(! file_exists($oldFile)) {
-                continue;
+                return $oldFile.' NOT FOUND!!!';
             }
             $this->mu()->execMe(
                 $moduleDir,

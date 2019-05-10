@@ -51,9 +51,10 @@ SS4:
             '/js/':
                 R: '/client/js/'
                 C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
-
-
-
+            '$List(Page':
+                R: '$List(\Page'
+            '$List(Page':
+                R: '$List(SilverStripe\CMS\Model\SiteTree:'
 
         '*':
             'mysite':
@@ -64,7 +65,22 @@ SS4:
 
 
         php:
-
+            '->setMultiple(true)':
+                R: '->setMultiple(true)'
+                C: 'Is this a listBox field? Now deprecated, ListboxField now extends MultiSelectField so multiple selections are built in.'
+            '->getConfig(''showcalendar'')':
+                R: '->getHTML5()'
+                C: 'Date Field? New way of finding out if the calendar is being shown (approximately). DateField no longer provides a jQuery UI date picker (showcalendar option), and uses HTML5 date pickers by default instead.'
+            '->ElementArea()':
+                R: '->ElementalArea()'
+                C: 'Are you using the Elemental Module? The ElementalPageExtension now has_one ElementalArea rather than ElementArea (note the name change)'
+            '->AllElements()':
+                R: '->Elements()'
+                C: 'Are you using the Elemental Module? The function AllElements no longer exists'
+            'ClassLoader::instance()':
+                R: 'ClassLoader::inst()'
+            'Config::FIRST_SET':
+                R: 'Config::UNINHERITED'
             'private function validate()':
                 R: 'public function validate()'
             'protected function validate()':
@@ -236,7 +252,7 @@ SS4:
                 R: "public function includeInHTML($content)"
                 I: true
             'Cache::factory(':
-                R: 'SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class . '
+                R: 'SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class ''. '
                 C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
             '$cache->load(':
                 R: '$cache->has('

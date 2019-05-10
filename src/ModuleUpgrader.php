@@ -809,7 +809,6 @@ class ModuleUpgrader
             }
         }
         $dir = __DIR__.'/../docs/en/';
-        echo $html;
         file_put_contents(
             $dir . '/AvailableTasks.md',
             $html

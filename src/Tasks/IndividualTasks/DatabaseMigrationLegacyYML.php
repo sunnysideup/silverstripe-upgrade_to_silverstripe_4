@@ -31,7 +31,7 @@ class DatabaseMigrationLegacyYML extends Task
     public function runActualTask($params = [])
     {
         foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-            $oldFile = $moduleDir.'/.upgrade.yml ';
+            $oldFile = $moduleDir.'/.upgrade.yml';
             $newFile = $moduleDir.'/_config/database.legacy.yml';
             $tmpFile = $moduleDir.'/_config/database.legacy.yml.tmp';
             $mvStatement = $newFile.' > '.$tmpFile.' && mv '.$tmpFile.' '.$newFile;

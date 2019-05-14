@@ -625,6 +625,12 @@ class ModuleUpgrader
      */
     protected $commandLineExec = null;
 
+    /**
+     * does the exec output Key Notes?
+     * @var bool
+     */
+    protected $makeKeyNotes = false;
+
 
     ###############################
     # USEFUL COMMANDS
@@ -634,8 +640,19 @@ class ModuleUpgrader
      * Executes given operations on the PHP2CommandLineSingleton instance
      * Documentation for this can be found in the PHP2CommandLineSingleton module
      */
-    public function execMe($newDir, $command, $comment, $alwaysRun = false)
+    public function execMe(
+        $newDir,
+        $command,
+        $comment,
+        $alwaysRun = false,
+        $keyNotesLogFileLocation = ''
+    )
     {
+        if($keyNotesLogFileLocation) {
+            $this->commandLineExec
+                ->setMakeKeyNotes(true)
+                ->setKeyNotesFileLocation($keyNotesLogFileLocation);
+        }
         return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
     }
 

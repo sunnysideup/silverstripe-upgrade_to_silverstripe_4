@@ -275,24 +275,35 @@ abstract class Task
      * @param  string $param2   [description]
      * @param  string $rootDirForCommand  modules root directory
      * @param  string $settings [description]
-     * @return [type]           [description]
+     * @param  string  $keyNotesLogFileLocation
+
      */
     protected function runSilverstripeUpgradeTask(
         $task,
         $param1 = '',
         $param2 = '',
         $rootDirForCommand = '',
-        $settings = ''
+        $settings = '',
+        $keyNotesLogFileLocation = ''
     )
     {
         if (! $rootDirForCommand) {
             $rootDirForCommand = $this->mu()->getWebRootDirLocation();
         }
+        if(! $keyNotesLogFileLocation) {
+            $fileName = '/upgrade_notes.md';
+            if(file_exists($param1)) {
+                $keyNotesLogFileLocation = $param1.$fileName;
+            } else {
+                $keyNotesLogFileLocation = $rootDirForCommand.$fileName;
+            }
+        }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'php '.$this->mu()->getLocationOfSSUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDirForCommand.' --write -vvv '.$settings,
             'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
-            false
+            false,
+            $keyNotesLogFileLocation
         );
     }
 

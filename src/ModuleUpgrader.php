@@ -652,6 +652,9 @@ class ModuleUpgrader
             $this->commandLineExec
                 ->setMakeKeyNotes(true)
                 ->setKeyNotesFileLocation($keyNotesLogFileLocation);
+        } else {
+            $this->commandLineExec
+                ->setMakeKeyNotes(false);
         }
         return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
     }

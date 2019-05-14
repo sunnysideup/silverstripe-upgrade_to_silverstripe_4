@@ -1922,12 +1922,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sunnysideup/silverstripe-php_2_command_line.git",
-                "reference": "d358d572ddd8eba09567ee01d4e5adb04a2e3446"
+                "reference": "929a727a0350f0b12e602b0f1456618d55cc417a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/d358d572ddd8eba09567ee01d4e5adb04a2e3446",
-                "reference": "d358d572ddd8eba09567ee01d4e5adb04a2e3446",
+                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/929a727a0350f0b12e602b0f1456618d55cc417a",
+                "reference": "929a727a0350f0b12e602b0f1456618d55cc417a",
                 "shasum": ""
             },
             "type": "library",
@@ -1950,7 +1950,7 @@
                 "php",
                 "script"
             ],
-            "time": "2019-05-14T08:05:21+00:00"
+            "time": "2019-05-14T08:13:41+00:00"
         },
         {
             "name": "symfony/console",

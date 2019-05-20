@@ -65,6 +65,12 @@ SS4:
 
 
         php:
+            'getIsDeletedFromStage()':
+                R: '!IsOnDraft()'
+                C: 'check new syntax'
+            'getExistsOnLive()':
+                R: 'isPublished()'
+                C: 'check new syntax'
             '->setMultiple(true)':
                 R: '->setMultiple(true)'
                 C: 'Is this a listBox field? Now deprecated, ListboxField now extends MultiSelectField so multiple selections are built in.'

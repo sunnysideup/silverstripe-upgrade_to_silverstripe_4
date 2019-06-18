@@ -65,6 +65,62 @@ SS4:
 
 
         php:
+            ' extends Bigint':
+                R: ' extends DBBigint'
+            ' extends Boolean':
+                R: ' extends DBBoolean'
+            ' extends ClassName':
+                R: ' extends DBClassName'
+            ' extends Composite':
+                R: ' extends DBComposite'
+            ' extends Currency':
+                R: ' extends DBCurrency'
+            ' extends Date':
+                R: ' extends DBDate'
+            ' extends Datetime':
+                R: ' extends DBDatetime'
+            ' extends Decimal':
+                R: ' extends DBDecimal'
+            ' extends Double':
+                R: ' extends DBDouble'
+            ' extends Enum':
+                R: ' extends DBEnum'
+            ' extends Field':
+                R: ' extends DBField'
+            ' extends Float':
+                R: ' extends DBFloat'
+            ' extends ForeignKey':
+                R: ' extends DBForeignKey'
+            ' extends HTMLText':
+                R: ' extends DBHTMLText'
+            ' extends HTMLVarchar':
+                R: ' extends DBHTMLVarchar'
+            ' extends Indexable':
+                R: ' extends DBIndexable'
+            ' extends Int':
+                R: ' extends DBInt'
+            ' extends Locale':
+                R: ' extends DBLocale'
+            ' extends Money':
+                R: ' extends DBMoney'
+            ' extends MultiEnum':
+                R: ' extends DBMultiEnum'
+            ' extends Percentage':
+                R: ' extends DBPercentage'
+            ' extends PolymorphicForeignKey':
+                R: ' extends DBPolymorphicForeignKey'
+            ' extends PrimaryKey':
+                R: ' extends DBPrimaryKey'
+            ' extends String':
+                R: ' extends DBString'
+            ' extends Text':
+                R: ' extends DBText'
+            ' extends Time':
+                R: ' extends DBTime'
+            ' extends Varchar':
+                R: ' extends DBVarchar'
+            ' extends Year':
+                R: ' extends DBYear'
             'getIsDeletedFromStage()':
                 R: '!IsOnDraft()'
                 C: 'check new syntax'

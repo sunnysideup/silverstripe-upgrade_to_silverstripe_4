@@ -14,12 +14,12 @@ $obj = ModuleUpgrader::create()
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'frontendeditor',
-              'PackageNamespace' => 'FrontendEditor',
-              'GitLink' => 'git@github.com:sunnysideup/silverstripe-frontendeditor.git'
+              'PackageName' => 'phone_field',
+              'PackageNamespace' => 'PhoneField',
+              'GitLink' => 'git@github.com:sunnysideup/silverstripe-phone_field.git'
             ]
         ]
     )
     ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setLogFolderDirLocation('/var/www/logdir')
+    ->setLogFolderDirLocation('/var/www/upgrade-logs')
     ->run();

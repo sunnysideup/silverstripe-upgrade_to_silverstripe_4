@@ -179,7 +179,7 @@ class ModuleUpgrader
         'FinaliseUpgradeWithMergeIntoMaster' => []
     ];
 
-    protected $frameworkComposerRestraint = '^4.3';
+    protected $frameworkComposerRestraint = '^4.4';
 
     /**
      * Removes the given task from the list of tasks to execute

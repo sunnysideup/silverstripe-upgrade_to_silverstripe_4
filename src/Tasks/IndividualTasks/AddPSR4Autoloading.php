@@ -57,7 +57,7 @@ class AddPSR4Autoloading extends Task
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
         $webRootLocation = $this->mu()->getWebRootDirLocation();
         $command = $baseCommands.$addPage;
-        $comment = 'Adding autoload Page and Page controller details in '.$webRootLocation.'/composer.json: '.$baseNameSpace.' => '.$location;
+        $comment = 'Adding autoload Page and Page controller details in '.$webRootLocation.'/composer.json';
         $this->updateJSONViaCommandLine(
             $webRootLocation,
             $command,

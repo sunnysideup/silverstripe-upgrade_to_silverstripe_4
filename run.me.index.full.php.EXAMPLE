@@ -13,31 +13,30 @@ $restart = isset($argv[1]) && $argv[1] === 'restart';
  */
 $obj = ModuleUpgrader::create()
     ->setRunImmediately(true)
-    ->setLogFolderDirLocation('/var/www/logdir')
+    ->setLogFolderDirLocation('/var/www/upgrade-logs')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setWebRootName('__upgradeto4__')
+    ->setWebRootName('upgradeto4')
     ->setRunInteractively(true)
     ->setRestartSession($restart)
     // ->setRunIrreversibly(true)
     ->setArrayOfModules(
         [
             1 => [
-              'VendorName' => 'sunnysideup',
-              'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'frontendeditor',
-              'PackageNamespace' => 'FrontendEditor',
-              'PackageFolderNameForInstall' => 'frontendeditor',
-              'GitLink' => 'git@bitbucket.org:sunnysideupnz/upgradesilverstripe.com.git',
-              'UpgradeAsFork' => false,
-              'OriginComposerFileLocation' => 'https://bitbucket.org/vendor/project.com/src/master/composer.json',
+              'VendorName' => 'myclient',
+              'VendorNamespace' => 'MyClient',
+              'PackageName' => 'app',
+              'PackageNamespace' => 'App',
+              'PackageFolderNameForInstall' => 'myclient',
+              'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git',
+              'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
               'IsModuleUpgrade' => false
             ]
         ]
     )
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
-    ->setFrameworkComposerRestraint('^4.3')
+    ->setFrameworkComposerRestraint('^4.4')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
-    ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
+    // ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     // ->setListOfTasks(
     //     [
     //         'ResetWebRootDir-1' => [],

@@ -1059,7 +1059,6 @@ class ModuleUpgrader
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
-        $this->colourPrint('- Type: '.($this->isModuleUpgrade ? 'module' : 'project'), 'light_cyan');
         $this->colourPrint('- Type: '.($this->getIsModuleUpgrade() ? 'module' : 'project'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Name: '.$this->vendorName, 'light_cyan');

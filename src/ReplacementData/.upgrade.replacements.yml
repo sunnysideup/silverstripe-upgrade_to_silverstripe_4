@@ -17,10 +17,19 @@ SS4:
                 R: "app"
             'Mysite':
                 R: "App"
-
-
-
+        'js':
+            'themes/'
+                R: 'resources/themes/'
+                I: true
+        'scss':
+            'themes/'
+                R: 'resources/themes/'
+                I: true
         'ss':
+            'themes/'
+                R: 'resources/themes/'
+                I: true
+
             '$ClassName':
                 R: '$ClassName'
                 C: 'Check if the class name can still be used as such'
@@ -65,6 +74,13 @@ SS4:
 
 
         php:
+            'PartialMatchfilter':
+                R: 'PartialMatchFilter'
+                I: true
+            'new HTMLText(':
+                R: 'new HTMLText('
+                C: 'consider replacing with DBField::create_field('HTMLText') ...'
+                I: true
             ' extends Bigint':
                 R: ' extends DBBigint'
             ' extends Boolean':

@@ -52,6 +52,12 @@ We have included two example files like this in the module root.
     $ php index.php
 ```
 
+Note that you can run this step by step and that you can also use the following commands:
+
+restart
+again
+
+
 
 4. Apply any final fixes to this branch to make it SS4 ready.
 

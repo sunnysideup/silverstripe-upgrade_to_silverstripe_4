@@ -3,6 +3,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
+
+$restart = isset($argv[1]) && $argv[1] === 'restart';
+$again = isset($argv[1]) && $argv[1] === 'again';
+
 // make sure the dirs noted below exist:
 // - /var/www/upgrades,
 // - /var/www/logdir

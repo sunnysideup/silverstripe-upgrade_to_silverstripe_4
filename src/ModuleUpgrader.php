@@ -252,6 +252,11 @@ class ModuleUpgrader
      * @var bool
      */
     protected $restartSession = false;
+    /**
+     * Should the session details be deleted before we start?
+     * @var bool
+     */
+    protected $runLastOneAgain = false;
 
     /**
      * are we upgrading a module or a whole project?
@@ -1092,6 +1097,11 @@ class ModuleUpgrader
         $this->colourPrint('---------------------', 'light_cyan');
     }
 
+    /**
+     * work out the current one to run!
+     *
+     * @return string
+     */
     protected function workOutMethodsToRun()
     {
         if($this->runInteractively) {
@@ -1109,19 +1119,23 @@ class ModuleUpgrader
                     foreach($arrayKeys as $index => $key) {
                         if($key === $lastMethod) {
                             $found = true;
-                            if(isset($arrayKeys[$index + 1])) {
-                                if(isset($this->listOfTasks[$arrayKeys[$index + 1]])) {
-                                    $this->onlyRun = $arrayKeys[$index + 1];
-                                } else {
-                                    user_error('Can not find next task: '.$arrayKeys[$index + 1]);
-                                }
+                            if($this->runLastOneAgain) {
+                                $this->onlyRun = $arrayKeys[$index];
                             } else {
-                                $this->deleteSession();
-                                die('
+                                if(isset($arrayKeys[$index + 1])) {
+                                    if(isset($this->listOfTasks[$arrayKeys[$index + 1]])) {
+                                        $this->onlyRun = $arrayKeys[$index + 1];
+                                    } else {
+                                        user_error('Can not find next task: '.$arrayKeys[$index + 1]);
+                                    }
+                                } else {
+                                    $this->deleteSession();
+                                    die('
 ==========================================
 Session has completed.
 ==========================================
-                                ');
+                                    ');
+                                }
                             }
                         }
                     }

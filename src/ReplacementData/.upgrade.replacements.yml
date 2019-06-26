@@ -12,23 +12,29 @@ SS4:
 
     '.':
 
+
+        '*':
+            'mysite':
+                R: "app"
+            'Mysite':
+                R: "App"
+
         'md':
             'mysite':
                 R: "app"
             'Mysite':
                 R: "App"
+
+
+
         'js':
-            'themes/'
+            'themes/':
                 R: 'resources/themes/'
-                I: true
-        'scss':
-            'themes/'
-                R: 'resources/themes/'
-                I: true
+
+
         'ss':
-            'themes/'
+            'themes/':
                 R: 'resources/themes/'
-                I: true
 
             '$ClassName':
                 R: '$ClassName'
@@ -65,18 +71,53 @@ SS4:
             '$List(Page':
                 R: '$List(SilverStripe\CMS\Model\SiteTree:'
 
-        '*':
-            'mysite':
-                R: "app"
-            'Mysite':
-                R: "App"
+
+        'yml':
+            '_Controller':
+                R: "Controller"
+            'Director:':
+                R: "SilverStripe\\Control\\Director:"
+            'SiteTree:':
+                R: "SilverStripe\\CMS\\Model\\SiteTree:"
+            'AssetAdmin:':
+                R: "SilverStripe\\AssetAdmin\\Controller\\AssetAdmin:"
+            'LeftAndMain:':
+                R: "SilverStripe\\Admin\\LeftAndMain:"
+            'DateField:':
+                R: "SilverStripe\\Forms\\DateField:"
+            'ContentController:':
+                R: "SilverStripe\\CMS\\Controllers\\ContentController:"
+            'Member:':
+                R: "SilverStripe\\Security\\Member:"
+            'SiteConfig:':
+                R: "SilverStripe\\SiteConfig\\SiteConfig:"
+            'TwitterExtension':
+                R: "TractorCow\\Twitter\\Extensions\\TwitterExtension:"
+            'themes/':
+                R: 'resources/themes'
+
+        'scss':
+            'themes/':
+                R: 'resources/themes/'
+        'css':
+            'themes/':
+                R: 'resources/themes/'
+        'sass':
+            'themes/':
+                R: 'resources/themes/'
 
 
 
         php:
+            'framework/sake':
+                R: 'vendor/bin/sake'
+
+            'framework/cli-script.php':
+                R: 'vendor/bin/sake'
+
             'PartialMatchfilter':
                 R: 'PartialMatchFilter'
-                I: true
+
             'new HTMLText(':
                 R: 'new HTMLText('
                 C: 'consider replacing with DBField::create_field('HTMLText') ...'
@@ -446,41 +487,5 @@ SS4:
             ' Object::':
                 R: ' SilverStripe\\Core\\Injector\\Injector::inst()->'
                 C: 'Check if this is the right implementation, this is highly speculative.'
-
-
-        'yml':
-            '_Controller':
-                R: "Controller"
-            'Director:':
-                R: "SilverStripe\\Control\\Director:"
-            'SiteTree:':
-                R: "SilverStripe\\CMS\\Model\\SiteTree:"
-            'AssetAdmin:':
-                R: "SilverStripe\\AssetAdmin\\Controller\\AssetAdmin:"
-            'LeftAndMain:':
-                R: "SilverStripe\\Admin\\LeftAndMain:"
-            'DateField:':
-                R: "SilverStripe\\Forms\\DateField:"
-            'ContentController:':
-                R: "SilverStripe\\CMS\\Controllers\\ContentController:"
-            'Member:':
-                R: "SilverStripe\\Security\\Member:"
-            'SiteConfig:':
-                R: "SilverStripe\\SiteConfig\\SiteConfig:"
-            'TwitterExtension':
-                R: "TractorCow\\Twitter\\Extensions\\TwitterExtension:"
-
-
-        'css':
-            'url(/themes)':
-                R: 'url(/resources/themes)'
-
-
-        'scss':
-            'url(/themes)':
-                R: 'url(/resources/themes)'
-
-
-        'sass':
-            'url(/themes)':
-                R: 'url(/resources/themes)'
+            'themes/':
+                R: 'resources/themes/'

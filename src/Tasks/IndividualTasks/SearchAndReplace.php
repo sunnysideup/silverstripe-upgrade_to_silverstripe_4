@@ -81,13 +81,13 @@ class SearchAndReplace extends Task
         }
 
         //replace API
-        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-            $textSearchMachine = new SearchAndReplaceAPI($moduleDir);
+        foreach($this->mu()->getExistingModuleDirLocationsWithThemeFolders() as $moduleOrThemeDir) {
+            $textSearchMachine = new SearchAndReplaceAPI($moduleOrThemeDir);
             $textSearchMachine->setIsReplacingEnabled(true);
             $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
 
             foreach ($replacementArray as $path => $pathArray) {
-                $path = $moduleDir  . '/'.$path ? : '' ;
+                $path = $moduleOrThemeDir  . '/'.$path ? : '' ;
                 $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
                 if (!file_exists($path)) {
                     $this->mu()->colourPrint("SKIPPING $path");
@@ -100,7 +100,7 @@ class SearchAndReplace extends Task
                             "CHECKING\n".
                             "IN $path\n".
                             "FOR $extension FILES\n".
-                            "BASE ".$moduleDir."\n".
+                            "BASE ".$moduleOrThemeDirr."\n".
                             "++++++++++++++++++++++++++++++++++++\n"
                         );
                         foreach ($extensionArray as $find => $findDetails) {

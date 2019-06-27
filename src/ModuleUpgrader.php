@@ -563,10 +563,16 @@ class ModuleUpgrader
     private $logFileLocation = '';
 
     /**
-     * Combination of the web dir root name and the above webRootDirLocation
+     * Combination of the web dir root name and the aboveWebRootDirLocation
      * @var string
      */
     private $webRootDirLocation = '';
+
+    /**
+     * Combination of the web dir root name and the aboveWebRootDirLocation
+     * @var string
+     */
+    private $themeDirLocation = '';
 
     /**
      * Directory that holds the module
@@ -595,7 +601,9 @@ class ModuleUpgrader
             }
         }
         if(count($array) === 0) {
-            if(! $this->getIsModuleUpgrade()) {
+            if($this->getIsModuleUpgrade()) {
+
+            } else {
                 user_error(
                     'You need to set moduleDirLocations (setModuleDirLocations)
                     as there are currently none.'
@@ -604,6 +612,14 @@ class ModuleUpgrader
         }
 
         return $array;
+    }
+
+    public function getExistingModuleDirLocationsWithThemeFolders()
+    {
+        $array = $this->getExistingModuleDirLocations();
+        if($this->themeDirLocation) {
+            $array[$this->themeDirLocation] = $this->themeDirLocation;
+        }
     }
 
     /**
@@ -862,6 +878,7 @@ class ModuleUpgrader
 
         $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation);
         $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation.'/'.$this->webRootName, true);
+        $this->themeDirLocation = $this->checkIfPathExistsAndCleanItUp($this->webRootDirLocation.'/themes', true);
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
@@ -1022,6 +1039,7 @@ class ModuleUpgrader
             $this->moduleDirLocations = [
                 $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall
             ];
+            $this->themeDirLocation = null;
         } else {
             if(! count($this->moduleDirLocations)) {
                 $this->moduleDirLocations[] = $this->webRootDirLocation . '/mysite';
@@ -1080,6 +1098,7 @@ class ModuleUpgrader
         $this->colourPrint('- Upgrade Dir (root of install): '.$this->getWebRootDirLocation(), 'light_cyan');
         $this->colourPrint('- Package Folder Name For Install: '.$this->packageFolderNameForInstall, 'light_cyan');
         $this->colourPrint('- Module / Project Dir(s): '.implode(', ', $this->moduleDirLocations), 'light_cyan');
+        $this->colourPrint('- Theme Dir: '.$this->themeDirLocation, 'light_cyan');
         $this->colourPrint('- Git and Composer Root Dir: '.$this->getGitRootDir(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Git Repository Link (SSH): '.$this->gitLink, 'light_cyan');

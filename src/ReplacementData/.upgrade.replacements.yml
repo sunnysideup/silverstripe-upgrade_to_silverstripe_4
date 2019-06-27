@@ -36,9 +36,10 @@ SS4:
             'themes/':
                 R: 'resources/themes/'
 
-            '$ClassName':
-                R: '$ClassName'
-                C: 'Check if the class name can still be used as such'
+            'ClassName':
+                R: 'ClassName.ShortName'
+                C: 'Check if the class name can still be used as such. The ShortName provides the name without NameSpace'
+
             '.setWidth(':
                 R: '.ScaleWidth('
                 I: true

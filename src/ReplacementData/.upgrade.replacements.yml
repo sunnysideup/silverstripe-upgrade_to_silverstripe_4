@@ -37,7 +37,7 @@ SS4:
                 R: 'resources/themes/'
 
             '$ClassName':
-                R: '$ClassName.ShortName'
+                R: '$`ClassName.ShortName'
                 C: 'Check if the class name can still be used as such. The ShortName provides the name without NameSpace'
 
             '.setWidth(':
@@ -71,6 +71,9 @@ SS4:
                 R: '$List(\Page'
             '$List(Page':
                 R: '$List(SilverStripe\CMS\Model\SiteTree:'
+            '.Format(':
+                R: '.Format('
+                C: 'Format function for dates have changed! Please consider something like: PHPNativeFormat as an extension'
 
 
         'yml':
@@ -490,3 +493,7 @@ SS4:
                 C: 'Check if this is the right implementation, this is highly speculative.'
             'themes/':
                 R: 'resources/themes/'
+            '->RenderWith(':
+                R: '->RenderWith('
+                I: true
+                C: 'Check that the template location is still valid!'

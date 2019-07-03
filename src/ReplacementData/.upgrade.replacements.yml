@@ -120,15 +120,18 @@ SS4:
 
 
         php:
+            "->format(":
+                R: "->format("
+                C: 'If this is a PHP Date format call then this needs to be changed to new Date formatting system'
+            " => 'Image'":
+                R: " => 'Image'"
+                C: 'you may want to add ownership (owns)'
             'framework/sake':
                 R: 'vendor/bin/sake'
-
             'framework/cli-script.php':
                 R: 'vendor/bin/sake'
-
             'PartialMatchfilter':
                 R: 'PartialMatchFilter'
-
             'new HTMLText(':
                 R: 'new HTMLText('
                 C: 'consider replacing with DBField::create_field('HTMLText') ...'

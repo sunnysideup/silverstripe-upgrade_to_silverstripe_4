@@ -103,9 +103,16 @@ SS4:
         'scss':
             'themes/':
                 R: 'resources/themes/'
+            '.Actions':
+                R: '.btn-toolbar'
+                C: 'Check if this replacement is right.'
         'css':
             'themes/':
                 R: 'resources/themes/'
+            '.Actions':
+                R: '.btn-toolbar'
+                C: 'Check if this replacement is right.'
+
         'sass':
             'themes/':
                 R: 'resources/themes/'

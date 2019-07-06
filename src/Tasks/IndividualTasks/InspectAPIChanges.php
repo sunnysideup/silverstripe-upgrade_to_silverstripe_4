@@ -16,6 +16,14 @@ class InspectAPIChanges extends Task
 {
     protected $taskStep = 's50';
 
+    protected $param1 = '';
+
+    protected $param2 = '';
+
+    protected $rootDirForCommand = '';
+
+    protected $settings = '';
+
     public function getTitle()
     {
         return 'After load fixes (inspect)';
@@ -29,16 +37,8 @@ class InspectAPIChanges extends Task
             Once a project has all class names migrated, and is brought up to a
             "loadable" state (that is, where all classes reference or extend real classes)
             then the inspect command can be run to perform additional automatic code rewrites.
-            This step will also warn of any upgradable code issues that may prevent a succesful upgrade.' ;
+            This step will also warn of any upgradable code issues that may prevent a succesful upgrade.';
     }
-
-    protected $param1 = '';
-
-    protected $param2 = '';
-
-    protected $rootDirForCommand = '';
-
-    protected $settings = '';
 
     public function runActualTask($params = [])
     {
@@ -49,7 +49,7 @@ class InspectAPIChanges extends Task
             false
         );
 
-        foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $this->param1 = dirname($codeDir);
             $this->runSilverstripeUpgradeTask(
                 'inspect',
@@ -58,7 +58,7 @@ class InspectAPIChanges extends Task
                 $this->rootDirForCommand,
                 $this->settings
             );
-            $this->setCommitMessage('MAJOR: core upgrade to SS4: running INSPECT on '.$this->param1);
+            $this->setCommitMessage('MAJOR: core upgrade to SS4: running INSPECT on ' . $this->param1);
         }
     }
 

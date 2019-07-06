@@ -14,6 +14,14 @@ class ChangeEnvironment extends Task
 {
     protected $taskStep = 's20';
 
+    protected $rootDirForCommand = '';
+
+    protected $param1 = '';
+
+    protected $param2 = '';
+
+    protected $settings = '';
+
     public function getTitle()
     {
         return 'Change Environment File';
@@ -25,20 +33,12 @@ class ChangeEnvironment extends Task
             Runs the silverstripe/upgrade task "environment". See:
             https://github.com/silverstripe/silverstripe-upgrader#environment.
             You can use this command to migrate a SilverStripe 3 _ss_environment.php
-            file to the Silverstripe 4 .env format.' ;
+            file to the Silverstripe 4 .env format.';
     }
-
-    protected $rootDirForCommand = '';
-
-    protected $param1 = '';
-
-    protected $param2 = '';
-
-    protected $settings = '';
 
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             //do nothing
         } else {
             $this->runSilverstripeUpgradeTask(
@@ -54,10 +54,9 @@ class ChangeEnvironment extends Task
 
     protected function hasCommitAndPush()
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 }

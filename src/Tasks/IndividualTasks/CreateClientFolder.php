@@ -20,7 +20,7 @@ class CreateClientFolder extends Task
     public function getDescription()
     {
         return '
-            Takes the javascript, css, and images folders and puts them in a newly created client folder.' ;
+            Takes the javascript, css, and images folders and puts them in a newly created client folder.';
     }
 
     /**
@@ -30,12 +30,12 @@ class CreateClientFolder extends Task
      */
     public function runActualTask($params = [])
     {
-        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-            $newClientFolder = $moduleDir.'/client/ ';
+        foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+            $newClientFolder = $moduleDir . '/client/ ';
             $this->mu()->execMe(
                 $moduleDir,
-                'mkdir -v '.$newClientFolder,
-                'Creating new client folder: '.$newClientFolder,
+                'mkdir -v ' . $newClientFolder,
+                'Creating new client folder: ' . $newClientFolder,
                 false
             );
             $foldersToMoveName = [
@@ -43,14 +43,14 @@ class CreateClientFolder extends Task
                 'js',
                 'images',
                 'img',
-                'css'
+                'css',
             ];
             foreach ($foldersToMoveName as $folderToMoveName) {
-                $folderToMove = $moduleDir.'/'.$folderToMoveName.'/ ';
+                $folderToMove = $moduleDir . '/' . $folderToMoveName . '/ ';
                 $this->mu()->execMe(
                     $moduleDir,
-                    'if test -d '.$folderToMove.'; then mv -vn '.$folderToMove.' '.$newClientFolder.'; fi;',
-                    'Moving '.$folderToMove.' to '.$newClientFolder.' -v is verbose, -n is only if does not exists already.',
+                    'if test -d ' . $folderToMove . '; then mv -vn ' . $folderToMove . ' ' . $newClientFolder . '; fi;',
+                    'Moving ' . $folderToMove . ' to ' . $newClientFolder . ' -v is verbose, -n is only if does not exists already.',
                     false
                 );
             }

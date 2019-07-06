@@ -15,6 +15,14 @@ class Reorganise extends Task
 {
     protected $taskStep = 's50';
 
+    protected $param1 = '';
+
+    protected $param2 = '';
+
+    protected $rootDirForCommand = '';
+
+    protected $settings = '';
+
     public function getTitle()
     {
         return 'move mysite/code folder to app/src';
@@ -28,21 +36,12 @@ class Reorganise extends Task
             You can use this command to reorganise your folder structure to
             conform to the new structure introduced with SilverStripe 4.1.
             Your mysite folder will be renamed to app and your code folder will be renamed to src.
-            ' ;
+            ';
     }
-
-    protected $param1 = '';
-
-    protected $param2 = '';
-
-    protected $rootDirForCommand = '';
-
-    protected $settings = '';
 
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
-
+        if ($this->mu()->getIsModuleUpgrade()) {
         } else {
             $this->runSilverstripeUpgradeTask(
                 'reorganise',
@@ -57,7 +56,7 @@ class Reorganise extends Task
 
     protected function hasCommitAndPush()
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             return false;
         }
 

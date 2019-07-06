@@ -16,6 +16,18 @@ class SearchAndReplace extends Task
 {
     protected $taskStep = 's30';
 
+    protected $debug = false;
+
+    protected $checkReplacementIssues = false;
+
+    protected $replacementHeader = 'upgrade to SS4';
+
+    protected $ignoreFolderArray = [
+        '.git',
+    ];
+
+    protected $alternativePathForReplacementData = '';
+
     public function getTitle()
     {
         return 'Search and Replace';
@@ -26,14 +38,8 @@ class SearchAndReplace extends Task
         return '
             Replaces a bunch of code snippets in preparation of the upgrade.
             Controversial replacements will be replaced with a comment
-            next to it so you can review replacements easily.' ;
+            next to it so you can review replacements easily.';
     }
-
-    protected $debug = false;
-
-    protected $checkReplacementIssues = false;
-
-    protected $replacementHeader = 'upgrade to SS4';
 
     public function setCheckReplacementIssues($b)
     {
@@ -42,18 +48,12 @@ class SearchAndReplace extends Task
         return $this;
     }
 
-    protected $ignoreFolderArray = [
-        ".git"
-    ];
-
     public function setIgnoreFolderArray($a)
     {
         $this->ignoreFolderArray = $a;
 
         return $this;
     }
-
-    protected $alternativePathForReplacementData = '';
 
     public function setAlternativePathForReplacementData($s)
     {
@@ -81,32 +81,32 @@ class SearchAndReplace extends Task
         }
 
         //replace API
-        foreach($this->mu()->getExistingModuleDirLocationsWithThemeFolders() as $moduleOrThemeDir) {
+        foreach ($this->mu()->getExistingModuleDirLocationsWithThemeFolders() as $moduleOrThemeDir) {
             $textSearchMachine = new SearchAndReplaceAPI($moduleOrThemeDir);
             $textSearchMachine->setIsReplacingEnabled(true);
             $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
 
             foreach ($replacementArray as $path => $pathArray) {
-                $path = $moduleOrThemeDir  . '/'.$path ? : '' ;
+                $path = $moduleOrThemeDir . '/' . $path ?: '';
                 $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
-                if (!file_exists($path)) {
-                    $this->mu()->colourPrint("SKIPPING $path");
+                if (! file_exists($path)) {
+                    $this->mu()->colourPrint("SKIPPING ${path}");
                 } else {
                     $textSearchMachine->setSearchPath($path);
                     foreach ($pathArray as $extension => $extensionArray) {
                         $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
                         $this->mu()->colourPrint(
-                            "++++++++++++++++++++++++++++++++++++\n".
-                            "CHECKING\n".
-                            "IN $path\n".
-                            "FOR $extension FILES\n".
-                            "BASE ".$moduleOrThemeDirr."\n".
+                            "++++++++++++++++++++++++++++++++++++\n" .
+                            "CHECKING\n" .
+                            "IN ${path}\n" .
+                            "FOR ${extension} FILES\n" .
+                            'BASE ' . $moduleOrThemeDir . "\n" .
                             "++++++++++++++++++++++++++++++++++++\n"
                         );
                         foreach ($extensionArray as $find => $findDetails) {
-                            $replace = isset($findDetails['R'])       ? $findDetails['R'] : $find;
-                            $comment = isset($findDetails['C'])       ? $findDetails['C'] : '';
-                            $ignoreCase = isset($findDetails['I'])    ? $findDetails['I'] : false;
+                            $replace = isset($findDetails['R']) ? $findDetails['R'] : $find;
+                            $comment = isset($findDetails['C']) ? $findDetails['C'] : '';
+                            $ignoreCase = isset($findDetails['I']) ? $findDetails['I'] : false;
                             $caseSensitive = ! $ignoreCase;
                             //$replace = $replaceArray[1]; unset($replaceArray[1]);
                             //$fullReplacement = (isset($replaceArray[2]) ? "/* ".$replaceArray[2]." */\n" : "").$replaceArray[1];
@@ -115,13 +115,13 @@ class SearchAndReplace extends Task
                             if ($comment) {
                                 $isStraightReplace = false;
                             }
-                            if (!$find) {
-                                user_error("no find is specified, replace is: $replace");
+                            if (! $find) {
+                                user_error("no find is specified, replace is: ${replace}");
                             }
-                            if (!$fullReplacement) {
-                                user_error("no replace is specified, find is: $find. We suggest setting your final replace to a single space if you would like to replace with NOTHING.");
+                            if (! $fullReplacement) {
+                                user_error("no replace is specified, find is: ${find}. We suggest setting your final replace to a single space if you would like to replace with NOTHING.");
                             }
-                            $replaceKey = $isStraightReplace ? "BASIC" : "COMPLEX";
+                            $replaceKey = $isStraightReplace ? 'BASIC' : 'COMPLEX';
 
                             $textSearchMachine->setSearchKey($find, $caseSensitive, $replaceKey);
                             $textSearchMachine->setReplacementKey($fullReplacement);
@@ -135,7 +135,7 @@ class SearchAndReplace extends Task
                         if ($replacements) {
                         } else {
                             //flush output anyway!
-                            $this->mu()->colourPrint("No replacements for  $extension");
+                            $this->mu()->colourPrint("No replacements for  ${extension}");
                         }
                         $this->mu()->colourPrint($textSearchMachine->getOutput());
                     }
@@ -144,19 +144,27 @@ class SearchAndReplace extends Task
         }
     }
 
+    protected function hasCommitAndPush()
+    {
+        return true;
+    }
+
     /**
      * 1. check that one find is not used twice:
      * find can be found 2x
-     *
      */
     private function checkReplacementDataIssues()
     {
-        $r = new ReplacementData();
-        $arr = $r->getReplacementArrays(null);
+        $replacementDataObject = new LoadReplacementData(
+            $this->mu(),
+            $this->alternativePathForReplacementData,
+            $this->params
+        );
+        $arr = $replacementDataObject->getReplacementArrays(null);
         $arrTos = [];
-        $arrLanguages = $r->getLanguages();
-        $fullFindArray = $r->getFlatFindArray();
-        $fullReplaceArray = $r->getFlatReplacedArray();
+        $arrLanguages = $replacementDataObject->getLanguages();
+        $fullFindArray = $replacementDataObject->getFlatFindArray();
+        $fullReplaceArray = $replacementDataObject->getFlatReplacedArray();
 
         //1. check that one find may not stop another replacement.
         foreach ($arrLanguages as $language) {
@@ -168,14 +176,14 @@ class SearchAndReplace extends Task
             foreach ($fullFindArray[$language] as $keyOuter => $findStringOuter) {
                 $keyOuterDoneSoFar[$keyOuter] = true;
                 foreach ($fullFindArray[$language] as $keyInner => $findStringInner) {
-                    if (!isset($keyOuterDoneSoFar[$keyInner])) {
-                        if ($keyOuter != $keyInner) {
-                            $findStringOuterReplaced = str_replace($findStringInner, "...", $findStringOuter);
-                            if ($findStringOuter == $findStringInner || $findStringOuterReplaced != $findStringOuter) {
+                    if (! isset($keyOuterDoneSoFar[$keyInner])) {
+                        if ($keyOuter !== $keyInner) {
+                            $findStringOuterReplaced = str_replace($findStringInner, '...', $findStringOuter);
+                            if ($findStringOuter === $findStringInner || $findStringOuterReplaced !== $findStringOuter) {
                                 $this->mu()->colourPrint("
-ERROR in $language: \t\t we are trying to find the same thing twice (A and B)
----- A: ($keyOuter): \t\t $findStringOuter
----- B: ($keyInner): \t\t $findStringInner");
+ERROR in ${language}: \t\t we are trying to find the same thing twice (A and B)
+---- A: (${keyOuter}): \t\t ${findStringOuter}
+---- B: (${keyInner}): \t\t ${findStringInner}");
                             }
                         }
                     }
@@ -185,7 +193,7 @@ ERROR in $language: \t\t we are trying to find the same thing twice (A and B)
 
         //2. check that a replacement is not mentioned before the it is being replaced
         foreach ($arrLanguages as $language) {
-            if (!isset($fullReplaceArray[$language])) {
+            if (! isset($fullReplaceArray[$language])) {
                 continue;
             }
             unset($keyOuterDoneSoFar);
@@ -194,24 +202,19 @@ ERROR in $language: \t\t we are trying to find the same thing twice (A and B)
                 $keyOuterDoneSoFar[$keyOuter] = true;
                 foreach ($fullFindArray[$language] as $keyInner => $findStringInner) {
                     if (isset($keyOuterDoneSoFar[$keyInner])) {
-                        if ($keyOuter != $keyInner) {
-                            $findStringOuterReplaced = str_replace($findStringInner, "...", $findStringOuter);
-                            if ($findStringOuter == $findStringInner || $findStringOuterReplaced != $findStringOuter) {
+                        if ($keyOuter !== $keyInner) {
+                            $findStringOuterReplaced = str_replace($findStringInner, '...', $findStringOuter);
+                            if ($findStringOuter === $findStringInner || $findStringOuterReplaced !== $findStringOuter) {
                                 $this->mu()->colourPrint("
-ERROR in $language: \t\t there is a replacement (A) that was earlier tried to be found (B).
----- A: ($keyOuter): \t\t $findStringOuter
----- B: ($keyInner): \t\t $findStringInner");
+ERROR in ${language}: \t\t there is a replacement (A) that was earlier tried to be found (B).
+---- A: (${keyOuter}): \t\t ${findStringOuter}
+---- B: (${keyInner}): \t\t ${findStringInner}");
                             }
                         }
                     }
                 }
             }
         }
-        $this->mu()->colourPrint("");
-    }
-
-    protected function hasCommitAndPush()
-    {
-        return true;
+        $this->mu()->colourPrint('');
     }
 }

@@ -8,23 +8,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  * This task runs the silverstripe upgrade task 'webroot' to configure
  * your project to use the public web root structure
  */
-class WebRootUpdate extends Task
+class WebrootUpdate extends Task
 {
-    public function getTitle()
-    {
-        return 'Fix Folder Case';
-    }
-
-
-    public function getDescription()
-    {
-        return '
-            Runs the silverstripe/upgrade task "webroot". See:
-            https://github.com/silverstripe/silverstripe-upgrader#webroot.
-            Configure your project to use the public web root structure
-            introduced with SilverStripe 4.1' ;
-    }
-
     protected $param1 = '';
 
     protected $param2 = '';
@@ -32,6 +17,20 @@ class WebRootUpdate extends Task
     protected $rootDirForCommand = '';
 
     protected $settings = '';
+
+    public function getTitle()
+    {
+        return 'Fix Folder Case';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Runs the silverstripe/upgrade task "webroot". See:
+            https://github.com/silverstripe/silverstripe-upgrader#webroot.
+            Configure your project to use the public web root structure
+            introduced with SilverStripe 4.1';
+    }
 
     public function runActualTask($params = [])
     {
@@ -43,5 +42,10 @@ class WebRootUpdate extends Task
             $this->settings
         );
         $this->setCommitMessage('MAJOR: adding webroot concept');
+    }
+
+    public function hasCommitAndPush()
+    {
+        true;
     }
 }

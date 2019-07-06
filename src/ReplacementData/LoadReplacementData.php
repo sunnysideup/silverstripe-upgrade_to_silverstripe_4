@@ -1,9 +1,12 @@
 <?php
 
+namespace Sunnysideup\UpgradeToSilverstripe4\ReplacementData;
+
+use SilverStripe\Upgrader\Util\ConfigFile;
+
 /**
  * loads yml data if strings to replace in
  * code.
- *
  *
  * The replacements should be in the same folder as this class.
  *
@@ -13,13 +16,11 @@
  * It will also search the root folders for any packages / projects being upgraded.
  */
 
-namespace Sunnysideup\UpgradeToSilverstripe4\ReplacementData;
 
-use SilverStripe\Upgrader\Util\ConfigFile;
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 class LoadReplacementData
 {
-
     /**
      * Standard file name
      */
@@ -35,9 +36,23 @@ class LoadReplacementData
 
     protected $folderContainingLocationData = '';
 
+    protected $to = 'SS4';
+
+    protected $fullArray = [];
+
+    protected $tos = [];
+
+    protected $languages = [];
+
+    protected $flatFindArray = [];
+
+    protected $flatReplacedArray = [];
+
+    protected $paths = [];
+
     public function __construct($mu, $folderContainingLocationData = '', $params = [])
     {
-        $this->folderContainingLocationData = $folderContainingLocationData ? : __DIR__;
+        $this->folderContainingLocationData = $folderContainingLocationData ?: __DIR__;
         $this->params = $params;
         $this->mu = $mu;
         $this->fullArray = $this->getData();
@@ -48,11 +63,11 @@ class LoadReplacementData
                 foreach ($pathArray as $language => $languageArray) {
                     $this->languages[$language] = $language;
                     foreach ($languageArray as $findKey => $findKeyArray) {
-                        if (!isset($findKeyArray['R'])) {
-                            user_error('replacement key not set: '.print_r($findKeyArray, 1));
+                        if (! isset($findKeyArray['R'])) {
+                            user_error('replacement key not set: ' . print_r($findKeyArray, 1));
                         }
                         $replaceKey = $findKeyArray['R'];
-                        $key = strtolower($to.'_'.$language.'_'.$path.'_'.$count);
+                        $key = strtolower($to . '_' . $language . '_' . $path . '_' . $count);
                         $this->flatFindArray[$key] = $findKey;
                         $this->flatReplacedArray[$key] = $replaceKey;
                         $count++;
@@ -61,8 +76,6 @@ class LoadReplacementData
             }
         }
     }
-
-    protected $to = 'SS4';
 
     public function setTo($s)
     {
@@ -73,55 +86,41 @@ class LoadReplacementData
 
     public function getReplacementArrays()
     {
-        if (!$this->to) {
+        if (! $this->to) {
             return $this->fullArray;
         }
         if (isset($this->fullArray[$this->to])) {
             return $this->fullArray[$this->to];
-        } else {
-            user_error("no data is available for upgrading to: ".$this->to);
         }
+        user_error('no data is available for upgrading to: ' . $this->to);
 
         return [];
     }
-
-    protected $fullArray = [];
-
-
-    protected $tos = [];
 
     public function getTos()
     {
         return $this->tos;
     }
 
-    protected $languages = [];
-
     public function getLanguages()
     {
         return $this->languages;
     }
-
-    protected $flatFindArray = [];
 
     public function getFlatFindArray()
     {
         return $this->flatFindArray;
     }
 
-    protected $flatReplacedArray = [];
-
     public function getFlatReplacedArray()
     {
         return $this->flatReplacedArray;
     }
 
-    protected $paths = [];
-
     protected function getPaths()
     {
         $array = [];
-        foreach($this->mu->getExistingModuleDirLocations() as $moduleDir) {
+        foreach ($this->mu->getExistingModuleDirLocations() as $moduleDir) {
             $array[$moduleDir] = $moduleDir;
         }
         $globalFixes = $this->mu->checkIfPathExistsAndCleanItUp($this->folderContainingLocationData);
@@ -145,14 +144,13 @@ class LoadReplacementData
                 // Merge
                 $config = $this->mergeConfig($config, $nextConfig);
             } else {
-                $this->mu->colourPrint('could not find: '.$nextFile);
+                $this->mu->colourPrint('could not find: ' . $nextFile);
             }
         }
         ksort($config);
 
         return $config;
     }
-
 
     protected static function mergeConfig(array $left, array $right)
     {
@@ -161,14 +159,14 @@ class LoadReplacementData
         foreach ($right as $key => $value) {
             // if non-associative, just merge in unique items
             if (is_numeric($key)) {
-                if (!in_array($value, $merged)) {
+                if (! in_array($value, $merged, true)) {
                     $merged[] = $value;
                 }
                 continue;
             }
 
             // If not merged into left hand side, then simply assign
-            if (!isset($merged[$key])) {
+            if (! isset($merged[$key])) {
                 $merged[$key] = $value;
                 continue;
             }
@@ -176,20 +174,20 @@ class LoadReplacementData
             // Make sure both sides are the same type
             if (is_array($merged[$key]) !== is_array($value)) {
                 user_error(
-                    "Config option $key cannot merge non-array with array value."
+                    "Config option ${key} cannot merge non-array with array value."
                 );
             }
 
             // If array type, then merge
             if (is_array($value)) {
-                $merged[$key] = $this->mergeConfig($merged[$key], $value);
+                $merged[$key] = self::mergeConfig($merged[$key], $value);
                 continue;
             }
 
             // If non array types, don't merge, but instead assert both values are set
             if ($merged[$key] !== $value) {
                 user_error(
-                    "Config option $key is defined with different values in multiple files."
+                    "Config option ${key} is defined with different values in multiple files."
                 );
             }
         }

@@ -29,11 +29,11 @@ class AddPSR4Autoloading extends Task
     public function runActualTask($params = [])
     {
         //project composer.json
-            // - app/src/...
-            // - app2/src/...
-            // DO FOR BOTH
+        // - app/src/...
+        // - app2/src/...
+        // DO FOR BOTH
         //module composor.json
-            //  ONLY FOR module
+        //  ONLY FOR module
         $listOfAutoLoads = [];
         $baseCommands = '
             if(! isset($data["autoload"])) {
@@ -44,7 +44,7 @@ class AddPSR4Autoloading extends Task
             }
         ';
         $addPage = '';
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             $addPage = '
             if(! isset($data["autoload"]["files"])) {
                 $data["autoload"]["files"] = [
@@ -52,35 +52,35 @@ class AddPSR4Autoloading extends Task
                     "app/src/PageController.php"
                 ];
             }';
-        } else {
         }
+
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
         $webRootLocation = $this->mu()->getWebRootDirLocation();
-        $command = $baseCommands.$addPage;
-        $comment = 'Adding autoload Page and Page controller details in '.$webRootLocation.'/composer.json';
+        $command = $baseCommands . $addPage;
+        $comment = 'Adding autoload Page and Page controller details in ' . $webRootLocation . '/composer.json';
         $this->updateJSONViaCommandLine(
             $webRootLocation,
             $command,
             $comment
         );
-        foreach($codeDirs as $baseNameSpace => $codeDir) {
-            $location = trim(str_replace($webRootLocation,'', $codeDir), '/').'/';
+        foreach ($codeDirs as $baseNameSpace => $codeDir) {
+            $location = trim(str_replace($webRootLocation, '', $codeDir), '/') . '/';
             //update webroot composer file
             //location:
-            $command = $baseCommands.'
-            $data["autoload"]["psr-4"]["'.$this->doubleSlash($baseNameSpace).'"] = "'.$location.'";';
-            $comment = 'Adding autoload psr-4 details in '.$webRootLocation.'/composer.json: '.$baseNameSpace.' => '.$location;
+            $command = $baseCommands . '
+            $data["autoload"]["psr-4"]["' . $this->doubleSlash($baseNameSpace) . '"] = "' . $location . '";';
+            $comment = 'Adding autoload psr-4 details in ' . $webRootLocation . '/composer.json: ' . $baseNameSpace . ' => ' . $location;
             $this->updateJSONViaCommandLine(
                 $webRootLocation,
                 $command,
                 $comment
             );
-            if($this->mu()->getIsModuleUpgrade()) {
+            if ($this->mu()->getIsModuleUpgrade()) {
                 $moduleLocation = dirname($codeDir);
-                $location = trim(basename($codeDir), '/').'/';
-                $command = $baseCommands.'
-                $data["autoload"]["psr-4"]["'.$this->doubleSlash($baseNameSpace).'"] = "'.ltrim($location, '/').'";';
-                $comment = 'Adding autoload psr-4 details in '.$moduleLocation.'/composer.json: '.$baseNameSpace.' => '.$location;
+                $location = trim(basename($codeDir), '/') . '/';
+                $command = $baseCommands . '
+                $data["autoload"]["psr-4"]["' . $this->doubleSlash($baseNameSpace) . '"] = "' . ltrim($location, '/') . '";';
+                $comment = 'Adding autoload psr-4 details in ' . $moduleLocation . '/composer.json: ' . $baseNameSpace . ' => ' . $location;
                 $this->updateJSONViaCommandLine(
                     $moduleLocation,
                     $command,

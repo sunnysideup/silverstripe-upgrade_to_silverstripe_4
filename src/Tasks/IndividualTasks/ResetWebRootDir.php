@@ -19,22 +19,22 @@ class ResetWebRootDir extends Task
     public function getDescription()
     {
         return '
-            Delete the web root directory to allow for a fresh install.' ;
+            Delete the web root directory to allow for a fresh install.';
     }
 
     public function runActualTask($params = [])
     {
         $this->mu()->execMe(
             $this->mu()->getAboveWebRootDirLocation(),
-            'rm '.$this->mu()->getWebRootDirLocation(). ' -rf',
-            'remove the upgrade dir: '.$this->mu()->getWebRootDirLocation(),
+            'rm ' . $this->mu()->getWebRootDirLocation() . ' -rf',
+            'remove the upgrade dir: ' . $this->mu()->getWebRootDirLocation(),
             false
         );
 
         $this->mu()->execMe(
             $this->mu()->getAboveWebRootDirLocation(),
-            'mkdir '.$this->mu()->getWebRootDirLocation(). '',
-            'create upgrade directory: '.$this->mu()->getWebRootDirLocation(),
+            'mkdir ' . $this->mu()->getWebRootDirLocation() . '',
+            'create upgrade directory: ' . $this->mu()->getWebRootDirLocation(),
             false
         );
     }

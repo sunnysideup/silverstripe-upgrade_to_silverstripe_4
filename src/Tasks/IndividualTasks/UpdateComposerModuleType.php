@@ -24,21 +24,20 @@ class UpdateComposerModuleType extends Task
             This means your module will be installed in the vendor folder after this upgrade.';
     }
 
-
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             $command =
             'if(isset($data["type"]) && $data["type"] === "silverstripe-module") { '
-            .'    $data["type"] = "silverstripe-vendormodule";'
-            .'}';
+            . '    $data["type"] = "silverstripe-vendormodule";'
+            . '}';
             $comment = 'Update composer module type from silverstripe-module to silverstripe-vendormodule';
             $this->updateJSONViaCommandLine(
                 $this->mu()->getGitRootDir(),
                 $command,
                 $comment
             );
-            $this->setCommitMessage('MAJOR: '.$this->getTitle());
+            $this->setCommitMessage('MAJOR: ' . $this->getTitle());
         }
     }
 

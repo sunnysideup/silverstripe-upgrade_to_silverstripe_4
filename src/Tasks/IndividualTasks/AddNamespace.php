@@ -24,12 +24,11 @@ class AddNamespace extends Task
             using the PSR-4 approach (matching folders and namespaces).';
     }
 
-
     public function runActualTask($params = [])
     {
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
         $dirsDone = [];
-        foreach($codeDirs as $baseNameSpace => $codeDir){
+        foreach ($codeDirs as $baseNameSpace => $codeDir) {
             $directories = new \RecursiveDirectoryIterator($codeDir);
             foreach (new \RecursiveIteratorIterator($directories) as $file => $fileObject) {
                 if ($fileObject->getExtension() === 'php') {
@@ -40,7 +39,7 @@ class AddNamespace extends Task
                         $nameSpaceAppendix = trim($nameSpaceAppendix, '/');
                         $nameSpaceAppendix = str_replace('/', '\\', $nameSpaceAppendix);
                         //prepend $baseNameSpace
-                        $nameSpace = $baseNameSpace.'\\'.$nameSpaceAppendix;
+                        $nameSpace = $baseNameSpace . '\\' . $nameSpaceAppendix;
                         //turn into array
                         $nameSpaceArray = explode('\\', $nameSpace);
                         $nameSpaceArrayNew = [];
@@ -52,8 +51,8 @@ class AddNamespace extends Task
                         $nameSpace = implode('\\', $nameSpaceArrayNew);
                         $this->mu()->execMe(
                             $codeDir,
-                            'php '.$this->mu()->getLocationOfSSUpgradeModule().' add-namespace "'.$nameSpace.'" '.$dirName.' --root-dir='.$this->mu()->getWebRootDirLocation().' --write --psr4 -vvv',
-                            'adding namespace: '.$nameSpace.' to '.$dirName,
+                            'php ' . $this->mu()->getLocationOfSSUpgradeModule() . ' add-namespace "' . $nameSpace . '" ' . $dirName . ' --root-dir=' . $this->mu()->getWebRootDirLocation() . ' --write --psr4 -vvv',
+                            'adding namespace: ' . $nameSpace . ' to ' . $dirName,
                             false
                         );
                     }
@@ -78,8 +77,8 @@ class AddNamespace extends Task
             // }
             $this->mu()->execMe(
                 $codeDir,
-                'php '.$this->mu()->getLocationOfSSUpgradeModule().' add-namespace "'.$baseNameSpace.'\" '.$codeDir.' --root-dir='.$this->mu()->getWebRootDirLocation().' --write --psr4 -vvv',
-                'adding namespace: '.$baseNameSpace.' to '.$codeDir,
+                'php ' . $this->mu()->getLocationOfSSUpgradeModule() . ' add-namespace "' . $baseNameSpace . '\" ' . $codeDir . ' --root-dir=' . $this->mu()->getWebRootDirLocation() . ' --write --psr4 -vvv',
+                'adding namespace: ' . $baseNameSpace . ' to ' . $codeDir,
                 false
             );
             $this->setCommitMessage('MAJOR: adding namespaces');

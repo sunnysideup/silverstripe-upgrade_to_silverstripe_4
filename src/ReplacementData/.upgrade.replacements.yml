@@ -134,7 +134,7 @@ SS4:
                 R: 'PartialMatchFilter'
             'new HTMLText(':
                 R: 'new HTMLText('
-                C: 'consider replacing with DBField::create_field('HTMLText') ...'
+                C: 'consider replacing with DBField::create_field("HTMLText") ...'
                 I: true
             ' extends Bigint':
                 R: ' extends DBBigint'

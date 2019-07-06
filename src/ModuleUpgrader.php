@@ -901,7 +901,7 @@ class ModuleUpgrader
 
     protected function loadNextStepInstructions()
     {
-        if (Director::is_cli()) {
+        if (PHP_SAPI === 'cli') {
             $this->restartSession = isset($argv[1]) && $argv[1] === 'restart';
         } else {
             $this->restartSession = isset($_GET['restart']);

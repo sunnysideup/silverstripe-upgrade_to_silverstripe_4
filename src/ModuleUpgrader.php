@@ -625,6 +625,14 @@ class ModuleUpgrader
     /**
      * Executes given operations on the PHP2CommandLineSingleton instance
      * Documentation for this can be found in the PHP2CommandLineSingleton module
+     *
+     * @param  string  $newDir                  root dir for ommand
+     * @param  string  $command                 actual command
+     * @param  string  $comment                 comment
+     * @param  boolean $alwaysRun               run even if you are just preparing a real run. Default FALSE
+     * @param  string  $keyNotesLogFileLocation
+     *
+     * @return void
      */
     public function execMe(
         $newDir,
@@ -641,6 +649,7 @@ class ModuleUpgrader
             $this->commandLineExec
                 ->setMakeKeyNotes(false);
         }
+
         return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
     }
 

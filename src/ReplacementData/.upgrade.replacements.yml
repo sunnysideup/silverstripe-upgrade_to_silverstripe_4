@@ -73,7 +73,7 @@ SS4:
                 R: '$List(SilverStripe\CMS\Model\SiteTree:'
             '.Format(':
                 R: '.Format('
-                C: 'Format function for dates have changed! Please consider something like: PHPNativeFormat as an extension'
+                C: 'Format function for dates have changed! Please consider something like: PHPNativeFormat as an extension (see http://userguide.icu-project.org/formatparse/datetime)'
 
 
         'yml':
@@ -122,7 +122,7 @@ SS4:
         php:
             "->format(":
                 R: "->format("
-                C: 'If this is a PHP Date format call then this needs to be changed to new Date formatting system'
+                C: 'If this is a PHP Date format call then this needs to be changed to new Date formatting system. (see http://userguide.icu-project.org/formatparse/datetime)'
             " => 'Image'":
                 R: " => 'Image'"
                 C: 'you may want to add ownership (owns)'

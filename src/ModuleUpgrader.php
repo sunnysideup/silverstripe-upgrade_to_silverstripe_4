@@ -605,6 +605,8 @@ class ModuleUpgrader
         if ($this->themeDirLocation) {
             $array[$this->themeDirLocation] = $this->themeDirLocation;
         }
+
+        return $array;
     }
 
     /**
@@ -914,6 +916,11 @@ class ModuleUpgrader
             $this->restartSession = isset($argv[1]) && $argv[1] === 'restart';
         } else {
             $this->restartSession = isset($_GET['restart']);
+        }
+        if (PHP_SAPI === 'cli') {
+            $this->runLastOneAgain = isset($argv[1]) && $argv[1] === 'again';
+        } else {
+            $this->runLastOneAgain = isset($_GET['again']);
         }
         //todo next / previous / etc...
     }

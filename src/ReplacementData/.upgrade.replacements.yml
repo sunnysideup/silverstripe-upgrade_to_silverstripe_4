@@ -507,3 +507,17 @@ SS4:
                 R: '->RenderWith('
                 I: true
                 C: 'Check that the template location is still valid!'
+            'SS_Datetime->':
+                R: 'DBDatetime->'
+            '@param SS_HTTPRequest':
+                R: '@param HTTPRequest'
+            '@return SS_HTTPRequest':
+                R: '@return HTTPRequest'
+            '@param SS_HTTPResponse':
+                R: '@param HTTPResponse'
+            '@return SS_HTTPResponse':
+                R: '@return HTTPResponse'
+            '@param FieldList':
+                R: '@param \Silverstripe\Forms\FieldList'
+            '@return FieldList':
+                R: '@return \Silverstripe\Forms\FieldList'

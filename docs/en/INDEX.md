@@ -1,8 +1,8 @@
-# Upgrade your module to Silverstripe 4
+# Upgrade your module/project to Silverstripe 4
 
-This module helps you upgrade Silverstripe 3 modules to SS4 with the least amount of effort.
-You can provide this tool with a list of modules and the tool will create an upgraded branch in each of your modules.
-After inspection you can then merge this into `dev/master` as you see fit.
+This module helps you upgrade Silverstripe 3 modules AND Projects to SS4 with the least amount of effort.
+
+After inspection you can then merge your upgraded project / module into `dev/master` as you see fit.
 
 This tool is highly customisable so that you can define your own upgrade path.
 
@@ -17,25 +17,26 @@ Here is what this module does, AUTOMAGICALLY:
  * clear workbench
  * do upgrade stuff
  * set up SS4 vanilla install
- * add your module again (upgrade branch)
+ * add your module / project again (upgrade branch)
  * do more upgrade stuff
 
-Once that has completed you an MANUALLY:
+Once that has completed you can MANUALLY:
  * review and fix any outstanding issues (many of them clearly marked) OR rerun full process (it is repeatable).
- * merge your upgrade branch into your master (and delete it)
+ * merge your upgrade branch into your master (and delete the upgrade branch)
  * you are now SS4 ready
 
 # prerequisites before you start:
 
- - module to be upgraded needs to be listed on packagist
+ 
  - projects need to be a git repository (private is fine)
- - for modules only, composer file needs to follow this pattern (installer-name requirement may be dropped in the future)
+ - for modules only:
+     - module to be upgraded needs to be listed on packagist.   
+     - composer file needs to follow this pattern (installer-name requirement may be dropped in the future)
 
-
-- **IMPORTANT** The module's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to **silverstripe/framework**, where classes are put in semantic folder names.  
+- **IMPORTANT** The module's / project's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to **silverstripe/framework**, where classes are put in semantic folder names.  
 You do not need to use title case for the folder names as this will be fixed by the upgrade tool.
 
-- Separate MyPage and MyPageController into separate classes and move them into Pages and Control folder
+- Separate MyPage and MyPageController into separate classes and move them into Pages and Control folder (moving both into a PageTypes folder is fine also). 
 ```
 /code/MyPage1.php (contains class MyPage1 AND MyPage1_Controller)
 /code/MyPage2.php (contains class MyPage2 AND MyPage2_Controller)
@@ -48,9 +49,17 @@ becomes:
 /code/Control/MyPage2Controller.php (contains class MyPage2Controller)
 ```
 
+OR:
+```
+/code/PageTypes/MyPage1.php (contains class MyPage1)
+/code/PageTypes/MyPage2.php (contains class MyPage2)
+/code/PageTypes/MyPage1Controller.php (contains class MyPage1Controller)
+/code/PageTypes/MyPage2Controller.php (contains class MyPage2Controller)
+```
+
 
 # additional things to consider before you start
-- It is recommended that your composer file follows this pattern:
+- It is recommended that your composer file follows this pattern (module only):
 ```json
 {
     "name": "sunnysideup/my-module-name-foo-bar",
@@ -65,10 +74,11 @@ becomes:
 ```
 
 # additional things to consider before you start
+
 - create a tag of the module/project you are upgrading
 
-# what does this module do?
 
+# what does this module do?
 
 To see a list of default upgrade tasks that will run, visit the auto-generated list of [default tasks](/docs/en/AvailableTasks.md).
 
@@ -84,7 +94,6 @@ In short, it checks out dev-master of your module / project.  Adds a branch name
 Next, it runs a bunch of upgrades, including the ones in the original SilverStripe
 upgrade module.
 
-To see a full list of steps in this module, please visit: <a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/blob/master/docs/en/AvailableTasks.md">Available Tasks</a> list.
 
 # installation and usage:
 
@@ -102,15 +111,8 @@ To see a full list of steps in this module, please visit: <a href="https://githu
   - [full](/example-index.full.php) - overview of all settings available
   - [short](example-index.short.php) - least amount of settings required
 
-1.  Install this module in your web-root (or another place if needed - we use `/var/www/upgrades/` in example below):
-    `composer install sunnysideup/upgrade_to_silverstripe_4 /var/www/upgrades/`
 
-2.  Create a new php file (e.g. `index.php`) in this folder:
-
-We have included two example files like this in the module root.
-
-
-3. Run the file to upgrade your modules - e.g.
+3. Run the file to upgrade your module / project - e.g.
 
 ```sh
     $ php index.php
@@ -118,40 +120,37 @@ We have included two example files like this in the module root.
 
 Note that you can run this step by step and that you can also use the following commands:
 
-restart
-again
+- restart
+- again
+- more options become available all the time!
 
+e.g. 
+```sh
+    $ php index.php again
+```
+OR 
 
-
-4. Apply any final fixes to this branch to make it SS4 ready.
-4. Apply any manual final fixes to the upgrade branch of your module(s) to make it/them SS4 ready.
+```sh
+    $ php index.php restart
+```
 
 **NB: You can run (3) as many times as you see fit**.
 
 
+4. Apply any manual final fixes to the upgrade branch of your module / project to make it SS4 ready. E.g.
+  
+  a. Add $private static $table_name for every class that extends DataObject, including pages (e.g private static $table_name = 'WebPortfolioPage';).
+  
+  b. move template files (in the future this module may do this for you).
 
-5. Merge the upgrade branch into `dev-master` as you see fit.\
+  c. Check for use statements WITHOUT name spacing - as these may need attention.
+  
+  d. etc...
 
-
-
-# once completed:
-
-1. Merge upgrade branch into master.
-
-2. Add $private static $table_name for every class that extends DataObject, including pages (e.g private static $table_name = 'WebPortfolioPage';).
-
-3. Check for use statements WITHOUT name spacing - as these may need attention.
+5. Merge the upgrade branch into `dev-master` as you see fit.
 
 
 # main config options:
-
-### run immediately or create bash script?
-
-`->setRunImmediately(false)`:
-When you set `runImmediately` to true, the PHP code will use the PHP `exec` function to run commands.
-If you set this option to false then you will be provided with a sample bash script.  It is recommended, however, that you use the
-`->setRunImmediately(true)` to run this tool rather than using the provided bash script.
-
 
 ### root directory
 
@@ -168,11 +167,11 @@ That is, your actual module will be cloned in the `[rootdir]/[upgrade directory]
 **Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**
 
 
-### list of modules
+### list of modules / projects
 
 `->setArrayOfModules([])`:
 This contains a list of modules you intend to update.
-We recommend updating one module at a time. For details see: [example index file](/example-index.full.php).
+We recommend updating one module / project at a time. For details see: [example index file](/example-index.full.php).
 
 ### temp branch
 
@@ -206,6 +205,17 @@ If set, a log of your upgrade will be saved in this folder.
 
 
 # advanced config options:
+
+
+### run immediately or create bash script?
+
+`->setRunImmediately(false)`:
+When you set `runImmediately` to true, the PHP code will use the PHP `exec` function to run commands.
+If you set this option to false then you will be provided with a sample bash script.  It is recommended, however, that you use the
+`->setRunImmediately(true)` to run this tool rather than using the provided bash script.
+
+Bash script option is currently NOT working. You should run it immediately.
+
 
 ### set list of tasks
 

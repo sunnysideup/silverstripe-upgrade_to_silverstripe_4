@@ -106,10 +106,10 @@ upgrade module.
     $ composer update
 ```
 
-2.  Create a php file (e.g. `index.php`) in your root dir, i.e. `/var/www/silverstripe-upgrade_to_silverstripe_4/` (or anywhere else where you can run it) - using the examples provided:
+2.  Create a php file (e.g. `/index.php`) in your root dir, i.e. `/var/www/silverstripe-upgrade_to_silverstripe_4/` (or anywhere else where you can run it) - using the examples provided:
 
-  - [full](/example-index.full.php) - overview of all settings available
-  - [short](example-index.short.php) - least amount of settings required
+  - [full](/run.me.index.full.php.EXAMPLE) - overview of all settings available
+  - [short](/run.me.index.short.php.EXAMPLE) - least amount of settings required
 
 
 3. Run the file to upgrade your module / project - e.g.

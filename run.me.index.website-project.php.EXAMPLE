@@ -14,7 +14,6 @@ $obj = ModuleUpgrader::create()
     ->setRunInteractively(true)
     ->setRunLastOneAgain($again)
     ->setRestartSession($restart)
-    // ->setRunIrreversibly(true)
     ->setArrayOfModules(
         [
             1 => [

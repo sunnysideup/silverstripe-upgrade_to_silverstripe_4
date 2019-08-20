@@ -1098,7 +1098,7 @@ class ModuleUpgrader
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: ' . ($this->logFileLocation ?: 'not logged'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- List of Steps: ' . $this->newLine() . ' -' . implode($this->newLine() . '    -', array_keys($this->listOfTasks)), 'light_cyan');
+        $this->colourPrint('- List of Steps: ' . $this->newLine() . '    -' . implode($this->newLine() . '    -', array_keys($this->listOfTasks)), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
     }
 

@@ -14,6 +14,26 @@ class AddTableName extends Task
 {
     protected $taskStep = 's10';
 
+    protected $debug = false;
+
+    private $ignoreFolderArray = [
+        'extensions',
+        'Extensions',
+    ];
+
+    private $extensionArray = [
+        'php',
+    ];
+
+    private $findArray = [
+        'private static $db',
+        'private static $has_one' .
+        'private static $belongs_to =',
+        'private static $has_many =',
+        'private static $many_many =',
+        'private static $belongs_many_many =',
+    ];
+
     public function getTitle()
     {
         return 'Add the table name ';
@@ -22,17 +42,8 @@ class AddTableName extends Task
     public function getDescription()
     {
         return '
-            Finds $db and $has_one and adds the private static $table_name for the class...' ;
+            Finds $db and $has_one and adds the private static $table_name for the class...';
     }
-
-    private $ignoreFolderArray = [
-        'extensions',
-        'Extensions'
-    ];
-
-    private $extensionArray = [
-        'php'
-    ];
 
     public function setExtensionArray($a)
     {
@@ -41,16 +52,6 @@ class AddTableName extends Task
         return $this;
     }
 
-
-    private $findArray = [
-        'private static $db',
-        'private static $has_one'.
-        'private static $belongs_to =',
-        'private static $has_many =',
-        'private static $many_many =',
-        'private static $belongs_many_many ='
-    ];
-
     public function setFindArray($a)
     {
         $this->findArray = $a;
@@ -58,15 +59,9 @@ class AddTableName extends Task
         return $this;
     }
 
-    protected $debug = false;
-
     public function runActualTask($params = [])
     {
-
-        if ($this->debug) {
-            $this->mu()->colourPrint(print_r($replacementArray, 1));
-        }
-        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+        foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $moduleDir = $this->mu()->findMyCodeDir($moduleDir);
             //Start search machine from the module location. replace API
             $textSearchMachine = new SearchAndReplaceAPI($moduleDir);
@@ -74,19 +69,19 @@ class AddTableName extends Task
             $textSearchMachine->setFileReplacementMaxCount(1);
             $textSearchMachine->setIgnoreFileIfFound(['private static $table_name']);
             $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
-            $this->mu()->colourPrint("Checking $moduleDir");
+            $this->mu()->colourPrint("Checking ${moduleDir}");
             $moduleDir = $this->mu()->checkIfPathExistsAndCleanItUp($moduleDir);
             if (! file_exists($moduleDir)) {
-                $this->mu()->colourPrint("SKIPPING $moduleDir as it does not exist.");
+                $this->mu()->colourPrint("SKIPPING ${moduleDir} as it does not exist.");
             } else {
                 $textSearchMachine->setSearchPath($moduleDir);
                 $textSearchMachine->setExtensions($this->extensionArray); //setting extensions to search files within
                 $this->mu()->colourPrint(
-                    "++++++++++++++++++++++++++++++++++++\n".
-                    "CHECKING\n".
-                    "IN $moduleDir\n".
-                    "FOR ". implode(',', $this->extensionArray)." FILES\n".
-                    "BASE ".$moduleDir."\n".
+                    "++++++++++++++++++++++++++++++++++++\n" .
+                    "CHECKING\n" .
+                    "IN ${moduleDir}\n" .
+                    'FOR ' . implode(',', $this->extensionArray) . " FILES\n" .
+                    'BASE ' . $moduleDir . "\n" .
                     "++++++++++++++++++++++++++++++++++++\n"
                 );
                 foreach ($this->findArray as $finalFind) {
@@ -96,10 +91,10 @@ class AddTableName extends Task
                     $finalReplace = '
     private static $table_name = \'[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]\';
 
-    '.$finalFind;
+    ' . $finalFind;
                     $this->mu()->colourPrint(
-                        '    --- FIND: '.$finalFind."\n".
-                        '    --- REPLACE: '.$finalReplace."\n"
+                        '    --- FIND: ' . $finalFind . "\n" .
+                        '    --- REPLACE: ' . $finalReplace . "\n"
                     );
 
                     $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
@@ -108,12 +103,11 @@ class AddTableName extends Task
                     $textSearchMachine->startSearchAndReplace();
                 }
 
-
                 //SHOW TOTALS
                 $replacements = $textSearchMachine->showFormattedSearchTotals();
                 if (! $replacements) {
                     //flush output anyway!
-                    $this->mu()->colourPrint("No replacements for  ".implode(',', $this->extensionArray));
+                    $this->mu()->colourPrint('No replacements for  ' . implode(',', $this->extensionArray));
                 }
                 $this->mu()->colourPrint($textSearchMachine->getOutput());
             }

@@ -20,22 +20,36 @@
         "installer-name": "upgrade_to_silverstripe_4"
     },
     "require": {
-        "silverstripe/upgrader":            "dev-master",
-        "sunnysideup/php_2_command_line":   "dev-master",
-        "friendsofphp/php-cs-fixer":        "*"
+        "silverstripe/upgrader":                       "dev-master",
+        "sunnysideup/php_2_command_line":              "dev-master",
+        "phpstan/phpstan":                             "~0.9.2"
+    },
+    "require-dev-only": {
+        "symplify/easy-coding-standard": "^6.0",
+        "phpunit/phpunit": "~5.7",
+        "squizlabs/php_codesniffer": "~3",
+        "phpstan/phpstan-shim": "~0.9.2",
+        "symbiote/silverstripe-phpstan": "~3.0.2"
     },
     "autoload": {
         "psr-4": {
             "Sunnysideup\\UpgradeToSilverstripe4\\":"src/",
-            "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/",
-            "SilverStripe\\Upgrader\\Util\\":"vendor/silverstripe/Upgrader/src/Util/",
-            "PhpCsFixer\\": "vendor/friendsofphp/php-cs-fixer/src/"
+            "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/"
         }
     },
     "scripts": {
         "post-install-cmd": [],
         "post-update-cmd": [
             "php create-list-of-tasks.php"
+        ],
+        "lint1":[
+            "vendor/bin/ecs check src --fix"
+        ],
+        "lint2":[
+            "phpstan analyse src -c phpstan.neon -a vendor/symbiote/silverstripe-phpstan/bootstrap.php --level 0  --ansi"
+        ],
+        "lint3":[
+            "phpstan analyse src -c phpstan.neon -a vendor/symbiote/silverstripe-phpstan/bootstrap.php --level max  --ansi"
         ]
     },
     "minimum-stability": "dev"

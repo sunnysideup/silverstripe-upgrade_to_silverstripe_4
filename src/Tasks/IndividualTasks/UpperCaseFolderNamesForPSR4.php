@@ -13,6 +13,9 @@ class UpperCaseFolderNamesForPSR4 extends Task
 {
     protected $taskStep = 's30';
 
+    protected $nameReplacements = [
+        'interface' => 'Interfaces',
+    ];
 
     public function getTitle()
     {
@@ -26,11 +29,6 @@ class UpperCaseFolderNamesForPSR4 extends Task
             yourmodule/src/model becomes yourmodule/src/Model in accordance with PSR-4 autoloading';
     }
 
-
-    protected $nameReplacements = [
-        'interface' => 'Interfaces'
-    ];
-
     public function setNameReplacements($a)
     {
         $this->nameReplacements = $a;
@@ -38,7 +36,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
 
     public function runActualTask($params = [])
     {
-        foreach($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $di = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($codeDir, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST
@@ -49,19 +47,19 @@ class UpperCaseFolderNamesForPSR4 extends Task
                 if ($fio->isDir()) {
                     //If its a directory then
                     $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->mu()->camelCase($fio->getFilename());
-                    foreach($this->nameReplacements as $from => $to) {
-                        if($from === $name) {
+                    foreach ($this->nameReplacements as $from => $to) {
+                        if ($from === $name) {
                             $newName = $to;
                         }
                     }
                     if ($name === $newName) {
-                        $this->mu()->colourPrint('No need to move '.str_replace($codeDir, '', $name).' as it is already in CamelCase', 'dark_gray');
+                        $this->mu()->colourPrint('No need to move ' . str_replace($codeDir, '', $name) . ' as it is already in CamelCase', 'dark_gray');
                     } else {
                         $this->mu()->colourPrint('New name for directory: ' . $newName, 'green');
                         $this->mu()->execMe(
                             $this->mu()->getWebRootDirLocation(),
-                            'mv '.$name.' '.$newName,
-                            'renaming code dir form '.str_replace($codeDir, '', $name).' to '.str_replace($codeDir, '', $newName),
+                            'mv ' . $name . ' ' . $newName,
+                            'renaming code dir (' . $baseNameSpace . ') form ' . str_replace($codeDir, '', $name) . ' to ' . str_replace($codeDir, '', $newName),
                             false
                         );
                     }

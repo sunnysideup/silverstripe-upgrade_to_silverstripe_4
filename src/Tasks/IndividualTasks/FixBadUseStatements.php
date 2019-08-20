@@ -14,6 +14,25 @@ class FixBadUseStatements extends Task
 {
     protected $taskStep = 's50';
 
+    protected $debug = false;
+
+    protected $replacementArray = [
+        'src' => [
+            'php' => [
+                'use bool;',
+                'use string;',
+                'use int;',
+                'use array;',
+            ],
+        ],
+    ];
+
+    private $checkReplacementIssues = false;
+
+    private $ignoreFolderArray = [
+        '.git',
+    ];
+
     public function getTitle()
     {
         return 'Look for single use statements and comment them out as they are not correct.';
@@ -22,12 +41,8 @@ class FixBadUseStatements extends Task
     public function getDescription()
     {
         return '
-            Goes through code and removes, for example, "use bool;", lines, as they do not make sense.' ;
+            Goes through code and removes, for example, "use bool;", lines, as they do not make sense.';
     }
-
-    protected $debug = false;
-
-    private $checkReplacementIssues = false;
 
     public function setCheckReplacementIssues($b)
     {
@@ -36,27 +51,12 @@ class FixBadUseStatements extends Task
         return $this;
     }
 
-    private $ignoreFolderArray = [
-        ".git"
-    ];
-
     public function setIgnoreFolderArray($a)
     {
         $this->ignoreFolderArray = $a;
 
         return $this;
     }
-
-    protected $replacementArray = [
-        'src' => [
-            'php' => [
-                'use bool;',
-                'use string;',
-                'use int;',
-                'use array;'
-            ]
-        ]
-    ];
 
     public function setReplacementArray($a)
     {
@@ -65,7 +65,6 @@ class FixBadUseStatements extends Task
         return $this;
     }
 
-
     public function runActualTask($params = [])
     {
         //replacement data patterns that will be searched for
@@ -73,7 +72,7 @@ class FixBadUseStatements extends Task
         if ($this->debug) {
             $this->mu()->colourPrint(print_r($this->replacementArray, 1));
         }
-        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+        foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             //Start search machine from the module location. replace API
             $textSearchMachine = new SearchAndReplaceAPI($moduleDir);
             $textSearchMachine->setIsReplacingEnabled(true);
@@ -84,10 +83,10 @@ class FixBadUseStatements extends Task
             * together making it ['src']['php']
             */
             foreach ($this->replacementArray as $path => $pathArray) {
-                $path = $moduleDir  . '/'.$path ? : '' ;
+                $path = $moduleDir . '/' . $path ?: '';
                 $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
                 if (! file_exists($path)) {
-                    $this->mu()->colourPrint("SKIPPING $path as it does not exist.");
+                    $this->mu()->colourPrint("SKIPPING ${path} as it does not exist.");
                 } else {
                     $textSearchMachine->setSearchPath($path);
                     foreach ($pathArray as $extension => $extensionArray) {
@@ -96,7 +95,7 @@ class FixBadUseStatements extends Task
                             $ignoreCase = true;
                             $caseSensitive = false;
                             $isStraightReplace = true;
-                            $replacementType = "BASIC";
+                            $replacementType = 'BASIC';
 
                             // $this->mu()->colourPrint(
                             //     "++++++++++++++++++++++++++++++++++++\n".
@@ -116,7 +115,7 @@ class FixBadUseStatements extends Task
                         $replacements = $textSearchMachine->showFormattedSearchTotals();
                         if (! $replacements) {
                             //flush output anyway!
-                            $this->mu()->colourPrint("No replacements for  $extension");
+                            $this->mu()->colourPrint("No replacements for  ${extension}");
                         }
                         $this->mu()->colourPrint($textSearchMachine->getOutput());
                     }

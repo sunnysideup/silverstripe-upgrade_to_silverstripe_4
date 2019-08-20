@@ -5,47 +5,46 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
-* Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')
-* using composer' ;
-*/
+ * Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')
+ * using composer' ;
+ */
 class ComposerInstallProject extends Task
 {
     protected $taskStep = 's20';
+
+    protected $versionToLoad = '';
 
     public function getTitle()
     {
         return 'Composer Install Silverstripe 4';
     }
 
-
     public function getDescription()
     {
         return '
-            Install a basic / standard install of Silverstripe ('.($this->versionToLoad ? : $this->mu()->getFrameworkComposerRestraint()).')
-            using composer' ;
+            Install a basic / standard install of Silverstripe (' . ($this->versionToLoad ?: $this->mu()->getFrameworkComposerRestraint()) . ')
+            using composer';
     }
-
-    protected $versionToLoad = '';
 
     public function runActualTask($params = [])
     {
-        if(! $this->versionToLoad) {
+        if (! $this->versionToLoad) {
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
         $cloneDir = $this->mu()->getGitRootDir();
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             $this->mu()->execMe(
                 $this->mu()->getAboveWebRootDirLocation(),
-                $this->mu()->getComposerEnvironmentVars().' composer create-project silverstripe/installer '.$this->mu()->getWebRootDirLocation().' '.$this->versionToLoad,
-                'set up vanilla SS4 install: '.$this->versionToLoad,
+                $this->mu()->getComposerEnvironmentVars() . ' composer create-project silverstripe/installer ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
+                'set up vanilla SS4 install: ' . $this->versionToLoad,
                 false
             );
         }
 
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'git clone '.$this->mu()->getGitLink().' '.$cloneDir,
-            'cloning module '.$this->mu()->getGitLink().' into '.$cloneDir.' - we clone to keep all vcs data (composer does not allow this for branch)',
+            'git clone ' . $this->mu()->getGitLink() . ' ' . $cloneDir,
+            'cloning module ' . $this->mu()->getGitLink() . ' into ' . $cloneDir . ' - we clone to keep all vcs data (composer does not allow this for branch)',
             false
         );
 
@@ -58,7 +57,7 @@ class ComposerInstallProject extends Task
 
         $this->mu()->execMe(
             $cloneDir,
-            'git checkout '.$this->mu()->getNameOfTempBranch(),
+            'git checkout ' . $this->mu()->getNameOfTempBranch(),
             'switch branch',
             false
         );
@@ -69,7 +68,7 @@ class ComposerInstallProject extends Task
             'confirm branch',
             false
         );
-        if($this->mu()->getIsProjectUpgrade()) {
+        if ($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $cloneDir,
                 'composer update -vvv',
@@ -77,7 +76,6 @@ class ComposerInstallProject extends Task
                 false
             );
         }
-
     }
 
     protected function hasCommitAndPush()

@@ -4,7 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 class FileNameToClass
 {
-
     /**
      * get the full name (name \ namespace) of a class from its file path
      * result example: (string) "I\Am\The\Namespace\Of\This\Class"
@@ -18,7 +17,6 @@ class FileNameToClass
         return $this->getClassNamespaceFromFile($filePathName) . '\\' . $this->getClassNameFromFile($filePathName);
     }
 
-
     /**
      * build and return an object of a class from its file path
      *
@@ -30,21 +28,15 @@ class FileNameToClass
     {
         $classString = $this->getClassFullNameFromFile($filePathName);
 
-        $object = new $classString;
-
-        return $object;
+        return new $classString();
     }
-
-
-
-
 
     /**
      * get the class namespace form file path using token
      *
      * @param $filePathName
      *
-     * @return  null|string
+     * @return string|null
      */
     public function getClassNamespaceFromFile($filePathName)
     {
@@ -71,11 +63,10 @@ class FileNameToClass
             }
             $i++;
         }
-        if (!$namespace_ok) {
+        if (! $namespace_ok) {
             return null;
-        } else {
-            return $namespace;
         }
+        return $namespace;
     }
 
     /**
@@ -89,23 +80,21 @@ class FileNameToClass
     {
         $php_code = file_get_contents($filePathName);
 
-        $classes = array();
+        $classes = [];
         $tokens = token_get_all($php_code);
         $count = count($tokens);
         for ($i = 2; $i < $count; $i++) {
-            if ($tokens[$i - 2][0] == T_CLASS
-                && $tokens[$i - 1][0] == T_WHITESPACE
-                && $tokens[$i][0] == T_STRING
+            if ($tokens[$i - 2][0] === T_CLASS
+                && $tokens[$i - 1][0] === T_WHITESPACE
+                && $tokens[$i][0] === T_STRING
             ) {
-
                 $class_name = $tokens[$i][1];
                 $classes[] = $class_name;
             }
         }
-        if(isset($classes[0])) {
+        if (isset($classes[0])) {
             return $classes[0];
         }
         return 'Error';
     }
-
 }

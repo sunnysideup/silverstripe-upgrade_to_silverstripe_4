@@ -4,51 +4,47 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 class FindFiles
 {
-
     //generic search settings
 
-    private $needToFillFileCache      = true;
+    private $needToFillFileCache = true;
 
-    private $basePath                  = '';
+    private $basePath = '';
 
-    private $searchPath                = '';
+    private $searchPath = '';
 
-    private $relevantFolders           = [];
+    private $relevantFolders = [];
 
-    private $defaultIgnoreFolderArray  = [
-        ".svn",
-        ".git"
+    private $defaultIgnoreFolderArray = [
+        '.svn',
+        '.git',
     ];
 
-    private $ignoreFolderArray         = [];
+    private $ignoreFolderArray = [];
 
-    private $extensions                = ["php", "ss", "yml", "yaml", "json", "js", "md"];
+    private $extensions = ['php', 'ss', 'yml', 'yaml', 'json', 'js', 'md'];
 
-    private $findAllExts               = false;
-
+    private $findAllExts = false;
 
     // files
 
     /**
-    * array of all the files we are searching
-    * @var array
-    */
-    private $fileArray                 = [];
+     * array of all the files we are searching
+     * @var array
+     */
+    private $fileArray = [];
 
-    private $flatFileArray             = [];
+    private $flatFileArray = [];
 
     public function __construct($basePath = '')
     {
         $this->basePath = $basePath;
     }
 
-
-
-
     /**
      *   Sets folders to ignore
-     *   @param Array ignoreFolderArray
-     *   @return none
+     *   @param array $ignoreFolderArray
+     *
+     *   @return FindFiles
      */
     public function setIgnoreFolderArray($ignoreFolderArray = [])
     {
@@ -64,8 +60,8 @@ class FindFiles
 
     /**
      *   Sets folders to ignore
-     *   @param Array ignoreFolderArray
-     *   @return none
+     *   @param array $ignoreFolderArray
+     *   @return self
      */
     public function addToIgnoreFolderArray($ignoreFolderArray = [])
     {
@@ -83,7 +79,6 @@ class FindFiles
         return $this;
     }
 
-
     /**
      * remove ignore folders
      */
@@ -94,7 +89,6 @@ class FindFiles
 
         return $this;
     }
-
 
     /**
      *   Sets extensions to look
@@ -108,9 +102,7 @@ class FindFiles
         return $this;
     }
 
-    /**
-     */
-    public function setBasePath($pathLocation)
+    public function setl($pathLocation)
     {
         $this->basePath = $pathLocation;
         $this->resetFileCache();
@@ -118,9 +110,6 @@ class FindFiles
         return $this;
     }
 
-
-    /**
-     */
     public function setSearchPath($pathLocation)
     {
         if ($pathLocation !== $this->searchPath) {
@@ -131,10 +120,9 @@ class FindFiles
         return $this;
     }
 
-
     /**
      *   Sets extensions to look
-     *   @param Array extensions
+     *   @param array $extensions
      */
     public function setExtensions($extensions = [])
     {
@@ -163,11 +151,11 @@ class FindFiles
                         $this->flatFileArray = [$this->searchPath];
                     } else {
                         $multiDimensionalArray = $this->getFileArray($this->searchPath);
-                        foreach($multiDimensionalArray as $folder => $arrayOfFiles) {
-                            if(count($arrayOfFiles)) {
+                        foreach ($multiDimensionalArray as $folder => $arrayOfFiles) {
+                            if (count($arrayOfFiles)) {
                                 $this->relevantFolders[$folder] = $folder;
                             }
-                            foreach($arrayOfFiles as $file) {
+                            foreach ($arrayOfFiles as $file) {
                                 $myArray[$file] = $file;
                             }
                         }
@@ -178,7 +166,7 @@ class FindFiles
                         // print_r($this->flatFileArray);
                     }
                 } else {
-                    return 'SKIPPED: can not find: '.$this->searchPath."\n";
+                    return 'SKIPPED: can not find: ' . $this->searchPath . "\n";
                 }
             }
             $this->flatFileArray = array_values($myArray);
@@ -188,38 +176,34 @@ class FindFiles
         return $this->flatFileArray;
     }
 
-
     /**
      * loads all the applicable files
-     * @param String $path (e.g. "." or "/var/www/mysite.co.nz")
-     * @param Boolean $innerLoop - is the method calling itself???
-     *
-     *
+     * @param string $path (e.g. "." or "/var/www/mysite.co.nz")
+     * @param boolean $runningInnerLoop - is the method calling itself???
      */
     protected function getFileArray($path, $runningInnerLoop = false)
     {
         if ($runningInnerLoop || $this->needToFillFileCache) {
             $dir = opendir($path);
             while ($file = readdir($dir)) {
-                $fullPath = $path.'/'.$file;
-                if (($file == ".") || ($file == "..") || (__FILE__ == $fullPath) || ($path == "." && basename(__FILE__) == $file)) {
+                $fullPath = $path . '/' . $file;
+                if (($file === '.') || ($file === '..') || ($fullPath === __FILE__) || ($path === '.' && basename(__FILE__) === $file)) {
                     continue;
                 }
                 //ignore hidden files and folders
-                if (substr($file, 0, 1) == ".") {
+                if (substr($file, 0, 1) === '.') {
                     continue;
                 }
                 //ignore folders with _manifest_exclude in them!
-                if ($file == "_manifest_exclude") {
+                if ($file === '_manifest_exclude') {
                     $this->ignoreFolderArray[] = $path;
                     unset($this->fileArray[$path]);
                     break;
                 }
-                if (filetype($fullPath) == "dir") {
-                    if (
-                        (in_array($file, $this->ignoreFolderArray) && ($path == "." || $path == $this->searchPath)) ||
-                        (in_array($path, $this->ignoreFolderArray))
-                    ) {
+                if (filetype($fullPath) === 'dir') {
+                    $conditionA = (in_array($file, $this->ignoreFolderArray, true) && ($path === '.' || $path === $this->searchPath));
+                    $conditionB = in_array($path, $this->ignoreFolderArray, true);
+                    if ($conditionA || $conditionB) {
                         continue;
                     }
                     $this->getFileArray($fullPath, $runningInnerLoop = true); //recursive traversing here
@@ -235,9 +219,6 @@ class FindFiles
         return $this->fileArray;
     }
 
-
-
-
     //FIND FILES
 
     protected function resetFileCache()
@@ -250,36 +231,34 @@ class FindFiles
         //cleanup other data
     }
 
-
-
     /**
      * Finds extension of a file
-     * @param filename
-     * @return file extension
+     * @param $file
+     *
+     * @return string
      */
     private function findExtension($file)
     {
-        $fileArray = explode(".", $file);
+        $fileArray = explode('.', $file);
 
         return array_pop($fileArray);
     }
 
     /**
      * Checks if a file extension is one of the extensions we are going to search
-     * @param String $filename
-     * @return Boolean
+     * @param string $file
+     * @return boolean
      */
     private function matchedExtension($file)
     {
         $fileExtension = $this->findExtension($file);
         if ($this->findAllExts) {
             return true;
-        } elseif (in_array('*', $this->extensions)) {
+        } elseif (in_array('*', $this->extensions, true)) {
             return true;
-        } elseif (in_array($fileExtension, $this->extensions)) {
+        } elseif (in_array($fileExtension, $this->extensions, true)) {
             return true;
         }
         return false;
     }
-
 }

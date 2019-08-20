@@ -37,7 +37,7 @@ SS4:
                 R: 'resources/themes/'
 
             '$ClassName':
-                R: '$ClassName.ShortName'
+                R: '$`ClassName.ShortName'
                 C: 'Check if the class name can still be used as such. The ShortName provides the name without NameSpace'
 
             '.setWidth(':
@@ -71,6 +71,9 @@ SS4:
                 R: '$List(\Page'
             '$List(Page':
                 R: '$List(SilverStripe\CMS\Model\SiteTree:'
+            '.Format(':
+                R: '.Format('
+                C: 'Format function for dates have changed! Please consider something like: PHPNativeFormat as an extension (see http://userguide.icu-project.org/formatparse/datetime)'
 
 
         'yml':
@@ -117,18 +120,21 @@ SS4:
 
 
         php:
+            "->format(":
+                R: "->format("
+                C: 'If this is a PHP Date format call then this needs to be changed to new Date formatting system. (see http://userguide.icu-project.org/formatparse/datetime)'
+            " => 'Image'":
+                R: " => 'Image'"
+                C: 'you may want to add ownership (owns)'
             'framework/sake':
                 R: 'vendor/bin/sake'
-
             'framework/cli-script.php':
                 R: 'vendor/bin/sake'
-
             'PartialMatchfilter':
                 R: 'PartialMatchFilter'
-
             'new HTMLText(':
                 R: 'new HTMLText('
-                C: 'consider replacing with DBField::create_field('HTMLText') ...'
+                C: 'consider replacing with DBField::create_field("HTMLText") ...'
                 I: true
             ' extends Bigint':
                 R: ' extends DBBigint'
@@ -497,3 +503,26 @@ SS4:
                 C: 'Check if this is the right implementation, this is highly speculative.'
             'themes/':
                 R: 'resources/themes/'
+            '->RenderWith(':
+                R: '->RenderWith('
+                I: true
+                C: 'Check that the template location is still valid!'
+            'SS_Datetime->':
+                R: 'DBDatetime->'
+            '@param SS_HTTPRequest':
+                R: '@param HTTPRequest'
+            '@return SS_HTTPRequest':
+                R: '@return HTTPRequest'
+            '@param SS_HTTPResponse':
+                R: '@param HTTPResponse'
+            '@return SS_HTTPResponse':
+                R: '@return HTTPResponse'
+            '@param FieldList':
+                R: '@param \\Silverstripe\\Forms\\FieldList'
+            '@return FieldList':
+                R: '@return \Silverstripe\Forms\\FieldList'
+            '@return FieldList':
+                R: '@return \\Silverstripe\\Forms\\FieldList'
+            'assets/':
+                R: 'assets/'
+                C: 'Check if you need the assets parts - use ASSETS_PATH if needed'

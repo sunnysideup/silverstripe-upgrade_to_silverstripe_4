@@ -1,0 +1,13 @@
+parameters:
+    ignoreErrors:
+        - '#Access to an undefined property#'
+        - '#Call to an undefined method#'
+        - '#on an unknown class [a-zA-Z0-9\\_]+#'
+        - '#with incorrect case:#'
+
+    autoload_directories:
+        - %currentWorkingDirectory%/src/
+
+    excludes_analyse:
+        - %currentWorkingDirectory%/vendor/phpunit/phpunit-mock-objects/
+        - %currentWorkingDirectory%/vendor/phpunit/php-code-coverage/Tests/

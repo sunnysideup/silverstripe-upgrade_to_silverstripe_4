@@ -12,17 +12,6 @@ class AddVendorExposeDataToComposer extends Task
 {
     protected $taskStep = 's50';
 
-    public function getTitle()
-    {
-        return 'Adds vendor expose data to composer';
-    }
-
-    public function getDescription()
-    {
-        return '
-            By default we expose all the client related files (images, css and javascript)';
-    }
-
     protected $toExpose = [
         'javascript',
         'images',
@@ -35,21 +24,32 @@ class AddVendorExposeDataToComposer extends Task
         'client/img',
         'client/css',
         'client/fonts',
-        'client/js'
+        'client/js',
     ];
+
+    public function getTitle()
+    {
+        return 'Adds vendor expose data to composer';
+    }
+
+    public function getDescription()
+    {
+        return '
+            By default we expose all the client related files (images, css and javascript)';
+    }
 
     public function runActualTask($params = [])
     {
         $expose = [];
-        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir){
+        foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             foreach ($this->toExpose as $folder) {
-                if (file_exists($moduleDir.'/'.$folder)) {
-                    if($this->mu()->getIsModuleUpgrade()){
+                if (file_exists($moduleDir . '/' . $folder)) {
+                    if ($this->mu()->getIsModuleUpgrade()) {
                         //expose "javascript"
                         $expose[] = $folder;
                     } else {
                         //expose "app/javascript"
-                        $expose[] = basename($moduleDir).'/'.$folder;
+                        $expose[] = basename($moduleDir) . '/' . $folder;
                     }
                 }
             }
@@ -57,15 +57,15 @@ class AddVendorExposeDataToComposer extends Task
         if (count($expose)) {
             $command =
             'if(!isset($data["extra"]["expose"])) { '
-                .'    $data["extra"]["expose"] = ["'.implode('", "', $expose).'"]; '
-                .'}';
+                . '    $data["extra"]["expose"] = ["' . implode('", "', $expose) . '"]; '
+                . '}';
             $this->updateJSONViaCommandLine(
                 $this->mu()->getGitRootDir(),
                 $command,
-                'exposing: '.implode(', ', $expose)
+                'exposing: ' . implode(', ', $expose)
             );
 
-            $this->setCommitMessage('MAJOR: exposing folders'.implode(',', $expose));
+            $this->setCommitMessage('MAJOR: exposing folders' . implode(',', $expose));
         }
     }
 

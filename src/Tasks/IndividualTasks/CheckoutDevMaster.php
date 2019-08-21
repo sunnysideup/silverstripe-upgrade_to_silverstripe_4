@@ -12,7 +12,7 @@ class CheckoutDevMaster extends Task
 {
     protected $taskStep = 's00';
 
-    protected $branchToUse = 'dev-master';
+    protected $branchToUse = 'master';
 
     public function getTitle()
     {

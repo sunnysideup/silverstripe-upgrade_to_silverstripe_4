@@ -47,7 +47,7 @@ class ModuleUpgrader
 
         'CheckoutDevMaster-2' => [],
         'AddUpgradeBranch' => [],
-        'CreatePublicFolder' => [],
+        'CreatePublicFolder-1' => [],
         'AddTableName' => [],
         'ChangeControllerInitToProtected' => [],
         // 'AddTableNamePrivateStatic' => [],
@@ -60,6 +60,7 @@ class ModuleUpgrader
         'ResetWebRootDir-3' => [],
 
         //Step2: MoveToNewVersion
+        'CreatePublicFolder-2' => [],
         'ComposerInstallProject' => [],
         'Recompose' => [],
 

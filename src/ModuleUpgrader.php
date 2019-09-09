@@ -96,7 +96,7 @@ class ModuleUpgrader
         'FinaliseUpgradeWithMergeIntoMaster' => [],
     ];
 
-    protected $frameworkComposerRestraint = '^4.4';
+    protected $frameworkComposerRestraint = '~4@stable';
 
     /**
      * Should the session details be deleted before we start?

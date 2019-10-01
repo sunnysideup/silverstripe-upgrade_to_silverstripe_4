@@ -126,6 +126,9 @@ SS4:
             " => 'Image'":
                 R: " => 'Image'"
                 C: 'you may want to add ownership (owns)'
+            "NumericField":
+                R: "NumericField"
+                C: 'check the number of decimals required and add as ->Step(123)'
             'framework/sake':
                 R: 'vendor/bin/sake'
             'framework/cli-script.php':

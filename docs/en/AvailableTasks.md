@@ -52,7 +52,7 @@
             This must run after the folder names have been changed to CamelCase (see: UpperCaseFolderNamesForPSR4).
         <br /><strong>Code: </strong>AddPSR4Autoloading<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddPSR4Autoloading.php">AddPSR4Autoloading</a></p><h4>28: Look for single use statements and comment them out as they are not correct.</h4><p>
             Goes through code and removes, for example, "use bool;", lines, as they do not make sense.<br /><strong>Code: </strong>FixBadUseStatements<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/FixBadUseStatements.php">FixBadUseStatements</a></p><h4>29: After load fixes (inspect)</h4><p>
-            Runs the silverstripe/upgrade task "inpect". See:
+            Runs the silverstripe/upgrade task "inspect". See:
             https://github.com/silverstripe/silverstripe-upgrader#inspect.
             Once a project has all class names migrated, and is brought up to a
             "loadable" state (that is, where all classes reference or extend real classes)
@@ -68,7 +68,7 @@
             Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.
             This means your module will be installed in the vendor folder after this upgrade.<br /><strong>Code: </strong>UpdateComposerModuleType<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/UpdateComposerModuleType.php">UpdateComposerModuleType</a></p><h4>33: Adds vendor expose data to composer</h4><p>
             By default we expose all the client related files (images, css and javascript)<br /><strong>Code: </strong>AddVendorExposeDataToComposer<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddVendorExposeDataToComposer.php">AddVendorExposeDataToComposer</a></p><h4>34: After load fixes (inspect)</h4><p>
-            Runs the silverstripe/upgrade task "inpect". See:
+            Runs the silverstripe/upgrade task "inspect". See:
             https://github.com/silverstripe/silverstripe-upgrader#inspect.
             Once a project has all class names migrated, and is brought up to a
             "loadable" state (that is, where all classes reference or extend real classes)

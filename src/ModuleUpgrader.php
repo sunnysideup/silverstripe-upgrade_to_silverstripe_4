@@ -47,7 +47,7 @@ class ModuleUpgrader
 
         'CheckoutDevMaster-2' => [],
         'AddUpgradeBranch' => [],
-        'CreatePublicFolder' => [],
+        'CreatePublicFolder-1' => [],
         'AddTableName' => [],
         'ChangeControllerInitToProtected' => [],
         // 'AddTableNamePrivateStatic' => [],
@@ -60,6 +60,7 @@ class ModuleUpgrader
         'ResetWebRootDir-3' => [],
 
         //Step2: MoveToNewVersion
+        'CreatePublicFolder-2' => [],
         'ComposerInstallProject' => [],
         'Recompose' => [],
 
@@ -95,7 +96,7 @@ class ModuleUpgrader
         'FinaliseUpgradeWithMergeIntoMaster' => [],
     ];
 
-    protected $frameworkComposerRestraint = '^4.4';
+    protected $frameworkComposerRestraint = '~4@stable';
 
     /**
      * Should the session details be deleted before we start?
@@ -1098,7 +1099,7 @@ class ModuleUpgrader
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: ' . ($this->logFileLocation ?: 'not logged'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- List of Steps: ' . $this->newLine() . ' -' . implode($this->newLine() . '    -', array_keys($this->listOfTasks)), 'light_cyan');
+        $this->colourPrint('- List of Steps: ' . $this->newLine() . '    -' . implode($this->newLine() . '    -', array_keys($this->listOfTasks)), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
     }
 

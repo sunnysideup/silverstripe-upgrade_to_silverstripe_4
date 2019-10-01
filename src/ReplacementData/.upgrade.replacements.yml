@@ -360,6 +360,9 @@ SS4:
                 C: "This needs further investigation, see: https://github.com/silverstripe/silverstripe-framework/issues/8225"
             "$result->error(":
                 R: "$result->addError("
+            '$form->addErrorMessage(':
+                R: '$form->sessionError('
+                C: 'SilverStripe\Forms\Form->addErrorMessage(): Removed. Use `sessionMessage()` or `sessionError()` to add a form level message, throw a `ValidationException` during submission, or add a custom validator.'
             "Object::use_custom_class":
                 R: "Object::use_custom_class"
                 C: "You need to move this code to yml, using SilverStripe\\Core\\Injector\\Injector\n  OldClass: NewClass"

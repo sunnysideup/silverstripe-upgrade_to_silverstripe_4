@@ -13,7 +13,21 @@ class RecomposeHomeBrew extends Task
     protected $taskStep = 's20';
 
     protected $requireLinesToAdd = [
-        'silverstripe/recipe-cms' => '',
+        'silverstripe/framework' => '',
+
+        'silverstripe/assets' => '',
+        'silverstripe/config' => '',
+        'silverstripe/admin' => '',
+
+        'silverstripe/cms' => '',
+        'silverstripe/asset-admin' => '',
+        'silverstripe/campaign-admin' => '',
+        'silverstripe/versioned-admin' => '',
+        'silverstripe/errorpage' => '',
+        'silverstripe/graphql' => '',
+        'silverstripe/reports' => '',
+        'silverstripe/siteconfig' => '',
+        'silverstripe/versioned' => ''  ,
     ];
 
     public function getTitle()
@@ -30,8 +44,14 @@ class RecomposeHomeBrew extends Task
 
     public function runActualTask($params = [])
     {
-        if (! $this->requireLinesToAdd['silverstripe/recipe-cms']) {
-            $this->requireLinesToAdd['silverstripe/recipe-cms'] = $this->mu()->getFrameworkComposerRestraint();
+        foreach($this->requireLinesToAdd['silverstripe/recipe-cms'] as $package => $constraint) {
+            if($constraint  === '') {
+                if($package === 'silverstripe/framework')  {
+                    $this->requireLinesToAdd[$package] = $this->mu()->getFrameworkComposerRestraint();
+                } else {
+                    $this->requireLinesToAdd[$package] = '*';
+                }
+            }
         }
         $command =
         'unset($data["require"]["silverstripe/cms"]);' .

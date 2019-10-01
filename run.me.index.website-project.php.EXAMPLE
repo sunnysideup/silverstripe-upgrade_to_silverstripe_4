@@ -1,0 +1,33 @@
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+
+$restart = isset($argv[1]) && $argv[1] === 'restart';
+$again = isset($argv[1]) && $argv[1] === 'again';
+
+$obj = ModuleUpgrader::create()
+    ->setRunImmediately(true)
+    ->setLogFolderDirLocation('/var/www/upgrade-logs')
+    ->setAboveWebRootDirLocation('/var/www/upgrades')
+    ->setWebRootName('upgradeto4')
+    ->setRunInteractively(true)
+    ->setRunLastOneAgain($again)
+    ->setRestartSession($restart)
+    ->setArrayOfModules(
+        [
+            1 => [
+              'VendorName' => 'awesomeproject',
+              'VendorNamespace' => 'AwesomeProject',
+              'PackageName' => 'app',
+              'PackageNamespace' => 'App',
+              'PackageFolderNameForInstall' => 'awesome',
+              'GitLink' => 'git@bitbucket.org:mybitbucket/awesome.org.nz.git',
+              'OriginComposerFileLocation' => 'https://bitbucket.org/mybitbucket/awesome.org.nz/src/master/composer.json',
+              'IsModuleUpgrade' => false
+            ]
+        ]
+    )
+    ->setNameOfTempBranch('4.1-TEMP-upgrade')
+    ->setFrameworkComposerRestraint('^4.4')
+    ->run();

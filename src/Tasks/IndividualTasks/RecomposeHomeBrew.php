@@ -44,7 +44,7 @@ class RecomposeHomeBrew extends Task
 
     public function runActualTask($params = [])
     {
-        foreach($this->requireLinesToAdd['silverstripe/recipe-cms'] as $package => $constraint) {
+        foreach($this->requireLinesToAdd as $package => $constraint) {
             if($constraint  === '') {
                 if($package === 'silverstripe/framework')  {
                     $this->requireLinesToAdd[$package] = $this->mu()->getFrameworkComposerRestraint();

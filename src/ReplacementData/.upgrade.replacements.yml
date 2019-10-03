@@ -495,6 +495,24 @@ SS4:
                 C: 'This should probably be replaced by PSR-4 autoloading!'
             'UserDefinedForm_Controller':
                 R: 'UserDefinedFormController'
+            "UploadField(Image":
+                R: "UploadField(Image"
+                C: make sure that Image does not end up as Image::class where this is not required
+            "UploadField('Image":
+                R: "UploadField('Image"
+                C: make sure that Image does not end up as Image::class where this is not required
+            "TextField('Email'":
+                R: "TextField('Email'"
+                C: make sure that this does not end up as Email::class
+            "TextField(Email::class":
+                R: "TextField('Email'"
+                C: make sure that this does not end up as Email::class
+            "EmailField('Email'":
+                R: "EmailField('Email'"
+                C: make sure that this does not end up as Email::class
+            "EmailField(Email::class":
+                R: "EmailField('Email'"
+                C: make sure that this does not end up as Email::class
             'Email::setAdminEmail':
                 R: '//Email::setAdminEmail'
                 C: 'This should be in the YML config layer as SilverStripe\Control\Email\Email: set_admin_email'

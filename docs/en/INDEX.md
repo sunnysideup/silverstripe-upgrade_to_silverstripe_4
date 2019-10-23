@@ -27,7 +27,7 @@ Once that has completed you can MANUALLY:
 
 # prerequisites before you start:
 
- 
+
  - projects need to be a git repository (private is fine)
  - for modules only:
      - module to be upgraded needs to be listed on packagist.   
@@ -36,7 +36,7 @@ Once that has completed you can MANUALLY:
 - **IMPORTANT** The module's / project's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to **silverstripe/framework**, where classes are put in semantic folder names.  
 You do not need to use title case for the folder names as this will be fixed by the upgrade tool.
 
-- Separate MyPage and MyPageController into separate classes and move them into Pages and Control folder (moving both into a PageTypes folder is fine also). 
+- Separate MyPage and MyPageController into separate classes and move them into Pages and Control folder (moving both into a PageTypes folder is fine also).
 ```
 /code/MyPage1.php (contains class MyPage1 AND MyPage1_Controller)
 /code/MyPage2.php (contains class MyPage2 AND MyPage2_Controller)
@@ -124,11 +124,11 @@ Note that you can run this step by step and that you can also use the following 
 - again
 - more options become available all the time!
 
-e.g. 
+e.g.
 ```sh
     $ php index.php again
 ```
-OR 
+OR
 
 ```sh
     $ php index.php restart
@@ -138,13 +138,13 @@ OR
 
 
 4. Apply any manual final fixes to the upgrade branch of your module / project to make it SS4 ready. E.g.
-  
+
   a. Add $private static $table_name for every class that extends DataObject, including pages (e.g private static $table_name = 'WebPortfolioPage';).
-  
+
   b. move template files (in the future this module may do this for you).
 
   c. Check for use statements WITHOUT name spacing - as these may need attention.
-  
+
   d. etc...
 
 5. Merge the upgrade branch into `dev-master` as you see fit.
@@ -209,12 +209,10 @@ If set, a log of your upgrade will be saved in this folder.
 
 ### run immediately or create bash script?
 
-`->setRunImmediately(false)`:
-When you set `runImmediately` to true, the PHP code will use the PHP `exec` function to run commands.
-If you set this option to false then you will be provided with a sample bash script.  It is recommended, however, that you use the
-`->setRunImmediately(true)` to run this tool rather than using the provided bash script.
+`->setRunImmediately(false)`: get a bash script to rn later
+`->setRunImmediately(true)` run immediately
 
-Bash script option is currently NOT working. You should run it immediately.
+NB. Bash script option is currently NOT working. You should run it immediately.
 
 
 ### set list of tasks
@@ -290,4 +288,3 @@ for details
 # Important references:
 
 * https://github.com/silverstripe/silverstripe-upgrader/issues/71#issuecomment-395244428
-

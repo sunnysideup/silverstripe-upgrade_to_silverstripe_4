@@ -3,9 +3,18 @@
 namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3toSs4;
 
 class ModuleUpgrader
 {
+
+
+    #########################################
+    # RECIPE
+    #########################################
+
+    protected $recipe = Ss3ToSs4::class;
+
     #########################################
     # TASKS
     #########################################
@@ -15,17 +24,7 @@ class ModuleUpgrader
      *
      * @var array
      */
-    protected $taskSteps = [
-        's00' => 'Generic',
-        's10' => 'Prepare Codebase',
-        's20' => 'Upgrade Structure',
-        's30' => 'Prepare Code',
-        's40' => 'Upgrade Code',
-        's50' => 'Upgrade Fixes',
-        's60' => 'Check',
-        's70' => 'Finalise',
-        's99' => 'ERROR!',
-    ];
+    protected $taskSteps = [];
 
     /**
      * An array of all the 'taskName's of the tasks that you wish to run during the execution of this upgrader task.
@@ -35,68 +34,9 @@ class ModuleUpgrader
      *
      * @var array
      */
-    protected $listOfTasks = [
-        //Step1: Prepare
-        'CheckThatFoldersAreReady' => [],
-        'ResetWebRootDir-1' => [],
+    protected $listOfTasks = [];
 
-        'CheckoutDevMaster-1' => [],
-        'FindFilesWithMoreThanOneClass' => [],
-        'AddLegacyBranch' => [],
-        'ResetWebRootDir-2' => [],
-
-        'CheckoutDevMaster-2' => [],
-        'AddUpgradeBranch' => [],
-        'CreatePublicFolder-1' => [],
-        'AddTableName' => [],
-        'ChangeControllerInitToProtected' => [],
-        // 'AddTableNamePrivateStatic' => [],
-        'RemoveComposerRequirements' => [
-            'package' => 'silverstripe/framework',
-        ],
-        'RecomposeHomeBrew' => [],
-        'UpdateComposerRequirements' => [],
-        'RemoveInstallerFolder' => [],
-        'ResetWebRootDir-3' => [],
-
-        //Step2: MoveToNewVersion
-        'CreatePublicFolder-2' => [],
-        'ComposerInstallProject' => [],
-        'Recompose' => [],
-
-        //Step3: FixBeforeStart
-        'ChangeEnvironment' => [],
-        'MoveCodeToSRC' => [],
-        'CreateClientFolder' => [],
-        'SearchAndReplace' => [],
-        'FixRequirements' => [],
-        'UpperCaseFolderNamesForPSR4' => [],
-
-        //Step4: CoreUpgrade
-        'AddNamespace' => [],
-        'Upgrade' => [],
-        'AddPSR4Autoloading' => [],
-
-        //Step5: FixUpgrade
-        'FixBadUseStatements' => [],
-        'InspectAPIChanges-1' => [],
-        'DatabaseMigrationLegacyYML' => [],
-        'Reorganise' => [],
-        'UpdateComposerModuleType' => [],
-        'AddVendorExposeDataToComposer' => [],
-        'InspectAPIChanges-2' => [],
-        // 'WebRootUpdate' => [],
-        //step6: Check
-        'ApplyPSR2' => [],
-        'FinalDevBuild' => [],
-        'RunImageTask' => [],
-        'DoMigrateSiteTreeLinkingTask' => [],
-        'FindFilesWithSimpleUseStatements' => [],
-        //step7: Lock-in
-        'FinaliseUpgradeWithMergeIntoMaster' => [],
-    ];
-
-    protected $frameworkComposerRestraint = '~4@stable';
+    protected $frameworkComposerRestraint = '';
 
     /**
      * Should the session details be deleted before we start?
@@ -120,7 +60,7 @@ class ModuleUpgrader
      * The default namespace for all tasks
      * @var string
      */
-    protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
+    protected $defaultNamespaceForTasks = '';
 
     /**
      * if set to true it will run each step and then stop.
@@ -199,7 +139,7 @@ class ModuleUpgrader
      * name of the branch created to do the upgrade
      * @var string branch name
      */
-    protected $nameOfTempBranch = 'temp-upgradeto4-branch';
+    protected $nameOfTempBranch = '';
 
     /**
      * Name of module vendor
@@ -393,7 +333,9 @@ class ModuleUpgrader
             $this->locationOfSSUpgradeModule = $this->locationOfThisUpgrader .
                 '/vendor/silverstripe/upgrader/bin/upgrade-code';
         }
+        $this->applyRecipe();
     }
+
 
     /**
      * Ends output to commandline / browser
@@ -771,7 +713,7 @@ class ModuleUpgrader
 
     public function createListOfTasks()
     {
-        $html = '<h1>List of Tasks in run order</h1>';
+        $html = '<h1>List of Tasks in run order for recipe: '.$this->getRecipe().'</h1>';
         $count = 0;
         $totalCount = count($this->listOfTasks);
         $previousStep = '';
@@ -827,7 +769,6 @@ class ModuleUpgrader
      */
     public function run()
     {
-        $this->startPHP2CommandLine();
         for ($i = 0; $i < 500; $i++) {
             $this->colourPrint(
                 '.',
@@ -936,6 +877,19 @@ class ModuleUpgrader
     protected function startPHP2CommandLine()
     {
         $this->commandLineExec = PHP2CommandLineSingleton::create();
+    }
+
+    protected function applyRecipe()
+    {
+        $recipeName = $this->getRecipe();
+        if($recipeName) {
+            $obj = new $recipeName();
+            $vars = $obj->getVariables();
+            foreach($vars as $variable => $value) {
+                $method = 'set'.ucwords($variable);
+                $this->$method($value);
+            }
+        }
     }
 
     /**

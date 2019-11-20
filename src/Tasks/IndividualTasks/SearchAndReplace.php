@@ -3,7 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
-use Sunnysideup\UpgradeToSilverstripe4\ReplacementData\LoadReplacementData;
+use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -20,7 +20,7 @@ class SearchAndReplace extends Task
 
     protected $checkReplacementIssues = false;
 
-    protected $replacementHeader = 'upgrade to SS4';
+    protected $replacementHeader = 'automated upgrade';
 
     protected $ignoreFolderArray = [
         '.git',

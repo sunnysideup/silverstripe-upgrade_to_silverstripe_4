@@ -54,7 +54,7 @@ class UpdateComposerRequirements extends Task
             $this->runActualTaskInner();
         }
 
-        $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - updating core requirements');
+        $this->setCommitMessage('MAJOR: upgrading composer requirements to - updating core requirements');
     }
 
     public function getReplacementPackage()

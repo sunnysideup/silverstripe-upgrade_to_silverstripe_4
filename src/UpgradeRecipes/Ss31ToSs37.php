@@ -24,23 +24,6 @@ class Ss31ToSs37 extends BaseClass
     #########################################
 
     /**
-     * A list of task groups
-     *
-     * @var array
-     */
-    protected $taskSteps = [
-        's00' => 'Generic',
-        's10' => 'Prepare Codebase',
-        's20' => 'Upgrade Structure',
-        's30' => 'Prepare Code',
-        's40' => 'Upgrade Code',
-        's50' => 'Upgrade Fixes',
-        's60' => 'Check',
-        's70' => 'Finalise',
-        's99' => 'ERROR!',
-    ];
-
-    /**
      * An array of all the 'taskName's of the tasks that you wish to run during the execution of this upgrader task.
      * This array can be overriden in the example-index.php file that you create.
      * You can enter a full name space if you need to.
@@ -54,60 +37,43 @@ class Ss31ToSs37 extends BaseClass
         'ResetWebRootDir-1' => [],
 
         'CheckoutDevMaster-1' => [],
-        'FindFilesWithMoreThanOneClass' => [],
-        'AddLegacyBranch' => [],
+        'AddLegacyBranchFor37' => [],
         'ResetWebRootDir-2' => [],
 
         'CheckoutDevMaster-2' => [],
+
         'AddUpgradeBranch' => [],
-        'CreatePublicFolder-1' => [],
-        'AddTableName' => [],
-        'ChangeControllerInitToProtected' => [],
-        // 'AddTableNamePrivateStatic' => [],
-        'RemoveComposerRequirements' => [
-            'package' => 'silverstripe/framework',
+
+        'UpdateComposerRequirements-1' => [
+            'Package' => 'silverstripe/framework',
+            'NewVersion' => '~3.7'
         ],
-        'RecomposeHomeBrew' => [],
-        'UpdateComposerRequirements' => [],
-        'RemoveInstallerFolder' => [],
+        'UpdateComposerRequirements-2' => [
+            'Package' => 'silverstripe/cms',
+            'NewVersion' => '~3.7'
+        ],
+        'UpdateComposerRequirements-3' => [
+            'Package' => 'silverstripe/reports',
+            'NewVersion' => '~3.7'
+        ],
+        'UpdateComposerRequirements-4' => [
+            'Package' => 'silverstripe/siteconfig',
+            'NewVersion' => '~3.7'
+        ],
         'ResetWebRootDir-3' => [],
 
         //Step2: MoveToNewVersion
-        'CreatePublicFolder-2' => [],
         'ComposerInstallProject' => [],
-        'Recompose' => [],
 
         //Step3: FixBeforeStart
-        'ChangeEnvironment' => [],
-        'MoveCodeToSRC' => [],
-        'CreateClientFolder' => [],
         'SearchAndReplace' => [],
-        'FixRequirements' => [],
-        'UpperCaseFolderNamesForPSR4' => [],
 
         //Step4: CoreUpgrade
-        'AddNamespace' => [],
-        'Upgrade' => [],
-        'AddPSR4Autoloading' => [],
+        'FinalDevBuild37' => [],
 
-        //Step5: FixUpgrade
-        'FixBadUseStatements' => [],
-        'InspectAPIChanges-1' => [],
-        'DatabaseMigrationLegacyYML' => [],
-        'Reorganise' => [],
-        'UpdateComposerModuleType' => [],
-        'AddVendorExposeDataToComposer' => [],
-        'InspectAPIChanges-2' => [],
-        // 'WebRootUpdate' => [],
-        //step6: Check
-        'ApplyPSR2' => [],
-        'FinalDevBuild' => [],
-        'RunImageTask' => [],
-        'DoMigrateSiteTreeLinkingTask' => [],
-        'FindFilesWithSimpleUseStatements' => [],
         //step7: Lock-in
-        'FinaliseUpgradeWithMergeIntoMaster' => [],
+        // 'FinaliseUpgradeWithMergeIntoMaster' => [],
     ];
 
-    protected $frameworkComposerRestraint = '~4@stable';
+    protected $frameworkComposerRestraint = '~3.7@stable';
 }

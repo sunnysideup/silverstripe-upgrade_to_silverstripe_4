@@ -19,29 +19,15 @@ class Ss3ToSs4 extends BaseClass
      * @var string
      */
     protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
+
+
     #########################################
     # TASKS
     #########################################
 
-    /**
-     * A list of task groups
-     *
-     * @var array
-     */
-    protected $taskSteps = [
-        's00' => 'Generic',
-        's10' => 'Prepare Codebase',
-        's20' => 'Upgrade Structure',
-        's30' => 'Prepare Code',
-        's40' => 'Upgrade Code',
-        's50' => 'Upgrade Fixes',
-        's60' => 'Check',
-        's70' => 'Finalise',
-        's99' => 'ERROR!',
-    ];
 
     /**
-     * An array of all the 'taskName's of the tasks that you wish to run during the execution of this upgrader task.
+     * An array of all the 'taskNames of the tasks that you wish to run during the execution of this upgrader task.
      * This array can be overriden in the example-index.php file that you create.
      * You can enter a full name space if you need to.
      * The final -x will be removed.  We add -1 or -2 to run the same task multiple times.

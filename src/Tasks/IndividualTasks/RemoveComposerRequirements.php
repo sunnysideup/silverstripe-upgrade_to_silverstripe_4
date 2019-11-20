@@ -41,7 +41,7 @@ class RemoveComposerRequirements extends Task
             $comment
         );
 
-        $this->setCommitMessage('MAJOR: remove composer requirements to SS4 - removing requirements for: ' . $this->package);
+        $this->setCommitMessage('MAJOR: remove composer requirements - removing requirements for: ' . $this->package);
     }
 
     protected function hasCommitAndPush()

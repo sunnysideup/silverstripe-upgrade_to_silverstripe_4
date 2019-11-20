@@ -16,7 +16,7 @@ class ComposerInstallProject extends Task
 
     public function getTitle()
     {
-        return 'Composer Install Silverstripe 4';
+        return 'use Composer to install vanilla Silverstripe project';
     }
 
     public function getDescription()
@@ -36,7 +36,7 @@ class ComposerInstallProject extends Task
             $this->mu()->execMe(
                 $this->mu()->getAboveWebRootDirLocation(),
                 $this->mu()->getComposerEnvironmentVars() . ' composer create-project silverstripe/installer ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
-                'set up vanilla SS4 install: ' . $this->versionToLoad,
+                'set up vanilla install using version: ' . $this->versionToLoad,
                 false
             );
         }

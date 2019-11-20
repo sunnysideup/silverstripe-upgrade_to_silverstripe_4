@@ -90,7 +90,7 @@ class ModuleUpgrader
      *
      * @var bool
      */
-    protected $runInteractively = false;
+    protected $runInteractively = true;
 
     /**
      * Show ALL the information or just a little bit.

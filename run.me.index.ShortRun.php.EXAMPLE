@@ -3,18 +3,12 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
-
-/**
- * below are examples
- * of most of the config options
- *
- * N.B. the individual tasks also have config options!
- */
 $obj = ModuleUpgrader::create()
+    ->setRecipe('SS37')
+
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('testrun')
-    ->setRunInteractively(true)
-    // ->setRunIrreversibly(true)
+
     ->setArrayOfModules(
         [
             //see run.me.index.full.php.EXAMPLE for more details1
@@ -29,8 +23,11 @@ $obj = ModuleUpgrader::create()
             ]
         ]
     )
+
     ->setNameOfTempBranch('test-only')
-    ->setFrameworkComposerRestraint('3.7')
+
+    ->setFrameworkComposerRestraint('~3.7')
+
     ->setListOfTasks(
         [
             'ResetWebRootDir-1' => [],

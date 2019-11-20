@@ -4,19 +4,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 
-/**
- * below are examples
- * of most of the config options
- *
- * N.B. the individual tasks also have config options!
- */
+
 $obj = ModuleUpgrader::create()
-    ->setRunImmediately(true)
     ->setLogFolderDirLocation('/var/www/upgrades-logs')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('upgradeto37')
-    ->setRunInteractively(true)
-    // ->setRunIrreversibly(true)
     ->setArrayOfModules(
         [
             1 => [

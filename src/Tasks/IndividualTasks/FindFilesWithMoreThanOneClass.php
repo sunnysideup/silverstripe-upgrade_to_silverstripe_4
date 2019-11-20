@@ -22,8 +22,8 @@ class FindFilesWithMoreThanOneClass extends Task
 
     public function runActualTask($params = [])
     {
+        $errors = [];
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-            $errors = [];
             $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if (file_exists($searchPath)) {
                 $this->mu()->colourPrint('Searching in ' . $searchPath, 'blue for files with more than one class.');

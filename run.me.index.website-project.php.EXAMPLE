@@ -4,11 +4,13 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 $obj = ModuleUpgrader::create()
-    ->setRunImmediately(true)
-    ->setLogFolderDirLocation('/var/www/upgrades-logs')
+    ->setRecipe('SS4')
+
     ->setAboveWebRootDirLocation('/var/www/upgrades')
+    ->setLogFolderDirLocation('/var/www/upgrades-logs')
+
     ->setWebRootName('upgradeto4')
-    ->setRunInteractively(true)
+
     ->setArrayOfModules(
         [
             1 => [
@@ -23,6 +25,9 @@ $obj = ModuleUpgrader::create()
             ]
         ]
     )
+
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
+
     ->setFrameworkComposerRestraint('^4.4')
+
     ->run();

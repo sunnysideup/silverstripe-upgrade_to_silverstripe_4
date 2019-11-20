@@ -81,7 +81,7 @@ class ModuleUpgrader
      * The default namespace for all tasks
      * @var string
      */
-    protected $defaultNamespaceForTasks = '';
+    protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
 
     /**
      * if set to true it will run each step and then stop.

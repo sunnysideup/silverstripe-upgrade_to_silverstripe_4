@@ -62,6 +62,7 @@ $obj = ModuleUpgrader::create()
     //         // 'WebRootUpdate' => []
     //     ]
     // )
+    // ->setVariableForTask($taskName, $variableName, $variableValue);
     // ->setStartFrom('RecomposeHomeBrew')
     // ->setEndWith('SearchAndReplace')
     // ->setOnlyRun('SearchAndReplace')

@@ -202,6 +202,12 @@ To set any of the variables in any of the tasks, you can set these as follows:
 where `package` and `newVersion` are variables (`properties`) in the `UpdateComposerRequirements`
 task.
 
+You can also use:
+
+```php
+    $moduleUpgrader->setVariableForTask($taskName, $variableName, $variableValue);
+```
+
 ### set recipe
 
 `->setRecipe('SS4')`:

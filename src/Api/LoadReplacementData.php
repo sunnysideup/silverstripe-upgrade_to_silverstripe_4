@@ -14,6 +14,11 @@ use SilverStripe\Upgrader\Util\ConfigFile;
  * construct method.
  *
  * It will also search the root folders for any packages / projects being upgraded.
+ * replacement data can be found in any path provided like this:
+ *
+ *     PATH / toFolder / '.upgrade.replacements.yml'
+ *
+ * toFolders have names like: SS37 or SS4.
  */
 
 
@@ -96,7 +101,7 @@ class LoadReplacementData
 
     protected function defaultLocation()
     {
-        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'ReplacementData';
+        return $this->mu()->getLocationOfThisUpgrader() . DIRECTORY_SEPARATOR . 'ReplacementData';
     }
 
     public function setToFolder(string $s)
@@ -159,7 +164,7 @@ class LoadReplacementData
         // Merge with any other upgrade spec in the top level
         $config = [];
         foreach ($this->paths as $path) {
-            $file = $path  . DIRECTORY_SEPARATOR . $this->toFolder . DIRECTORY_SEPARATOR .  $this->ymlFileName;
+            $file = $path . DIRECTORY_SEPARATOR . $this->toFolder . DIRECTORY_SEPARATOR .  $this->ymlFileName;
             if (file_exists($file)) {
                 $nextConfig = ConfigFile::loadConfig($file);
                 // Merge

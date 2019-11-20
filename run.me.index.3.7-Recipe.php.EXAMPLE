@@ -11,9 +11,8 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
  * N.B. the individual tasks also have config options!
  */
 $obj = ModuleUpgrader::create()
-    ->setArgv($argv)
     ->setRunImmediately(true)
-    ->setLogFolderDirLocation('/var/www/upgrade-logs')
+    ->setLogFolderDirLocation('/var/www/upgrades-logs')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('upgradeto37')
     ->setRunInteractively(true)
@@ -27,7 +26,7 @@ $obj = ModuleUpgrader::create()
               'PackageNamespace' => 'App',
               'PackageFolderNameForInstall' => 'myclient',
               'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git',
-              'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
+              // 'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
               'IsModuleUpgrade' => false
             ]
         ]

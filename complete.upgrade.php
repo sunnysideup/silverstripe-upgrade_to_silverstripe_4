@@ -19,7 +19,7 @@ $obj = ModuleUpgrader::create()
               'PackageFolderNameForInstall' => 'upgradenow',
               'GitLink' => 'git@bitbucket.org:sunnysideupnz/upgradesilverstripe.com.git',
               'IsModuleUpgrade' => false,
-              'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/upgradesilverstripe.com/raw/a88492066701dfa7fbb8685c4b923587de8ff0c2/composer.json'
+              // 'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/upgradesilverstripe.com/raw/a88492066701dfa7fbb8685c4b923587de8ff0c2/composer.json'
             ]
         ]
     )

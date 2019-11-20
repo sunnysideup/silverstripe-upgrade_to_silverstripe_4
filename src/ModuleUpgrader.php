@@ -346,6 +346,8 @@ class ModuleUpgrader
      */
     public function __construct()
     {
+        global $argv;
+        $this->argv = $argv;
         $this->startPHP2CommandLine();
         if (! $this->locationOfThisUpgrader) {
             $this->locationOfThisUpgrader = dirname(__DIR__);
@@ -865,6 +867,24 @@ class ModuleUpgrader
         $this->endPHP2CommandLine();
     }
 
+    protected function applyRecipe()
+    {
+        $recipeName = $this->getRecipe();
+        if($recipeName) {
+            if(isset($this->availableRecipes[$recipeName])) {
+                $recipeClass = $this->availableRecipes[$recipeName];
+                $obj = new $recipeClass();
+                $vars = $obj->getVariables();
+                foreach($vars as $variable => $value) {
+                    $method = 'set'.ucwords($variable);
+                    $this->$method($value);
+                }
+            } else {
+                user_error('Recipe '.$recipeName.' not available, available Recipes are: '.print_r($this->getAvailableRecipes()));
+            }
+        }
+    }
+
     /**
      * What is the index of given task within the sequence
      *
@@ -907,23 +927,6 @@ class ModuleUpgrader
         $this->commandLineExec = PHP2CommandLineSingleton::create();
     }
 
-    protected function applyRecipe()
-    {
-        $recipeName = $this->getRecipe();
-        if($recipeName) {
-            if(isset($this->availableRecipes[$recipeName])) {
-                $recipeClass = $this->availableRecipes[$recipeName];
-                $obj = new $recipeClass();
-                $vars = $obj->getVariables();
-                foreach($vars as $variable => $value) {
-                    $method = 'set'.ucwords($variable);
-                    $this->$method($value);
-                }
-            } else {
-                user_error('Recipe '.$recipeName.' not available, available Recipes are: '.print_r($this->getAvailableRecipes()));
-            }
-        }
-    }
 
     /**
      * deconstructs Command Line
@@ -1144,10 +1147,6 @@ Session has completed.
                 }
             }
         }
-    }
-
-    protected function nextStep()
-    {
     }
 
     /**

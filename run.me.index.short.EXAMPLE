@@ -10,7 +10,6 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 // we have used sunnysideup/cleaner_tinymce_config as an example repository below
 
 $obj = ModuleUpgrader::create()
-    ->setArgv($argv)
     ->setArrayOfModules(
         [
             1 => [
@@ -23,5 +22,6 @@ $obj = ModuleUpgrader::create()
         ]
     )
     ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setLogFolderDirLocation('/var/www/upgrade-logs')
+    ->setLogFolderDirLocation('/var/www/upgrades-logs')
+    ->setRecipe('SS4')
     ->run();

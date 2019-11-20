@@ -4,8 +4,8 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3toSs4;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31toSs37;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31ToSs37;
 
 class ModuleUpgrader
 {
@@ -776,6 +776,9 @@ class ModuleUpgrader
             }
             $dir = __DIR__ . '/../docs/en/';
         }
+
+        $html = str_replace(' _', ' \_', $html);
+
         file_put_contents(
             $dir . '/AvailableTasks.md',
             $html

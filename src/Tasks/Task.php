@@ -299,11 +299,11 @@ abstract class Task
 
     /**
      * Runs the SilverStripe made upgrader
-     * @param  string $task     [description]
-     * @param  string $param1   [description]
-     * @param  string $param2   [description]
+     * @param  string $task
+     * @param  string $param1
+     * @param  string $param2
      * @param  string $rootDirForCommand  modules root directory
-     * @param  string $settings [description]
+     * @param  string $settings
      * @param  string  $keyNotesLogFileLocation
      */
     protected function runSilverstripeUpgradeTask(

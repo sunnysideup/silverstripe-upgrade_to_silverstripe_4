@@ -26,7 +26,7 @@ class CreatePublicFolder extends Task
     /**
      * [runActualTask description]
      * @param  array  $params not currently used for this task
-     * @return [type]         [description]
+     * @return [type]         
      */
     public function runActualTask($params = [])
     {

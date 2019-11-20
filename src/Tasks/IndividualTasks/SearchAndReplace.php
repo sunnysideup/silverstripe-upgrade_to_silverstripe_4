@@ -16,17 +16,49 @@ class SearchAndReplace extends Task
 {
     protected $taskStep = 's30';
 
+    /**
+     * for debugging purposes
+     * @var bool
+     */
     protected $debug = false;
 
+    /**
+     * check if there are double-ups in replacement.
+     * @var bool
+     */
     protected $checkReplacementIssues = false;
 
+    /**
+     * string used to show issues in replacement in the actual code being replaced.
+     *
+     * @var string
+     */
     protected $replacementHeader = 'automated upgrade';
 
+    /**
+     * folder containing the replacement file
+     *
+     * @var string
+     */
+    protected $folderContainingReplacementData = '';
+
+    /**
+     * list of folders to ignore in search and replace
+     * @var array
+     */
     protected $ignoreFolderArray = [
         '.git',
+        '.svn',
     ];
 
-    protected $alternativePathForReplacementData = '';
+    /**
+     * the name of the folder that contains the data we need
+     * e.g. SS4 / SS37
+     * IMPORTANT!
+     *
+     * @var string
+     */
+    protected $toFolder = 'SS4';
 
     public function getTitle()
     {
@@ -41,23 +73,30 @@ class SearchAndReplace extends Task
             next to it so you can review replacements easily.';
     }
 
-    public function setCheckReplacementIssues($b)
+    public function setCheckReplacementIssues(bool $b)
     {
         $this->checkReplacementIssues = $b;
 
         return $this;
     }
 
-    public function setIgnoreFolderArray($a)
+    public function setIgnoreFolderArray(array $a)
     {
         $this->ignoreFolderArray = $a;
 
         return $this;
     }
 
-    public function setAlternativePathForReplacementData($s)
+    public function setFolderContainingReplacementData(string $s)
     {
-        $this->alternativePathForReplacementData = $s;
+        $this->folderContainingReplacementData = $s;
+
+        return $this;
+    }
+
+    public function setToFolder(string $s)
+    {
+        $this->toFolder = $s;
 
         return $this;
     }
@@ -69,11 +108,8 @@ class SearchAndReplace extends Task
         }
 
         //replacement data
-        $replacementDataObject = new LoadReplacementData(
-            $this->mu(),
-            $this->alternativePathForReplacementData,
-            $this->params
-        );
+        $replacementDataObject = $this->getReplacementDataObject();
+
         $replacementArray = $replacementDataObject->getReplacementArrays();
 
         if ($this->debug) {
@@ -149,17 +185,22 @@ class SearchAndReplace extends Task
         return true;
     }
 
+    protected function getReplacementDataObject()
+    {
+        return new LoadReplacementData(
+            $this->mu(),
+            $this->folderContainingReplacementData,
+            $this->toFolder
+        );
+    }
+
     /**
      * 1. check that one find is not used twice:
      * find can be found 2x
      */
     private function checkReplacementDataIssues()
     {
-        $replacementDataObject = new LoadReplacementData(
-            $this->mu(),
-            $this->alternativePathForReplacementData,
-            $this->params
-        );
+
         $arr = $replacementDataObject->getReplacementArrays(null);
         $arrTos = [];
         $arrLanguages = $replacementDataObject->getLanguages();

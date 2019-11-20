@@ -3,7 +3,9 @@
 namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
+
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3toSs4;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31toSs37;
 
 class ModuleUpgrader
 {
@@ -13,7 +15,20 @@ class ModuleUpgrader
     # RECIPE
     #########################################
 
-    protected $recipe = Ss3ToSs4::class;
+    /**
+     *
+     * @var string
+     */
+    protected $recipe = 'SS4';
+
+    /**
+     * list of recipes available
+     * @var array
+     */
+    protected $availableRecipes = [
+        'SS4' => Ss3ToSs4::class,
+        'SS37' => Ss31ToSs37::class,
+    ];
 
     #########################################
     # TASKS
@@ -713,50 +728,54 @@ class ModuleUpgrader
 
     public function createListOfTasks()
     {
-        $html = '<h1>List of Tasks in run order for recipe: '.$this->getRecipe().'</h1>';
-        $count = 0;
-        $totalCount = count($this->listOfTasks);
-        $previousStep = '';
-        foreach ($this->listOfTasks as $class => $params) {
-            $properClass = current(explode('-', $class));
-            $nameSpacesArray = explode('\\', $class);
-            $shortClassCode = end($nameSpacesArray);
-            if (! class_exists($properClass)) {
-                $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
-            }
-            if (class_exists($properClass)) {
-                $count++;
-                $runItNow = $this->shouldWeRunIt($shortClassCode);
-                $params['taskName'] = $shortClassCode;
-                $obj = $properClass::create($this, $params);
-                if ($obj->getTaskName()) {
-                    $params['taskName'] = $obj->getTaskName();
+        $html = '';
+        foreach(array_keys($this->getAvailableRecipes()) as $recipeKey) {
+            $this->applyRecipe($recipeKey);
+            $html .= '<h1>List of Tasks in run order for recipe: '.$recipeKey.'</h1>';
+            $count = 0;
+            $totalCount = count($this->listOfTasks);
+            $previousStep = '';
+            foreach ($this->listOfTasks as $class => $params) {
+                $properClass = current(explode('-', $class));
+                $nameSpacesArray = explode('\\', $class);
+                $shortClassCode = end($nameSpacesArray);
+                if (! class_exists($properClass)) {
+                    $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
                 }
-                $reflectionClass = new \ReflectionClass($properClass);
-                $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
-                $path .= str_replace('\\', '/', $reflectionClass->getName()) . '.php';
-                $path = str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
-                $currentStepCode = $obj->getTaskStepCode();
-                $currentStep = $obj->getTaskStep($currentStepCode);
-                if ($currentStepCode === 's00') {
-                    //do nothing when it is an anytime step
-                } else {
-                    if ($previousStep !== $currentStep) {
-                        $html .= '<h2>' . $currentStep . '</h2>';
+                if (class_exists($properClass)) {
+                    $count++;
+                    $runItNow = $this->shouldWeRunIt($shortClassCode);
+                    $params['taskName'] = $shortClassCode;
+                    $obj = $properClass::create($this, $params);
+                    if ($obj->getTaskName()) {
+                        $params['taskName'] = $obj->getTaskName();
                     }
-                    $previousStep = $currentStep;
+                    $reflectionClass = new \ReflectionClass($properClass);
+                    $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
+                    $path .= str_replace('\\', '/', $reflectionClass->getName()) . '.php';
+                    $path = str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
+                    $currentStepCode = $obj->getTaskStepCode();
+                    $currentStep = $obj->getTaskStep($currentStepCode);
+                    if ($currentStepCode === 's00') {
+                        //do nothing when it is an anytime step
+                    } else {
+                        if ($previousStep !== $currentStep) {
+                            $html .= '<h2>' . $currentStep . '</h2>';
+                        }
+                        $previousStep = $currentStep;
+                    }
+                    $html .= '<h4>' . $count . ': ' . $obj->getTitle() . '</h4>';
+                    $html .= '<p>' . $obj->getDescription() . '<br />';
+                    $html .= '<strong>Code: </strong>' . $class;
+                    $html .= '<br /><strong>Class Name: </strong><a href="' . $path . '">' . $reflectionClass->getShortName() . '</a>';
+                    $html .= '</p>';
+                    $obj = $properClass::deleteTask($params);
+                } else {
+                    user_error($properClass . ' could not be found as class', E_USER_ERROR);
                 }
-                $html .= '<h4>' . $count . ': ' . $obj->getTitle() . '</h4>';
-                $html .= '<p>' . $obj->getDescription() . '<br />';
-                $html .= '<strong>Code: </strong>' . $class;
-                $html .= '<br /><strong>Class Name: </strong><a href="' . $path . '">' . $reflectionClass->getShortName() . '</a>';
-                $html .= '</p>';
-                $obj = $properClass::deleteTask($params);
-            } else {
-                user_error($properClass . ' could not be found as class', E_USER_ERROR);
             }
+            $dir = __DIR__ . '/../docs/en/';
         }
-        $dir = __DIR__ . '/../docs/en/';
         file_put_contents(
             $dir . '/AvailableTasks.md',
             $html
@@ -872,7 +891,7 @@ class ModuleUpgrader
      * want to start the logger or not in different scenarios.
      *
      * For now it defaults to always existing
-     * @return [type] [description]
+     * @return [type]
      */
     protected function startPHP2CommandLine()
     {
@@ -883,11 +902,16 @@ class ModuleUpgrader
     {
         $recipeName = $this->getRecipe();
         if($recipeName) {
-            $obj = new $recipeName();
-            $vars = $obj->getVariables();
-            foreach($vars as $variable => $value) {
-                $method = 'set'.ucwords($variable);
-                $this->$method($value);
+            if(isset($this->availableRecipes[$recipeName])) {
+                $recipeClass = $this->availableRecipes[$recipeName];
+                $obj = new $recipeClass();
+                $vars = $obj->getVariables();
+                foreach($vars as $variable => $value) {
+                    $method = 'set'.ucwords($variable);
+                    $this->$method($value);
+                }
+            } else {
+                user_error('Recipe '.$recipeName.' not available, available Recipes are: '.print_r($this->getAvailableRecipes()));
             }
         }
     }
@@ -1024,6 +1048,7 @@ class ModuleUpgrader
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('- Type: ' . ($this->getIsModuleUpgrade() ? 'module' : 'project'), 'light_cyan');
+        $this->colourPrint('- Recipe: ' . ($this->getRecipe() ?? 'no recipe selected'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Name: ' . $this->vendorName, 'light_cyan');
         $this->colourPrint('- Package Name: ' . $this->packageName, 'light_cyan');
@@ -1055,6 +1080,8 @@ class ModuleUpgrader
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- List of Steps: ' . $this->newLine() . '    -' . implode($this->newLine() . '    -', array_keys($this->listOfTasks)), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
+        $this->colourPrint('- parameter "again" ... runs last comand again', 'light_cyan');
+        $this->colourPrint('- parameter "restart" ... starts process from beginning', 'light_cyan');
     }
 
     /**

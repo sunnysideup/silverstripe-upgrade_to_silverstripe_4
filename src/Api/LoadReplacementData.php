@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\ReplacementData;
+namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 use SilverStripe\Upgrader\Util\ConfigFile;
 
@@ -10,7 +10,7 @@ use SilverStripe\Upgrader\Util\ConfigFile;
  *
  * The replacements should be in the same folder as this class.
  *
- * Alternatively, you can specify another folderContainingLocationData in the
+ * Alternatively, you can specify another folderContainingReplacementData in the
  * construct method.
  *
  * It will also search the root folders for any packages / projects being upgraded.
@@ -32,74 +32,82 @@ class LoadReplacementData
      */
     protected $mu = null;
 
-    protected $params = '';
+    /**
+     * folder containing the replacement file
+     *
+     * @var string
+     */
+    protected $folderContainingReplacementData = '';
 
-    protected $folderContainingLocationData = '';
-
+    /**
+     * name of the sub-folder for the replacement data.
+     * @var string
+     */
     protected $to = 'SS4';
 
+    /**
+     * array of replacements
+     * @var array
+     */
     protected $fullArray = [];
 
-    protected $tos = [];
 
+    /**
+     *
+     * @var array
+     */
     protected $languages = [];
 
+
+    /**
+     *
+     * @var array
+     */
     protected $flatFindArray = [];
 
+
+    /**
+     *
+     * @var array
+     */
     protected $flatReplacedArray = [];
 
+
+    /**
+     * path where to look for data.
+     * @var array
+     */
     protected $paths = [];
 
-    public function __construct($mu, $folderContainingLocationData = '', $params = [])
+    /**
+     *
+     * @param ModuleUpgrader $mu
+     * @param string         $alternativeReplacementDataFolder
+     * @param string         $toFolder - the subfolder used for the specific replace`
+     */
+    public function __construct($mu, $alternativeReplacementDataFolder = '', $toFolder = 'SS4')
     {
-        $this->folderContainingLocationData = $folderContainingLocationData ?: __DIR__;
-        $this->params = $params;
+        $this->folderContainingReplacementData = $alternativeReplacementDataFolder ?? $this->defaultLocation();
+        $this->toFolder = $toFolder;
         $this->mu = $mu;
-        $this->fullArray = $this->getData();
-        $count = 0;
-        foreach ($this->fullArray as $to => $toArray) {
-            $this->tos[$to] = $to;
-            foreach ($toArray as $path => $pathArray) {
-                foreach ($pathArray as $language => $languageArray) {
-                    $this->languages[$language] = $language;
-                    foreach ($languageArray as $findKey => $findKeyArray) {
-                        if (! isset($findKeyArray['R'])) {
-                            user_error('replacement key not set: ' . print_r($findKeyArray, 1));
-                        }
-                        $replaceKey = $findKeyArray['R'];
-                        $key = strtolower($to . '_' . $language . '_' . $path . '_' . $count);
-                        $this->flatFindArray[$key] = $findKey;
-                        $this->flatReplacedArray[$key] = $replaceKey;
-                        $count++;
-                    }
-                }
-            }
-        }
+        $this->compileFlatArray();
     }
 
-    public function setTo($s)
+    protected function defaultLocation()
+    {
+        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'ReplacementData';
+    }
+
+    public function setTo(string $s)
     {
         $this->to = $s;
 
         return $this;
     }
 
-    public function getReplacementArrays()
+    public function getReplacementArrays() : array
     {
-        if (! $this->to) {
-            return $this->fullArray;
-        }
-        if (isset($this->fullArray[$this->to])) {
-            return $this->fullArray[$this->to];
-        }
-        user_error('no data is available for upgrading to: ' . $this->to);
-
-        return [];
-    }
-
-    public function getTos()
-    {
-        return $this->tos;
+        return $this->fullArray;
     }
 
     public function getLanguages()
@@ -107,38 +115,50 @@ class LoadReplacementData
         return $this->languages;
     }
 
-    public function getFlatFindArray()
+    public function getFlatFindArray() : array
     {
         return $this->flatFindArray;
     }
 
-    public function getFlatReplacedArray()
+    public function getFlatReplacedArray() : array
     {
         return $this->flatReplacedArray;
     }
 
-    protected function getPaths()
-    {
-        $array = [];
-        foreach ($this->mu->getExistingModuleDirLocations() as $moduleDir) {
-            $array[$moduleDir] = $moduleDir;
-        }
-        $globalFixes = $this->mu->checkIfPathExistsAndCleanItUp($this->folderContainingLocationData);
-        if ($globalFixes) {
-            $array[$globalFixes] = $globalFixes;
-        }
-        $this->paths = $array;
 
-        return $this->paths;
+    protected function compileFlatArray()
+    {
+        $this->fullArray = $this->getData();
+        $count = 0;
+        foreach ($this->fullArray  as $path => $pathArray) {
+            foreach ($pathArray as $language => $languageArray) {
+                $this->languages[$language] = $language;
+                foreach ($languageArray as $findKey => $findKeyArray) {
+                    if (! isset($findKeyArray['R'])) {
+                        user_error('replacement key not set: ' . print_r($findKeyArray, 1));
+                    }
+                    $replaceKey = $findKeyArray['R'];
+                    $key = strtolower( $language . '_' . $path . '_' . $count);
+                    $this->flatFindArray[$key] = $findKey;
+                    $this->flatReplacedArray[$key] = $replaceKey;
+                    $count++;
+                }
+            }
+        }
     }
 
-    protected function getData()
+    /**
+     * retrieve all replacements
+     *
+     * @return array
+     */
+    protected function getData() : array
     {
         $this->getPaths();
         // Merge with any other upgrade spec in the top level
         $config = [];
         foreach ($this->paths as $path) {
-            $nextFile = $path . DIRECTORY_SEPARATOR . $this->ymlFileName;
+            $nextFile = $path  . DIRECTORY_SEPARATOR . $this->to . DIRECTORY_SEPARATOR .  $this->ymlFileName;
             if (file_exists($nextFile)) {
                 $nextConfig = ConfigFile::loadConfig($nextFile);
                 // Merge
@@ -152,7 +172,34 @@ class LoadReplacementData
         return $config;
     }
 
-    protected static function mergeConfig(array $left, array $right)
+    /**
+     * returns a list of paths to be checked for replacement data.
+     *
+     * @return array
+     */
+    protected function getPaths() : array
+    {
+        $array = [];
+        foreach ($this->mu->getExistingModuleDirLocations() as $moduleDir) {
+            $array[$moduleDir] = $moduleDir;
+        }
+        $globalFixes = $this->mu->checkIfPathExistsAndCleanItUp($this->folderContainingReplacementData);
+        if ($globalFixes) {
+            $array[$globalFixes] = $globalFixes;
+        }
+        $this->paths = $array;
+
+        return $this->paths;
+    }
+
+    /**
+     * merge config of two files ...
+     * @param  array $left
+     * @param  array $right
+     *
+     * @return array
+     */
+    protected static function mergeConfig(array $left, array $right) : array
     {
         //see ConfigFile for original
         $merged = $left;

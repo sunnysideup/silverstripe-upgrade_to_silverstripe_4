@@ -12,7 +12,7 @@ class Ss31ToSs37 extends BaseClass
      * name of the branch created to do the upgrade
      * @var string branch name
      */
-    protected $nameOfTempBranch = 'automatedbranch/upgrade/31to37';
+    protected $nameOfTempBranch = 'automatedbranch/upgrade/to37';
 
     /**
      * The default namespace for all tasks
@@ -38,6 +38,7 @@ class Ss31ToSs37 extends BaseClass
 
         'CheckoutDevMaster-1' => [],
         'AddLegacyBranchFor37' => [],
+
         'ResetWebRootDir-2' => [],
 
         'CheckoutDevMaster-2' => [],
@@ -46,19 +47,19 @@ class Ss31ToSs37 extends BaseClass
 
         'UpdateComposerRequirements-1' => [
             'Package' => 'silverstripe/framework',
-            'NewVersion' => '~3.7'
+            'NewVersion' => '~3.7',
         ],
         'UpdateComposerRequirements-2' => [
             'Package' => 'silverstripe/cms',
-            'NewVersion' => '~3.7'
+            'NewVersion' => '~3.7',
         ],
         'UpdateComposerRequirements-3' => [
             'Package' => 'silverstripe/reports',
-            'NewVersion' => '~3.7'
+            'NewVersion' => '~3.7',
         ],
         'UpdateComposerRequirements-4' => [
             'Package' => 'silverstripe/siteconfig',
-            'NewVersion' => '~3.7'
+            'NewVersion' => '~3.7',
         ],
         'ResetWebRootDir-3' => [],
 
@@ -66,7 +67,9 @@ class Ss31ToSs37 extends BaseClass
         'ComposerInstallProject' => [],
 
         //Step3: FixBeforeStart
-        'SearchAndReplace' => [],
+        'SearchAndReplace' => [
+            'ToFolder' => 'SS37',
+        ],
 
         //Step4: CoreUpgrade
         'FinalDevBuild37' => [],

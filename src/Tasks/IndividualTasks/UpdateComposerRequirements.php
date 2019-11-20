@@ -44,10 +44,10 @@ class UpdateComposerRequirements extends Task
         if (is_array($this->replacementArray) && count($this->replacementArray)) {
             foreach ($this->replacementArray as $replacementDetails) {
                 $this->package = $replacementDetails['package'];
-                $this->newVersion = isset($replacementDetails['newVersion']) ? $replacementDetails['newVersion'] : 'error';
-                $this->isObsolete = isset($replacementDetails['isObsolete']) ? $replacementDetails['isObsolete'] : false;
-                $this->isNew = isset($replacementDetails['isNew']) ? $replacementDetails['isNew'] : false;
-                $this->replacementPackage = isset($replacementDetails['replacementPackage']) ? $replacementDetails['replacementPackage'] : '';
+                $this->newVersion = $replacementDetails['newVersion'] ?? 'error';
+                $this->isObsolete = $replacementDetails['isObsolete'] ?? false;
+                $this->isNew = $replacementDetails['isNew'] ?? false;
+                $this->replacementPackage = $replacementDetails['replacementPackage'] ?? '';
                 $this->runActualTaskInner();
             }
         } else {

@@ -1,0 +1,35 @@
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+
+
+/**
+ * below are examples
+ * of most of the config options
+ *
+ * N.B. the individual tasks also have config options!
+ */
+$obj = ModuleUpgrader::create()
+    ->setRunImmediately(true)
+    ->setLogFolderDirLocation('/var/www/upgrade-logs')
+    ->setAboveWebRootDirLocation('/var/www/upgrades')
+    ->setWebRootName('upgradeto37')
+    ->setRunInteractively(true)
+    // ->setRunIrreversibly(true)
+    ->setArrayOfModules(
+        [
+            1 => [
+              'VendorName' => 'myclient',
+              'VendorNamespace' => 'MyClient',
+              'PackageName' => 'app',
+              'PackageNamespace' => 'App',
+              'PackageFolderNameForInstall' => 'myclient',
+              'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git',
+              'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
+              'IsModuleUpgrade' => false
+            ]
+        ]
+    )
+    ->setRecipe('SS37')
+    ->run();

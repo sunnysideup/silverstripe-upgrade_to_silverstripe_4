@@ -12,6 +12,12 @@ class ModuleUpgrader
 
 
     #########################################
+    # Arguments
+    #########################################
+
+    protected $argv = [];
+
+    #########################################
     # RECIPE
     #########################################
 
@@ -348,7 +354,6 @@ class ModuleUpgrader
             $this->locationOfSSUpgradeModule = $this->locationOfThisUpgrader .
                 '/vendor/silverstripe/upgrader/bin/upgrade-code';
         }
-        $this->applyRecipe();
     }
 
 
@@ -791,6 +796,7 @@ class ModuleUpgrader
      */
     public function run()
     {
+        $this->applyRecipe();
         for ($i = 0; $i < 500; $i++) {
             $this->colourPrint(
                 '.',
@@ -877,12 +883,12 @@ class ModuleUpgrader
     protected function loadNextStepInstructions()
     {
         if (PHP_SAPI === 'cli') {
-            $this->restartSession = isset($argv[1]) && $argv[1] === 'restart';
+            $this->restartSession = isset($this->argv[1]) && $this->argv[1] === 'restart';
         } else {
             $this->restartSession = isset($_GET['restart']);
         }
         if (PHP_SAPI === 'cli') {
-            $this->runLastOneAgain = isset($argv[1]) && $argv[1] === 'again';
+            $this->runLastOneAgain = isset($this->argv[1]) && $this->argv[1] === 'again';
         } else {
             $this->runLastOneAgain = isset($_GET['again']);
         }
@@ -1051,7 +1057,7 @@ class ModuleUpgrader
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('- Type: ' . ($this->getIsModuleUpgrade() ? 'module' : 'project'), 'light_cyan');
-        $this->colourPrint('- Recipe: ' . ($this->getRecipe() ?? 'no recipe selected'), 'light_cyan');
+        $this->colourPrint('- Recipe: ' . ($this->getRecipe() ?: 'no recipe selected'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Name: ' . $this->vendorName, 'light_cyan');
         $this->colourPrint('- Package Name: ' . $this->packageName, 'light_cyan');
@@ -1259,9 +1265,9 @@ Session has completed.
         $this->setSessionData($session);
     }
 
-    protected function URLExists($url)
+    protected function URLExists($url) : bool
     {
-        if ($url) {
+        if ($url && $this->isValidURL($url)) {
             $headers = get_headers($url);
             if (is_array($headers) && count($headers)) {
                 foreach ($headers as $header) {
@@ -1272,6 +1278,15 @@ Session has completed.
             }
         }
         return false;
+    }
+
+    protected function isValidURL($url) :bool
+    {
+        if(filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function newLine()

@@ -217,11 +217,22 @@ abstract class Task
      */
     protected function starter($params = [])
     {
+        $this->setParams($params);
+    }
+
+    protected function setParams($params = [])
+    {
         foreach ($params as $paramKey => $paramValue) {
-            if (isset($this->{$paramKey})) {
-                $this->{$paramKey} = $paramValue;
+            $method = 'set'.$paramKey;
+            if(method_exists($this, $method)) {
+                $this->{$method}($paramValue);
             } else {
-                user_error('You are trying to set ' . $paramKey . ' but it is meaninguless to this class: ' . static::class);
+                $paramKey = lcfirst($paramKey);
+                if (property_exists($this, $paramKey)) {
+                    $this->{$paramKey} = $paramValue;
+                } else {
+                    user_error('You are trying to set ' . $paramKey . ' but it is meaninguless to this class: ' . static::class);
+                }
             }
         }
     }

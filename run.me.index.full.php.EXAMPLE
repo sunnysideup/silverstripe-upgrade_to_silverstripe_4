@@ -11,6 +11,7 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
  * N.B. the individual tasks also have config options!
  */
 $obj = ModuleUpgrader::create()
+    ->setArgv($argv)
     ->setRunImmediately(true)
     ->setLogFolderDirLocation('/var/www/upgrade-logs')
     ->setAboveWebRootDirLocation('/var/www/upgrades')

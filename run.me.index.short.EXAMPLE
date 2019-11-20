@@ -10,6 +10,7 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 // we have used sunnysideup/cleaner_tinymce_config as an example repository below
 
 $obj = ModuleUpgrader::create()
+    ->setArgv($argv)
     ->setArrayOfModules(
         [
             1 => [

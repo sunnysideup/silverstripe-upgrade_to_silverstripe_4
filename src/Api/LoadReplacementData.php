@@ -43,7 +43,7 @@ class LoadReplacementData
      * name of the sub-folder for the replacement data.
      * @var string
      */
-    protected $to = 'SS4';
+    protected $toFolder = 'SS4';
 
     /**
      * array of replacements
@@ -87,9 +87,10 @@ class LoadReplacementData
      */
     public function __construct($mu, $alternativeReplacementDataFolder = '', $toFolder = 'SS4')
     {
-        $this->folderContainingReplacementData = $alternativeReplacementDataFolder ?? $this->defaultLocation();
-        $this->toFolder = $toFolder;
         $this->mu = $mu;
+        $this->folderContainingReplacementData = $alternativeReplacementDataFolder ?: $this->defaultLocation();
+        $this->toFolder = $toFolder;
+
         $this->compileFlatArray();
     }
 
@@ -98,9 +99,9 @@ class LoadReplacementData
         return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'ReplacementData';
     }
 
-    public function setTo(string $s)
+    public function setToFolder(string $s)
     {
-        $this->to = $s;
+        $this->toFolder = $s;
 
         return $this;
     }
@@ -158,13 +159,14 @@ class LoadReplacementData
         // Merge with any other upgrade spec in the top level
         $config = [];
         foreach ($this->paths as $path) {
-            $nextFile = $path  . DIRECTORY_SEPARATOR . $this->to . DIRECTORY_SEPARATOR .  $this->ymlFileName;
-            if (file_exists($nextFile)) {
-                $nextConfig = ConfigFile::loadConfig($nextFile);
+            $file = $path  . DIRECTORY_SEPARATOR . $this->toFolder . DIRECTORY_SEPARATOR .  $this->ymlFileName;
+            if (file_exists($file)) {
+                $nextConfig = ConfigFile::loadConfig($file);
                 // Merge
                 $config = $this->mergeConfig($config, $nextConfig);
+                $this->mu->colourPrint('loaded replacement file: ' . $file);
             } else {
-                $this->mu->colourPrint('could not find: ' . $nextFile);
+                $this->mu->colourPrint('could not find: ' . $file);
             }
         }
         ksort($config);

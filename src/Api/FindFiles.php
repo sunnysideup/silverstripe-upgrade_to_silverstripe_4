@@ -179,7 +179,7 @@ class FindFiles
     /**
      * loads all the applicable files
      * @param string $path (e.g. "." or "/var/www/mysite.co.nz")
-     * @param boolean $runningInnerLoop - is the method calling itself???
+     * @param boolean $runningInnerLoop - is the method calling itself?
      */
     protected function getFileArray($path, $runningInnerLoop = false)
     {

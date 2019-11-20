@@ -15,7 +15,7 @@ $obj = ModuleUpgrader::create()
     ->setRunImmediately(true)
     ->setLogFolderDirLocation('/var/www/upgrade-logs')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setWebRootName('upgradeto37')
+    ->setWebRootName('upgradeto4')
     ->setRunInteractively(true)
     // ->setRunIrreversibly(true)
     ->setArrayOfModules(
@@ -32,5 +32,5 @@ $obj = ModuleUpgrader::create()
             ]
         ]
     )
-    ->setRecipe('SS37')
+    ->setRecipe('SS4')
     ->run();

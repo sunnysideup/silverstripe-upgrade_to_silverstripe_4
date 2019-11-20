@@ -20,14 +20,14 @@ $obj = ModuleUpgrader::create()
     ->setArrayOfModules(
         [
             1 => [
-              'VendorName' => 'myclient',
-              'VendorNamespace' => 'MyClient',
-              'PackageName' => 'app',
-              'PackageNamespace' => 'App',
-              'PackageFolderNameForInstall' => 'myclient',
-              'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git',
+              'VendorName' => 'myclient',  //e.g. as listed in composer.json file, not so relevant for projects
+              'VendorNamespace' => 'MyClient', //namespace to be used for project
+              'PackageName' => 'app', //e.g. as listed in composer.json file, not so relevant for projects
+              'PackageNamespace' => 'App', //second part of the namespace i.e. VendorNamespace/PackageNamespace
+              'PackageFolderNameForInstall' => 'myclient', //temp folder to be used for running upgrade.
+              'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git', //link to package
               // 'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
-              'IsModuleUpgrade' => false
+              'IsModuleUpgrade' => false, //is it a module or a website project?
             ]
         ]
     )

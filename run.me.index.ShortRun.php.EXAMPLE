@@ -11,14 +11,13 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
  * N.B. the individual tasks also have config options!
  */
 $obj = ModuleUpgrader::create()
-    ->setRunImmediately(true)
-    ->setLogFolderDirLocation('/var/www/upgrades-logs')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setWebRootName('upgradeto4')
+    ->setWebRootName('testrun')
     ->setRunInteractively(true)
     // ->setRunIrreversibly(true)
     ->setArrayOfModules(
         [
+            //see run.me.index.full.php.EXAMPLE for more details1
             1 => [
               'VendorName' => 'myclient',
               'VendorNamespace' => 'MyClient',
@@ -26,53 +25,18 @@ $obj = ModuleUpgrader::create()
               'PackageNamespace' => 'App',
               'PackageFolderNameForInstall' => 'myclient',
               'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git',
-              // 'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
-              'IsModuleUpgrade' => false
+              'IsModuleUpgrade' => true,
             ]
         ]
     )
-    ->setNameOfTempBranch('4.1-TEMP-upgrade')
-    ->setFrameworkComposerRestraint('^4.4')
-    //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
-    // ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
-    // ->setListOfTasks(
-    //     [
-    //         'ResetWebRootDir-1' => [],
-    //         'AddLegacyBranch' => [],
-    //         'ResetWebRootDir-2' => [],
-    //         'AddUpgradeBranch' => [],
-    //         'UpdateComposerRequirements-1' => [
-    //             'Package' => 'silverstripe/framework',
-    //             'NewVersion' => '~4.0'
-    //         ],
-    //         'RecomposeHomeBrew' => [],
-    //         'UpdateComposerRequirements-2' => [
-    //             'Package' => 'silverstripe/cms',
-    //             'ReplacementPackage' => 'silverstripe/recipe-cms',
-    //             'NewVersion' => '1.1.2'
-    //         ],
-    //
-    //         'ResetWebRootDir-3' => [],
-    //         'ComposerInstallProject' => [],
-    //         'SearchAndReplace' => [],
-    //         // 'ChangeEnvironment' => [],
-    //         'UpperCaseFolderNamesForPSR4' => [],
-    //         'AddNamespace' => [],
-    //         'Upgrade' => [],
-    //         'InspectAPIChanges' => [],
-    //         'Reorganise' => [],
-    //         // 'WebRootUpdate' => []
-    //     ]
-    // )
-    // ->setStartFrom('RecomposeHomeBrew')
-    // ->setEndWith('SearchAndReplace')
-    // ->setOnlyRun('SearchAndReplace')
-    // ->removeFromListOfTasks('SearchAndReplace')
-    // ->addToListOfTasks(
-    //      ['MyCustomTasks\\CustomNameSpace\\SearchAndReplace2'],
-    //      $beforeOrAfter = 'SearchAndReplace',
-    //      $isBefore = false
-    // )
-    // ->defaultNamespaceForTask('MyCustomisation\\CustomNameSpace\\MyTasks')
-    // ->setVerbose(false)
+    ->setNameOfTempBranch('test-only')
+    ->setFrameworkComposerRestraint('3.7')
+    ->setListOfTasks(
+        [
+            'ResetWebRootDir-1' => [],
+            'AddUpgradeBranch' => [],
+            'ResetWebRootDir-2' => [],
+            'ApplyPSR2' => [],
+        ]
+    )
     ->run();

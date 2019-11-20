@@ -12,14 +12,14 @@ $obj = ModuleUpgrader::create()
     ->setArrayOfModules(
         [
             1 => [
-              'VendorName' => 'awesomeproject',
-              'VendorNamespace' => 'AwesomeProject',
-              'PackageName' => 'app',
-              'PackageNamespace' => 'App',
-              'PackageFolderNameForInstall' => 'awesome',
-              'GitLink' => 'git@bitbucket.org:mybitbucket/awesome.org.nz.git',
-              // 'OriginComposerFileLocation' => 'https://bitbucket.org/mybitbucket/awesome.org.nz/src/master/composer.json',
-              'IsModuleUpgrade' => false
+                //see run.me.index.full.php.EXAMPLE for more details1
+                'VendorName' => 'awesomeproject', //e.g. as listed in composer.json file
+                'VendorNamespace' => 'AwesomeProject',
+                'PackageName' => 'app',
+                'PackageNamespace' => 'App',
+                'PackageFolderNameForInstall' => 'awesome',
+                'GitLink' => 'git@bitbucket.org:mybitbucket/awesome.org.nz.git',
+                'IsModuleUpgrade' => false,
             ]
         ]
     )

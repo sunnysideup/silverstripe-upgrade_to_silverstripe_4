@@ -25,20 +25,20 @@ class ApplyPSR2 extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        //1. install upgrader
-        $this->mu()->execMe(
-            $webRoot,
-            'composer require --dev symplify/easy-coding-standard',
-            'Adding easy coding standards',
-            false
-        );
-        //2. copy ecs.yml
-        $this->mu()->execMe(
-            $webRoot,
-            'cp '.$this->mu()->getLocationOfThisUpgrader().'/ecs.yml '.$webRoot.'/',
-            'copying ecs.yml file',
-            false
-        );
+        // //1. install upgrader
+        // $this->mu()->execMe(
+        //     $webRoot,
+        //     'composer require --dev symplify/easy-coding-standard',
+        //     'Adding easy coding standards',
+        //     false
+        // );
+        // //2. copy ecs.yml
+        // $this->mu()->execMe(
+        //     $webRoot,
+        //     'cp '.$this->mu()->getLocationOfThisUpgrader().'/ecs.yml '.$webRoot.'/',
+        //     'copying ecs.yml file',
+        //     false
+        // );
         //3. apply
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $this->mu()->execMe(

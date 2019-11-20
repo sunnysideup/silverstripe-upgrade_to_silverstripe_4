@@ -655,6 +655,12 @@ class ModuleUpgrader
                 $codeDirs[$baseNameSpace] = $codeDir;
             }
         }
+        if(count($codeDirs) === 0) {
+            user_error('
+                Could not find any code dirs. The locations searched: '.print_r($locations, 1)
+                .' Using the '.$this->getIsModuleUpgradeNice().' approach'
+            );
+        }
 
         return $codeDirs;
     }
@@ -1059,7 +1065,7 @@ class ModuleUpgrader
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
-        $this->colourPrint('- Type: ' . ($this->getIsModuleUpgrade() ? 'module' : 'project'), 'light_cyan');
+        $this->colourPrint('- Type: ' . $this->getIsModuleUpgradeNice(), 'light_cyan');
         $this->colourPrint('- Recipe: ' . ($this->getRecipe() ?: 'no recipe selected'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Name: ' . $this->vendorName, 'light_cyan');
@@ -1295,4 +1301,10 @@ Session has completed.
         }
         return nl2br("\n");
     }
+
+    protected function getIsModuleUpgradeNice()
+    {
+        return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
+    }
+
 }

@@ -15,9 +15,15 @@
         'Object':
             R: "SS_Object"
             C: "Check usage"
+            I: true
 
 
     php:
-        'Object':
-            R: "SS_Object"
-            C: "Check usage"
+        'extends Object':
+            R: "extends SS_Object"
+            C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
+            I: true
+        'Object::':
+            R: "SS_Object::"
+            C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
+            I: true

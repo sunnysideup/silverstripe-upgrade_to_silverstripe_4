@@ -1074,7 +1074,6 @@ class ModuleUpgrader
         $this->colourPrint('- Upgrade as Fork: ' . ($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- Run Interactively: ' . ($this->runInteractively ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- Run Irreversibly: ' . ($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
-        $this->colourPrint('- Is Module Upgrade: ' . ($this->isModuleUpgrade ? 'yes' : 'no'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Vendor Namespace: ' . $this->vendorNamespace, 'light_cyan');
         $this->colourPrint('- Package Namespace: ' . $this->packageNamespace, 'light_cyan');
@@ -1082,13 +1081,13 @@ class ModuleUpgrader
         $this->colourPrint('- Upgrade Dir (root of install): ' . $this->getWebRootDirLocation(), 'light_cyan');
         $this->colourPrint('- Package Folder Name For Install: ' . $this->packageFolderNameForInstall, 'light_cyan');
         $this->colourPrint('- Module / Project Dir(s): ' . implode(', ', $this->moduleDirLocations), 'light_cyan');
-        $this->colourPrint('- Theme Dir: ' . $this->themeDirLocation, 'light_cyan');
+        $this->colourPrint('- Theme Dir: ' . ($this->themeDirLocation ?: 'not set'), 'light_cyan');
         $this->colourPrint('- Git and Composer Root Dir: ' . $this->getGitRootDir(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Git Repository Link (SSH): ' . $this->gitLink, 'light_cyan');
         $this->colourPrint('- Git Repository Link (HTTPS): ' . $this->gitLinkAsHTTPS, 'light_cyan');
         $this->colourPrint('- Git Repository Link (RAW): ' . $this->gitLinkAsRawHTTPS, 'light_cyan');
-        $this->colourPrint('- Origin composer file location: ' . $this->originComposerFileLocation, 'light_cyan');
+        $this->colourPrint('- Origin composer file location: ' . ($this->originComposerFileLocation?: 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Session file: ' . $this->getSessionFileLocation(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');

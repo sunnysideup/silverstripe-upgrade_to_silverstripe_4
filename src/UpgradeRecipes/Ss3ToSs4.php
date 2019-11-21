@@ -59,8 +59,8 @@ class Ss3ToSs4 extends BaseClass
         'ResetWebRootDir-3' => [],
 
         //Step2: MoveToNewVersion
-        'CreatePublicFolder-2' => [],
         'ComposerInstallProject' => [],
+        'CreatePublicFolder-2' => [],
         'Recompose' => [],
 
         //Step3: FixBeforeStart

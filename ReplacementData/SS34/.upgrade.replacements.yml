@@ -22,7 +22,7 @@
     'php':
         'UploadField':
             R: "UploadField"
-            C: "swf, html, htm, xhtml and xml removed from default allowed uploadable file types, if you need to allow uploads for this file type you need to append these to the File.allowed_extensions config as necessary."
+            C: "swf, html, htm, xhtml and xml, svg removed from default allowed uploadable file types, if you need to allow uploads for this file type you need to append these to the File.allowed_extensions config as necessary."
             I: true
         'SetWidth':
             R: "ScaleWidth"
@@ -68,6 +68,42 @@
             R: "extends Controller"
             C: "Please access any custom controllers exclusively through self-defined routes. https://docs.silverstripe.org/en/3/changelogs/3.2.0/#api-removed-url-routing-by-controller-name"
             I: true
+        "PastMember"
+            R: "PastMember"
+            C: "Cookie has been remove, find an alternative solution. https://github.com/silverstripe/silverstripe-framework/commit/c7f656c"
+            I: true
+        "canCreate"
+            R: "canCreate"
+            C: "Any user code which overrides the SiteTree::canCreate method should be investigated to ensure it continues to work correctly. https://docs.silverstripe.org/en/3/changelogs/3.1.11/"
+            I: true
+        "Convert::xml2array"
+            R: "Convert::xml2array"
+            C: "If your code relies on Convert::xml2array there are some important things to consider with regards to certain vulnerabilities. https://docs.silverstripe.org/en/3/changelogs/3.1.12/"
+            I: true
+        "validationError"
+            R: "validationError"
+            C: "If a validation message in a custom Validator instance should be rendered as literal HTML, then the $message parameter for Validator::validationError should be passed as an instance of HTMLText: https://docs.silverstripe.org/en/3/changelogs/3.1.16/"
+            I: true
+        "FormAction"
+            R: "FormAction"
+            C: "FormAction buttons with custom HTML content should be assigned using the `FormAction::setButtonContent` method instead. https://github.com/silverstripe/silverstripe-framework/commit/1db08ba"
+            I: true
+        "Shortcode"
+            R: "Shortcode"
+            C: "Test this still works as expected: https://github.com/silverstripe/silverstripe-framework/commit/a339687"
+            I: true
+        "Treedropdownfield"
+            R: "Treedropdownfield"
+            C: "Treedropdownfield showsearch default true, is this desired? if not, change to false;"
+            I: true
+        "ExtraMeta"
+            R: "ExtraMeta"
+            C: "If you have previously used the SiteTree.ExtraMeta field for <head> markup other than its intended use case (<meta> and <link>), please consult https://www.silverstripe.org/download/security-releases/ss-2014-003-extrameta-allows-javascript-for-malicious-cms-authors-/?_ga=2.192553826.996819744.1574287179-1378013890.1569892033."
+            I: true
+        "Injector"
+            R: "Injector"
+            C: "Test cases that rely on updating and restoring Injector services may now take advantage of the new Injector::nest() and Injector::unnest() methods to sandbox their alterations."
+            I: true
 
     'ss':
         'SetWidth':
@@ -77,4 +113,8 @@
         'SetHeight':
             R: "ScaleHeight"
             C: "Updated Image method names in PHP code and templates: https://docs.silverstripe.org/en/3/changelogs/3.2.0/"
+            I: true
+        "ExtraMeta"
+            R: "ExtraMeta"
+            C: "If you have previously used the SiteTree.ExtraMeta field for <head> markup other than its intended use case (<meta> and <link>), please consult https://www.silverstripe.org/download/security-releases/ss-2014-003-extrameta-allows-javascript-for-malicious-cms-authors-/?_ga=2.192553826.996819744.1574287179-1378013890.1569892033."
             I: true

@@ -15,3 +15,7 @@
             R: "ReadOnlyField"
             C: "Does this field contain HTML in the value? If so, you will need to check if the html has been escaped or is displaying correctly."
             I: true
+        'ArrayList'
+            R: "ArrayList"
+            C: "Test this still works as expected. ArrayList should now be more consistent with DataList: https://github.com/silverstripe/silverstripe-framework/commit/f6fe1427c286fa5fc58b83cd10d84bf5930889e2"
+            I: true

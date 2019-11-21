@@ -68,10 +68,6 @@ class Ss33ToSs37 extends BaseClass
 
         //Step3: FixBeforeStart
         'SearchAndReplace' => [
-            'ToFolder' => 'SS34',
-        ],
-
-        'SearchAndReplace' => [
             'ToFolder' => 'SS36',
         ],
 

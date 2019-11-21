@@ -5,7 +5,7 @@ namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\BaseClass;
 
 
-class Ss33ToSs37 extends BaseClass
+class Ss35ToSs37 extends BaseClass
 {
 
     /**
@@ -67,14 +67,6 @@ class Ss33ToSs37 extends BaseClass
         'ComposerInstallProject' => [],
 
         //Step3: FixBeforeStart
-        'SearchAndReplace' => [
-            'ToFolder' => 'SS34',
-        ],
-
-        'SearchAndReplace' => [
-            'ToFolder' => 'SS36',
-        ],
-
         'SearchAndReplace' => [
             'ToFolder' => 'SS37',
         ],

@@ -101,7 +101,7 @@ class LoadReplacementData
 
     protected function defaultLocation()
     {
-        return $this->mu()->getLocationOfThisUpgrader() . DIRECTORY_SEPARATOR . 'ReplacementData';
+        return $this->mu->getLocationOfThisUpgrader() . DIRECTORY_SEPARATOR . 'ReplacementData';
     }
 
     public function setToFolder(string $s)

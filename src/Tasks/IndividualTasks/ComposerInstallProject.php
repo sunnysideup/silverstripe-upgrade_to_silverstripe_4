@@ -16,14 +16,14 @@ class ComposerInstallProject extends Task
 
     public function getTitle()
     {
-        return 'use Composer to install vanilla Silverstripe project';
+        return 'use Composer to install vanilla Silverstripe project and add project / module to it.';
     }
 
     public function getDescription()
     {
         return '
             Install a basic / standard install of Silverstripe (' . ($this->versionToLoad ?: $this->mu()->getFrameworkComposerRestraint()) . ')
-            using composer';
+            using composer and install module / project into the vanilla silverstripe install.';
     }
 
     public function runActualTask($params = [])
@@ -50,7 +50,7 @@ class ComposerInstallProject extends Task
 
         $this->mu()->execMe(
             $cloneDir,
-            'git branch -a ',
+            'git branch -a',
             'check branch exists',
             false
         );

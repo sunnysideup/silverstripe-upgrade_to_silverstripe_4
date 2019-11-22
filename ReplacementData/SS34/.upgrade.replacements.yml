@@ -1,0 +1,120 @@
+####
+#### FORMAT
+####    PATH (relative to root folder of module)
+####        LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
+####            FindKey
+####                R: replace with entry - you can leave empty to keep it as the find... in that case you should add a comment
+####                C: comment - this makes it a complex replacement.
+####                I: ignore case (default is case sensitive)
+
+
+'.':
+
+
+    'yml':
+        'Email':
+            R: "Email"
+            C: "Mailer no longer calls xml2raw on all email subject line, and now must be passed in via plain text. See: https://github.com/silverstripe/silverstripe-framework/commit/e47800917a5482b1dce455f4fbcb564ff73d7576"
+            I: true
+
+
+
+    'php':
+        'UploadField':
+            R: "UploadField"
+            C: "swf, html, htm, xhtml and xml, svg removed from default allowed uploadable file types, if you need to allow uploads for this file type you need to append these to the File.allowed_extensions config as necessary."
+            I: true
+        'SetWidth':
+            R: "ScaleWidth"
+            C: "Updated Image method names in PHP code and templates: https://docs.silverstripe.org/en/3/changelogs/3.2.0/"
+            I: true
+        'SetHeight':
+            R: "ScaleHeight"
+            C: "Updated Image method names in PHP code and templates: https://docs.silverstripe.org/en/3/changelogs/3.2.0/"
+            I: true
+        'SQLQuery':
+            R: "SQLQuery"
+            C: "Update code that uses SQLQuery, see https://docs.silverstripe.org/en/3/changelogs/3.2.0/#update-code-that-uses-sqlquery"
+            I: true
+        'DB::':
+            R: "DB::"
+            C: "Update code that interacts with SQL strings to use parameters, see https://docs.silverstripe.org/en/3/changelogs/3.2.0/#update-code-that-interacts-with-sql-strings-to-use-parameters"
+            I: true
+        'Email':
+            R: "Email"
+            C: "`Mailer` no longer calls `xml2raw` on all email subject line, and now must be passed in via plain text. See: https://github.com/silverstripe/silverstripe-framework/commit/e47800917a5482b1dce455f4fbcb564ff73d7576"
+            I: true
+        'Convert::html2raw':
+            R: "Convert::html2raw"
+            C: "API Convert::html2raw no longer wraps text automatically. See: https://github.com/silverstripe/silverstripe-framework/commit/29e33475621fd9e4be20ecdea45d017bbd4f65f8"
+            I: true
+        'LastVisited':
+            R: "LastVisited"
+            C: "deprecated in 3.1 due to performance concerns, and should be disabled unless required by your application. see https://docs.silverstripe.org/en/3/changelogs/3.2.0/#disable"
+            I: true
+        'NumVisits':
+            R: "LastVisited"
+            C: "deprecated in 3.1 due to performance concerns, and should be disabled unless required by your application. see https://docs.silverstripe.org/en/3/changelogs/3.2.0/#disable"
+            I: true
+        'Form':
+            R: "Form"
+            C: "API: Default Form and FormField ID attributes rewritten, Please test each of your existing site forms to ensure that they work correctly in particular, javascript and css styles which rely on specific ID values. see https://docs.silverstripe.org/en/3/changelogs/3.2.0/#api-default-form-and-formfield-id-attributes-rewritten"
+            I: true
+        "AjaxUniqueTextField"
+            R: "AjaxUniqueTextField"
+            C: "Needs to be replaced by custom code: https://github.com/silverstripe/silverstripe-framework/commit/cb1f95e51eff1ce762456e0fa6b7eca38ccc3198"
+            I: true
+        "extends Controller"
+            R: "extends Controller"
+            C: "Please access any custom controllers exclusively through self-defined routes. https://docs.silverstripe.org/en/3/changelogs/3.2.0/#api-removed-url-routing-by-controller-name"
+            I: true
+        "PastMember"
+            R: "PastMember"
+            C: "Cookie has been remove, find an alternative solution. https://github.com/silverstripe/silverstripe-framework/commit/c7f656c"
+            I: true
+        "canCreate"
+            R: "canCreate"
+            C: "Any user code which overrides the SiteTree::canCreate method should be investigated to ensure it continues to work correctly. https://docs.silverstripe.org/en/3/changelogs/3.1.11/"
+            I: true
+        "Convert::xml2array"
+            R: "Convert::xml2array"
+            C: "If your code relies on Convert::xml2array there are some important things to consider with regards to certain vulnerabilities. https://docs.silverstripe.org/en/3/changelogs/3.1.12/"
+            I: true
+        "validationError"
+            R: "validationError"
+            C: "If a validation message in a custom Validator instance should be rendered as literal HTML, then the $message parameter for Validator::validationError should be passed as an instance of HTMLText: https://docs.silverstripe.org/en/3/changelogs/3.1.16/"
+            I: true
+        "FormAction"
+            R: "FormAction"
+            C: "FormAction buttons with custom HTML content should be assigned using the `FormAction::setButtonContent` method instead. https://github.com/silverstripe/silverstripe-framework/commit/1db08ba"
+            I: true
+        "Shortcode"
+            R: "Shortcode"
+            C: "Test this still works as expected: https://github.com/silverstripe/silverstripe-framework/commit/a339687"
+            I: true
+        "Treedropdownfield"
+            R: "Treedropdownfield"
+            C: "Treedropdownfield showsearch default true, is this desired? if not, change to false;"
+            I: true
+        "ExtraMeta"
+            R: "ExtraMeta"
+            C: "If you have previously used the SiteTree.ExtraMeta field for <head> markup other than its intended use case (<meta> and <link>), please consult https://www.silverstripe.org/download/security-releases/ss-2014-003-extrameta-allows-javascript-for-malicious-cms-authors-/?_ga=2.192553826.996819744.1574287179-1378013890.1569892033."
+            I: true
+        "Injector"
+            R: "Injector"
+            C: "Test cases that rely on updating and restoring Injector services may now take advantage of the new Injector::nest() and Injector::unnest() methods to sandbox their alterations."
+            I: true
+
+    'ss':
+        'SetWidth':
+            R: "ScaleWidth"
+            C: "Updated Image method names in PHP code and templates: https://docs.silverstripe.org/en/3/changelogs/3.2.0/"
+            I: true
+        'SetHeight':
+            R: "ScaleHeight"
+            C: "Updated Image method names in PHP code and templates: https://docs.silverstripe.org/en/3/changelogs/3.2.0/"
+            I: true
+        "ExtraMeta"
+            R: "ExtraMeta"
+            C: "If you have previously used the SiteTree.ExtraMeta field for <head> markup other than its intended use case (<meta> and <link>), please consult https://www.silverstripe.org/download/security-releases/ss-2014-003-extrameta-allows-javascript-for-malicious-cms-authors-/?_ga=2.192553826.996819744.1574287179-1378013890.1569892033."
+            I: true

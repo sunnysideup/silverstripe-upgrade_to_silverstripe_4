@@ -18,6 +18,9 @@ class Upgrade extends Task
 
     protected $rootDirForCommand = '';
 
+    /**
+     * @todo Prompt does not show up sometimes, leaving the program hanging
+     */
     protected $settings = '--prompt';
 
     public function getTitle()

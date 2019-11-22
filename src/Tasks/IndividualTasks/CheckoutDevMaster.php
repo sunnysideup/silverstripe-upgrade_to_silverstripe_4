@@ -14,6 +14,8 @@ class CheckoutDevMaster extends Task
 
     protected $branchOrTagToUse = 'master';
 
+    protected $cloneAsProject = false;
+
     protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
@@ -32,7 +34,7 @@ class CheckoutDevMaster extends Task
      */
     public function runActualTask($params = [])
     {
-        if ($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade() && $cloneAsProject === false) {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
                 'composer init -s dev -n',

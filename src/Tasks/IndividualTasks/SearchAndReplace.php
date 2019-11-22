@@ -117,6 +117,7 @@ class SearchAndReplace extends Task
         }
 
         //replace API
+
         foreach ($this->mu()->getExistingModuleDirLocationsWithThemeFolders() as $moduleOrThemeDir) {
             $textSearchMachine = new SearchAndReplaceAPI($moduleOrThemeDir);
             $textSearchMachine->setIsReplacingEnabled(true);

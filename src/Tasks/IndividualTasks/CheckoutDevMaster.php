@@ -36,7 +36,7 @@ class CheckoutDevMaster extends Task
     {
         if ($this->mu()->getIsModuleUpgrade()) {
             if($this->useGitClone) {
-                $this->gitClone($this->mu()->getWebRootDirLocation());
+                $this->gitClone();
             } else {
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
@@ -58,7 +58,7 @@ class CheckoutDevMaster extends Task
                 );
             }
         } else {
-            $this->gitClone($this->mu()->getGitRootDir());
+            $this->gitClone();
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
                 'composer info --self',
@@ -69,16 +69,16 @@ class CheckoutDevMaster extends Task
     }
 
 
-    protected function gitClone($gitRootDir)
+    protected function gitClone()
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'git clone ' . $this->mu()->getGitLink() . ' ' . $gitRootDir,
+            'git clone ' . $this->mu()->getGitLink() . ' ' . $this->mu()->getGitRootDir(),
             'clone ' . $this->mu()->getGitLink(),
             false
         );
         $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
+            $this->mu()->getGitRootDir(),
             'git checkout ' . $this->branchOrTagToUse,
             'checkout ' . $this->branchOrTagToUse,
             false

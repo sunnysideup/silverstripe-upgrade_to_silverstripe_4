@@ -14,7 +14,7 @@ class CheckoutDevMaster extends Task
 
     protected $branchOrTagToUse = 'master';
 
-    protected $cloneAsProject = false;
+    protected $useGitClone = false;
 
     protected $composerOptions = '--prefer-source --update-no-dev';
 
@@ -34,38 +34,31 @@ class CheckoutDevMaster extends Task
      */
     public function runActualTask($params = [])
     {
-        if ($this->mu()->getIsModuleUpgrade() && $cloneAsProject === false) {
-            $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'composer init -s dev -n',
-                'Start composer - setting it to dev means that it is more likely to install dependencies that do not have tags',
-                false
-            );
-            $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->branchOrTagToUse . ' '.$this->composerOptions,
-                'checkout ' . $this->branchOrTagToUse . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
-                false
-            );
-            $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
-                'show information about installed package',
-                false
-            );
+        if ($this->mu()->getIsModuleUpgrade()) {
+            if($this->useGitClone) {
+                $this->gitClone($this->mu()->getWebRootDirLocation());
+            } else {
+                $this->mu()->execMe(
+                    $this->mu()->getWebRootDirLocation(),
+                    'composer init -s dev -n',
+                    'Start composer - setting it to dev means that it is more likely to install dependencies that do not have tags',
+                    false
+                );
+                $this->mu()->execMe(
+                    $this->mu()->getWebRootDirLocation(),
+                    'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->branchOrTagToUse . ' '.$this->composerOptions,
+                    'checkout ' . $this->branchOrTagToUse . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                    false
+                );
+                $this->mu()->execMe(
+                    $this->mu()->getWebRootDirLocation(),
+                    'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                    'show information about installed package',
+                    false
+                );
+            }
         } else {
-            $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'git clone ' . $this->mu()->getGitLink() . ' ' . $this->mu()->getGitRootDir(),
-                'clone ' . $this->mu()->getGitLink(),
-                false
-            );
-            $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'git checkout ' . $this->branchOrTagToUse,
-                'checkout ' . $this->branchOrTagToUse,
-                false
-            );
+            $this->gitClone($this->mu()->getGitRootDir());
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
                 'composer info --self',
@@ -73,6 +66,24 @@ class CheckoutDevMaster extends Task
                 false
             );
         }
+    }
+
+
+    protected function gitClone($gitRootDir)
+    {
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'git clone ' . $this->mu()->getGitLink() . ' ' . $gitRootDir,
+            'clone ' . $this->mu()->getGitLink(),
+            false
+        );
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'git checkout ' . $this->branchOrTagToUse,
+            'checkout ' . $this->branchOrTagToUse,
+            false
+        );
+
     }
 
     protected function hasCommitAndPush()

@@ -1033,7 +1033,7 @@ class ModuleUpgrader
         }
     }
 
-    protected function workoutPackageFolderName(string $moduleDetails)
+    protected function workoutPackageFolderName(array $moduleDetails)
     {
         $this->packageFolderNameForInstall = trim($this->packageFolderNameForInstall);
         if ($this->packageFolderNameForInstall) {

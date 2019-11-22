@@ -25,7 +25,7 @@ $obj = ModuleUpgrader::create()
               'PackageNamespace' => 'App', //second part of the namespace i.e. VendorNamespace/PackageNamespace
               'PackageFolderNameForInstall' => 'myclient', //temp folder to be used for running upgrade.
               'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git', //link to package
-              // 'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
+              'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
               'IsModuleUpgrade' => false, //is it a module or a website project?
             ]
         ]

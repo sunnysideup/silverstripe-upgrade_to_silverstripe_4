@@ -12,17 +12,19 @@ class CheckoutDevMaster extends Task
 {
     protected $taskStep = 's00';
 
-    protected $branchToUse = 'master';
+    protected $branchOrTagToUse = 'master';
+
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
     {
-        return 'Checkout the ' . $this->branchToUse . ' of this module.';
+        return 'Checkout the ' . $this->branchOrTagToUse . ' of this module.';
     }
 
     public function getDescription()
     {
         return '
-            Checks out ' . $this->branchToUse . ' of project/module using composer for a module or git checkout for a project';
+            Checks out ' . $this->branchOrTagToUse . ' of project/module using composer for a module or git checkout for a project';
     }
 
     /**
@@ -39,8 +41,8 @@ class CheckoutDevMaster extends Task
             );
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->branchToUse . '  --prefer-source --update-no-dev ',
-                'checkout ' . $this->branchToUse . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->branchOrTagToUse . ' '.$this->composerOptions,
+                'checkout ' . $this->branchOrTagToUse . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                 false
             );
             $this->mu()->execMe(
@@ -58,8 +60,8 @@ class CheckoutDevMaster extends Task
             );
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'git checkout ' . $this->branchToUse,
-                'checkout ' . $this->branchToUse,
+                'git checkout ' . $this->branchOrTagToUse,
+                'checkout ' . $this->branchOrTagToUse,
                 false
             );
             $this->mu()->execMe(

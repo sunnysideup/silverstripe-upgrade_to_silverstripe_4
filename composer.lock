@@ -502,12 +502,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/di.git",
-                "reference": "3aac44e0a29c10e4dbc1e8a8f1a871de0a4ef476"
+                "reference": "1959d490d8198756b488c53470b584e9d75db37b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/di/zipball/3aac44e0a29c10e4dbc1e8a8f1a871de0a4ef476",
-                "reference": "3aac44e0a29c10e4dbc1e8a8f1a871de0a4ef476",
+                "url": "https://api.github.com/repos/nette/di/zipball/1959d490d8198756b488c53470b584e9d75db37b",
+                "reference": "1959d490d8198756b488c53470b584e9d75db37b",
                 "shasum": ""
             },
             "require": {
@@ -567,7 +567,7 @@
                 "nette",
                 "static"
             ],
-            "time": "2019-11-19T18:27:16+00:00"
+            "time": "2019-11-20T15:55:50+00:00"
         },
         {
             "name": "nette/finder",
@@ -695,12 +695,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/php-generator.git",
-                "reference": "e92c09a75bb09297426abf418031f0c078f8d806"
+                "reference": "758077b90e86093d4f50e586720c8a47ad77e9d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/e92c09a75bb09297426abf418031f0c078f8d806",
-                "reference": "e92c09a75bb09297426abf418031f0c078f8d806",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/758077b90e86093d4f50e586720c8a47ad77e9d7",
+                "reference": "758077b90e86093d4f50e586720c8a47ad77e9d7",
                 "shasum": ""
             },
             "require": {
@@ -746,7 +746,7 @@
                 "php",
                 "scaffolding"
             ],
-            "time": "2019-11-20T01:57:16+00:00"
+            "time": "2019-11-20T16:40:58+00:00"
         },
         {
             "name": "nette/robot-loader",
@@ -1598,181 +1598,6 @@
             "time": "2019-07-06T19:05:43+00:00"
         },
         {
-            "name": "symfony/console",
-            "version": "4.4.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/console.git",
-                "reference": "35d9077f495c6d184d9930f7a7ecbd1ad13c7ab8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/35d9077f495c6d184d9930f7a7ecbd1ad13c7ab8",
-                "reference": "35d9077f495c6d184d9930f7a7ecbd1ad13c7ab8",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "symfony/polyfill-mbstring": "~1.0",
-                "symfony/polyfill-php73": "^1.8",
-                "symfony/service-contracts": "^1.1|^2"
-            },
-            "conflict": {
-                "symfony/dependency-injection": "<3.4",
-                "symfony/event-dispatcher": "<4.3|>=5",
-                "symfony/lock": "<4.4",
-                "symfony/process": "<3.3"
-            },
-            "provide": {
-                "psr/log-implementation": "1.0"
-            },
-            "require-dev": {
-                "psr/log": "~1.0",
-                "symfony/config": "^3.4|^4.0|^5.0",
-                "symfony/dependency-injection": "^3.4|^4.0|^5.0",
-                "symfony/event-dispatcher": "^4.3",
-                "symfony/lock": "^4.4|^5.0",
-                "symfony/process": "^3.4|^4.0|^5.0",
-                "symfony/var-dumper": "^4.3|^5.0"
-            },
-            "suggest": {
-                "psr/log": "For using the console logger",
-                "symfony/event-dispatcher": "",
-                "symfony/lock": "",
-                "symfony/process": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Console\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Console Component",
-            "homepage": "https://symfony.com",
-            "time": "2019-11-13T07:39:40+00:00"
-        },
-        {
-            "name": "symfony/filesystem",
-            "version": "4.4.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/filesystem.git",
-                "reference": "d12b01cba60be77b583c9af660007211e3909854"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/d12b01cba60be77b583c9af660007211e3909854",
-                "reference": "d12b01cba60be77b583c9af660007211e3909854",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "symfony/polyfill-ctype": "~1.8"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Filesystem\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Filesystem Component",
-            "homepage": "https://symfony.com",
-            "time": "2019-11-12T14:51:11+00:00"
-        },
-        {
-            "name": "symfony/finder",
-            "version": "4.4.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/finder.git",
-                "reference": "ce8743441da64c41e2a667b8eb66070444ed911e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/ce8743441da64c41e2a667b8eb66070444ed911e",
-                "reference": "ce8743441da64c41e2a667b8eb66070444ed911e",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Finder\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Finder Component",
-            "homepage": "https://symfony.com",
-            "time": "2019-11-17T21:56:56+00:00"
-        },
-        {
             "name": "symfony/polyfill-ctype",
             "version": "dev-master",
             "source": {
@@ -1946,55 +1771,6 @@
                 "shim"
             ],
             "time": "2019-08-06T08:03:45+00:00"
-        },
-        {
-            "name": "symfony/process",
-            "version": "4.4.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/process.git",
-                "reference": "75ad33d9b6f25325ebc396d68ad86fd74bcfbb06"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/75ad33d9b6f25325ebc396d68ad86fd74bcfbb06",
-                "reference": "75ad33d9b6f25325ebc396d68ad86fd74bcfbb06",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Process\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Process Component",
-            "homepage": "https://symfony.com",
-            "time": "2019-10-28T20:30:34+00:00"
         },
         {
             "name": "symfony/service-contracts",

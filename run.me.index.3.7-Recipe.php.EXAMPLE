@@ -17,7 +17,7 @@ $obj = ModuleUpgrader::create()
                 'VendorNamespace' => 'MyClient',
                 'PackageName' => 'app',
                 'PackageNamespace' => 'App',
-                'PackageFolderNameForInstall' => 'myclient',
+                'PackageFolderNameForInstall' => 'mysite',
                 'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git',
                 'IsModuleUpgrade' => false,
             ]

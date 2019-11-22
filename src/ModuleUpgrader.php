@@ -988,35 +988,9 @@ class ModuleUpgrader
 
         //Origin Composer FileLocation
         $this->originComposerFileLocation = isset($moduleDetails['OriginComposerFileLocation']) ? $moduleDetails['OriginComposerFileLocation'] : '';
-        if ($this->packageFolderNameForInstall) {
-            //do nothing
-        } else {
-            if ($this->getSessionValue('PackageFolderNameForInstall')) {
-                $this->packageFolderNameForInstall = $this->getSessionValue('PackageFolderNameForInstall');
-            } else {
-                if (! $this->originComposerFileLocation) {
-                    $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/master/composer.json';
-                }
-                if ($this->URLExists($this->originComposerFileLocation)) {
-                    $json = file_get_contents($this->originComposerFileLocation);
-                    $array = json_decode($json, true);
-                    if (isset($array['extra']['installer-name'])) {
-                        $this->packageFolderNameForInstall = $array['extra']['installer-name'];
-                    } else {
-                        if ($this->isModuleUpgrade) {
-                            $this->packageFolderNameForInstall = $this->packageName;
-                        } else {
-                            $this->packageFolderNameForInstall = 'mysite';
-                        }
-                    }
-                    if (isset($moduleDetails['PackageFolderNameForInstall'])) {
-                        $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
-                    }
-                }
-                //user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation. Could not find: '.$this->originComposerFileLocation);
-            }
-            $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);
-        }
+
+
+        $this->workoutPackageFolderName($moduleDetails);
 
         //moduleDirLocation
         if ($this->isModuleUpgrade) {
@@ -1056,6 +1030,48 @@ class ModuleUpgrader
 
         if ($this->restartSession) {
             $this->deleteSession();
+        }
+    }
+
+    protected function workoutPackageFolderName(array $moduleDetails)
+    {
+        $this->packageFolderNameForInstall = trim($this->packageFolderNameForInstall);
+        if ($this->packageFolderNameForInstall) {
+            //do nothing
+        } else {
+            if ($this->getSessionValue('PackageFolderNameForInstall')) {
+                $this->packageFolderNameForInstall = $this->getSessionValue('PackageFolderNameForInstall');
+            } else {
+                if (isset($moduleDetails['PackageFolderNameForInstall'])) {
+                    $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
+                } else {
+                    if (! $this->originComposerFileLocation) {
+                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/master/composer.json';
+                    }
+                    if ($this->URLExists($this->originComposerFileLocation)) {
+                        $json = file_get_contents($this->originComposerFileLocation);
+                        $array = json_decode($json, true);
+                        if (isset($array['extra']['installer-name'])) {
+                            $this->packageFolderNameForInstall = $array['extra']['installer-name'];
+                        } else {
+                            $this->packageFolderNameForInstall = $this->workoutPackageFolderNameBasic();
+                        }
+                    } else {
+                        $this->packageFolderNameForInstall = $this->workoutPackageFolderNameBasic();
+                    }
+                    //user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation. Could not find: '.$this->originComposerFileLocation);
+                }
+            }
+            $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);
+        }
+    }
+
+    protected function workoutPackageFolderNameBasic()
+    {
+        if ($this->isModuleUpgrade) {
+            return $this->packageName;
+        } else {
+            return 'mysite';
         }
     }
 

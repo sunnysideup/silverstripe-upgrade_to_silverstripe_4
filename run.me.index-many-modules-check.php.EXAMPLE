@@ -1,0 +1,51 @@
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+// make sure the dirs noted below exist:
+// - /var/www/upgrades,
+// - /var/www/logdir
+
+$jsonFile = file_get_contents('modules.json');
+$modules = json_decode($jsonFile, true);
+
+foreach($modules as $module) {
+
+    $obj = ModuleUpgrader::create();
+    $obj
+
+        ->setArrayOfModules(
+        [
+            1 => [
+              'VendorName' =>  $module['folder'],
+              'VendorNamespace' =>  $module['folder'],
+              'PackageName' => $module['folder'],
+              'PackageNamespace' =>  $module['folder'],
+              'PackageFolderNameForInstall' => $module['folder'],
+              'GitLink' => $module['repo'],
+              'UpgradeAsFork' => false,
+              'IsModuleUpgrade' => true
+            ]
+        ]
+    )
+    ->setRunInteractively(false)
+    ->setAboveWebRootDirLocation('/var/www/module-upgrades')
+    ->setLogFolderDirLocation('')
+    ->setRecipe('')
+    ->setListOfTasks(
+        [
+            'CheckThatFoldersAreReady' => [],
+            'ResetWebRootDir' => [],
+            'CheckoutDevMaster' => [
+                'useGitClone' => true,
+                'branchOrTagToUse' => $module['tag'],
+            ],
+            'SearchAndReplaceWithoutCommit' => [
+                'ToFolder' => 'SS37',
+            ],
+        ]
+    )
+    ->run();
+
+    $obj->destroy();
+    unset($obj);
+}

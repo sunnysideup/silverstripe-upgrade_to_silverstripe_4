@@ -358,6 +358,18 @@ class ModuleUpgrader
         }
     }
 
+    public function reinit()
+    {
+        $this->startPHP2CommandLine();
+
+        return $this;
+    }
+
+    public function destroy()
+    {
+        self::$_singleton = null;
+    }
+
 
     /**
      * Ends output to commandline / browser
@@ -928,7 +940,7 @@ class ModuleUpgrader
      * For now it defaults to always existing
      * @return [type]
      */
-    protected function startPHP2CommandLine()
+    public function startPHP2CommandLine()
     {
         $this->commandLineExec = PHP2CommandLineSingleton::create();
     }

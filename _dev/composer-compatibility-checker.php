@@ -76,7 +76,7 @@ class ComposerCompatibilityChecker {
         }
 
 
-        file_put_contents('array.txt', print_r($this->outputArray, true), FILE_APPEND | LOCK_EX);
+        file_put_contents('array.json', json_encode($this->outputArray), FILE_APPEND | LOCK_EX);
     }
 
 

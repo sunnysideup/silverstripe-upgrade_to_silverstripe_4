@@ -12,8 +12,8 @@
 
 
     'yml':
-        'Object':
-            R: "SS_Object"
+        ' Object':
+            R: " SS_Object"
             C: "Check usage"
             I: true
         'svg':
@@ -30,8 +30,12 @@
             R: "extends SS_Object"
             C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
             I: true
-        'Object::':
-            R: "SS_Object::"
+        ' Object::':
+            R: " SS_Object::"
+            C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
+            I: true
+        '(Object::':
+            R: "(SS_Object::"
             C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
             I: true
         'HTTP::set_cache_age(':

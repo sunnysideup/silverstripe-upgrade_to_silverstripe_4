@@ -18,9 +18,10 @@ class ComposerCompatibilityChecker {
 
         if($this->resetOutputFiles){
             file_put_contents('results.txt', '');
-            file_put_contents('array.txt', '');
+            file_put_contents('array.json', '');
         }
 
+        $libraryOutput = 0;
 
         foreach($libraries as $library){
             $commit = '';
@@ -32,9 +33,14 @@ class ComposerCompatibilityChecker {
             }
             $composerCommand = "composer require " . $name . " '" . $version . "' 2>&1 ";
 
-            exec($composerCommand, $output, $return_var);
+            exec($composerCommand, $$libraryOutput, $return_var);
 
-            if(in_array('Installation failed, reverting ./composer.json to its original content.', $output)){
+
+            if(in_array('  [InvalidArgumentException]', $$libraryOutput)){
+                $message = "composer require " . $name . " '" . $version . "' unsuccessful, could not find a matching version of package.\n";
+                $this->outputMessage($message);
+            }
+            else if(in_array('Installation failed, reverting ./composer.json to its original content.', $$libraryOutput)){
                 $message = "composer require " . $name . " '" . $version . "' unsuccessful, searching for next best version.\n";
                 $this->outputMessage($message);
                 $composerCommand = "composer show -a " . $name . " 2>&1 ";
@@ -73,6 +79,8 @@ class ComposerCompatibilityChecker {
                 $version = $commit ? $commit : $version;
                 $this->addToOutputArray($name, $version);
             }
+
+            $libraryOutput++;
         }
 
 
@@ -97,11 +105,12 @@ class ComposerCompatibilityChecker {
         foreach($strings as $string){
             if(strpos($string, 'source') !== false){
                 $source = $string;
+                preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $source, $match);
+                $array['repo'] = $match[0][0];
                 break;
             }
         }
-        preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $source, $match);
-        $array['repo'] = $match[0][0];
+
         array_push($this->outputArray, $array);
     }
 

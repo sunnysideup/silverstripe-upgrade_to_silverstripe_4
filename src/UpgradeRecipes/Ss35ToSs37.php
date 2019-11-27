@@ -32,22 +32,6 @@ class Ss35ToSs37 extends BaseClass
      * @var array
      */
     protected $listOfTasks = [
-        //Step1: Prepare
-
-        //Step2: MoveToNewVersion
-        'ComposerInstallProject' => [],
-
-        //Step3: FixBeforeStart
-        'SearchAndReplace' => [
-            'ToFolder' => 'SS37',
-        ],
-
-        //Step4: CoreUpgrade
-        'FinalDevBuild37' => [],
-
-        //step7: Lock-in
-        // 'FinaliseUpgradeWithMergeIntoMaster' => [],
-        //Step1: Prepare
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
 

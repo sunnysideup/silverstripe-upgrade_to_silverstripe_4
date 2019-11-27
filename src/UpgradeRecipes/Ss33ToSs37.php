@@ -63,13 +63,11 @@ class Ss33ToSs37 extends BaseClass
             'Package' => 'silverstripe/siteconfig',
             'NewVersion' => '~3.7',
         ],
-        'ResetWebRootDir-3' => [],
-
-        'SearchAndReplace' => [
+        'SearchAndReplace-1' => [
             'ToFolder' => 'SS36',
         ],
 
-        'SearchAndReplace' => [
+        'SearchAndReplace-2' => [
             'ToFolder' => 'SS37',
         ],
     ];

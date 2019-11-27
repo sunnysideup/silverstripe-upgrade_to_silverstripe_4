@@ -33,11 +33,28 @@ class Ss35ToSs37 extends BaseClass
      */
     protected $listOfTasks = [
         //Step1: Prepare
+
+        //Step2: MoveToNewVersion
+        'ComposerInstallProject' => [],
+
+        //Step3: FixBeforeStart
+        'SearchAndReplace' => [
+            'ToFolder' => 'SS37',
+        ],
+
+        //Step4: CoreUpgrade
+        'FinalDevBuild37' => [],
+
+        //step7: Lock-in
+        // 'FinaliseUpgradeWithMergeIntoMaster' => [],
+        //Step1: Prepare
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
 
         'CheckoutDevMaster-1' => [],
-        'AddLegacyBranchFor37' => [],
+        'AddLegacyBranchFor37' => [
+            'nameOfLegacyBranch' => 'upgrade37'
+        ],
 
         'ResetWebRootDir-2' => [],
 
@@ -61,21 +78,10 @@ class Ss35ToSs37 extends BaseClass
             'Package' => 'silverstripe/siteconfig',
             'NewVersion' => '~3.7',
         ],
-        'ResetWebRootDir-3' => [],
 
-        //Step2: MoveToNewVersion
-        'ComposerInstallProject' => [],
-
-        //Step3: FixBeforeStart
-        'SearchAndReplace' => [
+        'SearchAndReplace-2' => [
             'ToFolder' => 'SS37',
         ],
-
-        //Step4: CoreUpgrade
-        'FinalDevBuild37' => [],
-
-        //step7: Lock-in
-        // 'FinaliseUpgradeWithMergeIntoMaster' => [],
     ];
 
     protected $frameworkComposerRestraint = '~3.7@stable';

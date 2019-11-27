@@ -37,7 +37,9 @@ class Ss33ToSs37 extends BaseClass
         'ResetWebRootDir-1' => [],
 
         'CheckoutDevMaster-1' => [],
-        'AddLegacyBranchFor37' => [],
+        'AddLegacyBranchFor37' => [
+            'nameOfLegacyBranch' => 'upgrade37'
+        ],
 
         'ResetWebRootDir-2' => [],
 
@@ -63,10 +65,6 @@ class Ss33ToSs37 extends BaseClass
         ],
         'ResetWebRootDir-3' => [],
 
-        //Step2: MoveToNewVersion
-        'ComposerInstallProject' => [],
-
-        //Step3: FixBeforeStart
         'SearchAndReplace' => [
             'ToFolder' => 'SS36',
         ],
@@ -74,12 +72,6 @@ class Ss33ToSs37 extends BaseClass
         'SearchAndReplace' => [
             'ToFolder' => 'SS37',
         ],
-
-        //Step4: CoreUpgrade
-        'FinalDevBuild37' => [],
-
-        //step7: Lock-in
-        // 'FinaliseUpgradeWithMergeIntoMaster' => [],
     ];
 
     protected $frameworkComposerRestraint = '~3.7@stable';

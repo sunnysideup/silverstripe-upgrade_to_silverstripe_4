@@ -1,5 +1,7 @@
 <?php
-//use either of the following to create your info.json file
+//use either of the following to create the info.json file required
+//your project will also require a composer.json.default file
+//this file is used to reset the project to the default state before attempting to install each library
 //composer info --format=json > info.json
 //composer info --direct --format=json > info.json
 
@@ -24,6 +26,7 @@ class ComposerCompatibilityChecker {
         $libraryOutput = 0;
 
         foreach($libraries as $library){
+            $this->resetProject();
             $commit = '';
             $name = $library["name"];
             $version = $library["version"];
@@ -87,6 +90,12 @@ class ComposerCompatibilityChecker {
         file_put_contents('array.json', json_encode($this->outputArray), FILE_APPEND | LOCK_EX);
     }
 
+    public function resetProject(){
+        $this->outputMessage('reseting project to composer.json.default', false);
+        exec('rm composer.json', $remove, $return_var);
+        exec('cp composer.json.default composer.json', $copy, $return_var);
+        exec('composer update', $update, $return_var);
+    }
 
     public function outputMessage($message, $toFile = true){
         echo $message;
@@ -99,14 +108,21 @@ class ComposerCompatibilityChecker {
         $pos = strpos($name, '/') + 1;
         $array['folder'] = substr($name, $pos);
         $array['tag'] = $version;
+        $array['repo'] = null;
         $composerCommand = "composer show -a " . $name . " 2>&1 ";
         exec($composerCommand, $strings, $return_var);
         $source = '';
+
         foreach($strings as $string){
             if(strpos($string, 'source') !== false){
                 $source = $string;
                 preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $source, $match);
-                $array['repo'] = $match[0][0];
+                if(!isset($match[0][0])){
+                    preg_match_all('#((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?#', $source, $match);
+                }
+                if(isset($match[0][0])){
+                    $array['repo'] = $match[0][0];
+                }
                 break;
             }
         }

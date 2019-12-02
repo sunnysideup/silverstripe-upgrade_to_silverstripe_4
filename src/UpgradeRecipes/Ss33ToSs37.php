@@ -70,6 +70,7 @@ class Ss33ToSs37 extends BaseClass
         'SearchAndReplace-2' => [
             'ToFolder' => 'SS37',
         ],
+        'PHPCompatabilityCheck' => [],
     ];
 
     protected $frameworkComposerRestraint = '~3.7@stable';

@@ -21,7 +21,9 @@
     },
     "require": {
         "silverstripe/upgrader":                       "dev-master",
-        "sunnysideup/php_2_command_line":              "dev-master"
+        "sunnysideup/php_2_command_line":              "dev-master",
+        "sunnysideup/huringa":                         "dev-master",
+        "sunnysideup/easy-coding-standards":           "dev-master"
     },
     "autoload": {
         "psr-4": {

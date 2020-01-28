@@ -19,13 +19,12 @@ class RunImageTask extends Task
     public function getDescription()
     {
         return '
-            Run a dev/tasks/MigrateFileTask to upgrade files and images.' ;
+            Run a dev/tasks/MigrateFileTask to upgrade files and images.';
     }
 
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
-
+        if ($this->mu()->getIsModuleUpgrade()) {
         } else {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),

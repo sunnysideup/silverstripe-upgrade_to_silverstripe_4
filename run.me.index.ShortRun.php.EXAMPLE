@@ -1,0 +1,38 @@
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+
+$obj = ModuleUpgrader::create()
+    ->setRecipe('')
+    ->setAboveWebRootDirLocation('/var/www/upgrades')
+    ->setWebRootName('testrun')
+
+    ->setArrayOfModules(
+        [
+            //see run.me.index.full.php.EXAMPLE for more details1
+            1 => [
+              'VendorName' => 'myclient',
+              'VendorNamespace' => 'MyClient',
+              'PackageName' => 'app',
+              'PackageNamespace' => 'App',
+              'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git',
+              'IsModuleUpgrade' => true,
+            ]
+        ]
+    )
+
+    ->setNameOfTempBranch('test-only')
+
+    ->setFrameworkComposerRestraint('~3.7')
+
+    ->setListOfTasks(
+        [
+            'CheckThatFoldersAreReady' => [],
+            'ResetWebRootDir-1' => [],
+            'CheckoutDevMaster-1' => [],
+            'AddUpgradeBranch' => [],
+            'ApplyPSR2' => [],
+        ]
+    )
+    ->run();

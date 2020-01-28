@@ -12,39 +12,58 @@ class RecomposeHomeBrew extends Task
 {
     protected $taskStep = 's20';
 
+    protected $requireLinesToAdd = [
+        'silverstripe/framework' => '',
+
+        'silverstripe/assets' => '',
+        'silverstripe/config' => '',
+        'silverstripe/admin' => '',
+
+        'silverstripe/cms' => '',
+        'silverstripe/asset-admin' => '',
+        'silverstripe/campaign-admin' => '',
+        'silverstripe/versioned-admin' => '',
+        'silverstripe/errorpage' => '',
+        'silverstripe/graphql' => '',
+        'silverstripe/reports' => '',
+        'silverstripe/siteconfig' => '',
+        'silverstripe/versioned' => ''  ,
+    ];
+
     public function getTitle()
     {
-        return 'Update composer.json to '.$this->mu()->getFrameworkComposerRestraint().'';
+        return 'Update composer.json to ' . $this->mu()->getFrameworkComposerRestraint() . '';
     }
 
     public function getDescription()
     {
         return '
             Updates the requirements in the composer.json file without any extras.
-            We may need to look at "project-files" here and make sure they do not get muddled up.' ;
+            We may need to look at "project-files" here and make sure they do not get muddled up.';
     }
-
-    protected $requireLinesToAdd = [
-        'silverstripe/recipe-cms' => ''
-    ];
-
 
     public function runActualTask($params = [])
     {
-        if(! $this->requireLinesToAdd['silverstripe/recipe-cms']) {
-            $this->requireLinesToAdd['silverstripe/recipe-cms'] = $this->mu()->getFrameworkComposerRestraint();
+        foreach($this->requireLinesToAdd as $package => $constraint) {
+            if($constraint  === '') {
+                if($package === 'silverstripe/framework')  {
+                    $this->requireLinesToAdd[$package] = $this->mu()->getFrameworkComposerRestraint();
+                } else {
+                    $this->requireLinesToAdd[$package] = '*';
+                }
+            }
         }
         $command =
-        'unset($data["require"]["silverstripe/cms"]);'.
-        'unset($data["require"]["silverstripe/framework"]);'.
-        'unset($data["require"]["silverstripe/reports"]);'.
-        'unset($data["require"]["silverstripe/siteconfig"]);'.
-        'unset($data["require"]["silverstripe/recipe-cms"]);'.
+        'unset($data["require"]["silverstripe/cms"]);' .
+        'unset($data["require"]["silverstripe/framework"]);' .
+        'unset($data["require"]["silverstripe/reports"]);' .
+        'unset($data["require"]["silverstripe/siteconfig"]);' .
+        'unset($data["require"]["silverstripe/recipe-cms"]);' .
         'unset($data["require"]["composer/installers"]);';
         foreach ($this->requireLinesToAdd as $key => $value) {
             $command .=
-        '$data["require"]["'.$key.'"] = "'.$value.'"; ';
-        };
+        '$data["require"]["' . $key . '"] = "' . $value . '"; ';
+        }
         $this->updateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),
             $command,

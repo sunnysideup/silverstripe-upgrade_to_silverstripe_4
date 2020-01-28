@@ -12,6 +12,11 @@ class AddLegacyBranch extends Task
 {
     protected $taskStep = 's10';
 
+    /**
+     * @var string what should the legacy branch be called
+     */
+    protected $nameOfLegacyBranch = '3';
+
     public function getTitle()
     {
         return 'Add Legacy Branch';
@@ -20,18 +25,12 @@ class AddLegacyBranch extends Task
     public function getDescription()
     {
         return '
-            Creates a legacy branch: "'.$this->nameOfLegacyBranch.'" of your module so that you
+            Creates a legacy branch: "' . $this->nameOfLegacyBranch . '" of your module so that you
             can keep making bugfixes to older versions.
             You can set the name of the legacy branch as you see fit.';
     }
 
     /**
-     * @var string what should the legacy branch be called
-     */
-    protected $nameOfLegacyBranch = '3';
-
-    /**
-     *
      * @param  array  $params not currently used for this task
      */
     public function runActualTask($params = [])
@@ -43,11 +42,11 @@ class AddLegacyBranch extends Task
             if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->nameOfLegacyBranch . "'" . '); then
                     echo branch exists
                 else
-                    git checkout -b '.$this->nameOfLegacyBranch.';
-                    git push origin '.$this->nameOfLegacyBranch.';
+                    git checkout -b ' . $this->nameOfLegacyBranch . ';
+                    git push origin ' . $this->nameOfLegacyBranch . ';
 
             fi',
-            'create legacy branch: '.$this->nameOfLegacyBranch.' in '.$gitRootDir,
+            'create legacy branch: ' . $this->nameOfLegacyBranch . ' in ' . $gitRootDir,
             false
         );
     }

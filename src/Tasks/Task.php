@@ -3,6 +3,7 @@
  * mu stands for Module Object
  * @var [type]
  */
+
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
@@ -16,23 +17,53 @@ abstract class Task
     protected $debug = false;
 
     /**
+     * set a specific task name if needed
+     * @var string
+     */
+    protected $taskName = '';
+
+    protected $taskStep = 's99';
+
+    /**
+     * Array of params that define this task, holds information such as its taskName etc.
+     * @var mixed
+     */
+    protected $params = [];
+
+    /**
+     * @var ModuleUpgrader|null the 'Manager' of all the modules responsible for holding Meta data and runtime
+     * specific runtime arguments.
+     */
+    protected $mu = null;
+
+    /**
+     * What to write in the commit message after the task is run, only useful if hasCommitAndPush() returns true
+     * @var string message
+     */
+    protected $commitMessage = '';
+
+    /**
      * A static array for holding all the different Tasks that are running
      * @var Task[]
      */
     private static $_singletons = [];
 
     /**
-     * set a specific task name if needed
-     * @var string
+     * On instantiation sets the parameters and a refernece to the parent ModuleUpgrader
+     * @param ModuleUpgrader $mu Reference to the master ModuleUpgrader
+     * @param array  $params All parameters that define this task or are required at any stage during its execution
      */
-    protected $taskName = '';
+    public function __construct($mu, $params = [])
+    {
+        $this->mu = $mu;
+        $this->params = $params;
+        $this->mu = ModuleUpgrader::create();
+    }
 
     public function getTaskName()
     {
         return $this->taskName;
     }
-
-    protected $taskStep = 's99';
 
     public function getTaskStepCode()
     {
@@ -42,7 +73,7 @@ abstract class Task
     public function getTaskStep($currentStepCode = '')
     {
         $taskSteps = $this->mu()->getTaskSteps();
-        if(! $currentStepCode) {
+        if (! $currentStepCode) {
             $currentStepCode = $this->getTaskStepCode();
         }
 
@@ -59,7 +90,7 @@ abstract class Task
      */
     public static function create($mu, $params = [])
     {
-        $className = get_called_class();
+        $className = static::class;
         if (empty(self::$_singletons[$params['taskName']])) {
             self::$_singletons[$params['taskName']] = new $className($mu, $params);
         }
@@ -69,39 +100,14 @@ abstract class Task
 
     /**
      * Deletes reference to given task and removes it from list of tasks
-     * @param array $params array containing the 'taskName' of target task to delete
      *
-     * @return null
+     * @param array $params array containing the 'taskName' of target task to delete
      */
     public static function deleteTask($params)
     {
-        self::$_singletons[$params['taskName']] = null;
         unset(self::$_singletons[$params['taskName']]);
 
         return null;
-    }
-
-    /**
-     * Array of params that define this task, holds information such as its taskName etc.
-     * @var mixed
-     */
-    protected $params = [];
-
-    /**
-     * @var null|ModuleUpgrader the 'Manager' of all the modules responsible for holding Meta data and runtime
-     * specific runtime arguments.
-     */
-    protected $mu = null;
-
-    /**
-     * On instantiation sets the parameters and a refernece to the parent ModuleUpgrader
-     * @param ModuleUpgrader $mu Reference to the master ModuleUpgrader
-     * @param array  $params All parameters that define this task or are required at any stage during its execution
-     */
-    public function __construct($mu, $params = [])
-    {
-        $this->params = $params;
-        $this->mu = ModuleUpgrader::create();
     }
 
     public function mu()
@@ -121,7 +127,6 @@ abstract class Task
     abstract public function getTitle();
 
     /**
-     *
      * @return string
      */
     abstract public function getDescription();
@@ -137,9 +142,7 @@ abstract class Task
         $des = $this->getDescription();
         $des = trim(preg_replace('/\s+/', ' ', $des));
         $des = trim(wordwrap($des));
-        $des = str_replace("\n", "\n".'# ', $des);
-
-        return $des;
+        return str_replace("\n", "\n" . '# ', $des);
     }
 
     /**
@@ -150,27 +153,12 @@ abstract class Task
         $this->starter($this->params);
         $error = $this->runActualTask($this->params);
         if (is_string($error) && strlen($error) > 0) {
-            $this->mu()->colourPrint("\n\n".'------------------- EXIT WITH ERROR -------------------------', 'red');
+            $this->mu()->colourPrint("\n\n" . '------------------- EXIT WITH ERROR -------------------------', 'red');
             $this->mu()->colourPrint($error, 'red');
-            $this->mu()->colourPrint("\n\n".'------------------- EXIT WITH ERROR -------------------------', 'red');
+            $this->mu()->colourPrint("\n\n" . '------------------- EXIT WITH ERROR -------------------------', 'red');
             die("\n\n\n---");
         }
         $this->ender($this->params);
-    }
-
-    /**
-     * Runs everything that should be run and begining of execution, I.e commiting everything to get or creating a
-     * backup branch before making changes
-     */
-    protected function starter($params = [])
-    {
-        foreach ($params as $paramKey => $paramValue) {
-            if (isset($this->$paramKey)) {
-                $this->$paramKey = $paramValue;
-            } else {
-                user_error('You are trying to set '.$paramKey.' but it is meaninguless to this class: '.get_called_class());
-            }
-        }
     }
 
     /**
@@ -179,16 +167,81 @@ abstract class Task
      *
      * When it returns a string, we regard this to be a description of a fatal error!
      *
-     * @return null|string
+     * @return string|null
      */
     abstract public function runActualTask($params = []);
 
+    public function setCommitMessage($s)
+    {
+        $this->commitMessage = $s;
+
+        return $this;
+    }
+
+    public function getJSON($dir)
+    {
+        $location = $dir . '/composer.json';
+        $jsonString = file_get_contents($location);
+
+        return json_decode($jsonString, true);
+    }
+
+    public function setJSON($dir, $data)
+    {
+        $location = $dir . '/composer.json';
+        $newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents("'.${location}.'", $newJsonString);
+        return $this;
+    }
+
+    public function updateJSONViaCommandLine($dir, $code, $comment)
+    {
+        $location = $dir . '/composer.json';
+        $this->mu()->execMe(
+            $dir,
+            'php -r  \''
+                . '$jsonString = file_get_contents("' . $location . '"); '
+                . '$data = json_decode($jsonString, true); '
+                . $code
+                . '$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
+                . 'file_put_contents("' . $location . '", $newJsonString); '
+                . '\'',
+            $comment . ' --- in ' . $location,
+            false
+        );
+    }
+
+    /**
+     * Runs everything that should be run and begining of execution, I.e commiting everything to get or creating a
+     * backup branch before making changes
+     */
+    protected function starter($params = [])
+    {
+        $this->setParams($params);
+    }
+
+    protected function setParams($params = [])
+    {
+        foreach ($params as $paramKey => $paramValue) {
+            $method = 'set'.$paramKey;
+            if(method_exists($this, $method)) {
+                $this->{$method}($paramValue);
+            } else {
+                $paramKey = lcfirst($paramKey);
+                if (property_exists($this, $paramKey)) {
+                    $this->{$paramKey} = $paramValue;
+                } else {
+                    user_error('You are trying to set ' . $paramKey . ' but it is meaninguless to this class: ' . static::class);
+                }
+            }
+        }
+    }
 
     /**
      * Executed as the last step of a task. Used primarily for finishing off of changes made during execution of task.
      * I.e Making a git commit or tagging the new branch etc etc after all changes are made
      */
-    protected function ender()
+    protected function ender($params = [])
     {
         if ($this->hasCommitAndPush()) {
             $this->commitAndPush();
@@ -202,19 +255,6 @@ abstract class Task
     abstract protected function hasCommitAndPush();
 
     /**
-     * What to write in the commit message after the task is run, only useful if hasCommitAndPush() returns true
-     * @var string message
-     */
-    protected $commitMessage = '';
-
-    public function setCommitMessage($s)
-    {
-        $this->commitMessage = $s;
-
-        return $this;
-    }
-
-    /**
      * The commit message that is used for the final git commit after running this task. IF none are set it will
      * return a default message
      * @return string commit message
@@ -222,7 +262,7 @@ abstract class Task
     protected function getCommitMessage()
     {
         if (! $this->commitMessage) {
-            $this->commitMessage = 'MAJOR: upgrade to new version of Silverstripe - step: '.$this->getTitle();
+            $this->commitMessage = 'MAJOR: upgrade to new version of Silverstripe - step: ' . $this->getTitle();
         }
         return $this->commitMessage;
     }
@@ -232,12 +272,12 @@ abstract class Task
      */
     protected function commitAndPush()
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             $moduleDirs = $this->mu()->getExistingModuleDirLocations();
         } else {
             $moduleDirs = [$this->mu()->getWebRootDirLocation()];
         }
-        foreach($moduleDirs as $moduleDir) {
+        foreach ($moduleDirs as $moduleDir) {
             $message = $this->getCommitMessage();
             $this->mu()->execMe(
                 $moduleDir,
@@ -253,16 +293,16 @@ abstract class Task
                 if [ -z "$(git status --porcelain)" ]; then
                     echo \'OKI DOKI - Nothing to commit\';
                 else
-                    git commit . -m "'.addslashes($message).'"
+                    git commit . -m "' . addslashes($message) . '"
                 fi',
-                'commit changes: '.$message,
+                'commit changes: ' . $message,
                 false
             );
 
             $this->mu()->execMe(
                 $moduleDir,
-                'git push origin '.$this->mu()->getNameOfTempBranch(),
-                'pushing changes to origin on the '.$this->mu()->getNameOfTempBranch().' branch',
+                'git push origin ' . $this->mu()->getNameOfTempBranch(),
+                'pushing changes to origin on the ' . $this->mu()->getNameOfTempBranch() . ' branch',
                 false
             );
         }
@@ -270,13 +310,12 @@ abstract class Task
 
     /**
      * Runs the SilverStripe made upgrader
-     * @param  string $task     [description]
-     * @param  string $param1   [description]
-     * @param  string $param2   [description]
+     * @param  string $task
+     * @param  string $param1
+     * @param  string $param2
      * @param  string $rootDirForCommand  modules root directory
-     * @param  string $settings [description]
+     * @param  string $settings
      * @param  string  $keyNotesLogFileLocation
-
      */
     protected function runSilverstripeUpgradeTask(
         $task,
@@ -285,57 +324,24 @@ abstract class Task
         $rootDirForCommand = '',
         $settings = '',
         $keyNotesLogFileLocation = ''
-    )
-    {
+    ) {
         if (! $rootDirForCommand) {
             $rootDirForCommand = $this->mu()->getWebRootDirLocation();
         }
-        if(! $keyNotesLogFileLocation) {
+        if (! $keyNotesLogFileLocation) {
             $fileName = '/upgrade_notes.md';
-            if(file_exists($param1)) {
-                $keyNotesLogFileLocation = $param1.$fileName;
+            if (file_exists($param1)) {
+                $keyNotesLogFileLocation = $param1 . $fileName;
             } else {
-                $keyNotesLogFileLocation = $rootDirForCommand.$fileName;
+                $keyNotesLogFileLocation = $rootDirForCommand . $fileName;
             }
         }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'php '.$this->mu()->getLocationOfSSUpgradeModule().' '.$task.' '.$param1.' '.$param2.' --root-dir='.$rootDirForCommand.' --write -vvv '.$settings,
-            'running php upgrade '.$task.' see: https://github.com/silverstripe/silverstripe-upgrader',
+            'php ' . $this->mu()->getLocationOfSSUpgradeModule() . ' ' . $task . ' ' . $param1 . ' ' . $param2 . ' --root-dir=' . $rootDirForCommand . ' --write -vvv ' . $settings,
+            'running php upgrade ' . $task . ' see: https://github.com/silverstripe/silverstripe-upgrader',
             false,
             $keyNotesLogFileLocation
-        );
-    }
-
-
-    public function getJSON($dir)
-    {
-        $location = $dir.'/composer.json';
-        return json_decode($jsonString, true);
-    }
-
-    public function setJSON($dir, $data)
-    {
-        $location = $dir.'/composer.json';
-        $newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        file_put_contents("'.$location.'", $newJsonString);
-        return $this;
-    }
-
-    public function updateJSONViaCommandLine($dir, $code, $comment)
-    {
-        $location = $dir.'/composer.json';
-        $this->mu()->execMe(
-            $dir,
-            'php -r  \''
-                .'$jsonString = file_get_contents("'.$location.'"); '
-                .'$data = json_decode($jsonString, true); '
-                .$code
-                .'$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
-                .'file_put_contents("'.$location.'", $newJsonString); '
-                .'\'',
-            $comment . ' --- in '.$location,
-            false
         );
     }
 }

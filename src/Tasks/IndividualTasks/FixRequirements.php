@@ -14,6 +14,14 @@ class FixRequirements extends Task
 {
     protected $taskStep = 's30';
 
+    protected $debug = false;
+
+    private $checkReplacementIssues = false;
+
+    private $ignoreFolderArray = [
+        '.git',
+    ];
+
     public function getTitle()
     {
         return 'Finds requirements (Requirements::) and fixes them to be exposed properly';
@@ -22,12 +30,8 @@ class FixRequirements extends Task
     public function getDescription()
     {
         return '
-            Finds Requirements:: instances and fixes them to be used properly for modules - e.g. [vendorname] / [modulename] : location/for/my/script.js' ;
+            Finds Requirements:: instances and fixes them to be used properly for modules - e.g. [vendorname] / [modulename] : location/for/my/script.js';
     }
-
-    protected $debug = false;
-
-    private $checkReplacementIssues = false;
 
     public function setCheckReplacementIssues($b)
     {
@@ -36,17 +40,12 @@ class FixRequirements extends Task
         return $this;
     }
 
-    private $ignoreFolderArray = [
-        ".git"
-    ];
-
     public function setIgnoreFolderArray($a)
     {
         $this->ignoreFolderArray = $a;
 
         return $this;
     }
-
 
     public function runActualTask($params = [])
     {
@@ -55,22 +54,22 @@ class FixRequirements extends Task
             'src' => [
                 'php' => [
                     'Requirements::javascript(' => [
-                        'R' => ''
+                        'R' => '',
                     ],
                     'Requirements::css(' => [
-                        'R' => ''
+                        'R' => '',
                     ],
                     'Requirements::themedCSS(' => [
-                        'R' => ''
-                    ]
-                ]
-            ]
+                        'R' => '',
+                    ],
+                ],
+            ],
         ];
 
         if ($this->debug) {
             $this->mu()->colourPrint(print_r($replacementArray, 1));
         }
-        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
+        foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             //Start search machine from the module location. replace API
             $textSearchMachine = new SearchAndReplaceAPI($moduleDir);
             $textSearchMachine->setIsReplacingEnabled(true);
@@ -81,25 +80,25 @@ class FixRequirements extends Task
             * together making it ['src']['php']
             */
             foreach ($replacementArray as $path => $pathArray) {
-                $path = $moduleDir  . '/'.$path ? : '' ;
+                $path = $moduleDir . '/' . $path ?: '';
                 $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
                 if (! file_exists($path)) {
-                    $this->mu()->colourPrint("SKIPPING $path as it does not exist.");
+                    $this->mu()->colourPrint("SKIPPING ${path} as it does not exist.");
                 } else {
                     $textSearchMachine->setSearchPath($path);
                     foreach ($pathArray as $extension => $extensionArray) {
                         $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
                         $this->mu()->colourPrint(
-                            "++++++++++++++++++++++++++++++++++++\n".
-                            "CHECKING\n".
-                            "IN $path\n".
-                            "FOR $extension FILES\n".
-                            "BASE ".$moduleDir."\n".
+                            "++++++++++++++++++++++++++++++++++++\n" .
+                            "CHECKING\n" .
+                            "IN ${path}\n" .
+                            "FOR ${extension} FILES\n" .
+                            'BASE ' . $moduleDir . "\n" .
                             "++++++++++++++++++++++++++++++++++++\n"
                         );
                         foreach ($extensionArray as $find => $findDetails) {
-                            $replace = isset($findDetails['R'])       ? $findDetails['R'] : $find;
-                            $comment = isset($findDetails['C'])       ? $findDetails['C'] : '';
+                            $replace = isset($findDetails['R']) ? $findDetails['R'] : $find;
+                            $comment = isset($findDetails['C']) ? $findDetails['C'] : '';
                             $ignoreCase = true;
                             $caseSensitive = ! $ignoreCase;
 
@@ -108,22 +107,22 @@ class FixRequirements extends Task
                             // REPLACMENT PATTERN!
                             //Requirements::javascript(moduledirfolder/bla);
                             //Requirements::javascript(vpl: bla);
-                            $findWithPackageName = $find.strtolower($this->mu()->getPackageName());
+                            $findWithPackageName = $find . strtolower($this->mu()->getPackageName());
                             $vendorAndPackageFolderNameForInstall = $this->mu()->getVendorAndPackageFolderNameForInstall();
-                            if (!$find) {
-                                user_error("no find is specified, replace is: $replace");
+                            if (! $find) {
+                                user_error("no find is specified, replace is: ${replace}");
                             }
-                            $replacementType = $isStraightReplace ? "BASIC" : "COMPLEX";
+                            $replacementType = $isStraightReplace ? 'BASIC' : 'COMPLEX';
 
                             foreach (['\'', '"'] as $quoteMark) {
-                                $finalReplace = $find.$quoteMark.$vendorAndPackageFolderNameForInstall.': ';
-                                if (!$finalReplace && $finalReplace !== ' ') {
-                                    user_error("no replace is specified, find is: $find. We suggest setting your final replace to a single space if you would like to replace with NOTHING.");
+                                $finalReplace = $find . $quoteMark . $vendorAndPackageFolderNameForInstall . ': ';
+                                if (! $finalReplace && $finalReplace !== ' ') {
+                                    user_error("no replace is specified, find is: ${find}. We suggest setting your final replace to a single space if you would like to replace with NOTHING.");
                                 }
-                                $finalFind = $find.$quoteMark;
+                                $finalFind = $find . $quoteMark;
                                 $this->mu()->colourPrint(
-                                    '    --- FIND: '.$finalFind."\n".
-                                    '    --- REPLACE: '.$finalReplace."\n"
+                                    '    --- FIND: ' . $finalFind . "\n" .
+                                    '    --- REPLACE: ' . $finalReplace . "\n"
                                 );
 
                                 $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
@@ -139,13 +138,13 @@ class FixRequirements extends Task
                         //silverstripe/admin: only
                         foreach (['cms', 'framework', 'siteconfig', 'reports'] as $ssModule) {
                             $isStraightReplace = true;
-                            $finalFind = $vendorAndPackageFolderNameForInstall.': silverstripe/'.$ssModule.': ';
-                            $finalReplace = 'silverstripe/'.$ssModule.': ';
+                            $finalFind = $vendorAndPackageFolderNameForInstall . ': silverstripe/' . $ssModule . ': ';
+                            $finalReplace = 'silverstripe/' . $ssModule . ': ';
                             $this->mu()->colourPrint(
-                                '    --- FIND: '.$finalFind."\n".
-                                '    --- REPLACE: '.$finalReplace."\n"
+                                '    --- FIND: ' . $finalFind . "\n" .
+                                '    --- REPLACE: ' . $finalReplace . "\n"
                             );
-                            $textSearchMachine->setSearchKey($finalFind, $isStraightReplace, 'silverstripe/'.$ssModule.'/@@@@double-up@@@@');
+                            $textSearchMachine->setSearchKey($finalFind, $isStraightReplace, 'silverstripe/' . $ssModule . '/@@@@double-up@@@@');
                             $textSearchMachine->setReplacementKey($finalReplace);
                             $textSearchMachine->startSearchAndReplace();
                         }
@@ -154,7 +153,7 @@ class FixRequirements extends Task
                         $replacements = $textSearchMachine->showFormattedSearchTotals();
                         if (! $replacements) {
                             //flush output anyway!
-                            $this->mu()->colourPrint("No replacements for  $extension");
+                            $this->mu()->colourPrint("No replacements for  ${extension}");
                         }
                         $this->mu()->colourPrint($textSearchMachine->getOutput());
                     }

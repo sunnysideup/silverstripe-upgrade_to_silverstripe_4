@@ -12,6 +12,8 @@ class RemoveComposerRequirements extends Task
 {
     protected $taskStep = 's20';
 
+    protected $package = '';
+
     public function getTitle()
     {
         return 'Remove composer.json requirements';
@@ -21,19 +23,17 @@ class RemoveComposerRequirements extends Task
     {
         return '
             Remove requirements in composer.json file for
-            '.($this->package ?: 'an Old Package').'
+            ' . ($this->package ?: 'an Old Package') . '
             For example, we remove silverstripe/framework requirement from 3 to 4.';
     }
-
-    protected $package = '';
 
     public function runActualTask($params = [])
     {
         $package = $this->package;
 
-        $command = 'unset($data["require"]["'.$package.'"]);';
+        $command = 'unset($data["require"]["' . $package . '"]);';
 
-        $comment = 'remove the requirement for '.$package.' from '.$this->mu()->getGitRootDir();
+        $comment = 'remove the requirement for ' . $package . ' from ' . $this->mu()->getGitRootDir();
 
         $this->updateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),
@@ -41,7 +41,7 @@ class RemoveComposerRequirements extends Task
             $comment
         );
 
-        $this->setCommitMessage('MAJOR: remove composer requirements to SS4 - removing requirements for: '.$this->package);
+        $this->setCommitMessage('MAJOR: remove composer requirements - removing requirements for: ' . $this->package);
     }
 
     protected function hasCommitAndPush()

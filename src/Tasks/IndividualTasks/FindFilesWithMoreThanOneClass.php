@@ -5,7 +5,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
-
 class FindFilesWithMoreThanOneClass extends Task
 {
     protected $taskStep = 's10';
@@ -18,24 +17,22 @@ class FindFilesWithMoreThanOneClass extends Task
     public function getDescription()
     {
         return '
-            Goes through all the PHP files and makes sure that only one class is defined.  If any are found than the code exits as you should fix this first!' ;
+            Goes through all the PHP files and makes sure that only one class is defined.  If any are found than the code exits as you should fix this first!';
     }
-
 
     public function runActualTask($params = [])
     {
-        foreach($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-
-            $errors = [];
+        $errors = [];
+        foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $searchPath = $this->mu()->findMyCodeDir($moduleDir);
-            if(file_exists($searchPath)) {
-                $this->mu()->colourPrint("Searching in ".$searchPath, 'blue for files with more than one class.');
+            if (file_exists($searchPath)) {
+                $this->mu()->colourPrint('Searching in ' . $searchPath, 'blue for files with more than one class.');
                 $fileFinder = new FindFiles($searchPath);
                 $flatArray = $fileFinder
                     ->setSearchPath($searchPath)
                     ->setExtensions(['php'])
                     ->getFlatFileArray();
-                if(is_array($flatArray) && count($flatArray)) {
+                if (is_array($flatArray) && count($flatArray)) {
                     foreach ($flatArray as $path) {
                         $className = basename($path, '.php');
                         $classNames = [];
@@ -43,31 +40,29 @@ class FindFilesWithMoreThanOneClass extends Task
                         $tokens = token_get_all($content);
                         $namespace = '';
                         for ($index = 0; isset($tokens[$index]); $index++) {
-                            if (!isset($tokens[$index][0])) {
+                            if (! isset($tokens[$index][0])) {
                                 continue;
                             }
-                            if (T_CLASS === $tokens[$index][0] && T_WHITESPACE === $tokens[$index + 1][0] && T_STRING === $tokens[$index + 2][0]) {
+                            if ($tokens[$index][0] === T_CLASS && $tokens[$index + 1][0] === T_WHITESPACE && $tokens[$index + 2][0] === T_STRING) {
                                 $index += 2; // Skip class keyword and whitespace
                                 $classNames[] = $tokens[$index][1];
                             }
                         }
-                        if(count($classNames) > 1) {
-                            $errors[] = $path.': '.implode(', ', $classNames);
+                        if (count($classNames) > 1) {
+                            $errors[] = $path . ': ' . implode(', ', $classNames);
                         }
                     }
                 } else {
-                    $this->mu()->colourPrint("Could not find any files in ".$searchPath, 'red');
+                    $this->mu()->colourPrint('Could not find any files in ' . $searchPath, 'red');
                 }
             } else {
-                $this->mu()->colourPrint("Could not find ".$searchPath, 'blue');
+                $this->mu()->colourPrint('Could not find ' . $searchPath, 'blue');
             }
         }
-        if(count($errors)) {
-            return 'Found files with multiple classes: '.implode("\n\n ---\n\n", $errors);
+        if (count($errors)) {
+            return 'Found files with multiple classes: ' . implode("\n\n ---\n\n", $errors);
         }
-
     }
-
 
     protected function hasCommitAndPush()
     {

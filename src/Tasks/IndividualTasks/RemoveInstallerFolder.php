@@ -12,6 +12,12 @@ class RemoveInstallerFolder extends Task
 {
     protected $taskStep = 's20';
 
+    protected $package = '';
+
+    protected $newVersion = '';
+
+    protected $newPackage = '';
+
     public function getTitle()
     {
         return 'Remove installer-name from composer.json';
@@ -21,22 +27,16 @@ class RemoveInstallerFolder extends Task
     {
         return '
             Remove installer folder from composer.json file so that package
-            installs into vendor folder.' ;
+            installs into vendor folder.';
     }
-
-    protected $package = '';
-
-    protected $newVersion = '';
-
-    protected $newPackage = '';
 
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             $command =
             'if(isset($data["extra"]["installer-name"])) { '
-            .'    unset($data["extra"]["installer-name"]);'
-            .'}';
+            . '    unset($data["extra"]["installer-name"]);'
+            . '}';
             $comment = 'Removing extra.installer-name variable';
             $this->updateJSONViaCommandLine(
                 $this->mu()->getGitRootDir(),

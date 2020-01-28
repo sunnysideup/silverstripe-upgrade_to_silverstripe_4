@@ -3,41 +3,36 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
-$restart = isset($argv[1]) && $argv[1] === 'restart';
 
-/**
- * below are examples
- * of most of the config options
- *
- * N.B. the individual tasks also have config options!
- */
 $obj = ModuleUpgrader::create()
+    ->setRecipe('SS4')
+
     ->setRunImmediately(true)
-    ->setLogFolderDirLocation('/var/www/logdir')
-    ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setWebRootName('__upgradeto4__')
     ->setRunInteractively(true)
-    ->setRestartSession($restart)
-    // ->setRunIrreversibly(true)
+    ->setRunIrreversibly(false)
+
+    ->setLogFolderDirLocation('/var/www/upgrades-logs')
+    ->setAboveWebRootDirLocation('/var/www/upgrades')
+    ->setWebRootName('upgradeto4')
+    ->setNameOfTempBranch('4.1-TEMP-upgrade')
+
     ->setArrayOfModules(
         [
             1 => [
-              'VendorName' => 'sunnysideup',
-              'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'frontendeditor',
-              'PackageNamespace' => 'FrontendEditor',
-              'PackageFolderNameForInstall' => 'frontendeditor',
-              'GitLink' => 'git@bitbucket.org:sunnysideupnz/upgradesilverstripe.com.git',
-              'UpgradeAsFork' => false,
-              'OriginComposerFileLocation' => 'https://bitbucket.org/vendor/project.com/src/master/composer.json',
-              'IsModuleUpgrade' => false
+              'VendorName' => 'myclient',  //e.g. as listed in composer.json file, not so relevant for projects
+              'VendorNamespace' => 'MyClient', //namespace to be used for project
+              'PackageName' => 'app', //e.g. as listed in composer.json file, not so relevant for projects
+              'PackageNamespace' => 'App', //second part of the namespace i.e. VendorNamespace/PackageNamespace
+              'PackageFolderNameForInstall' => 'myclient', //temp folder to be used for running upgrade.
+              'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git', //link to package
+              'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/myclient.org.nz/src/master/composer.json',
+              'IsModuleUpgrade' => false, //is it a module or a website project?
             ]
         ]
     )
-    ->setNameOfTempBranch('4.1-TEMP-upgrade')
-    ->setFrameworkComposerRestraint('^4.3')
+    ->setFrameworkComposerRestraint('^4.4')
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
-    ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
+    // ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     // ->setListOfTasks(
     //     [
     //         'ResetWebRootDir-1' => [],
@@ -67,6 +62,7 @@ $obj = ModuleUpgrader::create()
     //         // 'WebRootUpdate' => []
     //     ]
     // )
+    // ->setVariableForTask($taskName, $variableName, $variableValue);
     // ->setStartFrom('RecomposeHomeBrew')
     // ->setEndWith('SearchAndReplace')
     // ->setOnlyRun('SearchAndReplace')

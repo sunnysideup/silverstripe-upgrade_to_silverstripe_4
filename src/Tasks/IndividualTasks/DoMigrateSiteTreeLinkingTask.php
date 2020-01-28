@@ -19,21 +19,20 @@ class DoMigrateSiteTreeLinkingTask extends Task
     public function getDescription()
     {
         return '
-            Run a dev/tasks/MigrateSiteTreeLinkingTask to upgrade sitetree links.' ;
+            Run a dev/tasks/MigrateSiteTreeLinkingTask to upgrade sitetree links.';
     }
 
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             return false;
-        } else {
-            $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'php vendor/silverstripe/framework/cli-script.php dev/tasks/MigrateSiteTreeLinkingTask flush=all',
-                'MigrateSiteTreeLinkingTask is running',
-                false
-            );
         }
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'php vendor/silverstripe/framework/cli-script.php dev/tasks/MigrateSiteTreeLinkingTask flush=all',
+            'MigrateSiteTreeLinkingTask is running',
+            false
+        );
     }
 
     protected function hasCommitAndPush()

@@ -15,9 +15,8 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
     {
         if ($this->mu()->getRunIrreversibly()) {
             return 'Finalise Upgrade with merge into Master.';
-        } else {
-            return 'Finalise Upgrade with merge into Master (TURNED OFF)';
         }
+        return 'Finalise Upgrade with merge into Master (TURNED OFF)';
     }
 
     public function getDescription()
@@ -28,13 +27,12 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                 You should only run this upgrade task if you are 100% sure.
                 You can turn off this task by setting `runIrreversibly` to false in the upgrader.
                 You can do this as follows: `$upgrader->setRunIrreversibly(false)`
-                 ' ;
-        } else {
-            return '
+                 ';
+        }
+        return '
                 This is currently turned off allowing you to run the upgrader more than once without any consequences to the project at hand.
                 You can turn on this task by setting `runIrreversibly` to true in the upgrader.
                 You can do this as follows: `$upgrader->setRunIrreversibly(true)`.';
-        }
     }
 
     public function runActualTask($params = [])
@@ -44,16 +42,16 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
             $this->mu()->execMe(
                 $this->mu()->getGitRootDir(),
                 '
-                    git checkout '.$branchName.'
-                    git pull origin '.$branchName.'
+                    git checkout ' . $branchName . '
+                    git pull origin ' . $branchName . '
                     git checkout master
-                    git merge --squash '.$branchName.'
+                    git merge --squash ' . $branchName . '
                     git commit . -m "MAJOR: upgrade to Silverstripe 4"
                     git push origin master
-                    git branch -D '.$branchName.'
-                    git push origin --delete '.$branchName.'
+                    git branch -D ' . $branchName . '
+                    git push origin --delete ' . $branchName . '
                 ',
-                'merging '.$branchName.' into master in '.$this->mu()->getGitRootDir(),
+                'merging ' . $branchName . ' into master in ' . $this->mu()->getGitRootDir(),
                 false
             );
         }

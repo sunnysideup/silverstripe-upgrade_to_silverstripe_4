@@ -1,0 +1,33 @@
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+
+$obj = ModuleUpgrader::create()
+    ->setRecipe('SS4')
+
+    ->setAboveWebRootDirLocation('/var/www/upgrades')
+    ->setLogFolderDirLocation('/var/www/upgrades-logs')
+
+    ->setWebRootName('upgradeto4')
+
+    ->setArrayOfModules(
+        [
+            1 => [
+                //see run.me.index.full.php.EXAMPLE for more details1
+                'VendorName' => 'awesomeproject',
+                'VendorNamespace' => 'AwesomeProject',
+                'PackageName' => 'app',
+                'PackageNamespace' => 'App',
+                'PackageFolderNameForInstall' => 'mymodule',
+                'GitLink' => 'git@bitbucket.org:mybitbucket/awesome.org.nz.git',
+                'IsModuleUpgrade' => true,
+            ]
+        ]
+    )
+
+    ->setNameOfTempBranch('4.1-TEMP-upgrade')
+
+    ->setFrameworkComposerRestraint('^4.4')
+
+    ->run();

@@ -14,6 +14,12 @@ class DoctorTask extends Task
 {
     protected $taskStep = 's30';
 
+    protected $param1 = '';
+
+    protected $param2 = '';
+
+    protected $rootDirForCommand = '';
+
     public function getTitle()
     {
         return 'Fix up .htaccess and index.html';
@@ -24,18 +30,12 @@ class DoctorTask extends Task
         return '
             Runs the silverstripe/upgrade task "doctor". See:
             https://github.com/silverstripe/silverstripe-upgrader#doctor.
-            CAREFUL: will remove any customisations!' ;
+            CAREFUL: will remove any customisations!';
     }
-
-    protected $param1 = '';
-
-    protected $param2 = '';
-
-    protected $rootDirForCommand = '';
 
     public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             //do nothing ...
         } else {
             $this->runSilverstripeUpgradeTask(
@@ -50,10 +50,9 @@ class DoctorTask extends Task
 
     protected function hasCommitAndPush()
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 }

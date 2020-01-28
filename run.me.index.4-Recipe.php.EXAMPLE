@@ -1,0 +1,28 @@
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+
+
+
+$obj = ModuleUpgrader::create()
+    ->setRecipe('SS4')
+    ->setLogFolderDirLocation('/var/www/upgrades-logs')
+    ->setAboveWebRootDirLocation('/var/www/upgrades')
+    ->setWebRootName('upgradeto4')
+    ->setArrayOfModules(
+        [
+            1 => [
+                //see run.me.index.full.php.EXAMPLE for more details1
+                'VendorName' => 'myclient',
+                'VendorNamespace' => 'MyClient',
+                'PackageName' => 'app',
+                'PackageNamespace' => 'App',
+                'PackageFolderNameForInstall' => 'myclient',
+                'GitLink' => 'git@bitbucket.org:sunnysideupnz/myclient.org.nz.git',
+                'IsModuleUpgrade' => false,
+            ]
+        ]
+    )
+    ->setRecipe('SS4')
+    ->run();

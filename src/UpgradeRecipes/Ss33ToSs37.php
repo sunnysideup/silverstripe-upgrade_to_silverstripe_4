@@ -2,8 +2,8 @@
 
 
 namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\BaseClass;
 
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\BaseClass;
 
 class Ss33ToSs37 extends BaseClass
 {

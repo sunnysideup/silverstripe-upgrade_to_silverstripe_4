@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
-
 
 abstract class BaseClass
 {
@@ -40,7 +38,7 @@ abstract class BaseClass
     public function getVariables() : array
     {
         $returnArray = [];
-        foreach($this->varsToProvide as $var) {
+        foreach ($this->varsToProvide as $var) {
             $returnArray[$var] = $this->returnValidValue($var);
         }
 
@@ -49,7 +47,7 @@ abstract class BaseClass
 
     protected function returnValidValue($nameOfVar)
     {
-        if(empty($this->$nameOfVar) === true) {
+        if (empty($this->$nameOfVar) === true) {
             return user_error('You have not defined a variable "'.$nameOfVar.'" in your recipe: '. __CLASS__);
         } else {
             return $this->$nameOfVar;

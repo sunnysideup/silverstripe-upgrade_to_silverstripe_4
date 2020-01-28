@@ -1,9 +1,8 @@
 <?php
 
-
 namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\BaseClass;
 
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\BaseClass;
 
 class Ss3ToSs4 extends BaseClass
 {
@@ -40,6 +39,7 @@ class Ss3ToSs4 extends BaseClass
         'ResetWebRootDir-1' => [],
 
         'CheckoutDevMaster-1' => [],
+        'PHPCompatabilityCheck' => [],
         'FindFilesWithMoreThanOneClass' => [],
         'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],

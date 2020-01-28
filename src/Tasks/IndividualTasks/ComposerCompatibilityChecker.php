@@ -11,11 +11,29 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 class ComposerCompatibilityChecker extends Task
 {
 
-    public $jsonFileLocation = "/var/www/ss3/337/info.json";
+    protected $taskStep = 's10';
 
-    public $outputArray = [];
+    public function getTitle()
+    {
+        return 'Check what composer requirements packages are best to use.';
+    }
 
-    public $resetOutputFiles = true;
+    public function getDescription()
+    {
+        return '
+            THIS IS STILL UNDER CONSTRUCTION!
+            ';
+    }
+
+
+
+    protected $jsonFileLocation = "/var/www/ss3/337/info.json";
+
+    protected  $outputArray = [];
+
+    protected $resetOutputFiles = true;
+
+    protected $lessUpgradeIsBetter = false;
 
     public function run()
     {
@@ -58,7 +76,9 @@ class ComposerCompatibilityChecker extends Task
                 $currentVersionPos = strpos($versionsString, ', ' . $version);
                 $versionsString = substr($versionsString, 0, $currentVersionPos);
                 $newerVersions = explode(", ", $versionsString);
-                $newerVersions = array_reverse($newerVersions);
+                if($this->lessUpgradeIsBetter) {
+                    $newerVersions = array_reverse($newerVersions);
+                }
                 $output = 0;
                 $versionFound = false;
                 foreach($newerVersions as $newVersion){

@@ -36,6 +36,7 @@ class Ss31ToSs37 extends BaseClass
 
         'CheckoutUpgradeStarterBranch' => [],
         'AddTempUpgradeBranch' => [],
+        'ComposerCompatibilityCheckerStep1' => [],
         'FixOutdatedPHPStyles' => [],
 
         'UpdateComposerRequirements-1' => [

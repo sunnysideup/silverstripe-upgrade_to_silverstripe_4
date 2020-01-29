@@ -8,7 +8,7 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 //composer info --format=json > info.json
 //composer info --direct --format=json > info.json
 
-class ComposerCompatibilityCheckerStep1 extends Task
+class ComposerCompatibilityCheckerStep2 extends Task
 {
 
     protected $taskStep = 's10';

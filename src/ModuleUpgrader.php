@@ -161,10 +161,22 @@ class ModuleUpgrader
     #########################################
 
     /**
+     * name of the branch that exists as the starting point for upgrade
+     * @var string branch name
+     */
+    protected $nameOfBranchForBaseCode = 'master';
+
+    /**
+     * name of the branch to be created that we use a starter branch for upgrade
+     * @var string branch name
+     */
+    protected $nameOfUpgradeStarterBranch = 'upgrades/starting-point';
+
+    /**
      * name of the branch created to do the upgrade
      * @var string branch name
      */
-    protected $nameOfTempBranch = '';
+    protected $nameOfTempBranch = 'upgrades/temp-automated-upgrade-branch';
 
     /**
      * Name of module vendor
@@ -615,7 +627,7 @@ class ModuleUpgrader
      * @param  boolean $alwaysRun               run even if you are just preparing a real run. Default FALSE
      * @param  string  $keyNotesLogFileLocation
      *
-     * @return void
+     * @return array
      */
     public function execMe(
         $newDir,

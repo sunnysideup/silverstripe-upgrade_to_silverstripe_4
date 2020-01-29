@@ -8,10 +8,14 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 //composer info --format=json > info.json
 //composer info --direct --format=json > info.json
 
-class ComposerCompatibilityChecker extends Task
+class ComposerCompatibilityCheckerStep1 extends Task
 {
 
     protected $taskStep = 's10';
+
+    protected $infoFileFileName = 'composer-requirements-info.json';
+
+    protected $resultsFileAsJSON = 'composer-requirements-info.upgraded.json';
 
     public function getTitle()
     {
@@ -25,28 +29,18 @@ class ComposerCompatibilityChecker extends Task
             ';
     }
 
-
-
-    protected $jsonFileLocation = "/var/www/ss3/337/info.json";
-
-    protected  $outputArray = [];
-
-    protected $resetOutputFiles = true;
-
     protected $lessUpgradeIsBetter = false;
+
+    private $outputArray = [];
 
     public function run()
     {
-        $jsonFile = file_get_contents($this->jsonFileLocation);
+        file_put_contents($this->getJsonFileLocationJSONResults(), '');
+
+        $jsonFile = file_get_contents($this->getJsonFileLocation());
         $jsonData = json_decode($jsonFile, true);
+
         $libraries = $jsonData["installed"];
-
-        if($this->resetOutputFiles){
-            file_put_contents('results.txt', '');
-            file_put_contents('array.json', '');
-        }
-
-        $libraryOutput = 0;
 
         foreach($libraries as $library){
             $this->resetProject();
@@ -57,20 +51,25 @@ class ComposerCompatibilityChecker extends Task
                 $commit = $version;
                 $version = str_replace(' ', '#', $version);
             }
-            $composerCommand = "composer require " . $name . " '" . $version . "' 2>&1 ";
-
-            exec($composerCommand, $$libraryOutput, $return_var);
-
-
-            if(in_array('  [InvalidArgumentException]', $$libraryOutput)){
+            unset($libraryOutput);
+            $libraryOutput = $this->mu()->execMe(
+                $webRoot,
+                "composer require " . $name . " '" . $version . "' 2>&1 ",
+                'adding module'
+            );
+            if(in_array('  [InvalidArgumentException]', $libraryOutput)){
                 $message = "composer require " . $name . " '" . $version . "' unsuccessful, could not find a matching version of package.\n";
-                $this->outputMessage($message);
+                $this->mu()->colourPrint($message);
             }
-            else if(in_array('Installation failed, reverting ./composer.json to its original content.', $$libraryOutput)){
+            else if(in_array('Installation failed, reverting ./composer.json to its original content.', $libraryOutput)){
                 $message = "composer require " . $name . " '" . $version . "' unsuccessful, searching for next best version.\n";
-                $this->outputMessage($message);
-                $composerCommand = "composer show -a " . $name . " 2>&1 ";
-                exec($composerCommand, $show, $return_var);
+                $this->mu()->colourPrint($message);
+                unset($show);
+                $show = $this->mu()->execMe(
+                    $webRoot,
+                    "composer show -a " . $name . " 2>&1 ",
+                    'show details of module'
+                );
                 $versionsString = $show[3];
                 $versionsString = str_replace('versions : ', '', $versionsString);
                 $currentVersionPos = strpos($versionsString, ', ' . $version);
@@ -82,51 +81,71 @@ class ComposerCompatibilityChecker extends Task
                 $output = 0;
                 $versionFound = false;
                 foreach($newerVersions as $newVersion){
-                    $composerCommand = "composer require " . $name . " '" . $newVersion . "' 2>&1 ";
-                    exec($composerCommand, $$output, $return_var);
-                    if(! in_array('Installation failed, reverting ./composer.json to its original content.', $$output)){
+                    unset($output);
+                    $output = $this->mu()->execMe(
+                        $webRoot,
+                        "composer require " . $name . " '" . $newVersion . "' 2>&1 ",
+                        'show details of module',
+                        false
+                    );
+                    if(! in_array('Installation failed, reverting ./composer.json to its original content.', $output)){
                         $versionFound = true;
                         $message = "composer require " . $name . " '" . $newVersion . "' is the next best version.\n";
-                        $this->outputMessage($message);
+                        $this->mu()->colourPrint($message);
                         $this->addToOutputArray($name, $newVersion);
                         break;
                     }
                     $message = "composer require " . $name . " '" . $newVersion . "' unsuccessful, searching for next best version.\n";
-                    $this->outputMessage($message, false);
+                    $this->mu()->colourPrint($message, false);
                     $output++;
                 }
 
                 if(!$versionFound){
                     $message = "Could not find any compatiable versions for:  " . $name . "!'\n ";
-                    $this->outputMessage($message);
+                    $this->mu()->colourPrint($message);
                 }
             }
             else {
                 $message = "composer require " . $name . " '" . $version . "' successful!\n ";
-                $this->outputMessage($message);
+                $this->mu()->colourPrint($message);
                 $version = $commit ? $commit : $version;
                 $this->addToOutputArray($name, $version);
             }
 
-            $libraryOutput++;
         }
 
 
-        file_put_contents('array.json', json_encode($this->outputArray), FILE_APPEND | LOCK_EX);
+        file_put_contents(
+            $this->getJsonFileLocationJSONResults(),
+            json_encode($this->outputArray),
+            FILE_APPEND | LOCK_EX
+        );
     }
 
-    public function resetProject(){
-        $this->outputMessage('reseting project to composer.json.default', false);
-        exec('rm composer.json', $remove, $return_var);
-        exec('cp composer.json.default composer.json', $copy, $return_var);
-        exec('composer update', $update, $return_var);
-    }
-
-    public function outputMessage($message, $toFile = true){
-        echo $message;
-        if($toFile){
-            file_put_contents('results.txt', $message, FILE_APPEND | LOCK_EX);
+    public function resetProject($firstTime = false){
+        $this->mu()->colourPrint('resetting project to composer.json.default', false);
+        if($firstTime) {
+            $this->mu()->execMe(
+                $webRoot,
+                'cp composer.json composer.json.temp.default',
+                'make temporary copy of composer.json'
+            );
         }
+        $this->mu()->execMe(
+            $webRoot,
+            'rm composer.json',
+            'remove composer.json'
+        );
+        $this->mu()->execMe(
+            $webRoot,
+            'cp composer.json.temp.default composer.json',
+            'back to default composer file'
+        );
+        $this->mu()->execMe(
+            $webRoot,
+            'composer update',
+            'run composer update'
+        );
     }
 
     public function addToOutputArray($name, $version){
@@ -134,8 +153,12 @@ class ComposerCompatibilityChecker extends Task
         $array['folder'] = substr($name, $pos);
         $array['tag'] = $version;
         $array['repo'] = null;
-        $composerCommand = "composer show -a " . $name . " 2>&1 ";
-        exec($composerCommand, $strings, $return_var);
+        unset($strings);
+        $strings = $this->mu()->execMe(
+            $webRoot,
+            "composer show -a " . $name . " 2>&1 ",
+            'run composer update'
+        );
         $source = '';
 
         foreach ($strings as $string){
@@ -153,6 +176,16 @@ class ComposerCompatibilityChecker extends Task
         }
 
         array_push($this->outputArray, $array);
+    }
+
+    protected function getJsonFileLocation()
+    {
+        return $this->mu()->getWebRootDirLocation().$this->infoFileFileName;
+    }
+
+    protected function getJsonFileLocationJSONResults()
+    {
+        return $this->mu()->getWebRootDirLocation().$this->resultsFileAsJSON;
     }
 
 }

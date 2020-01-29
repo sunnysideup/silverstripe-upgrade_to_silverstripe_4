@@ -19,7 +19,13 @@ class ComposerCompatibilityCheckerStep2 extends Task
 
     public function getTitle()
     {
-        return 'Check what composer requirements packages are best to use.';
+        if($this->mu()->getIsModuleUpgrade()) {
+            return 'For modules upgrades, this is not being used right now.';
+        } else {
+            return 'Check what composer requirements packages are best to use, using the '
+            .$this->getJsonFileLocation().' file and placing results in '
+            .$this->getJsonFileLocationJSONResults();
+        }
     }
 
     public function getDescription()
@@ -35,6 +41,9 @@ class ComposerCompatibilityCheckerStep2 extends Task
 
     public function run()
     {
+        if($this->mu()->getIsModuleUpgrade()) {
+            return;
+        }
         file_put_contents($this->getJsonFileLocationJSONResults(), '');
 
         $jsonFile = file_get_contents($this->getJsonFileLocation());
@@ -123,9 +132,10 @@ class ComposerCompatibilityCheckerStep2 extends Task
 
     private $firstTimeReset = true;
 
-    public function resetProject(){
+    protected function resetProject()
+    {
         $this->mu()->colourPrint('resetting project to composer.json.default', false);
-        if($this>$firstTimeReset) {
+        if($this->firstTimeReset === true) {
             $this->mu()->execMe(
                 $webRoot,
                 'cp composer.json composer.json.temp.default',
@@ -142,17 +152,17 @@ class ComposerCompatibilityCheckerStep2 extends Task
             'cp composer.json.temp.default composer.json',
             'back to default composer file'
         );
-        if(! $this>$firstTimeReset) {
+        if($this->firstTimeReset === false) {
             $this->mu()->execMe(
                 $webRoot,
                 'composer update',
                 'run composer update'
             );
         }
-        $this>$firstTimeReset = false;
+        $this->firstTimeReset = false;
     }
 
-    public function addToOutputArray($name, $version){
+    protected function addToOutputArray($name, $version){
         $pos = strpos($name, '/') + 1;
         $array['folder'] = substr($name, $pos);
         $array['tag'] = $version;
@@ -182,12 +192,12 @@ class ComposerCompatibilityCheckerStep2 extends Task
         array_push($this->outputArray, $array);
     }
 
-    protected function getJsonFileLocation()
+    protected function getJsonFileLocation() : string
     {
         return $this->mu()->getWebRootDirLocation().$this->infoFileFileName;
     }
 
-    protected function getJsonFileLocationJSONResults()
+    protected function getJsonFileLocationJSONResults(): string
     {
         return $this->mu()->getWebRootDirLocation().$this->resultsFileAsJSON;
     }

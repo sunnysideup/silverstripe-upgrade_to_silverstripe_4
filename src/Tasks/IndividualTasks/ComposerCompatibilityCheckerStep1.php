@@ -32,12 +32,16 @@ class ComposerCompatibilityCheckerStep1 extends Task
 
     public function run()
     {
-        $this->mu()->execMe(
-            $webRoot,
-            'composer info '.$this->composerSettings.' --format=json > '.$this->infoFileFileName,
-            'getting requirement details',
-            false
-        );
+        if($this->mu()->getIsModuleUpgrade()) {
+            //do nothing for now ...
+        } else {
+            $this->mu()->execMe(
+                $webRoot,
+                'composer info '.$this->composerSettings.' --format=json > '.$this->infoFileFileName,
+                'getting requirement details',
+                false
+            );
+        }
 
     }
 

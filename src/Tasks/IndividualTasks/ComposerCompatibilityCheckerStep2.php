@@ -88,7 +88,7 @@ class ComposerCompatibilityCheckerStep1 extends Task
                         'show details of module',
                         false
                     );
-                    if(! in_array('Installation failed, reverting ./composer.json to its original content.', $output)){
+                    if(! in_array('Installation failed', $output)){
                         $versionFound = true;
                         $message = "composer require " . $name . " '" . $newVersion . "' is the next best version.\n";
                         $this->mu()->colourPrint($message);
@@ -97,10 +97,9 @@ class ComposerCompatibilityCheckerStep1 extends Task
                     }
                     $message = "composer require " . $name . " '" . $newVersion . "' unsuccessful, searching for next best version.\n";
                     $this->mu()->colourPrint($message, false);
-                    $output++;
                 }
 
-                if(!$versionFound){
+                if(! $versionFound){
                     $message = "Could not find any compatiable versions for:  " . $name . "!'\n ";
                     $this->mu()->colourPrint($message);
                 }
@@ -122,9 +121,11 @@ class ComposerCompatibilityCheckerStep1 extends Task
         );
     }
 
-    public function resetProject($firstTime = false){
+    private $firstTimeReset = true;
+
+    public function resetProject(){
         $this->mu()->colourPrint('resetting project to composer.json.default', false);
-        if($firstTime) {
+        if($this>$firstTimeReset) {
             $this->mu()->execMe(
                 $webRoot,
                 'cp composer.json composer.json.temp.default',
@@ -141,11 +142,14 @@ class ComposerCompatibilityCheckerStep1 extends Task
             'cp composer.json.temp.default composer.json',
             'back to default composer file'
         );
-        $this->mu()->execMe(
-            $webRoot,
-            'composer update',
-            'run composer update'
-        );
+        if(! $this>$firstTimeReset) {
+            $this->mu()->execMe(
+                $webRoot,
+                'composer update',
+                'run composer update'
+            );
+        }
+        $this>$firstTimeReset = false;
     }
 
     public function addToOutputArray($name, $version){

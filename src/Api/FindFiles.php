@@ -8,8 +8,6 @@ class FindFiles
 
     private $needToFillFileCache = true;
 
-    private $basePath = '';
-
     private $searchPath = '';
 
     private $relevantFolders = [];
@@ -34,11 +32,6 @@ class FindFiles
     private $fileArray = [];
 
     private $flatFileArray = [];
-
-    public function __construct($basePath = '')
-    {
-        $this->basePath = $basePath;
-    }
 
     /**
      *   Sets folders to ignore
@@ -97,14 +90,6 @@ class FindFiles
     public function setFindAllExts($boolean = true)
     {
         $this->findAllExts = $boolean;
-        $this->resetFileCache();
-
-        return $this;
-    }
-
-    public function setl($pathLocation)
-    {
-        $this->basePath = $pathLocation;
         $this->resetFileCache();
 
         return $this;
@@ -185,7 +170,8 @@ class FindFiles
     {
         if ($runningInnerLoop || $this->needToFillFileCache) {
             $dir = opendir($path);
-            while ($file = readdir($dir)) {
+            $file = readdir($dir);
+            while ($file) {
                 $fullPath = $path . '/' . $file;
                 if (($file === '.') ||
                     ($file === '..') ||
@@ -216,6 +202,7 @@ class FindFiles
                         $this->fileArray[$path][] = $fullPath; //search file data
                     }
                 }
+                $file = readdir($dir);
             } //End of while
             closedir($dir);
         }

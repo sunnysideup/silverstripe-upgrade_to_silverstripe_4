@@ -101,7 +101,6 @@ class FixRequirements extends Task
                         foreach ($extensionArray as $find => $findDetails) {
                             $replace = $findDetails['R'] ?? $find;
                             $comment = $findDetails['C'] ?? '';
-                            $ignoreCase = true;
                             $caseSensitive = false;
 
                             $isStraightReplace = true;
@@ -110,7 +109,7 @@ class FixRequirements extends Task
                             // REPLACMENT PATTERN!
                             //Requirements::javascript(moduledirfolder/bla);
                             //Requirements::javascript(vpl: bla);
-                            $findWithPackageName = $find . strtolower($this->mu()->getPackageName());
+                            // $findWithPackageName = $find . strtolower($this->mu()->getPackageName());
                             $vendorAndPackageFolderNameForInstall =
                                 $this->mu()->getVendorAndPackageFolderNameForInstall();
                             if (empty($find)) {

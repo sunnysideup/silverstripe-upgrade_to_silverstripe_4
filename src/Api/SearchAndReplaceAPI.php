@@ -315,6 +315,14 @@ class SearchAndReplaceAPI
     //================================================
 
     /**
+     * @return bool
+     */
+    public function getDebug()
+    {
+        return $this->debug;
+    }
+
+    /**
      * returns full output
      * and clears it.
      * @return string
@@ -456,10 +464,14 @@ class SearchAndReplaceAPI
                 return;
             }
 
-            //get magic data
-            $classNameOfFile = $this->getClassNameOfFile($file);
+            $magicalData = [];
+            $magicalData['classNameOfFile'] = $this->getClassNameOfFile($file);
             foreach ($this->magicReplacers as $magicReplacerFind => $magicReplacerReplaceVariable) {
-                $myReplacementKey = str_replace($magicReplacerFind, ${$magicReplacerReplaceVariable}, $myReplacementKey);
+                $myReplacementKey = str_replace(
+                    $magicReplacerFind,
+                    $magicalData[$magicReplacerReplaceVariable],
+                    $myReplacementKey
+                );
             }
             $oldFileContentArray = file($file);
             $newFileContentArray = [];
@@ -560,7 +572,11 @@ class SearchAndReplaceAPI
                     }
                     $this->appendToLog($file, $foundStr);
                 } else {
-                    $this->appendToLog($file, '********** ERROR: NO REPLACEMENT DESPITE MATCHES - searched for: ' . $pattern . ' and replaced with ' . $myReplacementKey . " \n");
+                    $this->appendToLog(
+                        $file,
+                        '********** ERROR: NO REPLACEMENT DESPITE MATCHES - searched for: ' .
+                        $pattern . ' and replaced with ' . $myReplacementKey . " \n"
+                    );
                 }
             }
         } else {
@@ -580,7 +596,10 @@ class SearchAndReplaceAPI
             fwrite($fp, $data);
             fclose($fp);
         } else {
-            user_error("********** ERROR: Can not replace text. File ${file} is not writable. \nPlease make it writable\n");
+            user_error(
+                "********** ERROR: Can not replace text. File ${file} is not writable.",
+                "\nPlease make it writable\n"
+            );
         }
     }
 
@@ -673,7 +692,11 @@ class SearchAndReplaceAPI
                 }
             }
             if ($passed === false) {
-                $this->appendToLog($fileName, "********** skipping file ('.${fileBaseName}.'), as it does not contain any of the following: " . implode(', ', $this->fileNameMustContain));
+                $this->appendToLog(
+                    $fileName,
+                    "********** skipping file ('.${fileBaseName}.'), as it does not contain following: " .
+                    implode(', ', $this->fileNameMustContain)
+                );
 
                 return false;
             }

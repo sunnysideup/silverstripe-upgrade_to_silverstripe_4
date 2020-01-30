@@ -203,8 +203,7 @@ class SearchAndReplace extends Task
      */
     private function checkReplacementDataIssues($replacementDataObject)
     {
-        $arr = $replacementDataObject->getReplacementArrays(null);
-        $arrTos = [];
+        $replacementDataObject->getReplacementArrays(null);
         $arrLanguages = $replacementDataObject->getLanguages();
         $fullFindArray = $replacementDataObject->getFlatFindArray();
         $fullReplaceArray = $replacementDataObject->getFlatReplacedArray();

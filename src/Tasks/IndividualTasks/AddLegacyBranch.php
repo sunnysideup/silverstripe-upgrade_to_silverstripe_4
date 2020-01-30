@@ -42,11 +42,11 @@ class AddLegacyBranch extends Task
             if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->nameOfLegacyBranch . "'" . '); then
                     echo branch exists
                 else
-                    git checkout -b ' . $this->nameOfLegacyBranch . ' ' . $this->mu()->getNameOfBranchForBaseCode(). '
+                    git checkout -b ' . $this->nameOfLegacyBranch . ' ' . $this->mu()->getNameOfBranchForBaseCode() . '
                     git push origin ' . $this->nameOfLegacyBranch . ';
 
             fi',
-            'create legacy branch ' . $this->nameOfLegacyBranch . ' from the ' . $this->mu()->getNameOfBranchForBaseCode(). ' branch in ' . $gitRootDir,
+            'create legacy branch ' . $this->nameOfLegacyBranch . ' from the ' . $this->mu()->getNameOfBranchForBaseCode() . ' branch in ' . $gitRootDir,
             false
         );
     }

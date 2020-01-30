@@ -187,7 +187,10 @@ class FindFiles
             $dir = opendir($path);
             while ($file = readdir($dir)) {
                 $fullPath = $path . '/' . $file;
-                if (($file === '.') || ($file === '..') || ($fullPath === __FILE__) || ($path === '.' && basename(__FILE__) === $file)) {
+                if (($file === '.') ||
+                    ($file === '..') ||
+                    ($fullPath === __FILE__) ||
+                    ($path === '.' && basename(__FILE__) === $file)) {
                     continue;
                 }
                 //ignore hidden files and folders
@@ -201,7 +204,8 @@ class FindFiles
                     break;
                 }
                 if (filetype($fullPath) === 'dir') {
-                    $conditionA = (in_array($file, $this->ignoreFolderArray, true) && ($path === '.' || $path === $this->searchPath));
+                    $conditionA = (in_array($file, $this->ignoreFolderArray, true) &&
+                        ($path === '.' || $path === $this->searchPath));
                     $conditionB = in_array($path, $this->ignoreFolderArray, true);
                     if ($conditionA || $conditionB) {
                         continue;
@@ -223,9 +227,7 @@ class FindFiles
 
     protected function resetFileCache()
     {
-        $this->fileArray = null;
         $this->fileArray = [];
-        $this->flatFileArray = null;
         $this->flatFileArray = [];
         $this->needToFillFileCache = true;
         //cleanup other data
@@ -233,13 +235,13 @@ class FindFiles
 
     /**
      * Finds extension of a file
-     * @param $file
+     * @param string $file
      *
      * @return string
      */
     private function findExtension($file)
     {
-        $fileArray = explode('.', $file);
+        $fileArray = explode('.', $file) ?? [];
 
         return array_pop($fileArray);
     }

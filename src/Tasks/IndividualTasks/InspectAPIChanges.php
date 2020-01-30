@@ -51,7 +51,7 @@ class InspectAPIChanges extends Task
 
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $rootDir = '';
-            if($this->mu->getIsModuleUpgrade()) {
+            if ($this->mu->getIsModuleUpgrade()) {
                 $dirToRun = $codeDir;
             } else {
                 $dirToRun = dirname($codeDir);

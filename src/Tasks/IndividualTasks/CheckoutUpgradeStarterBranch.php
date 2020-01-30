@@ -35,7 +35,7 @@ class CheckoutUpgradeStarterBranch extends Task
     public function runActualTask($params = [])
     {
         if ($this->mu()->getIsModuleUpgrade()) {
-            if($this->useGitClone) {
+            if ($this->useGitClone) {
                 $this->gitClone();
             } else {
                 $this->composerRequire();
@@ -51,7 +51,6 @@ class CheckoutUpgradeStarterBranch extends Task
         }
     }
 
-
     protected function gitClone()
     {
         $this->mu()->execMe(
@@ -66,7 +65,6 @@ class CheckoutUpgradeStarterBranch extends Task
             'checkout ' . $this->mu()->getNameOfUpgradeStarterBranch(),
             false
         );
-
     }
 
     protected function composerRequire()
@@ -79,7 +77,7 @@ class CheckoutUpgradeStarterBranch extends Task
         );
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->mu()->getNameOfUpgradeStarterBranch() . ' '.$this->composerOptions,
+            'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->mu()->getNameOfUpgradeStarterBranch() . ' ' . $this->composerOptions,
             'checkout ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
             false
         );

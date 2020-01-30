@@ -4,7 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 
 abstract class BaseClass
 {
-
     protected $varsToProvide = [
         'nameOfTempBranch',
         'defaultNamespaceForTasks',
@@ -12,7 +11,6 @@ abstract class BaseClass
         'listOfTasks',
         'frameworkComposerRestraint',
     ];
-
 
     /**
      * A list of task groups
@@ -32,10 +30,9 @@ abstract class BaseClass
     ];
 
     /**
-     *
      * @return array
      */
-    public function getVariables() : array
+    public function getVariables(): array
     {
         $returnArray = [];
         foreach ($this->varsToProvide as $var) {
@@ -47,10 +44,9 @@ abstract class BaseClass
 
     protected function returnValidValue($nameOfVar)
     {
-        if (empty($this->$nameOfVar) === true) {
-            return user_error('You have not defined a variable "'.$nameOfVar.'" in your recipe: '. __CLASS__);
-        } else {
-            return $this->$nameOfVar;
+        if (empty($this->{$nameOfVar}) === true) {
+            return user_error('You have not defined a variable "' . $nameOfVar . '" in your recipe: ' . self::class);
         }
+        return $this->{$nameOfVar};
     }
 }

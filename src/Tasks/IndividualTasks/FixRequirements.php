@@ -30,7 +30,8 @@ class FixRequirements extends Task
     public function getDescription()
     {
         return '
-            Finds Requirements:: instances and fixes them to be used properly for modules - e.g. [vendorname] / [modulename] : location/for/my/script.js';
+            Finds Requirements:: instances and fixes them to be used properly for modules
+            - e.g. [vendorname] / [modulename] : location/for/my/script.js';
     }
 
     public function setCheckReplacementIssues($b)
@@ -87,7 +88,8 @@ class FixRequirements extends Task
                 } else {
                     $textSearchMachine->setSearchPath($path);
                     foreach ($pathArray as $extension => $extensionArray) {
-                        $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
+                        //setting extensions to search files within
+                        $textSearchMachine->setExtensions(explode('|', $extension));
                         $this->mu()->colourPrint(
                             "++++++++++++++++++++++++++++++++++++\n" .
                             "CHECKING\n" .
@@ -97,27 +99,32 @@ class FixRequirements extends Task
                             "++++++++++++++++++++++++++++++++++++\n"
                         );
                         foreach ($extensionArray as $find => $findDetails) {
-                            $replace = isset($findDetails['R']) ? $findDetails['R'] : $find;
-                            $comment = isset($findDetails['C']) ? $findDetails['C'] : '';
+                            $replace = $findDetails['R'] ?? $find;
+                            $comment = $findDetails['C'] ?? '';
                             $ignoreCase = true;
-                            $caseSensitive = ! $ignoreCase;
+                            $caseSensitive = false;
 
                             $isStraightReplace = true;
+                            $replacementType = 'BASIC';
 
                             // REPLACMENT PATTERN!
                             //Requirements::javascript(moduledirfolder/bla);
                             //Requirements::javascript(vpl: bla);
                             $findWithPackageName = $find . strtolower($this->mu()->getPackageName());
-                            $vendorAndPackageFolderNameForInstall = $this->mu()->getVendorAndPackageFolderNameForInstall();
-                            if (! $find) {
+                            $vendorAndPackageFolderNameForInstall =
+                                $this->mu()->getVendorAndPackageFolderNameForInstall();
+                            if (empty($find)) {
                                 user_error("no find is specified, replace is: ${replace}");
                             }
-                            $replacementType = $isStraightReplace ? 'BASIC' : 'COMPLEX';
 
                             foreach (['\'', '"'] as $quoteMark) {
                                 $finalReplace = $find . $quoteMark . $vendorAndPackageFolderNameForInstall . ': ';
                                 if (! $finalReplace && $finalReplace !== ' ') {
-                                    user_error("no replace is specified, find is: ${find}. We suggest setting your final replace to a single space if you would like to replace with NOTHING.");
+                                    user_error("
+                                        no replace is specified, find is: ${find}.
+                                        We suggest setting your final replace to a single space
+                                        if you would like to replace with NOTHING.
+                                    ");
                                 }
                                 $finalFind = $find . $quoteMark;
                                 $this->mu()->colourPrint(
@@ -144,7 +151,11 @@ class FixRequirements extends Task
                                 '    --- FIND: ' . $finalFind . "\n" .
                                 '    --- REPLACE: ' . $finalReplace . "\n"
                             );
-                            $textSearchMachine->setSearchKey($finalFind, $isStraightReplace, 'silverstripe/' . $ssModule . '/@@@@double-up@@@@');
+                            $textSearchMachine->setSearchKey(
+                                $finalFind,
+                                $isStraightReplace,
+                                'silverstripe/' . $ssModule . '/@@@@double-up@@@@'
+                            );
                             $textSearchMachine->setReplacementKey($finalReplace);
                             $textSearchMachine->startSearchAndReplace();
                         }

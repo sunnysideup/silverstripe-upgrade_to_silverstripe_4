@@ -29,7 +29,6 @@ class AddTempUpgradeBranch extends Task
 
     public function runActualTask($params = [])
     {
-
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
             'git fetch --all ',
@@ -53,20 +52,20 @@ class AddTempUpgradeBranch extends Task
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
             'git checkout ' . $this->mu()->getNameOfUpgradeStarterBranch(),
-            'check out : ' . $this->mu()->getNameOfUpgradeStarterBranch().' as a starting point',
+            'check out : ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' as a starting point',
             false
         );
 
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
             'git pull origin ' . $this->mu()->getNameOfUpgradeStarterBranch(),
-            'get the latest details for : ' . $this->mu()->getNameOfUpgradeStarterBranch().'',
+            'get the latest details for : ' . $this->mu()->getNameOfUpgradeStarterBranch() . '',
             false
         );
 
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
-            'git checkout -b ' . $this->mu()->getNameOfTempBranch(). ' ' . $this->mu()->getNameOfUpgradeStarterBranch(),
+            'git checkout -b ' . $this->mu()->getNameOfTempBranch() . ' ' . $this->mu()->getNameOfUpgradeStarterBranch(),
             'create and checkout new branch: ' . $this->mu()->getNameOfTempBranch(),
             false
         );

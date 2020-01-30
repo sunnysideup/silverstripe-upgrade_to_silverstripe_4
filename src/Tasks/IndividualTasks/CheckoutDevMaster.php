@@ -35,7 +35,7 @@ class CheckoutDevMaster extends Task
     public function runActualTask($params = [])
     {
         if ($this->mu()->getIsModuleUpgrade()) {
-            if($this->useGitClone) {
+            if ($this->useGitClone) {
                 $this->gitClone();
             } else {
                 $this->mu()->execMe(
@@ -46,7 +46,7 @@ class CheckoutDevMaster extends Task
                 );
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
-                    'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->mu()->getNameOfBranchForBaseCode() . ' '.$this->composerOptions,
+                    'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->mu()->getNameOfBranchForBaseCode() . ' ' . $this->composerOptions,
                     'checkout ' . $this->mu()->getNameOfBranchForBaseCode() . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                     false
                 );
@@ -68,7 +68,6 @@ class CheckoutDevMaster extends Task
         }
     }
 
-
     protected function gitClone()
     {
         $this->mu()->execMe(
@@ -83,7 +82,6 @@ class CheckoutDevMaster extends Task
             'checkout ' . $this->mu()->getNameOfBranchForBaseCode(),
             false
         );
-
     }
 
     protected function hasCommitAndPush()

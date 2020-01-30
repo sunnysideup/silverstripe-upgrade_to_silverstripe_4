@@ -27,7 +27,7 @@ class RecomposeHomeBrew extends Task
         'silverstripe/graphql' => '',
         'silverstripe/reports' => '',
         'silverstripe/siteconfig' => '',
-        'silverstripe/versioned' => ''  ,
+        'silverstripe/versioned' => '',
     ];
 
     public function getTitle()
@@ -44,9 +44,9 @@ class RecomposeHomeBrew extends Task
 
     public function runActualTask($params = [])
     {
-        foreach($this->requireLinesToAdd as $package => $constraint) {
-            if($constraint  === '') {
-                if($package === 'silverstripe/framework')  {
+        foreach ($this->requireLinesToAdd as $package => $constraint) {
+            if ($constraint === '') {
+                if ($package === 'silverstripe/framework') {
                     $this->requireLinesToAdd[$package] = $this->mu()->getFrameworkComposerRestraint();
                 } else {
                     $this->requireLinesToAdd[$package] = '*';

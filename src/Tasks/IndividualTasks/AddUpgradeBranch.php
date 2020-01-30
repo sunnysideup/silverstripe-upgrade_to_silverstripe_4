@@ -44,7 +44,7 @@ class AddUpgradeBranch extends Task
                     git push origin ' . $this->mu()->getNameOfUpgradeBranch() . '
 
             fi',
-            'create upgrade branch: ' . $this->mu()->getNameOfUpgradeBranch() . ' from '.$this->mu()->getNameOfBranchForBaseCode().' in ' . $gitRootDir,
+            'create upgrade branch: ' . $this->mu()->getNameOfUpgradeBranch() . ' from ' . $this->mu()->getNameOfBranchForBaseCode() . ' in ' . $gitRootDir,
             false
         );
     }

@@ -47,9 +47,9 @@ class PHPCompatabilityCheck extends Task
             $this->mu()->execMe(
                 $webRoot,
                 'phpcs -p ' . $codeDir .
-                ' --standard=PHPCompatibility'.
-                ' --extensions=php --runtime-set testVersion 7.2'.
-                ' --report-full='.$this->mu()->getLogFolderDirLocation() . '/' . $baseNameSpace . '-php-compatibility-report -n',
+                ' --standard=PHPCompatibility' .
+                ' --extensions=php --runtime-set testVersion 7.2' .
+                ' --report-full=' . $this->mu()->getLogFolderDirLocation() . '/' . $baseNameSpace . '-php-compatibility-report -n',
                 'Running PHP Compatibility Check in: ' . $this->mu()->getWebRootDirLocation(),
                 false
             );

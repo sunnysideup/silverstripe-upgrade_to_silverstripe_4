@@ -26,7 +26,6 @@ class MoveCodeToSRC extends Task
     /**
      * [runActualTask description]
      * @param  array  $params not currently used for this task
-     * @return [type]         
      */
     public function runActualTask($params = [])
     {

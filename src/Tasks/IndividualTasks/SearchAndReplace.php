@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
 use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
+use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -103,12 +103,13 @@ class SearchAndReplace extends Task
 
     public function runActualTask($params = [])
     {
-        if ($this->checkReplacementIssues) {
-            $this->checkReplacementDataIssues();
-        }
 
         //replacement data
         $replacementDataObject = $this->getReplacementDataObject();
+
+        if ($this->checkReplacementIssues) {
+            $this->checkReplacementDataIssues($replacementDataObject);
+        }
 
         $replacementArray = $replacementDataObject->getReplacementArrays();
 
@@ -198,10 +199,10 @@ class SearchAndReplace extends Task
     /**
      * 1. check that one find is not used twice:
      * find can be found 2x
+     * @param mixed $replacementDataObject
      */
-    private function checkReplacementDataIssues()
+    private function checkReplacementDataIssues($replacementDataObject)
     {
-
         $arr = $replacementDataObject->getReplacementArrays(null);
         $arrTos = [];
         $arrLanguages = $replacementDataObject->getLanguages();

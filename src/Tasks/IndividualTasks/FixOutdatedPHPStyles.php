@@ -4,7 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
-
 class FixOutdatedPHPStyles extends Task
 {
     protected $taskStep = 's10';
@@ -31,13 +30,11 @@ class FixOutdatedPHPStyles extends Task
             false
         );
 
-
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
         foreach ($codeDirs as $baseNameSpace => $codeDir) {
-
             $this->mu()->execMe(
                 $webRoot,
-                './vendor/sunnysideup/huringa/huringa.php '.$codeDir,
+                './vendor/sunnysideup/huringa/huringa.php ' . $codeDir,
                 'fixing outdated code styles in ' . $codeDir,
                 false
             );

@@ -22,10 +22,14 @@ class DoMigrateSiteTreeLinkingTask extends Task
             Run a dev/tasks/MigrateSiteTreeLinkingTask to upgrade sitetree links.';
     }
 
+    /**
+     * @param array $params
+     * @return string|null
+     */
     public function runActualTask($params = [])
     {
         if ($this->mu()->getIsModuleUpgrade()) {
-            return false;
+            return null;
         }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),

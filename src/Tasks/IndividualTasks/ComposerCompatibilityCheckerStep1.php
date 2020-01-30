@@ -2,6 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+
 //use either of the following to create the info.json file required
 //your project will also require a composer.json.default file
 //this file is used to reset the project to the default state before attempting to install each library
@@ -10,7 +12,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 class ComposerCompatibilityCheckerStep1 extends Task
 {
-
     protected $taskStep = 's10';
 
     protected $infoFileFileName = 'composer-requirements-info.json';
@@ -26,28 +27,31 @@ class ComposerCompatibilityCheckerStep1 extends Task
     {
         return '
             This first step works out what requirements you have before you upgrade.
-            It saves the data into: '.$this->infoFileFileName.' (customisable).
+            It saves the data into: ' . $this->infoFileFileName . ' (customisable).
             ';
     }
 
-    public function run()
+    /**
+     * @param array $params
+     * @return string|null
+     */
+    public function runActualTask($params = [])
     {
-        if($this->mu()->getIsModuleUpgrade()) {
+        if ($this->mu()->getIsModuleUpgrade()) {
             //do nothing for now ...
         } else {
+            $webRootLocation = $this->mu()->getWebRootDirLocation();
             $this->mu()->execMe(
-                $webRoot,
-                'composer info '.$this->composerSettings.' --format=json > '.$this->infoFileFileName,
+                $webRootLocation,
+                'composer info ' . $this->composerSettings . ' --format=json > ' . $this->infoFileFileName,
                 'getting requirement details',
                 false
             );
         }
-
     }
 
     protected function hasCommitAndPush()
     {
         return true;
     }
-
 }

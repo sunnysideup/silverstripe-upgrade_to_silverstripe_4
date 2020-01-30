@@ -85,9 +85,9 @@ class SearchAndReplaceAPI
     /**
      * magic replacement functions
      */
-    private static $_class_name_cache = [];
+    private static $class_name_cache = [];
 
-    private static $_finder = null;
+    private static $finder = null;
 
     public function __construct($basePath = '')
     {
@@ -247,7 +247,7 @@ class SearchAndReplaceAPI
      * @param string $searchKey,
      * @param bool $caseSensitive
      */
-    public function setSearchKey($searchKey, $caseSensitive = false, $replacementType)
+    public function setSearchKey($searchKey, $caseSensitive = false, $replacementType = 'noType')
     {
         $this->searchKey = $searchKey;
         $this->caseSensitive = $caseSensitive;
@@ -296,9 +296,11 @@ class SearchAndReplaceAPI
             if ($this->replacementHeader) {
                 $string .= '  * WHY: ' . $this->replacementHeader . PHP_EOL;
             }
+            $caseSensitiveStatement = ($this->caseSensitive ? 'case sensitive' : 'ignore case');
+            $replacementTypeStatement = ($this->replacementType ? ' (' . $this->replacementType . ')' : '');
             $string .=
-                '  * OLD: ' . $this->searchKey . ' (' . ($this->caseSensitive ? 'case sensitive' : 'ignore case') . ')' . PHP_EOL .
-                '  * NEW: ' . $this->replacementKey . ($this->replacementType ? ' (' . $this->replacementType . ')' : '') . PHP_EOL .
+                '  * OLD: ' . $this->searchKey . ' (' . $caseSensitiveStatement . ')' . PHP_EOL .
+                '  * NEW: ' . $this->replacementKey . $replacementTypeStatement . PHP_EOL .
                 '  * EXP: ' . $this->comment . PHP_EOL .
                 '  * ' . $this->endMarker . PHP_EOL .
                 '  */' .
@@ -363,7 +365,7 @@ class SearchAndReplaceAPI
             if ($flatArray && ! is_array($flatArray)) {
                 $this->addToOutput("\n" . $flatArray . "\n");
             } else {
-                $this->addToOutput("\n------------------------------------\nFiles Searched\n------------------------------------\n");
+                $this->addToOutput("\n--------------\nFiles Searched\n--------------\n");
                 foreach ($flatArray as $file) {
                     $strippedFile = str_replace($this->basePath, '', $file);
                     $this->addToOutput($strippedFile . "\n");
@@ -371,12 +373,12 @@ class SearchAndReplaceAPI
             }
             $folderSimpleTotals = [];
             $realBase = realpath($this->basePath);
-            $this->addToOutput("\n------------------------------------\nSummary: by search key\n------------------------------------\n");
+            $this->addToOutput("\n--------------\nSummary: by search key\n--------------\n");
             arsort($this->searchKeyTotals);
             foreach ($this->searchKeyTotals as $searchKey => $total) {
                 $this->addToOutput(sprintf("%d:\t %s\n", $total, $searchKey));
             }
-            $this->addToOutput("\n------------------------------------\nSummary: by directory\n------------------------------------\n");
+            $this->addToOutput("\n--------------\nSummary: by directory\n--------------\n");
             arsort($this->folderTotals);
             foreach ($this->folderTotals as $folder => $total) {
                 $path = str_replace($realBase, '', realpath($folder));
@@ -392,13 +394,15 @@ class SearchAndReplaceAPI
                 }
             }
             $strippedRealBase = '/';
-            $this->addToOutput(sprintf("\n------------------------------------\nSummary: by root directory (%s)\n------------------------------------\n", $strippedRealBase));
+            $this->addToOutput(
+                sprintf("\n--------------\nSummary: by root directory (%s)\n--------------\n", $strippedRealBase)
+            );
             arsort($folderSimpleTotals);
             foreach ($folderSimpleTotals as $folder => $total) {
                 $strippedFolder = str_replace($this->basePath, '', $folder);
                 $this->addToOutput(sprintf("%d:\t %s\n", $total, $strippedFolder));
             }
-            $this->addToOutput(sprintf("\n------------------------------------\nTotal replacements: %d\n------------------------------------\n", $totalSearches));
+            $this->addToOutput(sprintf("\n--------------\nTotal replacements: %d\n--------------\n", $totalSearches));
         }
         //add to total total
         $this->totalTotal += $totalSearches;
@@ -413,7 +417,6 @@ class SearchAndReplaceAPI
 
     /**
      * Searches all the files and creates the logs
-     * @param to $path search
      *
      * @return self
      */
@@ -424,7 +427,8 @@ class SearchAndReplaceAPI
             $this->searchFileData($file);
         }
         if ($this->totalFound) {
-            $this->addToOutput('' . $this->totalFound . ' matches (' . $this->replacementType . ') for: ' . $this->logString);
+            $msg = $this->totalFound . ' matches (' . $this->replacementType . ') for: ' . $this->logString;
+            $this->addToOutput($msg);
         }
         if ($this->errorText !== '') {
             $this->addToOutput("\t Error-----" . $this->errorText);
@@ -440,6 +444,7 @@ class SearchAndReplaceAPI
      */
     private function searchFileData($file)
     {
+        $foundInLineCount = 0;
         $myReplacementKey = $this->replacementKey;
         $searchKey = preg_quote($this->searchKey, '/');
         if ($this->isReplacingEnabled) {
@@ -565,7 +570,8 @@ class SearchAndReplaceAPI
 
     /**
      * Writes new data (after the replacement) to file
-     * @param $file, $data
+     * @param string $file,
+     * @param string $data
      */
     private function writeToFile($file, $data)
     {
@@ -604,11 +610,11 @@ class SearchAndReplaceAPI
 
     private function getClassNameOfFile($filePath)
     {
-        if (! self::$_finder) {
-            self::$_finder = new FileNameToClass();
+        if (! self::$finder) {
+            self::$finder = new FileNameToClass();
         }
-        if (! isset(self::$_class_name_cache[$filePath])) {
-            $class = self::$_finder->getClassNameFromFile($filePath);
+        if (! isset(self::$class_name_cache[$filePath])) {
+            $class = self::$finder->getClassNameFromFile($filePath);
             //see: https://stackoverflow.com/questions/7153000/get-class-name-from-file/44654073
             // $file = 'class.php'; # contains class Foo
             // $class = shell_exec("php -r \"include('$file'); echo end(get_declared_classes());\"");
@@ -637,9 +643,9 @@ class SearchAndReplaceAPI
             //         }
             //     }
             // }
-            self::$_class_name_cache[$filePath] = $class;
+            self::$class_name_cache[$filePath] = $class;
         }
-        return self::$_class_name_cache[$filePath];
+        return self::$class_name_cache[$filePath];
     }
 
     private function testMustContain($fileName)

@@ -1,13 +1,9 @@
 <?php
 
-
 namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\BaseClass;
-
 
 class Ss35ToSs37 extends BaseClass
 {
-
     /**
      * name of the branch created to do the upgrade
      * @var string branch name
@@ -19,6 +15,7 @@ class Ss35ToSs37 extends BaseClass
      * @var string
      */
     protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
+
     #########################################
     # TASKS
     #########################################
@@ -37,7 +34,7 @@ class Ss35ToSs37 extends BaseClass
 
         'CheckoutDevMaster-1' => [],
         'AddLegacyBranch' => [
-            'nameOfLegacyBranch' => '3.5'
+            'nameOfLegacyBranch' => '3.5',
         ],
         'AddUpgradeBranch' => [],
         'ResetWebRootDir-2' => [],

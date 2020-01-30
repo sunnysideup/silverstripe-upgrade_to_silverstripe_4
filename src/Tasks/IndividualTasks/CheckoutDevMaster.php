@@ -46,8 +46,8 @@ class CheckoutDevMaster extends Task
                 );
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
-                    'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->branchOrTagToUse . ' ' . $this->composerOptions,
-                    'checkout ' . $this->branchOrTagToUse . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                    'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->mu()->getNameOfBranchForBaseCode() . ' ' . $this->composerOptions,
+                    'checkout ' . $this->mu()->getNameOfBranchForBaseCode() . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                     false
                 );
                 $this->mu()->execMe(

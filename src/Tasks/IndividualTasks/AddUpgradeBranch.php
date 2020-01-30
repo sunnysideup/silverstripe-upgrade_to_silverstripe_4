@@ -5,7 +5,8 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
- * Adds a new branch to your repository that is going to be used for upgrading it.
+ * This task adds a legacy branch to the git repo of the original to act as a backup/legacy version for
+ * holding a version of the module before it was changed
  */
 class AddUpgradeBranch extends Task
 {
@@ -13,38 +14,37 @@ class AddUpgradeBranch extends Task
 
     public function getTitle()
     {
-        return 'Add Upgrade Branch';
+        return 'Creates a start branch for upgrading';
     }
 
     public function getDescription()
     {
         return '
-            Adds a new branch (' . $this->mu()->getNameOfTempBranch() . ') to your
-            repository (' . ($this->mu()->getVendorName() ?: 'Vendor Name') . '/' . ($this->mu()->getPackageName() ?: 'Package Name') . ')
-            that is going to be used for upgrading it.
-            If it exists then it will be DELETED!';
+            Creates a starter branch: "' . $this->mu()->getnameOfUpgradeBranch() . '" of your module/app
+            from the ' . $this->mu()->getNameOfBranchForBaseCode() . ' branch.
+            These branch names can be customised.
+            ';
     }
 
+    /**
+     * @param  array  $params not currently used for this task
+     */
     public function runActualTask($params = [])
     {
+        $gitRootDir = $this->mu()->getGitRootDir();
         $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'if git show-ref --quiet refs/heads/' . $this->mu()->getNameOfTempBranch() . '; then git branch -d ' . $this->mu()->getNameOfTempBranch() . '; git push origin --delete ' . $this->mu()->getNameOfTempBranch() . '; fi',
-            'delete upgrade branch (' . $this->mu()->getNameOfTempBranch() . ') locally',
-            false
-        );
+            $gitRootDir,
+            '
+            if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->mu()->getNameOfUpgradeBranch() . "'" . '); then
+                    echo branch exists
+                else
+                    git checkout origin ' . $this->mu()->getNameOfBranchForBaseCode() . '
+                    git pull origin ' . $this->mu()->getNameOfBranchForBaseCode() . '
+                    git checkout -b ' . $this->mu()->getNameOfUpgradeBranch() . '
+                    git push origin ' . $this->mu()->getNameOfUpgradeBranch() . '
 
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git push origin --delete ' . $this->mu()->getNameOfTempBranch(),
-            'delete upgrade branch (' . $this->mu()->getNameOfTempBranch() . ') remotely',
-            false
-        );
-
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git checkout -b ' . $this->mu()->getNameOfTempBranch(),
-            'create and checkout new branch: ' . $this->mu()->getNameOfTempBranch(),
+            fi',
+            'create upgrade branch: ' . $this->mu()->getNameOfUpgradeBranch() . ' from ' . $this->mu()->getNameOfBranchForBaseCode() . ' in ' . $gitRootDir,
             false
         );
     }

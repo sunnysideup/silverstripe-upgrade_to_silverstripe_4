@@ -158,10 +158,22 @@ class ModuleUpgrader
     #########################################
 
     /**
+     * name of the branch that exists as the starting point for upgrade
+     * @var string branch name
+     */
+    protected $nameOfBranchForBaseCode = 'master';
+
+    /**
+     * name of the branch to be created that we use a starter branch for upgrade
+     * @var string branch name
+     */
+    protected $nameOfUpgradeStarterBranch = 'upgrades/starting-point';
+
+    /**
      * name of the branch created to do the upgrade
      * @var string branch name
      */
-    protected $nameOfTempBranch = '';
+    protected $nameOfTempBranch = 'upgrades/temp-automated-upgrade-branch';
 
     /**
      * Name of module vendor
@@ -283,7 +295,7 @@ class ModuleUpgrader
 
     /**
      *Reference to the commandline printer that outputs everything to the command line
-     * @var PHP2CommandLineSingleton
+     * @var PHP2CommandLineSingleton|null
      */
     protected $commandLineExec = null;
 
@@ -304,7 +316,7 @@ class ModuleUpgrader
      * Holds the only instance of me
      * @var ModuleUpgrader|null
      */
-    private static $_singleton = null;
+    private static $singleton = null;
 
     /**
      * Is this the last TASK we are running?
@@ -415,7 +427,7 @@ class ModuleUpgrader
 
     public function destroy()
     {
-        self::$_singleton = null;
+        self::$singleton = null;
     }
 
     /**
@@ -424,10 +436,10 @@ class ModuleUpgrader
      */
     public static function create()
     {
-        if (self::$_singleton === null) {
-            self::$_singleton = new self();
+        if (self::$singleton === null) {
+            self::$singleton = new self();
         }
-        return self::$_singleton;
+        return self::$singleton;
     }
 
     /**
@@ -444,7 +456,10 @@ class ModuleUpgrader
         if ($key !== false) {
             $this->listOfTasks[$taskName][$variableName] = $variableValue;
         } else {
-            user_error('Could not find ' . $taskName . '. Choose from ' . implode(', ', array_keys($this->listOfTasks)));
+            user_error(
+                'Could not find ' . $taskName . '.
+                Choose from ' . implode(', ', array_keys($this->listOfTasks))
+            );
         }
 
         return $this;
@@ -486,6 +501,8 @@ class ModuleUpgrader
             if ($task === $insertBeforeOrAfter) {
                 if ($isBefore) {
                     $pos = $key - 1;
+                } else {
+                    $pos = $key;
                 }
                 array_splice(
                     $this->listOfTasks,
@@ -610,6 +627,8 @@ class ModuleUpgrader
      * @param  string  $comment                 comment
      * @param  boolean $alwaysRun               run even if you are just preparing a real run. Default FALSE
      * @param  string  $keyNotesLogFileLocation
+     *
+     * @return array
      */
     public function execMe(
         $newDir,
@@ -750,8 +769,8 @@ class ModuleUpgrader
 
     public function createListOfTasks()
     {
-        $html = '';
         foreach (array_keys($this->getAvailableRecipes()) as $recipeKey) {
+            $html = '';
             $this->applyRecipe($recipeKey);
             $html .= '<h1>List of Tasks in run order for recipe: ' . $recipeKey . '</h1>';
             $count = 0;
@@ -789,7 +808,8 @@ class ModuleUpgrader
                     $html .= '<h4>' . $count . ': ' . $obj->getTitle() . '</h4>';
                     $html .= '<p>' . $obj->getDescription() . '<br />';
                     $html .= '<strong>Code: </strong>' . $class;
-                    $html .= '<br /><strong>Class Name: </strong><a href="' . $path . '">' . $reflectionClass->getShortName() . '</a>';
+                    $html .= '<br /><strong>Class Name: </strong>';
+                    $html .= '<a href="' . $path . '">' . $reflectionClass->getShortName() . '</a>';
                     $html .= '</p>';
                     $obj = $properClass::deleteTask($params);
                 } else {
@@ -797,14 +817,14 @@ class ModuleUpgrader
                 }
             }
             $dir = __DIR__ . '/../docs/en/';
+
+            $html = str_replace(' _', ' \_', $html);
+
+            file_put_contents(
+                $dir . '/AvailableTasks.md',
+                $html
+            );
         }
-
-        $html = str_replace(' _', ' \_', $html);
-
-        file_put_contents(
-            $dir . '/AvailableTasks.md',
-            $html
-        );
     }
 
     /**
@@ -829,7 +849,10 @@ class ModuleUpgrader
         );
         $this->loadNextStepInstructions();
         $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation);
-        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation . '/' . $this->webRootName, true);
+        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
+            $this->aboveWebRootDirLocation . '/' . $this->webRootName,
+            true
+        );
         $this->themeDirLocation = $this->checkIfPathExistsAndCleanItUp($this->webRootDirLocation . '/themes', true);
         foreach ($this->arrayOfModules as $counter => $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
@@ -870,7 +893,11 @@ class ModuleUpgrader
                     }
                     $obj = $properClass::deleteTask($params);
                 } else {
-                    user_error($properClass . ' could not be found as class. You can add namespacing to include your own classes.', E_USER_ERROR);
+                    user_error(
+                        $properClass . ' could not be found as class.
+                        You can add namespacing to include your own classes.',
+                        E_USER_ERROR
+                    );
                 }
             }
         }
@@ -887,16 +914,18 @@ class ModuleUpgrader
      * want to start the logger or not in different scenarios.
      *
      * For now it defaults to always existing
-     * @return [type]
+     * @return PHP2CommandLineSingleton
      */
-    public function startPHP2CommandLine()
+    public function startPHP2CommandLine(): PHP2CommandLineSingleton
     {
         $this->commandLineExec = PHP2CommandLineSingleton::create();
     }
 
-    protected function applyRecipe()
+    protected function applyRecipe($recipeName = null)
     {
-        $recipeName = $this->getRecipe();
+        if ($recipeName === null) {
+            $recipeName = $this->getRecipe();
+        }
         if ($recipeName) {
             if (isset($this->availableRecipes[$recipeName])) {
                 $recipeClass = $this->availableRecipes[$recipeName];
@@ -907,7 +936,10 @@ class ModuleUpgrader
                     $this->{$method}($value);
                 }
             } else {
-                user_error('Recipe ' . $recipeName . ' not available, available Recipes are: ' . print_r($this->getAvailableRecipes()));
+                user_error(
+                    'Recipe ' . $recipeName . ' not available.
+                    Available Recipes are: ' . print_r($this->getAvailableRecipes())
+                );
             }
         }
     }
@@ -949,7 +981,8 @@ class ModuleUpgrader
     protected function endPHP2CommandLine()
     {
         if ($this->commandLineExec !== null) {
-            $this->commandLineExec = PHP2CommandLineSingleton::delete();
+            PHP2CommandLineSingleton::delete();
+            $this->commandLineExec = null;
         }
     }
 
@@ -991,11 +1024,19 @@ class ModuleUpgrader
         }
         //see: https://stackoverflow.com/questions/5573334/remove-a-part-of-a-string-but-only-when-it-is-at-the-end-of-the-string
         $gitLinkWithoutExtension = preg_replace('/' . preg_quote('.git', '/') . '$/', '', $this->gitLink);
-        $this->gitLinkAsHTTPS = str_replace('git@github.com:', 'https://github.com/', $gitLinkWithoutExtension);
-        $this->gitLinkAsRawHTTPS = str_replace('git@github.com:', 'https://raw.githubusercontent.com/', $gitLinkWithoutExtension);
+        $this->gitLinkAsHTTPS = str_replace(
+            'git@github.com:',
+            'https://github.com/',
+            $gitLinkWithoutExtension
+        );
+        $this->gitLinkAsRawHTTPS = str_replace(
+            'git@github.com:',
+            'https://raw.githubusercontent.com/',
+            $gitLinkWithoutExtension
+        );
 
         //Origin Composer FileLocation
-        $this->originComposerFileLocation = isset($moduleDetails['OriginComposerFileLocation']) ? $moduleDetails['OriginComposerFileLocation'] : '';
+        $this->originComposerFileLocation = $moduleDetails['OriginComposerFileLocation'] ?? '';
 
         $this->workoutPackageFolderName($moduleDetails);
 
@@ -1004,7 +1045,7 @@ class ModuleUpgrader
             $this->moduleDirLocations = [
                 $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall,
             ];
-            $this->themeDirLocation = null;
+            $this->themeDirLocation = '';
         } else {
             if (! count($this->moduleDirLocations)) {
                 $this->moduleDirLocations[] = $this->webRootDirLocation . '/mysite';
@@ -1029,7 +1070,10 @@ class ModuleUpgrader
         //LogFileLocation
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {
-            $this->logFileLocation = $this->logFolderDirLocation . '/' . $this->packageName . '-upgrade-log.' . time() . '.txt';
+            $this->logFileLocation =
+                $this->logFolderDirLocation . '/' . $this->packageName .
+                '-upgrade-log.' . time() .
+                '.txt';
             $this->commandLineExec->setLogFileLocation($this->logFileLocation);
         } else {
             $this->commandLineExec->setLogFileLocation('');
@@ -1066,7 +1110,6 @@ class ModuleUpgrader
                     } else {
                         $this->packageFolderNameForInstall = $this->workoutPackageFolderNameBasic();
                     }
-                    //user_error('You need to set originComposerFileLocation using ->setOriginComposerFileLocation. Could not find: '.$this->originComposerFileLocation);
                 }
             }
             $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);
@@ -1109,7 +1152,8 @@ class ModuleUpgrader
         $this->colourPrint('- Git Repository Link (SSH): ' . $this->gitLink, 'light_cyan');
         $this->colourPrint('- Git Repository Link (HTTPS): ' . $this->gitLinkAsHTTPS, 'light_cyan');
         $this->colourPrint('- Git Repository Link (RAW): ' . $this->gitLinkAsRawHTTPS, 'light_cyan');
-        $this->colourPrint('- Origin composer file location: ' . ($this->originComposerFileLocation ?: 'not set'), 'light_cyan');
+        $this->colourPrint('- Origin composer file location: ' .
+            ($this->originComposerFileLocation ?: 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Session file: ' . $this->getSessionFileLocation(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
@@ -1117,7 +1161,8 @@ class ModuleUpgrader
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: ' . ($this->logFileLocation ?: 'not logged'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- List of Steps: ' . $this->newLine() . '    -' . implode($this->newLine() . '    -', array_keys($this->listOfTasks)), 'light_cyan');
+        $this->colourPrint('- List of Steps: ' . $this->newLine() . '    -' .
+            implode($this->newLine() . '    -', array_keys($this->listOfTasks)), 'light_cyan');
         $this->colourPrint('---------------------', 'light_cyan');
         $this->colourPrint('- parameter "again" ... runs last comand again', 'light_cyan');
         $this->colourPrint('- parameter "restart" ... starts process from beginning', 'light_cyan');

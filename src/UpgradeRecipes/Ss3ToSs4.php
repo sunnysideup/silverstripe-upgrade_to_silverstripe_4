@@ -34,13 +34,19 @@ class Ss3ToSs4 extends BaseClass
         'ResetWebRootDir-1' => [],
 
         'CheckoutDevMaster-1' => [],
+        'AddLegacyBranch' => [
+            'nameOfLegacyBranch' => '3',
+        ],
+        'AddUpgradeBranch' => [],
         'PHPCompatabilityCheck' => [],
-        'FindFilesWithMoreThanOneClass' => [],
-        'AddLegacyBranch' => [],
         'ResetWebRootDir-2' => [],
 
-        'CheckoutDevMaster-2' => [],
-        'AddUpgradeBranch' => [],
+        'CheckoutUpgradeStarterBranch' => [],
+        'AddTempUpgradeBranch' => [],
+        'ComposerCompatibilityCheckerStep1' => [],
+        'FixOutdatedPHPStyles' => [],
+        'FindFilesWithMoreThanOneClass' => [],
+
         'CreatePublicFolder-1' => [],
         'AddTableName' => [],
         'ChangeControllerInitToProtected' => [],
@@ -55,6 +61,7 @@ class Ss3ToSs4 extends BaseClass
 
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
+        'ComposerCompatibilityCheckerStep2' => [],
         'CreatePublicFolder-2' => [],
         'Recompose' => [],
 

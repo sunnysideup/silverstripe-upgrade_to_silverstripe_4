@@ -38,7 +38,7 @@ class Upgrade extends Task
 
     public function runActualTask($params = [])
     {
-        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
             $actualDir = dirname($codeDir);
             $this->param1 = $actualDir;
             $this->runSilverstripeUpgradeTask(

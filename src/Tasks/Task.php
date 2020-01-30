@@ -1,7 +1,6 @@
 <?php
 /**
  * mu stands for Module Object
- * @var [type]
  */
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
@@ -46,7 +45,7 @@ abstract class Task
      * A static array for holding all the different Tasks that are running
      * @var Task[]
      */
-    private static $_singletons = [];
+    private static $singletons = [];
 
     /**
      * On instantiation sets the parameters and a refernece to the parent ModuleUpgrader
@@ -91,11 +90,11 @@ abstract class Task
     public static function create($mu, $params = [])
     {
         $className = static::class;
-        if (empty(self::$_singletons[$params['taskName']])) {
-            self::$_singletons[$params['taskName']] = new $className($mu, $params);
+        if (empty(self::$singletons[$params['taskName']])) {
+            self::$singletons[$params['taskName']] = new $className($mu, $params);
         }
 
-        return self::$_singletons[$params['taskName']];
+        return self::$singletons[$params['taskName']];
     }
 
     /**
@@ -105,7 +104,7 @@ abstract class Task
      */
     public static function deleteTask($params)
     {
-        unset(self::$_singletons[$params['taskName']]);
+        unset(self::$singletons[$params['taskName']]);
 
         return null;
     }

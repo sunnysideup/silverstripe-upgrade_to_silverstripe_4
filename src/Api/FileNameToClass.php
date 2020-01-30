@@ -8,11 +8,11 @@ class FileNameToClass
      * get the full name (name \ namespace) of a class from its file path
      * result example: (string) "I\Am\The\Namespace\Of\This\Class"
      *
-     * @param $filePathName
+     * @param string $filePathName
      *
      * @return  string
      */
-    public function getClassFullNameFromFile($filePathName)
+    public function getClassFullNameFromFile(string $filePathName): string
     {
         return $this->getClassNamespaceFromFile($filePathName) . '\\' . $this->getClassNameFromFile($filePathName);
     }
@@ -20,11 +20,9 @@ class FileNameToClass
     /**
      * build and return an object of a class from its file path
      *
-     * @param $filePathName
-     *
-     * @return  mixed
+     * @param string $filePathName
      */
-    public function getClassObjectFromFile($filePathName)
+    public function getClassObjectFromFile(string $filePathName)
     {
         $classString = $this->getClassFullNameFromFile($filePathName);
 
@@ -34,11 +32,11 @@ class FileNameToClass
     /**
      * get the class namespace form file path using token
      *
-     * @param $filePathName
+     * @param string $filePathName
      *
      * @return string|null
      */
-    public function getClassNamespaceFromFile($filePathName)
+    public function getClassNamespaceFromFile(string $filePathName)
     {
         $src = file_get_contents($filePathName);
 
@@ -72,11 +70,11 @@ class FileNameToClass
     /**
      * get the class name form file path using token
      *
-     * @param $filePathName
+     * @param string $filePathName
      *
-     * @return  mixed
+     * @return string
      */
-    public function getClassNameFromFile($filePathName)
+    public function getClassNameFromFile(string $filePathName): string
     {
         $php_code = file_get_contents($filePathName);
 

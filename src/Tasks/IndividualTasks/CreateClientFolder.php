@@ -24,9 +24,7 @@ class CreateClientFolder extends Task
     }
 
     /**
-     * [runActualTask description]
      * @param  array  $params not currently used for this task
-     * @return [type]
      */
     public function runActualTask($params = [])
     {
@@ -50,7 +48,8 @@ class CreateClientFolder extends Task
                 $this->mu()->execMe(
                     $moduleDir,
                     'if test -d ' . $folderToMove . '; then mv -vn ' . $folderToMove . ' ' . $newClientFolder . '; fi;',
-                    'Moving ' . $folderToMove . ' to ' . $newClientFolder . ' -v is verbose, -n is only if does not exists already.',
+                    'Moving ' . $folderToMove . ' to ' . $newClientFolder . '
+                        -v is verbose, -n is only if does not exists already.',
                     false
                 );
             }

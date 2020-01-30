@@ -17,33 +17,17 @@
         }
     ],
     "extra": {
-        "installer-name": "upgrade_to_silverstripe_4"
+        "installer-name": "upgrade_silverstripe"
     },
     "require": {
         "silverstripe/upgrader":                       "dev-master",
-        "sunnysideup/php_2_command_line":              "dev-master",
-        "sunnysideup/huringa":                         "dev-master"
+        "sunnysideup/php_2_command_line":              "dev-master"
     },
     "autoload": {
         "psr-4": {
             "Sunnysideup\\UpgradeToSilverstripe4\\":"src/",
             "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/"
         }
-    },
-    "scripts": {
-        "post-install-cmd": [],
-        "post-update-cmd": [
-            "php create-list-of-tasks.php"
-        ],
-        "lint1":[
-            "vendor/bin/ecs check src --fix"
-        ],
-        "lint2":[
-            "phpstan analyse src -c phpstan.neon -a vendor/symbiote/silverstripe-phpstan/bootstrap.php --level 0  --ansi"
-        ],
-        "lint3":[
-            "phpstan analyse src -c phpstan.neon -a vendor/symbiote/silverstripe-phpstan/bootstrap.php --level max  --ansi"
-        ]
     },
     "minimum-stability": "dev"
 }

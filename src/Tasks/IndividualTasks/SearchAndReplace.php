@@ -103,12 +103,13 @@ class SearchAndReplace extends Task
 
     public function runActualTask($params = [])
     {
-        if ($this->checkReplacementIssues) {
-            $this->checkReplacementDataIssues();
-        }
 
         //replacement data
         $replacementDataObject = $this->getReplacementDataObject();
+
+        if ($this->checkReplacementIssues) {
+            $this->checkReplacementDataIssues($replacementDataObject);
+        }
 
         $replacementArray = $replacementDataObject->getReplacementArrays();
 
@@ -198,11 +199,11 @@ class SearchAndReplace extends Task
     /**
      * 1. check that one find is not used twice:
      * find can be found 2x
+     * @param mixed $replacementDataObject
      */
-    private function checkReplacementDataIssues()
+    private function checkReplacementDataIssues($replacementDataObject)
     {
-        $arr = $replacementDataObject->getReplacementArrays(null);
-        $arrTos = [];
+        $replacementDataObject->getReplacementArrays(null);
         $arrLanguages = $replacementDataObject->getLanguages();
         $fullFindArray = $replacementDataObject->getFlatFindArray();
         $fullReplaceArray = $replacementDataObject->getFlatReplacedArray();

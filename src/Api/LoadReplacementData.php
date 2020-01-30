@@ -56,27 +56,20 @@ class LoadReplacementData
      */
     protected $fullArray = [];
 
-
     /**
-     *
      * @var array
      */
     protected $languages = [];
 
-
     /**
-     *
      * @var array
      */
     protected $flatFindArray = [];
 
-
     /**
-     *
      * @var array
      */
     protected $flatReplacedArray = [];
-
 
     /**
      * path where to look for data.
@@ -85,7 +78,6 @@ class LoadReplacementData
     protected $paths = [];
 
     /**
-     *
      * @param ModuleUpgrader $mu
      * @param string         $alternativeReplacementDataFolder
      * @param string         $toFolder - the subfolder used for the specific replace`
@@ -99,11 +91,6 @@ class LoadReplacementData
         $this->compileFlatArray();
     }
 
-    protected function defaultLocation()
-    {
-        return $this->mu->getLocationOfThisUpgrader() . DIRECTORY_SEPARATOR . 'ReplacementData';
-    }
-
     public function setToFolder(string $s)
     {
         $this->toFolder = $s;
@@ -111,7 +98,7 @@ class LoadReplacementData
         return $this;
     }
 
-    public function getReplacementArrays() : array
+    public function getReplacementArrays(): array
     {
         return $this->fullArray;
     }
@@ -121,22 +108,26 @@ class LoadReplacementData
         return $this->languages;
     }
 
-    public function getFlatFindArray() : array
+    public function getFlatFindArray(): array
     {
         return $this->flatFindArray;
     }
 
-    public function getFlatReplacedArray() : array
+    public function getFlatReplacedArray(): array
     {
         return $this->flatReplacedArray;
     }
 
+    protected function defaultLocation()
+    {
+        return $this->mu->getLocationOfThisUpgrader() . DIRECTORY_SEPARATOR . 'ReplacementData';
+    }
 
     protected function compileFlatArray()
     {
         $this->fullArray = $this->getData();
         $count = 0;
-        foreach ($this->fullArray  as $path => $pathArray) {
+        foreach ($this->fullArray as $path => $pathArray) {
             foreach ($pathArray as $language => $languageArray) {
                 $this->languages[$language] = $language;
                 foreach ($languageArray as $findKey => $findKeyArray) {
@@ -144,7 +135,7 @@ class LoadReplacementData
                         user_error('replacement key not set: ' . print_r($findKeyArray, 1));
                     }
                     $replaceKey = $findKeyArray['R'];
-                    $key = strtolower( $language . '_' . $path . '_' . $count);
+                    $key = strtolower($language . '_' . $path . '_' . $count);
                     $this->flatFindArray[$key] = $findKey;
                     $this->flatReplacedArray[$key] = $replaceKey;
                     $count++;
@@ -158,13 +149,13 @@ class LoadReplacementData
      *
      * @return array
      */
-    protected function getData() : array
+    protected function getData(): array
     {
         $this->getPaths();
         // Merge with any other upgrade spec in the top level
         $config = [];
         foreach ($this->paths as $path) {
-            $file = $path . DIRECTORY_SEPARATOR . $this->toFolder . DIRECTORY_SEPARATOR .  $this->ymlFileName;
+            $file = $path . DIRECTORY_SEPARATOR . $this->toFolder . DIRECTORY_SEPARATOR . $this->ymlFileName;
             if (file_exists($file)) {
                 $nextConfig = ConfigFile::loadConfig($file);
                 // Merge
@@ -184,7 +175,7 @@ class LoadReplacementData
      *
      * @return array
      */
-    protected function getPaths() : array
+    protected function getPaths(): array
     {
         $array = [];
         foreach ($this->mu->getExistingModuleDirLocations() as $moduleDir) {
@@ -206,7 +197,7 @@ class LoadReplacementData
      *
      * @return array
      */
-    protected static function mergeConfig(array $left, array $right) : array
+    protected static function mergeConfig(array $left, array $right): array
     {
         //see ConfigFile for original
         $merged = $left;

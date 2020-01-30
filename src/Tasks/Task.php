@@ -223,8 +223,8 @@ abstract class Task
     protected function setParams($params = [])
     {
         foreach ($params as $paramKey => $paramValue) {
-            $method = 'set'.$paramKey;
-            if(method_exists($this, $method)) {
+            $method = 'set' . $paramKey;
+            if (method_exists($this, $method)) {
                 $this->{$method}($paramValue);
             } else {
                 $paramKey = lcfirst($paramKey);

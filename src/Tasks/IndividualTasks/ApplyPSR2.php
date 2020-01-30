@@ -35,7 +35,7 @@ class ApplyPSR2 extends Task
         //2. copy ecs.yml
         $this->mu()->execMe(
             $webRoot,
-            'cp '.$this->mu()->getLocationOfThisUpgrader().'/ecs.yml '.$webRoot.'/',
+            'cp ' . $this->mu()->getLocationOfThisUpgrader() . '/ecs.yml ' . $webRoot . '/',
             'copying ecs.yml file',
             false
         );

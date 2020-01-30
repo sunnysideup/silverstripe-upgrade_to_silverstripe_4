@@ -2,11 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\BaseClass;
-
 class Ss3ToSs4 extends BaseClass
 {
-
     /**
      * name of the branch created to do the upgrade
      * @var string branch name
@@ -19,11 +16,9 @@ class Ss3ToSs4 extends BaseClass
      */
     protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
 
-
     #########################################
     # TASKS
     #########################################
-
 
     /**
      * An array of all the 'taskNames of the tasks that you wish to run during the execution of this upgrader task.

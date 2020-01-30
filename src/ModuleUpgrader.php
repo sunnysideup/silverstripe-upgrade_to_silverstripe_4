@@ -4,15 +4,13 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss33ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
 
 class ModuleUpgrader
 {
-
-
     #########################################
     # Arguments
     #########################################
@@ -24,7 +22,6 @@ class ModuleUpgrader
     #########################################
 
     /**
-     *
      * @var string
      */
     protected $recipe = 'SS4';
@@ -362,19 +359,6 @@ class ModuleUpgrader
         }
     }
 
-    public function reinit()
-    {
-        $this->startPHP2CommandLine();
-
-        return $this;
-    }
-
-    public function destroy()
-    {
-        self::$_singleton = null;
-    }
-
-
     /**
      * Ends output to commandline / browser
      */
@@ -420,6 +404,18 @@ class ModuleUpgrader
         } else {
             user_error('Fatal error: Call to undefined method ModuleUpgrader::' . $function . '()', E_USER_ERROR);
         }
+    }
+
+    public function reinit()
+    {
+        $this->startPHP2CommandLine();
+
+        return $this;
+    }
+
+    public function destroy()
+    {
+        self::$_singleton = null;
     }
 
     /**
@@ -614,8 +610,6 @@ class ModuleUpgrader
      * @param  string  $comment                 comment
      * @param  boolean $alwaysRun               run even if you are just preparing a real run. Default FALSE
      * @param  string  $keyNotesLogFileLocation
-     *
-     * @return void
      */
     public function execMe(
         $newDir,
@@ -671,11 +665,10 @@ class ModuleUpgrader
                 $codeDirs[$baseNameSpace] = $codeDir;
             }
         }
-        if(count($codeDirs) === 0) {
+        if (count($codeDirs) === 0) {
             user_error('
-                Could not find any code dirs. The locations searched: '.print_r($locations, 1)
-                .' Using the '.$this->getIsModuleUpgradeNice().' approach'
-            );
+                Could not find any code dirs. The locations searched: ' . print_r($locations, 1)
+                . ' Using the ' . $this->getIsModuleUpgradeNice() . ' approach');
         }
 
         return $codeDirs;
@@ -758,9 +751,9 @@ class ModuleUpgrader
     public function createListOfTasks()
     {
         $html = '';
-        foreach(array_keys($this->getAvailableRecipes()) as $recipeKey) {
+        foreach (array_keys($this->getAvailableRecipes()) as $recipeKey) {
             $this->applyRecipe($recipeKey);
-            $html .= '<h1>List of Tasks in run order for recipe: '.$recipeKey.'</h1>';
+            $html .= '<h1>List of Tasks in run order for recipe: ' . $recipeKey . '</h1>';
             $count = 0;
             $totalCount = count($this->listOfTasks);
             $previousStep = '';
@@ -889,20 +882,32 @@ class ModuleUpgrader
         $this->endPHP2CommandLine();
     }
 
+    /**
+     * Starts the logger. Extra checking may be put in here to see if you
+     * want to start the logger or not in different scenarios.
+     *
+     * For now it defaults to always existing
+     * @return [type]
+     */
+    public function startPHP2CommandLine()
+    {
+        $this->commandLineExec = PHP2CommandLineSingleton::create();
+    }
+
     protected function applyRecipe()
     {
         $recipeName = $this->getRecipe();
-        if($recipeName) {
-            if(isset($this->availableRecipes[$recipeName])) {
+        if ($recipeName) {
+            if (isset($this->availableRecipes[$recipeName])) {
                 $recipeClass = $this->availableRecipes[$recipeName];
                 $obj = new $recipeClass();
                 $vars = $obj->getVariables();
-                foreach($vars as $variable => $value) {
-                    $method = 'set'.ucwords($variable);
-                    $this->$method($value);
+                foreach ($vars as $variable => $value) {
+                    $method = 'set' . ucwords($variable);
+                    $this->{$method}($value);
                 }
             } else {
-                user_error('Recipe '.$recipeName.' not available, available Recipes are: '.print_r($this->getAvailableRecipes()));
+                user_error('Recipe ' . $recipeName . ' not available, available Recipes are: ' . print_r($this->getAvailableRecipes()));
             }
         }
     }
@@ -936,19 +941,6 @@ class ModuleUpgrader
         }
         //todo next / previous / etc...
     }
-
-    /**
-     * Starts the logger. Extra checking may be put in here to see if you
-     * want to start the logger or not in different scenarios.
-     *
-     * For now it defaults to always existing
-     * @return [type]
-     */
-    public function startPHP2CommandLine()
-    {
-        $this->commandLineExec = PHP2CommandLineSingleton::create();
-    }
-
 
     /**
      * deconstructs Command Line
@@ -1004,7 +996,6 @@ class ModuleUpgrader
 
         //Origin Composer FileLocation
         $this->originComposerFileLocation = isset($moduleDetails['OriginComposerFileLocation']) ? $moduleDetails['OriginComposerFileLocation'] : '';
-
 
         $this->workoutPackageFolderName($moduleDetails);
 
@@ -1086,9 +1077,8 @@ class ModuleUpgrader
     {
         if ($this->isModuleUpgrade) {
             return $this->packageName;
-        } else {
-            return 'mysite';
         }
+        return 'mysite';
     }
 
     protected function printVarsForModule($moduleDetails)
@@ -1119,7 +1109,7 @@ class ModuleUpgrader
         $this->colourPrint('- Git Repository Link (SSH): ' . $this->gitLink, 'light_cyan');
         $this->colourPrint('- Git Repository Link (HTTPS): ' . $this->gitLinkAsHTTPS, 'light_cyan');
         $this->colourPrint('- Git Repository Link (RAW): ' . $this->gitLinkAsRawHTTPS, 'light_cyan');
-        $this->colourPrint('- Origin composer file location: ' . ($this->originComposerFileLocation?: 'not set'), 'light_cyan');
+        $this->colourPrint('- Origin composer file location: ' . ($this->originComposerFileLocation ?: 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Session file: ' . $this->getSessionFileLocation(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
@@ -1301,7 +1291,7 @@ Session has completed.
         $this->setSessionData($session);
     }
 
-    protected function URLExists($url) : bool
+    protected function URLExists($url): bool
     {
         if ($url && $this->isValidURL($url)) {
             $headers = get_headers($url);
@@ -1316,9 +1306,9 @@ Session has completed.
         return false;
     }
 
-    protected function isValidURL($url) :bool
+    protected function isValidURL($url): bool
     {
-        if(filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
             return false;
         }
 
@@ -1337,5 +1327,4 @@ Session has completed.
     {
         return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
     }
-
 }

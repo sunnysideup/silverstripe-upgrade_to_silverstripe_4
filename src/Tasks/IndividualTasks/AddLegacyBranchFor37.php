@@ -16,5 +16,4 @@ class AddLegacyBranchFor37 extends AddLegacyBranch
      * @var string what should the legacy branch be called
      */
     protected $nameOfLegacyBranch = 'pre3-7';
-
 }

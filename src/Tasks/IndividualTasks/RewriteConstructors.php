@@ -24,7 +24,6 @@ class RewriteConstructors extends Task
 
     public function runActualTask($params = [])
     {
-
         $this->mu()->execMe(
             $this->mu()->getAboveWebRootDirLocation(),
             'php ' . $this->mu()->getWebRootDirLocation() . '--disable-class-file-create',

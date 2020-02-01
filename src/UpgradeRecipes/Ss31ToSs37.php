@@ -25,16 +25,15 @@ class Ss31ToSs37 extends BaseClass
         'ResetWebRootDir-1' => [],
 
         'CheckoutDevMaster-1' => [],
-        'AddLegacyBranch' => [
-            'nameOfLegacyBranch' => '3.1',
+        'AddLegacyBranchFor37' => [
+            'nameOfLegacyBranch' => 'upgrade37',
         ],
-        'AddUpgradeBranch' => [],
+
         'ResetWebRootDir-2' => [],
 
-        'CheckoutUpgradeStarterBranch' => [],
-        'AddTempUpgradeBranch' => [],
-        'ComposerCompatibilityCheckerStep1' => [],
-        'FixOutdatedPHPStyles' => [],
+        'CheckoutDevMaster-2' => [],
+
+        'AddUpgradeBranch' => [],
 
         'UpdateComposerRequirements-1' => [
             'Package' => 'silverstripe/framework',

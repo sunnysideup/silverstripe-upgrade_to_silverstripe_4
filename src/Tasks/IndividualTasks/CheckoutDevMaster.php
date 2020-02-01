@@ -12,21 +12,21 @@ class CheckoutDevMaster extends Task
 {
     protected $taskStep = 's00';
 
+    protected $branchOrTagToUse = 'master';
+
     protected $useGitClone = false;
 
     protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
     {
-        return 'Checkout the ' . $this->mu()->getNameOfBranchForBaseCode() . ' of this module.
-            The name of the branch can be changed by using the following method: setNameOfBranchForBaseCode
-        ';
+        return 'Checkout the ' . $this->branchOrTagToUse . ' of this module.';
     }
 
     public function getDescription()
     {
         return '
-            Checks out ' . $this->mu()->getNameOfBranchForBaseCode() . ' of project/module using composer for a module or git checkout for a project';
+            Checks out ' . $this->branchOrTagToUse . ' of project/module using composer for a module or git checkout for a project';
     }
 
     /**
@@ -78,8 +78,8 @@ class CheckoutDevMaster extends Task
         );
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
-            'git checkout ' . $this->mu()->getNameOfBranchForBaseCode(),
-            'checkout ' . $this->mu()->getNameOfBranchForBaseCode(),
+            'git checkout ' . $this->branchOrTagToUse,
+            'checkout ' . $this->branchOrTagToUse,
             false
         );
     }

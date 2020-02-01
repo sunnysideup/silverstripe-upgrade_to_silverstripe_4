@@ -31,7 +31,7 @@ class FixOutdatedPHPStyles extends Task
         );
 
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
-        foreach ($codeDirs as $baseNameSpace => $codeDir) {
+        foreach ($codeDirs as $codeDir) {
             $this->mu()->execMe(
                 $webRoot,
                 './vendor/sunnysideup/huringa/huringa.php ' . $codeDir,

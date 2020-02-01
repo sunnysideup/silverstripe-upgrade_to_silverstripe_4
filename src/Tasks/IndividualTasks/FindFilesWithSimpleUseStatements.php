@@ -22,7 +22,9 @@ class FindFilesWithSimpleUseStatements extends Task
     public function getDescription()
     {
         return '
-            Goes through all the PHP files and makes sure that there are no simple use statements, apart from things like use \\page;. ';
+            Goes through all the PHP files and
+            makes sure that there are no simple use statements,
+            apart from things like "use \\Page;". ';
     }
 
     public function runActualTask($params = [])
@@ -40,11 +42,9 @@ class FindFilesWithSimpleUseStatements extends Task
                 if (is_array($flatArray) && count($flatArray)) {
                     foreach ($flatArray as $path) {
                         $this->mu()->colourPrint('Searching ' . $path, 'grey');
-                        $className = basename($path, '.php');
-                        $classNames = [];
+                        // $className = basename($path, '.php');
                         $content = file_get_contents($path);
                         $tokens = token_get_all($content);
-                        $namespace = '';
                         for ($index = 0; isset($tokens[$index]); $index++) {
                             if (! isset($tokens[$index][0])) {
                                 continue;
@@ -58,7 +58,8 @@ class FindFilesWithSimpleUseStatements extends Task
                                 if (! in_array($string, $this->listOfOKOnes, true)) {
                                     $testPhrase = ltrim($string, '\\');
                                     if (! strpos($testPhrase, '\\')) {
-                                        $errors[] = $path . ': ' . $tokens[$index][1] . $tokens[$index + 1][1] . $tokens[$index + 2][1] . ';';
+                                        $errors[] = $path . ': ' . $tokens[$index][1] .
+                                        $tokens[$index + 1][1] . $tokens[$index + 2][1] . ';';
                                     }
                                 }
                                 $index += 3; // Skip checked ones ...

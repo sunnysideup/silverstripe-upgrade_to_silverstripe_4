@@ -27,8 +27,6 @@ class FixBadUseStatements extends Task
         ],
     ];
 
-    private $checkReplacementIssues = false;
-
     private $ignoreFolderArray = [
         '.git',
     ];
@@ -42,13 +40,6 @@ class FixBadUseStatements extends Task
     {
         return '
             Goes through code and removes, for example, "use bool;", lines, as they do not make sense.';
-    }
-
-    public function setCheckReplacementIssues($b)
-    {
-        $this->checkReplacementIssues = $b;
-
-        return $this;
     }
 
     public function setIgnoreFolderArray($a)
@@ -90,11 +81,10 @@ class FixBadUseStatements extends Task
                 } else {
                     $textSearchMachine->setSearchPath($path);
                     foreach ($pathArray as $extension => $extensionArray) {
-                        $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
+                        //setting extensions to search files within
+                        $textSearchMachine->setExtensions(explode('|', $extension));
                         foreach ($extensionArray as $find) {
-                            $ignoreCase = true;
                             $caseSensitive = false;
-                            $isStraightReplace = true;
                             $replacementType = 'BASIC';
 
                             // $this->mu()->colourPrint(

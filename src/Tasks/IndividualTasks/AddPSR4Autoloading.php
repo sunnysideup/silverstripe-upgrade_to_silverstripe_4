@@ -34,7 +34,6 @@ class AddPSR4Autoloading extends Task
         // DO FOR BOTH
         //module composor.json
         //  ONLY FOR module
-        $listOfAutoLoads = [];
         $baseCommands = '
             if(! isset($data["autoload"])) {
                 $data["autoload"] = [];
@@ -69,7 +68,9 @@ class AddPSR4Autoloading extends Task
             //location:
             $command = $baseCommands . '
             $data["autoload"]["psr-4"]["' . $this->doubleSlash($baseNameSpace) . '"] = "' . $location . '";';
-            $comment = 'Adding autoload psr-4 details in ' . $webRootLocation . '/composer.json: ' . $baseNameSpace . ' => ' . $location;
+            $comment = 'Adding autoload psr-4 details in ' .
+                $webRootLocation . '/composer.json: ' .
+                $baseNameSpace . ' => ' . $location;
             $this->updateJSONViaCommandLine(
                 $webRootLocation,
                 $command,
@@ -79,8 +80,12 @@ class AddPSR4Autoloading extends Task
                 $moduleLocation = dirname($codeDir);
                 $location = trim(basename($codeDir), '/') . '/';
                 $command = $baseCommands . '
-                $data["autoload"]["psr-4"]["' . $this->doubleSlash($baseNameSpace) . '"] = "' . ltrim($location, '/') . '";';
-                $comment = 'Adding autoload psr-4 details in ' . $moduleLocation . '/composer.json: ' . $baseNameSpace . ' => ' . $location;
+                $data["autoload"]["psr-4"]["' .
+                $this->doubleSlash($baseNameSpace) . '"] = "' .
+                ltrim($location, '/') . '";';
+                $comment = 'Adding autoload psr-4 details in ' .
+                    $moduleLocation . '/composer.json: ' .
+                    $baseNameSpace . ' => ' . $location;
                 $this->updateJSONViaCommandLine(
                     $moduleLocation,
                     $command,

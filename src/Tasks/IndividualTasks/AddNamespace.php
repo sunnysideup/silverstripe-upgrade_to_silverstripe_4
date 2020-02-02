@@ -45,7 +45,7 @@ class AddNamespace extends Task
                         $nameSpaceArrayNew = [];
                         foreach ($nameSpaceArray as $nameSpaceSnippet) {
                             if ($nameSpaceSnippet) {
-                                $nameSpaceArrayNew[] = $this->mu()->camelCase($nameSpaceSnippet);
+                                $nameSpaceArrayNew[] = $this->mu()->cleanCamelCase($nameSpaceSnippet);
                             }
                         }
                         $nameSpace = implode('\\', $nameSpaceArrayNew);

@@ -46,7 +46,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
             foreach ($di as $name => $fio) {
                 if ($fio->isDir()) {
                     //If its a directory then
-                    $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->mu()->camelCase($fio->getFilename());
+                    $newName = $fio->getPath() . DIRECTORY_SEPARATOR . $this->mu()->cleanCamelCase($fio->getFilename());
                     foreach ($this->nameReplacements as $from => $to) {
                         if ($from === $name) {
                             $newName = $to;

@@ -32,13 +32,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     }
 
 
-    public function reinit()
-    {
-        $this->startPHP2CommandLine();
-
-        return $this;
-    }
-
     public function destroy()
     {
         self::$singleton = null;
@@ -96,29 +89,11 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
      * Executes given operations on the PHP2CommandLineSingleton instance
      * Documentation for this can be found in the PHP2CommandLineSingleton module
      */
-    public function colourPrint($mixedVar, $colour = 'dark_gray', $newLineCount = 1)
+    public function colourPrint($mixedVar, string $colour = 'dark_gray', $newLineCount = 1)
     {
         return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
     }
 
-
-    /**
-     * Cleans an input string and returns a more natural human readable version
-     * @param  string $str input string
-     * @param  array  $noStrip
-     * @return string cleaned string
-     */
-    public function camelCase($str, array $noStrip = [])
-    {
-        $str = str_replace('-', ' ', $str);
-        $str = str_replace('_', ' ', $str);
-        // non-alpha and non-numeric characters become spaces
-        $str = preg_replace('/[^a-z0-9' . implode('', $noStrip) . ']+/i', ' ', $str);
-        $str = trim($str);
-        // uppercase the first character of each word
-        $str = ucwords($str);
-        return str_replace(' ', '', $str);
-    }
 
     /**
      * returns path in a consistent format
@@ -144,66 +119,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     ###############################
     # RUN
     ###############################
-
-    public function createListOfTasks()
-    {
-        foreach (array_keys($this->getAvailableRecipes()) as $recipeKey) {
-            $html = '';
-            $this->applyRecipe($recipeKey);
-            $html .= '<h1>List of Tasks in run order for recipe: ' . $recipeKey . '</h1>';
-            $count = 0;
-            $totalCount = count($this->listOfTasks);
-            $previousStep = '';
-            foreach ($this->listOfTasks as $class => $params) {
-                $properClass = current(explode('-', $class));
-                $nameSpacesArray = explode('\\', $class);
-                $shortClassCode = end($nameSpacesArray);
-                if (! class_exists($properClass)) {
-                    $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
-                }
-                if (class_exists($properClass)) {
-                    $count++;
-                    // $runItNow = $this->shouldWeRunIt($shortClassCode);
-                    $params['taskName'] = $shortClassCode;
-                    $obj = $properClass::create($this, $params);
-                    if ($obj->getTaskName()) {
-                        $params['taskName'] = $obj->getTaskName();
-                    }
-                    $reflectionClass = new \ReflectionClass($properClass);
-                    $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
-                    $path .= str_replace('\\', '/', $reflectionClass->getName()) . '.php';
-                    $path = str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
-                    $currentStepCode = $obj->getTaskStepCode();
-                    $currentStep = $obj->getTaskStep($currentStepCode);
-                    if ($currentStepCode === 's00') {
-                        //do nothing when it is an anytime step
-                    } else {
-                        if ($previousStep !== $currentStep) {
-                            $html .= '<h2>' . $currentStep . '</h2>';
-                        }
-                        $previousStep = $currentStep;
-                    }
-                    $html .= '<h4>' . $count . '/' . $totalCount . ': ' . $obj->getTitle() . '</h4>';
-                    $html .= '<p>' . $obj->getDescription() . '<br />';
-                    $html .= '<strong>Code: </strong>' . $class;
-                    $html .= '<br /><strong>Class Name: </strong>';
-                    $html .= '<a href="' . $path . '">' . $reflectionClass->getShortName() . '</a>';
-                    $html .= '</p>';
-                    $obj = $properClass::deleteTask($params);
-                } else {
-                    user_error($properClass . ' could not be found as class', E_USER_ERROR);
-                }
-            }
-            $dir = __DIR__ . '/../docs/en/';
-
-            $html = str_replace(' _', ' \_', $html);
-
-            file_put_contents(
-                $dir . '/AvailableTasks.md',
-                $html
-            );
-        }
-    }
 
     /**
      * Starts the command line output and prints some opening information to the output
@@ -383,7 +298,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         if (isset($moduleDetails['VendorNamespace'])) {
             $this->vendorNamespace = $moduleDetails['VendorNamespace'];
         } else {
-            $this->vendorNamespace = $this->camelCase($this->vendorName);
+            $this->vendorNamespace = $this->cleanCamelCase($this->vendorName);
         }
 
         //PackageName
@@ -393,7 +308,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         if (isset($moduleDetails['PackageNamespace'])) {
             $this->packageNamespace = $moduleDetails['PackageNamespace'];
         } else {
-            $this->packageNamespace = $this->camelCase($this->packageName);
+            $this->packageNamespace = $this->cleanCamelCase($this->packageName);
         }
 
         if (isset($moduleDetails['GitLink'])) {
@@ -633,39 +548,6 @@ Session has completed.
         return $runMe;
     }
 
-
-    protected function URLExists($url): bool
-    {
-        if ($url && $this->isValidURL($url)) {
-            $headers = get_headers($url);
-            if (is_array($headers) && count($headers)) {
-                foreach ($headers as $header) {
-                    if (substr($header, 9, 3) === '200') {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    protected function isValidURL($url): bool
-    {
-        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            return false;
-        }
-
-        return true;
-    }
-
-    protected function getCommandLineOrArgumentAsBoolean(string $variableName = '') : bool
-    {
-        if (PHP_SAPI === 'cli') {
-            return isset($this->argv[1]) && $this->argv[1] === $variableName ? true : false;
-        } else {
-            return isset($_GET[$variableName]) ? true : false;
-        }
-    }
 
 
     protected function newLine()

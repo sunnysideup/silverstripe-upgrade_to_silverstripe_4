@@ -31,44 +31,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->endPHP2CommandLine();
     }
 
-    /**
-     * creates magic getters and setters
-     * if you call $this->getFooBar() then it will get the variable FooBar even if the method
-     * getFooBar does not exist.
-     *
-     * if you call $this->setFooBar('hello') then it will set the variable FooBar even if the method
-     * setFooBar does not exist.
-     *
-     * See: http://php.net/manual/en/language.oop5.overloading.php#object.call
-     *
-     * @param  string   $function name of the function
-     * @param  array    $args     parameters provided to the getter / setter
-     *
-     * @return mixed|Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
-     */
-    public function __call($function, $args)
-    {
-        $getOrSet = substr($function, 0, 3);
-        if ($getOrSet === 'set' || $getOrSet === 'get') {
-            $var = lcfirst(ltrim($function, $getOrSet));
-            if (property_exists($this, $var)) {
-                if ($getOrSet === 'get') {
-                    if (strpos($var, 'DirLocation') !== false || strpos($var, 'FileLocation') !== false) {
-                        return $this->checkIfPathExistsAndCleanItUp($this->{$var}, true);
-                    }
-                    return $this->{$var};
-                } elseif ($getOrSet === 'set') {
-                    $this->{$var} = $args[0];
-
-                    return $this;
-                }
-            } else {
-                user_error('Fatal error: can not get/set variable in ModuleUpgrader::' . $var, E_USER_ERROR);
-            }
-        } else {
-            user_error('Fatal error: Call to undefined method ModuleUpgrader::' . $function . '()', E_USER_ERROR);
-        }
-    }
 
     public function reinit()
     {
@@ -94,177 +56,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         return self::$singleton;
     }
 
-    /**
-     * Removes the given task from the list of tasks to execute
-     * @param  string $taskName name of the task
-     * @param  string $variableName name of the task
-     * @param  mixed $variableValue name of the task
-     *
-     * @return ModuleUpgrader
-     */
-    public function setVariableForTask($taskName, $variableName, $variableValue)
-    {
-        $key = $this->positionForTask($taskName);
-        if ($key !== false) {
-            $this->listOfTasks[$taskName][$variableName] = $variableValue;
-        } else {
-            user_error(
-                'Could not find ' . $taskName . '.
-                Choose from ' . implode(', ', array_keys($this->listOfTasks))
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Removes the given task from the list of tasks to execute
-     * @param  string $s name of the task to remove
-     *
-     * @return ModuleUpgrader
-     */
-    public function removeFromListOfTasks($s)
-    {
-        $key = $this->positionForTask($s);
-        if ($key !== false) {
-            unset($this->listOfTasks[$key]);
-        } else {
-            user_error('Removing non existent task ' . $key . '. Choose from ' . implode(', ', $this->listOfTasks));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Inserts another task to the list of tasks at a given position in the order of execution, if it is set
-     * TODO These parameter names need some more refining
-     * @param string|array  $oneOrMoreTasks the tasks to be inserted
-     * @param bool          $insertBeforeOrAfter If to insert before or after
-     * @param bool          $isBefore
-     *
-     * @return ModuleUpgrader
-     */
-    public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore)
-    {
-        if (! is_array($oneOrMoreTasks)) {
-            $oneOrMoreTasks = [$oneOrMoreTasks];
-        }
-        foreach ($this->listOfTasks as $key => $task) {
-            if ($task === $insertBeforeOrAfter) {
-                if ($isBefore) {
-                    $pos = $key - 1;
-                } else {
-                    $pos = $key;
-                }
-                array_splice(
-                    $this->listOfTasks,
-                    $pos,
-                    0,
-                    $oneOrMoreTasks
-                );
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * @param bool $b
-     */
-    public function setRunImmediately($b)
-    {
-        $this->commandLineExec->setRunImmediately($b);
-
-        return $this;
-    }
-
-    /**
-     * Whether execution should come to a halt when an error is reached
-     * @return bool
-     */
-    public function getBreakOnAllErrors()
-    {
-        return $this->commandLineExec->getBreakOnAllErrors();
-    }
-
-    /**
-     * Whether execution should come to a halt when an error is reached
-     * @return bool
-     */
-    public function getIsProjectUpgrade()
-    {
-        return $this->isModuleUpgrade ? false : true;
-    }
-
-    /**
-     * @param bool $b
-     */
-    public function setBreakOnAllErrors($b)
-    {
-        $this->commandLineExec->setBreakOnAllErrors($b);
-
-        return $this;
-    }
-
-    /**
-     * Appends the given module in the form of all its module data that has to be formatted in an array
-     * to the array of modules that will be worked with during the upgrade procedure.
-     *
-     * @param array $a data to append
-     * @return ModuleUpgrader
-     */
-    public function addModule($a)
-    {
-        $this->arrayOfModules[] = $a;
-
-        return $this;
-    }
-
-    /**
-     * returns an array of existing paths
-     *
-     * @return array
-     */
-    public function getExistingModuleDirLocations()
-    {
-        $array = [];
-        foreach ($this->moduleDirLocations as $location) {
-            if ($location = $this->checkIfPathExistsAndCleanItUp($location)) {
-                $array[$location] = $location;
-            }
-        }
-        if (count($array) === 0) {
-            if ($this->getIsModuleUpgrade()) {
-            } else {
-                user_error(
-                    'You need to set moduleDirLocations (setModuleDirLocations)
-                    as there are currently none.'
-                );
-            }
-        }
-
-        return $array;
-    }
-
-    public function getExistingModuleDirLocationsWithThemeFolders()
-    {
-        $array = $this->getExistingModuleDirLocations();
-        if ($this->themeDirLocation) {
-            $array[$this->themeDirLocation] = $this->themeDirLocation;
-        }
-
-        return $array;
-    }
-
-    /**
-     * returns path for module
-     *
-     * @return string
-     */
-    public function getExistingFirstModuleDirLocation()
-    {
-        $locations = array_values($this->getExistingModuleDirLocations());
-        return array_shift($locations);
-    }
 
     ###############################
     # USEFUL COMMANDS
@@ -310,71 +101,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
     }
 
-    /**
-     * Locates the directory in which the code is kept within the module directory
-     *
-     * If it can be found returns the location otherwise it errors
-     *
-     * @return array codedirlocation
-     */
-    public function findNameSpaceAndCodeDirs()
-    {
-        $codeDirs = [];
-        $locations = $this->getExistingModuleDirLocations();
-        foreach ($locations as $location) {
-            $codeDir = $this->findMyCodeDir($location);
-            if ($codeDir) {
-                if ($this->getIsModuleUpgrade()) {
-                    $baseNameSpace = $this->getVendorNamespace() . '\\' . $this->getPackageNamespace() . '\\';
-                } else {
-                    $nameSpaceKey = ucwords(basename($location));
-                    if (strtolower($nameSpaceKey) === 'app' || strtolower($nameSpaceKey) === 'mysite') {
-                        $nameSpaceKey = $this->getPackageNamespace();
-                    }
-                    $baseNameSpace = $this->getVendorNamespace() . '\\' . $nameSpaceKey . '\\';
-                }
-                $codeDirs[$baseNameSpace] = $codeDir;
-            }
-        }
-        if (count($codeDirs) === 0) {
-            user_error('
-                Could not find any code dirs. The locations searched: ' . print_r($locations, 1)
-                . ' Using the ' . $this->getIsModuleUpgradeNice() . ' approach');
-        }
-
-        return $codeDirs;
-    }
-
-    public function findMyCodeDir($moduleDir)
-    {
-        if (file_exists($moduleDir)) {
-            $test1 = $moduleDir . '/code';
-            $test2 = $moduleDir . '/src';
-            if (file_exists($test1) && file_exists($test2)) {
-                user_error('There is a code and a src dir for ' . $moduleDir, E_USER_NOTICE);
-            } elseif (file_exists($test1)) {
-                return $moduleDir . '/code';
-            } elseif (file_exists($test2)) {
-                return $moduleDir . '/src';
-            } else {
-                user_error('Can not find code/src dir for ' . $moduleDir, E_USER_NOTICE);
-            }
-        }
-    }
-
-    public function getGitRootDir()
-    {
-        if ($this->getIsModuleUpgrade()) {
-            $location = $this->getExistingFirstModuleDirLocation();
-            if (! $location) {
-                return $this->moduleDirLocations[0];
-            }
-        } else {
-            $location = $this->getWebRootDirLocation();
-        }
-
-        return $location;
-    }
 
     /**
      * Cleans an input string and returns a more natural human readable version
@@ -486,9 +212,9 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     public function run()
     {
         $this->applyRecipe();
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $this->colourPrint(
-                '.',
+                str_repeat('_', 72),
                 'light_red',
                 5
             );
@@ -500,12 +226,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             5
         );
         $this->loadNextStepInstructions();
-        $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation);
-        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
-            $this->aboveWebRootDirLocation . '/' . $this->webRootName,
-            true
-        );
-        $this->themeDirLocation = $this->checkIfPathExistsAndCleanItUp($this->webRootDirLocation . '/themes', true);
+        $this->loadGlobalVariables();
         foreach ($this->arrayOfModules as $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
@@ -532,7 +253,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                         $this->colourPrint('# --------------------', 'dark_grey');
                         $obj->run();
                         if ($this->runInteractively) {
-                            $this->setSessionValue('Completed', $class);
+                            $this->getSessionManager()->setSessionValue('Completed', $class);
                         }
                     } else {
                         if (! $this->runInteractively) {
@@ -613,17 +334,23 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 
     protected function loadNextStepInstructions()
     {
-        if (PHP_SAPI === 'cli') {
-            $this->restartSession = isset($this->argv[1]) && $this->argv[1] === 'restart';
-        } else {
-            $this->restartSession = isset($_GET['restart']);
-        }
-        if (PHP_SAPI === 'cli') {
-            $this->runLastOneAgain = isset($this->argv[1]) && $this->argv[1] === 'again';
-        } else {
-            $this->runLastOneAgain = isset($_GET['again']);
-        }
-        //todo next / previous / etc...
+        $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
+        $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
+    }
+
+    protected function loadGlobalVariables()
+    {
+        $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
+            $this->aboveWebRootDirLocation
+        );
+        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
+            $this->aboveWebRootDirLocation . '/' . $this->webRootName,
+            true
+        );
+        $this->themeDirLocation = $this->checkIfPathExistsAndCleanItUp(
+            $this->webRootDirLocation . '/themes',
+            true
+        );
     }
 
     /**
@@ -732,7 +459,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         }
 
         if ($this->restartSession) {
-            $this->deleteSession();
+            $this->getSessionManager()->deleteSession();
         }
     }
 
@@ -742,8 +469,11 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         if ($this->packageFolderNameForInstall) {
             //do nothing
         } else {
-            if ($this->getSessionValue('PackageFolderNameForInstall')) {
-                $this->packageFolderNameForInstall = $this->getSessionValue('PackageFolderNameForInstall');
+            $packageFolderNameForInstall = $this->getSessionManager()->getSessionValue(
+                'PackageFolderNameForInstall'
+            );
+            if ($packageFolderNameForInstall) {
+                $this->packageFolderNameForInstall = $packageFolderNameForInstall;
             } else {
                 if (isset($moduleDetails['PackageFolderNameForInstall'])) {
                     $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
@@ -757,24 +487,20 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                         if (isset($array['extra']['installer-name'])) {
                             $this->packageFolderNameForInstall = $array['extra']['installer-name'];
                         } else {
-                            $this->packageFolderNameForInstall = $this->workoutPackageFolderNameBasic();
+                            $this->packageFolderNameForInstall = $this->getPackageFolderNameBasic();
                         }
                     } else {
-                        $this->packageFolderNameForInstall = $this->workoutPackageFolderNameBasic();
+                        $this->packageFolderNameForInstall = $this->getPackageFolderNameBasic();
                     }
                 }
             }
-            $this->setSessionValue('PackageFolderNameForInstall', $this->packageFolderNameForInstall);
+            $this->getSessionManager()->setSessionValue(
+                'PackageFolderNameForInstall',
+                $this->packageFolderNameForInstall
+            );
         }
     }
 
-    protected function workoutPackageFolderNameBasic()
-    {
-        if ($this->isModuleUpgrade) {
-            return $this->packageName;
-        }
-        return 'mysite';
-    }
 
     protected function printVarsForModule($moduleDetails)
     {
@@ -807,9 +533,9 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->colourPrint('- Origin composer file location: ' .
             ($this->originComposerFileLocation ?: 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Session file: ' . $this->getSessionFileLocation(), 'light_cyan');
+        $this->colourPrint('- Session file: ' . $this->getSessionManager()->getSessionFileLocation(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Last Step: ' . ($this->getSessionValue('Completed') ?: 'not set'), 'light_cyan');
+        $this->colourPrint('- Last Step: ' . ($this->getSessionManager()->getSessionValue('Completed') ?: 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: ' . ($this->logFileLocation ?: 'not logged'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
@@ -833,7 +559,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             }
             if ($this->onlyRun) {
             } else {
-                $lastMethod = $this->getSessionValue('Completed');
+                $lastMethod = $this->getSessionManager()->getSessionValue('Completed');
                 if ($lastMethod) {
                     $this->verbose = false;
                     $arrayKeys = array_keys($this->listOfTasks);
@@ -851,7 +577,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                                         user_error('Can not find next task: ' . $arrayKeys[$index + 1]);
                                     }
                                 } else {
-                                    $this->deleteSession();
+                                    $this->getSessionManager()->deleteSession();
                                     die('
 ==========================================
 Session has completed.
@@ -932,6 +658,16 @@ Session has completed.
         return true;
     }
 
+    protected function getCommandLineOrArgumentAsBoolean(string $variableName = '') : bool
+    {
+        if (PHP_SAPI === 'cli') {
+            return isset($this->argv[1]) && $this->argv[1] === $variableName ? true : false;
+        } else {
+            return isset($_GET[$variableName]) ? true : false;
+        }
+    }
+
+
     protected function newLine()
     {
         if (PHP_SAPI === 'cli') {
@@ -940,8 +676,5 @@ Session has completed.
         return nl2br("\n");
     }
 
-    protected function getIsModuleUpgradeNice()
-    {
-        return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
-    }
+
 }

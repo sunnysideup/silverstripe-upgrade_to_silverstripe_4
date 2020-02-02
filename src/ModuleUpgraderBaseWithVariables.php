@@ -4,13 +4,27 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
+use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
+use Sunnysideup\UpgradeToSilverstripe4\Api\SessionManagement;
+use Sunnysideup\UpgradeToSilverstripe4\Traits\Misc;
+
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss33ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
 
+use Sunnysideup\UpgradeToSilverstripe4\Traits\GettersAndSetters;
+
 class ModuleUpgraderBaseWithVariables
 {
+
+
+    use GettersAndSetters;
+
+    use SessionManagement;
+
+    use Misc;
+
     #########################################
     # Arguments
     #########################################
@@ -328,11 +342,11 @@ class ModuleUpgraderBaseWithVariables
 
     /**
      *Reference to the commandline printer that outputs everything to the command line
-     * @var PHP2CommandLineSingleton|null
+     * @var PHP2CommandLineSingleton|nullgut
      */
     protected $sessionManager = null;
 
-    public function getSessionManager()
+    public function getSessionManager() : SessionManagementInterface
     {
         if ($this->sessionManager === null) {
             $this->sessionManager = new SessionManagement;
@@ -357,30 +371,30 @@ class ModuleUpgraderBaseWithVariables
      * Holds the only instance of me
      * @var ModuleUpgrader|null
      */
-    private static $singleton = null;
+    protected static $singleton = null;
 
     /**
      * Is this the last TASK we are running?
      * @var bool
      */
-    private $lastMethodHasBeenRun = false;
+    protected $lastMethodHasBeenRun = false;
 
     /**
      * @var string
      */
-    private $logFileLocation = '';
-
-    /**
-     * Combination of the web dir root name and the aboveWebRootDirLocation
-     * @var string
-     */
-    private $webRootDirLocation = '';
+    protected $logFileLocation = '';
 
     /**
      * Combination of the web dir root name and the aboveWebRootDirLocation
      * @var string
      */
-    private $themeDirLocation = '';
+    protected $webRootDirLocation = '';
+
+    /**
+     * Combination of the web dir root name and the aboveWebRootDirLocation
+     * @var string
+     */
+    protected $themeDirLocation = '';
 
     /**
      * Directory that holds the module
@@ -393,9 +407,266 @@ class ModuleUpgraderBaseWithVariables
      *
      * @var array
      */
-    private $moduleDirLocations = [];
+    protected $moduleDirLocations = [];
+
+
+    /**
+     * returns an array of existing paths
+     *
+     * @return array
+     */
+    public function getExistingModuleDirLocations()
+    {
+        $array = [];
+        foreach ($this->moduleDirLocations as $location) {
+            if ($location = $this->checkIfPathExistsAndCleanItUp($location)) {
+                $array[$location] = $location;
+            }
+        }
+        if (count($array) === 0) {
+            if ($this->getIsModuleUpgrade()) {
+            } else {
+                user_error(
+                    'You need to set moduleDirLocations (setModuleDirLocations)
+                    as there are currently none.'
+                );
+            }
+        }
+
+        return $array;
+    }
+
+
+    /**
+     * Removes the given task from the list of tasks to execute
+     * @param  string $taskName name of the task
+     * @param  string $variableName name of the task
+     * @param  mixed $variableValue name of the task
+     *
+     * @return ModuleUpgrader
+     */
+    public function setVariableForTask($taskName, $variableName, $variableValue)
+    {
+        $key = $this->positionForTask($taskName);
+        if ($key !== false) {
+            $this->listOfTasks[$taskName][$variableName] = $variableValue;
+        } else {
+            user_error(
+                'Could not find ' . $taskName . '.
+                Choose from ' . implode(', ', array_keys($this->listOfTasks))
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Removes the given task from the list of tasks to execute
+     * @param  string $s name of the task to remove
+     *
+     * @return ModuleUpgrader
+     */
+    public function removeFromListOfTasks($s)
+    {
+        $key = $this->positionForTask($s);
+        if ($key !== false) {
+            unset($this->listOfTasks[$key]);
+        } else {
+            user_error('Removing non existent task ' . $key . '. Choose from ' . implode(', ', $this->listOfTasks));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Inserts another task to the list of tasks at a given position in the order of execution, if it is set
+     * TODO These parameter names need some more refining
+     * @param string|array  $oneOrMoreTasks the tasks to be inserted
+     * @param bool          $insertBeforeOrAfter If to insert before or after
+     * @param bool          $isBefore
+     *
+     * @return ModuleUpgrader
+     */
+    public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore)
+    {
+        if (! is_array($oneOrMoreTasks)) {
+            $oneOrMoreTasks = [$oneOrMoreTasks];
+        }
+        foreach ($this->listOfTasks as $key => $task) {
+            if ($task === $insertBeforeOrAfter) {
+                if ($isBefore) {
+                    $pos = $key - 1;
+                } else {
+                    $pos = $key;
+                }
+                array_splice(
+                    $this->listOfTasks,
+                    $pos,
+                    0,
+                    $oneOrMoreTasks
+                );
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param bool $b
+     * @return ModuleUpgraderBaseWithVariables
+     */
+    public function setRunImmediately(bool $b)
+    {
+        $this->commandLineExec->setRunImmediately($b);
+
+        return $this;
+    }
+
+    /**
+     * Whether execution should come to a halt when an error is reached
+     * @return bool
+     */
+    public function getBreakOnAllErrors() : bool
+    {
+        return $this->commandLineExec->getBreakOnAllErrors();
+    }
+
+    /**
+     * @param bool $b
+     */
+    public function setBreakOnAllErrors(bool $b)
+    {
+        $this->commandLineExec->setBreakOnAllErrors($b);
+
+        return $this;
+    }
+
+    /**
+     * Whether execution should come to a halt when an error is reached
+     * @return bool
+     */
+    public function getIsProjectUpgrade() : bool
+    {
+        return $this->isModuleUpgrade ? false : true;
+    }
+
+
+    /**
+     * Appends the given module in the form of all its module data that has to be formatted in an array
+     * to the array of modules that will be worked with during the upgrade procedure.
+     *
+     * @param array $a data to append
+     * @return ModuleUpgrader
+     */
+    public function addModule(array $a)
+    {
+        $this->arrayOfModules[] = $a;
+
+        return $this;
+    }
+
+
+    public function getExistingModuleDirLocationsWithThemeFolders()
+    {
+        $array = $this->getExistingModuleDirLocations();
+        if ($this->themeDirLocation) {
+            $array[$this->themeDirLocation] = $this->themeDirLocation;
+        }
+
+        return $array;
+    }
+
+    /**
+     * returns path for module
+     *
+     * @return string
+     */
+    public function getExistingFirstModuleDirLocation()
+    {
+        $locations = array_values($this->getExistingModuleDirLocations());
+        return array_shift($locations);
+    }
+
+
+    /**
+     * Locates the directory in which the code is kept within the module directory
+     *
+     * If it can be found returns the location otherwise it errors
+     *
+     * @return array codedirlocation
+     */
+    public function findNameSpaceAndCodeDirs()
+    {
+        $codeDirs = [];
+        $locations = $this->getExistingModuleDirLocations();
+        foreach ($locations as $location) {
+            $codeDir = $this->findMyCodeDir($location);
+            if ($codeDir) {
+                if ($this->getIsModuleUpgrade()) {
+                    $baseNameSpace = $this->getVendorNamespace() . '\\' . $this->getPackageNamespace() . '\\';
+                } else {
+                    $nameSpaceKey = ucwords(basename($location));
+                    if (strtolower($nameSpaceKey) === 'app' || strtolower($nameSpaceKey) === 'mysite') {
+                        $nameSpaceKey = $this->getPackageNamespace();
+                    }
+                    $baseNameSpace = $this->getVendorNamespace() . '\\' . $nameSpaceKey . '\\';
+                }
+                $codeDirs[$baseNameSpace] = $codeDir;
+            }
+        }
+        if (count($codeDirs) === 0) {
+            user_error('
+                Could not find any code dirs. The locations searched: ' . print_r($locations, 1)
+                . ' Using the ' . $this->getIsModuleUpgradeNice() . ' approach');
+        }
+
+        return $codeDirs;
+    }
+
+
+    public function findMyCodeDir($moduleDir)
+    {
+        if (file_exists($moduleDir)) {
+            $test1 = $moduleDir . '/code';
+            $test2 = $moduleDir . '/src';
+            if (file_exists($test1) && file_exists($test2)) {
+                user_error('There is a code and a src dir for ' . $moduleDir, E_USER_NOTICE);
+            } elseif (file_exists($test1)) {
+                return $moduleDir . '/code';
+            } elseif (file_exists($test2)) {
+                return $moduleDir . '/src';
+            } else {
+                user_error('Can not find code/src dir for ' . $moduleDir, E_USER_NOTICE);
+            }
+        }
+    }
+
+    public function getGitRootDir() : string
+    {
+        if ($this->getIsModuleUpgrade()) {
+            $location = $this->getExistingFirstModuleDirLocation();
+            if (! $location) {
+                return $this->moduleDirLocations[0];
+            }
+        } else {
+            $location = $this->getWebRootDirLocation();
+        }
+
+        return $location;
+    }
+
+
+    protected function getPackageFolderNameBasic() : string
+    {
+        if ($this->isModuleUpgrade) {
+            return $this->packageName;
+        }
+        return 'mysite';
+    }
 
 
 
-
+    protected function getIsModuleUpgradeNice() : string
+    {
+        return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
+    }
 }

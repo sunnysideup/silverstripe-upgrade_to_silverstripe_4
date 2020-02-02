@@ -17,7 +17,9 @@ class FindFilesWithMoreThanOneClass extends Task
     public function getDescription()
     {
         return '
-            Goes through all the PHP files and makes sure that only one class is defined.  If any are found than the code exits as you should fix this first!';
+            Goes through all the PHP files and makes sure that only one class is defined.
+            If any are found than the code exits as you should fix this first!
+        ';
     }
 
     public function runActualTask($params = [])
@@ -27,7 +29,7 @@ class FindFilesWithMoreThanOneClass extends Task
             $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if (file_exists($searchPath)) {
                 $this->mu()->colourPrint('Searching in ' . $searchPath, 'blue for files with more than one class.');
-                $fileFinder = new FindFiles($searchPath);
+                $fileFinder = new FindFiles();
                 $flatArray = $fileFinder
                     ->setSearchPath($searchPath)
                     ->setExtensions(['php'])
@@ -42,7 +44,10 @@ class FindFilesWithMoreThanOneClass extends Task
                             if (! isset($tokens[$index][0])) {
                                 continue;
                             }
-                            if ($tokens[$index][0] === T_CLASS && $tokens[$index + 1][0] === T_WHITESPACE && $tokens[$index + 2][0] === T_STRING) {
+                            if ($tokens[$index][0] === T_CLASS &&
+                                $tokens[$index + 1][0] === T_WHITESPACE &&
+                                $tokens[$index + 2][0] === T_STRING
+                            ) {
                                 $index += 2; // Skip class keyword and whitespace
                                 $classNames[] = $tokens[$index][1];
                             }

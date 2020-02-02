@@ -32,7 +32,7 @@ class AddTableNamePrivateStatic extends Task
     public function runActualTask($params = [])
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-            $fileFinder = new FindFiles($moduleDir);
+            $fileFinder = new FindFiles();
             $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if (file_exists($searchPath)) {
                 $flatArray = $fileFinder

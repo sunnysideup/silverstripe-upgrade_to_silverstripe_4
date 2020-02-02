@@ -400,10 +400,11 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
      *
      * @param  string $path
      *
-     * @return string
+     * @return string | null
      */
     public function checkIfPathExistsAndCleanItUp($path, $returnEvenIfItDoesNotExists = false)
     {
+        // $originalPath = $path;
         $path = str_replace('///', '/', $path);
         $path = str_replace('//', '/', $path);
         if (file_exists($path)) {
@@ -412,8 +413,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         if (file_exists($path) || $returnEvenIfItDoesNotExists) {
             return rtrim($path, '/');
         }
-
-        return '';
     }
 
     ###############################
@@ -438,6 +437,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                 }
                 if (class_exists($properClass)) {
                     $count++;
+                    // $runItNow = $this->shouldWeRunIt($shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     if ($obj->getTaskName()) {
@@ -486,9 +486,9 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     public function run()
     {
         $this->applyRecipe();
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             $this->colourPrint(
-                str_repeat('_', 72),
+                '.',
                 'light_red',
                 5
             );
@@ -500,7 +500,12 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             5
         );
         $this->loadNextStepInstructions();
-        $this->loadGlobalVariables();
+        $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation);
+        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
+            $this->aboveWebRootDirLocation . '/' . $this->webRootName,
+            true
+        );
+        $this->themeDirLocation = $this->checkIfPathExistsAndCleanItUp($this->webRootDirLocation . '/themes', true);
         foreach ($this->arrayOfModules as $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
@@ -566,8 +571,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     public function startPHP2CommandLine(): PHP2CommandLineSingleton
     {
         $this->commandLineExec = PHP2CommandLineSingleton::create();
-
-        return $this->commandLineExec;
     }
 
     protected function applyRecipe($recipeName = null)
@@ -610,28 +613,17 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 
     protected function loadNextStepInstructions()
     {
-        $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
-        $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
-        //todo next / previous / etc...
-    }
-
-    protected function loadGlobalVariables()
-    {
-        $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp($this->aboveWebRootDirLocation);
-        $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
-            $this->aboveWebRootDirLocation . '/' . $this->webRootName,
-            true
-        );
-        $this->themeDirLocation = $this->checkIfPathExistsAndCleanItUp($this->webRootDirLocation . '/themes', true);
-    }
-
-    protected function getCommandLineOrArgumentAsBoolean(string $variableName = '') : bool
-    {
         if (PHP_SAPI === 'cli') {
-            return isset($this->argv[1]) && $this->argv[1] === $variableName ? true : false;
+            $this->restartSession = isset($this->argv[1]) && $this->argv[1] === 'restart';
         } else {
-            return isset($_GET[$variableName]) ? true : false;
+            $this->restartSession = isset($_GET['restart']);
         }
+        if (PHP_SAPI === 'cli') {
+            $this->runLastOneAgain = isset($this->argv[1]) && $this->argv[1] === 'again';
+        } else {
+            $this->runLastOneAgain = isset($_GET['again']);
+        }
+        //todo next / previous / etc...
     }
 
     /**
@@ -740,7 +732,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         }
 
         if ($this->restartSession) {
-            $this->getSessionManager()->deleteSession();
+            $this->deleteSession();
         }
     }
 
@@ -784,7 +776,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         return 'mysite';
     }
 
-    protected function printVarsForModule()
+    protected function printVarsForModule($moduleDetails)
     {
         //output the confirmation.
         $this->colourPrint('---------------------', 'light_cyan');

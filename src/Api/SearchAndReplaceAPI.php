@@ -92,7 +92,7 @@ class SearchAndReplaceAPI
     public function __construct($basePath = '')
     {
         $this->basePath = $basePath;
-        $this->fileFinder = new FindFiles($basePath);
+        $this->fileFinder = new FindFiles();
     }
 
     //================================================

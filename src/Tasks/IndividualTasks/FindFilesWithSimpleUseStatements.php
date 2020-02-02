@@ -22,7 +22,9 @@ class FindFilesWithSimpleUseStatements extends Task
     public function getDescription()
     {
         return '
-            Goes through all the PHP files and makes sure that there are no simple use statements, apart from things like use \\page;. ';
+            Goes through all the PHP files and
+            makes sure that there are no simple use statements,
+            apart from things like "use \\Page;". ';
     }
 
     public function runActualTask($params = [])
@@ -30,7 +32,7 @@ class FindFilesWithSimpleUseStatements extends Task
         $errors = [];
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $this->mu()->colourPrint('Searching ' . $moduleDir, 'grey');
-            $fileFinder = new FindFiles($moduleDir);
+            $fileFinder = new FindFiles();
             $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if (file_exists($searchPath)) {
                 $flatArray = $fileFinder
@@ -56,7 +58,8 @@ class FindFilesWithSimpleUseStatements extends Task
                                 if (! in_array($string, $this->listOfOKOnes, true)) {
                                     $testPhrase = ltrim($string, '\\');
                                     if (! strpos($testPhrase, '\\')) {
-                                        $errors[] = $path . ': ' . $tokens[$index][1] . $tokens[$index + 1][1] . $tokens[$index + 2][1] . ';';
+                                        $errors[] = $path . ': ' . $tokens[$index][1] .
+                                        $tokens[$index + 1][1] . $tokens[$index + 2][1] . ';';
                                     }
                                 }
                                 $index += 3; // Skip checked ones ...

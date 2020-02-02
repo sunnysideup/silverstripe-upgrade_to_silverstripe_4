@@ -81,7 +81,8 @@ class FixBadUseStatements extends Task
                 } else {
                     $textSearchMachine->setSearchPath($path);
                     foreach ($pathArray as $extension => $extensionArray) {
-                        $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
+                        //setting extensions to search files within
+                        $textSearchMachine->setExtensions(explode('|', $extension));
                         foreach ($extensionArray as $find) {
                             $caseSensitive = false;
                             $replacementType = 'BASIC';

@@ -32,7 +32,7 @@ class FindFilesWithSimpleUseStatements extends Task
         $errors = [];
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $this->mu()->colourPrint('Searching ' . $moduleDir, 'grey');
-            $fileFinder = new FindFiles($moduleDir);
+            $fileFinder = new FindFiles();
             $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if (file_exists($searchPath)) {
                 $flatArray = $fileFinder

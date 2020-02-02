@@ -752,7 +752,7 @@ class ModuleUpgrader
      */
     public function checkIfPathExistsAndCleanItUp($path, $returnEvenIfItDoesNotExists = false)
     {
-        $originalPath = $path;
+        // $originalPath = $path;
         $path = str_replace('///', '/', $path);
         $path = str_replace('//', '/', $path);
         if (file_exists($path)) {
@@ -785,7 +785,7 @@ class ModuleUpgrader
                 }
                 if (class_exists($properClass)) {
                     $count++;
-                    $runItNow = $this->shouldWeRunIt($shortClassCode);
+                    // $runItNow = $this->shouldWeRunIt($shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     if ($obj->getTaskName()) {
@@ -805,7 +805,7 @@ class ModuleUpgrader
                         }
                         $previousStep = $currentStep;
                     }
-                    $html .= '<h4>' . $count . ': ' . $obj->getTitle() . '</h4>';
+                    $html .= '<h4>' . $count . '/' . $totalCount . ': ' . $obj->getTitle() . '</h4>';
                     $html .= '<p>' . $obj->getDescription() . '<br />';
                     $html .= '<strong>Code: </strong>' . $class;
                     $html .= '<br /><strong>Class Name: </strong>';
@@ -854,7 +854,7 @@ class ModuleUpgrader
             true
         );
         $this->themeDirLocation = $this->checkIfPathExistsAndCleanItUp($this->webRootDirLocation . '/themes', true);
-        foreach ($this->arrayOfModules as $counter => $moduleDetails) {
+        foreach ($this->arrayOfModules as $moduleDetails) {
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
             $this->printVarsForModule($moduleDetails);

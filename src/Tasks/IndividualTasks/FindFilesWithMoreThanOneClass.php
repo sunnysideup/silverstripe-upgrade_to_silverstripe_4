@@ -34,11 +34,10 @@ class FindFilesWithMoreThanOneClass extends Task
                     ->getFlatFileArray();
                 if (is_array($flatArray) && count($flatArray)) {
                     foreach ($flatArray as $path) {
-                        $className = basename($path, '.php');
+                        // $className = basename($path, '.php');
                         $classNames = [];
                         $content = file_get_contents($path);
                         $tokens = token_get_all($content);
-                        $namespace = '';
                         for ($index = 0; isset($tokens[$index]); $index++) {
                             if (! isset($tokens[$index][0])) {
                                 continue;

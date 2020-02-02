@@ -483,7 +483,7 @@ class SearchAndReplaceAPI
             $insidePreviousReplaceComment = false;
             $insideIgnoreArea = false;
             $completedTask = false;
-            foreach ($oldFileContentArray as $key => $oldLineContent) {
+            foreach ($oldFileContentArray as $oldLineContent) {
                 $newLineContent = $oldLineContent;
 
                 if ($completedTask === false) {
@@ -520,7 +520,6 @@ class SearchAndReplaceAPI
                                 }
                             }
                         } else {
-                            $hasError = false;
                             if ($this->caseSensitive) {
                                 if (strpos($oldLineContent, $this->searchKey) !== false) {
                                     user_error('Should have found: ' . $this->searchKey);

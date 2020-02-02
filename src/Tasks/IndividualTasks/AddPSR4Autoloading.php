@@ -34,7 +34,6 @@ class AddPSR4Autoloading extends Task
         // DO FOR BOTH
         //module composor.json
         //  ONLY FOR module
-        $listOfAutoLoads = [];
         $baseCommands = '
             if(! isset($data["autoload"])) {
                 $data["autoload"] = [];

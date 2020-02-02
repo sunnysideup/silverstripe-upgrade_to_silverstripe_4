@@ -16,8 +16,6 @@ class FixRequirements extends Task
 
     protected $debug = false;
 
-    private $checkReplacementIssues = false;
-
     private $ignoreFolderArray = [
         '.git',
     ];
@@ -32,13 +30,6 @@ class FixRequirements extends Task
         return '
             Finds Requirements:: instances and fixes them to be used properly for modules
             - e.g. [vendorname] / [modulename] : location/for/my/script.js';
-    }
-
-    public function setCheckReplacementIssues($b)
-    {
-        $this->checkReplacementIssues = $b;
-
-        return $this;
     }
 
     public function setIgnoreFolderArray($a)
@@ -100,7 +91,6 @@ class FixRequirements extends Task
                         );
                         foreach ($extensionArray as $find => $findDetails) {
                             $replace = $findDetails['R'] ?? $find;
-                            $comment = $findDetails['C'] ?? '';
                             $caseSensitive = false;
 
                             $isStraightReplace = true;

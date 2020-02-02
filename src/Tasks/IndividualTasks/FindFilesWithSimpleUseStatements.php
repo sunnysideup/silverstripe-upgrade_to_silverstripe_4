@@ -40,11 +40,9 @@ class FindFilesWithSimpleUseStatements extends Task
                 if (is_array($flatArray) && count($flatArray)) {
                     foreach ($flatArray as $path) {
                         $this->mu()->colourPrint('Searching ' . $path, 'grey');
-                        $className = basename($path, '.php');
-                        $classNames = [];
+                        // $className = basename($path, '.php');
                         $content = file_get_contents($path);
                         $tokens = token_get_all($content);
-                        $namespace = '';
                         for ($index = 0; isset($tokens[$index]); $index++) {
                             if (! isset($tokens[$index][0])) {
                                 continue;

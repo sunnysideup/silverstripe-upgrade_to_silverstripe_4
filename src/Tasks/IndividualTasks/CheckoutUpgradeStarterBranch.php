@@ -77,10 +77,12 @@ class CheckoutUpgradeStarterBranch extends Task
             to install dependencies that do not have tags',
             false
         );
+        $packageNameFull = $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName();
+        $branchAdjusted = 'dev-' . $this->mu()->getNameOfUpgradeStarterBranch();
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->mu()->getNameOfUpgradeStarterBranch() . ' ' . $this->composerOptions,
-            'checkout ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+            'composer require ' . $packageNameFull . ':' . $branchAdjusted . ' ' . $this->composerOptions,
+            'checkout ' . $branchAdjusted . ' of ' . $packageNameFull,
             false
         );
         $this->mu()->execMe(

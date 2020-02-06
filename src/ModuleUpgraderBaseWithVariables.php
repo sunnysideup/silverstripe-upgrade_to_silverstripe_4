@@ -385,31 +385,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this;
     }
 
-
-    /**
-     * Removes the given task from the list of tasks to execute
-     * @param  string $taskName name of the task
-     * @param  string $variableName name of the task
-     * @param  mixed $variableValue name of the task
-     *
-     * @return  ModuleUpgraderInterface
-     */
-    protected function setVariableForTask($taskName, $variableName, $variableValue): ModuleUpgraderInterface
-    {
-        $key = $this->positionForTask($taskName);
-        if ($key !== false) {
-            $this->listOfTasks[$taskName][$variableName] = $variableValue;
-        } else {
-            user_error(
-                'Could not find ' . $taskName . '.
-                Choose from ' . implode(', ', array_keys($this->listOfTasks))
-            );
-        }
-
-        return $this;
-    }
-
-
     /**
      * Inserts another task to the list of tasks at a given position in the order of execution, if it is set
      * TODO These parameter names need some more refining
@@ -442,7 +417,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this;
     }
 
-
     /**
      * Removes the given task from the list of tasks to execute
      * @param  string $s name of the task to remove
@@ -460,8 +434,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
         return $this;
     }
-
-
 
     /**
      * @param bool $b
@@ -483,7 +455,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
         return $this;
     }
-
 
     public function getRecipe(): string
     {
@@ -577,7 +548,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      *
      * @return array
      */
-    public function getExistingModuleDirLocations() : array
+    public function getExistingModuleDirLocations(): array
     {
         $array = [];
         foreach ($this->moduleDirLocations as $location) {
@@ -606,7 +577,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     {
         return $this->commandLineExec->getBreakOnAllErrors();
     }
-
 
     /**
      * Whether execution should come to a halt when an error is reached
@@ -702,6 +672,29 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         }
 
         return $location;
+    }
+
+    /**
+     * Removes the given task from the list of tasks to execute
+     * @param  string $taskName name of the task
+     * @param  string $variableName name of the task
+     * @param  mixed $variableValue name of the task
+     *
+     * @return  ModuleUpgraderInterface
+     */
+    protected function setVariableForTask($taskName, $variableName, $variableValue): ModuleUpgraderInterface
+    {
+        $key = $this->positionForTask($taskName);
+        if ($key !== false) {
+            $this->listOfTasks[$taskName][$variableName] = $variableValue;
+        } else {
+            user_error(
+                'Could not find ' . $taskName . '.
+                Choose from ' . implode(', ', array_keys($this->listOfTasks))
+            );
+        }
+
+        return $this;
     }
 
     /**

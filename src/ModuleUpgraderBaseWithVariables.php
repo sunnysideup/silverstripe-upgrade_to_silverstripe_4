@@ -371,6 +371,120 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      */
     protected $moduleDirLocations = [];
 
+    /**
+     * Appends the given module in the form of all its module data that has to be formatted in an array
+     * to the array of modules that will be worked with during the upgrade procedure.
+     *
+     * @param array $a data to append
+     * @return ModuleUpgraderInterface
+     */
+    public function addModule(array $a): ModuleUpgraderInterface
+    {
+        $this->arrayOfModules[] = $a;
+
+        return $this;
+    }
+
+
+    /**
+     * Removes the given task from the list of tasks to execute
+     * @param  string $taskName name of the task
+     * @param  string $variableName name of the task
+     * @param  mixed $variableValue name of the task
+     *
+     * @return  ModuleUpgraderInterface
+     */
+    protected function setVariableForTask($taskName, $variableName, $variableValue): ModuleUpgraderInterface
+    {
+        $key = $this->positionForTask($taskName);
+        if ($key !== false) {
+            $this->listOfTasks[$taskName][$variableName] = $variableValue;
+        } else {
+            user_error(
+                'Could not find ' . $taskName . '.
+                Choose from ' . implode(', ', array_keys($this->listOfTasks))
+            );
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Inserts another task to the list of tasks at a given position in the order of execution, if it is set
+     * TODO These parameter names need some more refining
+     * @param string|array  $oneOrMoreTasks the tasks to be inserted
+     * @param bool          $insertBeforeOrAfter If to insert before or after
+     * @param bool          $isBefore
+     *
+     * @return ModuleUpgraderInterface
+     */
+    public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore): ModuleUpgraderInterface
+    {
+        if (! is_array($oneOrMoreTasks)) {
+            $oneOrMoreTasks = [$oneOrMoreTasks];
+        }
+        foreach ($this->listOfTasks as $key => $task) {
+            if ($task === $insertBeforeOrAfter) {
+                if ($isBefore) {
+                    $pos = $key - 1;
+                } else {
+                    $pos = $key;
+                }
+                array_splice(
+                    $this->listOfTasks,
+                    $pos,
+                    0,
+                    $oneOrMoreTasks
+                );
+            }
+        }
+        return $this;
+    }
+
+
+    /**
+     * Removes the given task from the list of tasks to execute
+     * @param  string $s name of the task to remove
+     *
+     * @return ModuleUpgraderInterface
+     */
+    public function removeFromListOfTasks($s): ModuleUpgraderInterface
+    {
+        $key = $this->positionForTask($s);
+        if ($key !== false) {
+            unset($this->listOfTasks[$key]);
+        } else {
+            user_error('Removing non existent task ' . $key . '. Choose from ' . implode(', ', $this->listOfTasks));
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param bool $b
+     * @return ModuleUpgraderInterface
+     */
+    public function setRunImmediately(bool $b): ModuleUpgraderInterface
+    {
+        $this->commandLineExec->setRunImmediately($b);
+
+        return $this;
+    }
+
+    /**
+     * @param bool $b
+     */
+    public function setBreakOnAllErrors(bool $b)
+    {
+        $this->commandLineExec->setBreakOnAllErrors($b);
+
+        return $this;
+    }
+
+
     public function getRecipe(): string
     {
         return $this->recipe;
@@ -463,7 +577,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      *
      * @return array
      */
-    public function getExistingModuleDirLocations()
+    public function getExistingModuleDirLocations() : array
     {
         $array = [];
         foreach ($this->moduleDirLocations as $location) {
@@ -485,90 +599,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     }
 
     /**
-     * Removes the given task from the list of tasks to execute
-     * @param  string $taskName name of the task
-     * @param  string $variableName name of the task
-     * @param  mixed $variableValue name of the task
-     *
-     * @return  ModuleUpgraderInterface
-     */
-    public function setVariableForTask($taskName, $variableName, $variableValue): ModuleUpgraderInterface
-    {
-        $key = $this->positionForTask($taskName);
-        if ($key !== false) {
-            $this->listOfTasks[$taskName][$variableName] = $variableValue;
-        } else {
-            user_error(
-                'Could not find ' . $taskName . '.
-                Choose from ' . implode(', ', array_keys($this->listOfTasks))
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Removes the given task from the list of tasks to execute
-     * @param  string $s name of the task to remove
-     *
-     * @return ModuleUpgraderInterface
-     */
-    public function removeFromListOfTasks($s): ModuleUpgraderInterface
-    {
-        $key = $this->positionForTask($s);
-        if ($key !== false) {
-            unset($this->listOfTasks[$key]);
-        } else {
-            user_error('Removing non existent task ' . $key . '. Choose from ' . implode(', ', $this->listOfTasks));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Inserts another task to the list of tasks at a given position in the order of execution, if it is set
-     * TODO These parameter names need some more refining
-     * @param string|array  $oneOrMoreTasks the tasks to be inserted
-     * @param bool          $insertBeforeOrAfter If to insert before or after
-     * @param bool          $isBefore
-     *
-     * @return ModuleUpgraderInterface
-     */
-    public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore): ModuleUpgraderInterface
-    {
-        if (! is_array($oneOrMoreTasks)) {
-            $oneOrMoreTasks = [$oneOrMoreTasks];
-        }
-        foreach ($this->listOfTasks as $key => $task) {
-            if ($task === $insertBeforeOrAfter) {
-                if ($isBefore) {
-                    $pos = $key - 1;
-                } else {
-                    $pos = $key;
-                }
-                array_splice(
-                    $this->listOfTasks,
-                    $pos,
-                    0,
-                    $oneOrMoreTasks
-                );
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * @param bool $b
-     * @return ModuleUpgraderInterface
-     */
-    public function setRunImmediately(bool $b): ModuleUpgraderInterface
-    {
-        $this->commandLineExec->setRunImmediately($b);
-
-        return $this;
-    }
-
-    /**
      * Whether execution should come to a halt when an error is reached
      * @return bool
      */
@@ -577,15 +607,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this->commandLineExec->getBreakOnAllErrors();
     }
 
-    /**
-     * @param bool $b
-     */
-    public function setBreakOnAllErrors(bool $b)
-    {
-        $this->commandLineExec->setBreakOnAllErrors($b);
-
-        return $this;
-    }
 
     /**
      * Whether execution should come to a halt when an error is reached
@@ -594,20 +615,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     public function getIsProjectUpgrade(): bool
     {
         return $this->isModuleUpgrade ? false : true;
-    }
-
-    /**
-     * Appends the given module in the form of all its module data that has to be formatted in an array
-     * to the array of modules that will be worked with during the upgrade procedure.
-     *
-     * @param array $a data to append
-     * @return ModuleUpgraderInterface
-     */
-    public function addModule(array $a): ModuleUpgraderInterface
-    {
-        $this->arrayOfModules[] = $a;
-
-        return $this;
     }
 
     public function getExistingModuleDirLocationsWithThemeFolders()

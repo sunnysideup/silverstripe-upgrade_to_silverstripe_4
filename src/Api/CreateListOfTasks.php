@@ -58,16 +58,16 @@ class CreateListOfTasks
                     user_error($properClass . ' could not be found as class', E_USER_ERROR);
                 }
             }
-            $dir = $this->mu->checkIfPathExistsAndCleanItUp(__DIR__ . '/../../docs/en/');
-            if ($dir) {
-                $html = str_replace(' _', ' \_', $html);
-                file_put_contents(
-                    rtrim($dir, '/') . '/AvailableTasks.md',
-                    $html
-                );
-            } else {
-                user_error('Coult not find '.$dir.' directory');
-            }
+        }
+        $dir = $this->mu->checkIfPathExistsAndCleanItUp(__DIR__ . '/../../docs/en/');
+        if ($dir) {
+            $html = str_replace(' _', ' \_', $html);
+            file_put_contents(
+                rtrim($dir, '/') . '/AvailableTasks.md',
+                $html
+            );
+        } else {
+            user_error('Coult not find '.$dir.' directory');
         }
     }
 }

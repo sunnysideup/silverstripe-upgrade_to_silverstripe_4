@@ -1,4 +1,372 @@
 EasyCodingStandard v6.1.0
 Config file: /home/thiemen/.composer/vendor/sunnysideup/easy-coding-standards/ecs.yml
+
+
+
+1) src/ModuleUpgrader.php
+
+    ---------- begin diff ----------
+--- Original
++++ New
+@@ -9,7 +9,6 @@
+ {
+     use Creator;
+ 
+-
+     ###############################
+     # USEFUL COMMANDS
+     ###############################
+
+    ----------- end diff -----------
+
+Applied checkers:
+
+ * PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\ControlStructureSpacingSniff.NoLineAfterClose
+ * SlevomatCodingStandard\Sniffs\Classes\TraitUseSpacingSniff.IncorrectLinesCountAfterLastUse
+
+
+    ---------- begin diff ----------
+--- Original
++++ New
+@@ -139,7 +139,7 @@
+             5
+         );
+         $this->colourPrint(
+-            'Next: '.$nextStep,
++            'Next: ' . $nextStep,
+             'light_red',
+             5
+         );
+@@ -169,6 +169,11 @@
+         }
+     }
+ 
++    public function getLastMethodRun(): string
++    {
++        return $this->getSessionManager()->getSessionValue('Completed');
++    }
++
+     protected function loadNextStepInstructions()
+     {
+         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
+@@ -190,7 +195,6 @@
+         );
+     }
+ 
+-
+     /**
+      * Loads in and sets all the meta data for a module from the inputed array
+      * @param array $moduleDetails
+@@ -387,11 +391,6 @@
+         }
+     }
+ 
+-    public function getLastMethodRun() : string
+-    {
+-        return $this->getSessionManager()->getSessionValue('Completed');
+-    }
+-
+     /**
+      * start the method ...
+      * - should we run it?
+@@ -425,5 +424,4 @@
+ 
+         return $runMe;
+     }
+-
+ }
+
+    ----------- end diff -----------
+
+Applied checkers:
+
+ * PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer
+ * PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer
+ * PhpCsFixer\Fixer\FunctionNotation\ReturnTypeDeclarationFixer
+ * PhpCsFixer\Fixer\Operator\ConcatSpaceFixer
+
+
+
+2) src/ModuleUpgraderBaseWithVariables.php
+
+    ---------- begin diff ----------
+--- Original
++++ New
+@@ -21,24 +21,6 @@
+     use GettersAndSetters;
+     use Misc;
+ 
+-    /**
+-     * Starts the output to the commandline / browser
+-     */
+-    public function __construct()
+-    {
+-        global $argv;
+-        $this->argv = $argv;
+-        $this->startPHP2CommandLine();
+-    }
+-
+-    /**
+-     * Ends output to commandline / browser
+-     */
+-    public function __destruct()
+-    {
+-        $this->endPHP2CommandLine();
+-    }
+-
+     #########################################
+     # Arguments
+     #########################################
+@@ -390,6 +372,24 @@
+     protected $moduleDirLocations = [];
+ 
+     /**
++     * Starts the output to the commandline / browser
++     */
++    public function __construct()
++    {
++        global $argv;
++        $this->argv = $argv;
++        $this->startPHP2CommandLine();
++    }
++
++    /**
++     * Ends output to commandline / browser
++     */
++    public function __destruct()
++    {
++        $this->endPHP2CommandLine();
++    }
++
++    /**
+      * Appends the given module in the form of all its module data that has to be formatted in an array
+      * to the array of modules that will be worked with during the upgrade procedure.
+      *
+@@ -606,7 +606,7 @@
+         return $this->isModuleUpgrade ? false : true;
+     }
+ 
+-    public function getExistingModuleDirLocationsWithThemeFolders() : array
++    public function getExistingModuleDirLocationsWithThemeFolders(): array
+     {
+         $array = $this->getExistingModuleDirLocations();
+         if ($this->themeDirLocation) {
+@@ -693,6 +693,11 @@
+         return $location;
+     }
+ 
++    public function getIsModuleUpgradeNice(): string
++    {
++        return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
++    }
++
+     /**
+      * Removes the given task from the list of tasks to execute
+      * @param  string $taskName name of the task
+@@ -739,12 +744,6 @@
+         return 'mysite';
+     }
+ 
+-    public function getIsModuleUpgradeNice(): string
+-    {
+-        return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
+-    }
+-
+-
+     /**
+      * Starts the logger. Extra checking may be put in here to see if you
+      * want to start the logger or not in different scenarios.
+@@ -758,8 +757,6 @@
+ 
+         return $this->commandLineExec;
+     }
+-
+-
+ 
+     /**
+      * deconstructs Command Line
+
+    ----------- end diff -----------
+
+Applied checkers:
+
+ * PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer
+ * PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer
+ * PhpCsFixer\Fixer\FunctionNotation\ReturnTypeDeclarationFixer
+
+
+
+3) src/ModuleUpgraderInfo.php
+
+    ---------- begin diff ----------
+--- Original
++++ New
+@@ -16,7 +16,6 @@
+ 
+         $mu->colourPrint('- Recipe: ' . ($mu->getRecipe() ?: 'no recipe selected'), 'light_cyan');
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint('- Vendor Name: ' . $mu->getVendorName(), 'light_cyan');
+@@ -23,7 +22,6 @@
+ 
+         $mu->colourPrint('- Package Name: ' . $mu->getPackageName(), 'light_cyan');
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint('- Upgrade as Fork: ' . ($mu->getUpgradeAsFork() ? 'yes' : 'no'), 'light_cyan');
+@@ -32,7 +30,6 @@
+ 
+         $mu->colourPrint('- Run Irreversibly: ' . ($mu->getRunIrreversibly() ? 'yes' : 'no'), 'light_cyan');
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint('- Vendor Namespace: ' . $mu->getVendorNamespace(), 'light_cyan');
+@@ -39,7 +36,6 @@
+ 
+         $mu->colourPrint('- Package Namespace: ' . $mu->getPackageNamespace(), 'light_cyan');
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint(
+@@ -57,7 +53,6 @@
+             'light_cyan'
+         );
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint('- Upgrade Dir (root of install): ' . $mu->getWebRootDirLocation(), 'light_cyan');
+@@ -70,7 +65,6 @@
+ 
+         $mu->colourPrint('- Git and Composer Root Dir: ' . $mu->getGitRootDir(), 'light_cyan');
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint('- Git Repository Link (SSH): ' . $mu->getGitLink(), 'light_cyan');
+@@ -82,21 +76,17 @@
+         $mu->colourPrint('- Origin composer file location: ' .
+             ($mu->getOriginComposerFileLocation() ?: 'not set'), 'light_cyan');
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint('- Session file: ' . $mu->getSessionManager()->getSessionFileLocation(), 'light_cyan');
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint('- Last Step: ' . ($mu->getLastMethodRun() ?: 'not set'), 'light_cyan');
+ 
+-
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+         $mu->colourPrint('- Log File Location: ' . ($mu->getLogFileLocation() ?: 'not logged'), 'light_cyan');
+-
+ 
+         $mu->colourPrint('- ---', 'light_cyan');
+ 
+
+    ----------- end diff -----------
+
+Applied checkers:
+
+ * PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\SuperfluousWhitespaceSniff.EmptyLines
+
+
+    ---------- begin diff ----------
+--- Original
++++ New
+@@ -4,7 +4,6 @@
+ 
+ class ModuleUpgraderInfo
+ {
+-
+     public function printVarsForModule($mu, $moduleDetails)
+     {
+         //output the confirmation.
+
+    ----------- end diff -----------
+
+Applied checkers:
+
+ * PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer
+
+
+
+4) src/Tasks/IndividualTasks/PHPCompatabilityCheck.php
+
+    ---------- begin diff ----------
+--- Original
++++ New
+@@ -14,6 +14,8 @@
+ {
+     protected $taskStep = 's00';
+ 
++    protected $phpVersion = '7.2';
++
+     public function getTitle()
+     {
+         return 'PHP Compatibility Check';
+@@ -21,10 +23,8 @@
+ 
+     public function getDescription()
+     {
+-        return 'Outputs a file showing errors prevent code from being compatible with php '.$this->phpVersion;
++        return 'Outputs a file showing errors prevent code from being compatible with php ' . $this->phpVersion;
+     }
+-
+-    protected $phpVersion = '7.2';
+ 
+     public function setPhpVersion(string $phpVersion)
+     {
+
+    ----------- end diff -----------
+
+Applied checkers:
+
+ * PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer
+ * PhpCsFixer\Fixer\Operator\ConcatSpaceFixer
+
+
+
+5) src/Traits/Misc.php
+
+    ---------- begin diff ----------
+--- Original
++++ New
+@@ -4,7 +4,6 @@
+ 
+ trait Misc
+ {
+-
+     public function newLine()
+     {
+         if (PHP_SAPI === 'cli') {
+
+    ----------- end diff -----------
+
+Applied checkers:
+
+ * PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer
+
+
+ [OK] 7 errors successfully fixed and no other found!                                                                   
+
 EasyCodingStandard v6.1.0
 Config file: /home/thiemen/.composer/vendor/sunnysideup/easy-coding-standards/ecs.yml
+
+
+ ------ ------------------------------------------ 
+  Line   ModuleUpgrader.php                        
+ ------ ------------------------------------------ 
+  142    Variable $nextStep might not be defined.  
+ ------ ------------------------------------------ 
+
+ [ERROR] Found 1 error                                                                                                  
+

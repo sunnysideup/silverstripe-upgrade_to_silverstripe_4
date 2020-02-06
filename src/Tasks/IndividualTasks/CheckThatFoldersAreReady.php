@@ -13,7 +13,7 @@ class CheckThatFoldersAreReady extends Task
 
     public function getTitle()
     {
-        return 'Check Folders Are Ready';
+        return 'Check folders are ready for upgrade process';
     }
 
     public function getDescription()
@@ -49,11 +49,13 @@ class CheckThatFoldersAreReady extends Task
         if ($logDir) {
             //check that log dir is exists
             if (! file_exists($logDir)) {
-                return 'Log dir not exists: ' . $logDir . ' set your log dir to an empty string if you prefer to continue without a log.';
+                return 'Log dir not exists: ' . $logDir . '
+                    set your log dir to an empty string if you prefer to continue without a log.';
             }
             //Directory exists, now check if writable.
             if (! is_writable($logDir)) {
-                return $logDir . ' is not writable' . '. Set the log dir to an empty string or provide a writable directory. ';
+                return $logDir . ' is not writable' . '.
+                Set the log dir to an empty string or provide a writable directory. ';
             }
             //all ok
         }

@@ -13,7 +13,7 @@ class ResetWebRootDir extends Task
 
     public function getTitle()
     {
-        return 'Remove and reset Web Root';
+        return 'Remove and reset the web root';
     }
 
     public function getDescription()

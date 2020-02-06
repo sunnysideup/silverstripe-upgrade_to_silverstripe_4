@@ -49,7 +49,7 @@ class CreateListOfTasks
                     }
                     $html .= '<h4>' . $count . '/' . $totalCount . ': ' . $obj->getTitle() . '</h4>';
                     $html .= '<p>' . $obj->getDescription() . '<br />';
-                    $html .= '<strong>Code: </strong>' . $class;
+                    $html .= '<strong>Class Code: </strong>' . $class;
                     $html .= '<br /><strong>Class Name: </strong>';
                     $html .= '<a href="' . $path . '">' . $reflectionClass->getShortName() . '</a>';
                     $html .= '</p>';

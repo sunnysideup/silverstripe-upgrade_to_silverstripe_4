@@ -2,21 +2,19 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Interfaces;
 
-
 interface SessionManagementInterface
 {
+    public function initSession();
 
-    public function getSessionFileLocation() : string;
-
-    public function initSession() : SessionManagementInterface;
+    public function getSessionFileLocation(): string;
 
     public function deleteSession();
 
-    public function getSessionValue(string $key) : string;
+    public function getSessionValue(string $key): string;
 
-    public function getSessionData() : array;
+    public function getSessionData(): array;
 
-    public function setSessionData(array $session) : SessionManagementInterface;
+    public function setSessionData(array $session): self;
 
-    public function setSessionValue(string $key, string $value): SessionManagementInterface;
+    public function setSessionValue(string $key, string $value): self;
 }

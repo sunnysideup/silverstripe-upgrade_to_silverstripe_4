@@ -1,7 +1,28 @@
 <?php
 
+namespace Sunnysideup\UpgradeToSilverstripe4\Traits;
+
 trait Misc
 {
+    /**
+     * Cleans an input string and returns a more natural human readable version
+     * @param  string $str input string
+     * @param  array  $noStrip
+     *
+     * @return string cleaned string
+     */
+    public function cleanCamelCase($str, array $noStrip = []): string
+    {
+        $str = str_replace('-', ' ', $str);
+        $str = str_replace('_', ' ', $str);
+        // non-alpha and non-numeric characters become spaces
+        $str = preg_replace('/[^a-z0-9' . implode('', $noStrip) . ']+/i', ' ', $str);
+        $str = trim($str);
+        // uppercase the first character of each word
+        $str = ucwords($str);
+
+        return str_replace(' ', '', $str);
+    }
 
     protected function URLExists($url): bool
     {
@@ -27,33 +48,11 @@ trait Misc
         return true;
     }
 
-    protected function getCommandLineOrArgumentAsBoolean(string $variableName = '') : bool
+    protected function getCommandLineOrArgumentAsBoolean(string $variableName = ''): bool
     {
         if (PHP_SAPI === 'cli') {
             return isset($this->argv[1]) && $this->argv[1] === $variableName ? true : false;
-        } else {
-            return isset($_GET[$variableName]) ? true : false;
         }
+        return isset($_GET[$variableName]) ? true : false;
     }
-
-    /**
-     * Cleans an input string and returns a more natural human readable version
-     * @param  string $str input string
-     * @param  array  $noStrip
-     *
-     * @return string cleaned string
-     */
-    public function cleanCamelCase($str, array $noStrip = []) : string
-    {
-        $str = str_replace('-', ' ', $str);
-        $str = str_replace('_', ' ', $str);
-        // non-alpha and non-numeric characters become spaces
-        $str = preg_replace('/[^a-z0-9' . implode('', $noStrip) . ']+/i', ' ', $str);
-        $str = trim($str);
-        // uppercase the first character of each word
-        $str = ucwords($str);
-
-        return str_replace(' ', '', $str);
-    }
-
 }

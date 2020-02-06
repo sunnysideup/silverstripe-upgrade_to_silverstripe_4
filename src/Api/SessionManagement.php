@@ -6,13 +6,23 @@ use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
 
 class SessionManagement implements SessionManagementInterface
 {
+
+
+    public function initSession()
+    {
+        if (! file_exists($this->getSessionFileLocation())) {
+            $this->setSessionData(['Started' => date('Y-m-d h:i ')]);
+        }
+
+        return $this;
+    }
+
     /**
-     *
      * @var string
      */
     protected $sessionFileName = 'Session_For';
 
-    public function getSessionFileLocation() : string
+    public function getSessionFileLocation(): string
     {
         return trim(
             $this->getAboveWebRootDirLocation() .
@@ -26,21 +36,13 @@ class SessionManagement implements SessionManagementInterface
         );
     }
 
-    public function initSession()
-    {
-        if (! file_exists($this->getSessionFileLocation())) {
-            $this->setSessionData(['Started' => date('Y-m-d h:i ')]);
-        }
-
-        return $this;
-    }
 
     public function deleteSession()
     {
         unlink($this->getSessionFileLocation());
     }
 
-    public function getSessionValue(string $key) : string
+    public function getSessionValue(string $key): string
     {
         $session = $this->getSessionData();
         if (isset($session[$key])) {
@@ -49,7 +51,7 @@ class SessionManagement implements SessionManagementInterface
         return '';
     }
 
-    public function getSessionData() : array
+    public function getSessionData(): array
     {
         $this->initSession();
         $data = file_get_contents($this->getSessionFileLocation());
@@ -62,7 +64,7 @@ class SessionManagement implements SessionManagementInterface
     /**
      * @param array $session
      */
-    public function setSessionData(array $session) : SessionManagementInterface
+    public function setSessionData(array $session): SessionManagementInterface
     {
         $data = json_encode($session, JSON_PRETTY_PRINT);
         try {
@@ -86,7 +88,7 @@ class SessionManagement implements SessionManagementInterface
         return $this;
     }
 
-    public function setSessionValue(string $key, string $value) : SessionManagementInterface
+    public function setSessionValue(string $key, string $value): SessionManagementInterface
     {
         $session = $this->getSessionData();
         $session[$key] = trim($value);

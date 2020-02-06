@@ -4,15 +4,8 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31ToSs37;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss33ToSs37;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
-
 class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 {
-
-
     /**
      * Starts the output to the commandline / browser
      */
@@ -31,7 +24,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->endPHP2CommandLine();
     }
 
-
     public function destroy()
     {
         self::$singleton = null;
@@ -48,7 +40,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         }
         return self::$singleton;
     }
-
 
     ###############################
     # USEFUL COMMANDS
@@ -93,7 +84,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     {
         return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
     }
-
 
     /**
      * returns path in a consistent format
@@ -207,6 +197,8 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     public function startPHP2CommandLine(): PHP2CommandLineSingleton
     {
         $this->commandLineExec = PHP2CommandLineSingleton::create();
+
+        return $this->commandLineExec;
     }
 
     protected function applyRecipe($recipeName = null)
@@ -416,7 +408,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         }
     }
 
-
     protected function printVarsForModule($moduleDetails)
     {
         //output the confirmation.
@@ -450,7 +441,8 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Session file: ' . $this->getSessionManager()->getSessionFileLocation(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Last Step: ' . ($this->getSessionManager()->getSessionValue('Completed') ?: 'not set'), 'light_cyan');
+        $this->colourPrint('- Last Step: ' .
+            ($this->getSessionManager()->getSessionValue('Completed') ?: 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: ' . ($this->logFileLocation ?: 'not logged'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
@@ -548,8 +540,6 @@ Session has completed.
         return $runMe;
     }
 
-
-
     protected function newLine()
     {
         if (PHP_SAPI === 'cli') {
@@ -557,6 +547,4 @@ Session has completed.
         }
         return nl2br("\n");
     }
-
-
 }

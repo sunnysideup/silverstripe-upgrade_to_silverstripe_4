@@ -4,25 +4,20 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
-use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
 use Sunnysideup\UpgradeToSilverstripe4\Api\SessionManagement;
-use Sunnysideup\UpgradeToSilverstripe4\Traits\Misc;
+use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
+use Sunnysideup\UpgradeToSilverstripe4\Traits\GettersAndSetters;
 
+use Sunnysideup\UpgradeToSilverstripe4\Traits\Misc;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss33ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
 
-use Sunnysideup\UpgradeToSilverstripe4\Traits\GettersAndSetters;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
 
 class ModuleUpgraderBaseWithVariables
 {
-
-
     use GettersAndSetters;
-
-    use SessionManagement;
-
     use Misc;
 
     #########################################
@@ -300,35 +295,12 @@ class ModuleUpgraderBaseWithVariables
     protected $locationOfThisUpgrader = '';
 
     /**
-     * @return string
-     */
-    public function getLocationOfThisUpgrader() : string
-    {
-        if (! $this->locationOfThisUpgrader) {
-            $this->locationOfThisUpgrader = dirname(__DIR__);
-        }
-        return $this->locationOfThisUpgrader;
-    }
-
-    /**
      * //e.g. 'upgrade-code'
      * //e.g. '~/.composer/vendor/bin/upgrade-code'
      * //e.g. '/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code'
      * @var string
      */
     protected $locationOfSSUpgradeModule = '';
-
-    /**
-     * @return string [description]
-     */
-    public function getLocationOfSSUpgradeModule() : string
-    {
-        if (! $this->locationOfSSUpgradeModule) {
-            $this->locationOfSSUpgradeModule = $this->getLocationOfThisUpgrader() .
-                '/vendor/silverstripe/upgrader/bin/upgrade-code';
-        }
-        return $this->locationOfSSUpgradeModule;
-    }
 
     ###############################
     # HELPERS
@@ -346,15 +318,6 @@ class ModuleUpgraderBaseWithVariables
      */
     protected $sessionManager = null;
 
-    public function getSessionManager() : SessionManagementInterface
-    {
-        if ($this->sessionManager === null) {
-            $this->sessionManager = new SessionManagement;
-        }
-
-        return $this->sessionManager;
-    }
-
     /**
      * does the exec output Key Notes?
      * @var bool
@@ -365,7 +328,6 @@ class ModuleUpgraderBaseWithVariables
      * @var string
      */
     protected $originComposerFileLocation = '';
-
 
     /**
      * Holds the only instance of me
@@ -409,6 +371,37 @@ class ModuleUpgraderBaseWithVariables
      */
     protected $moduleDirLocations = [];
 
+    /**
+     * @return string
+     */
+    public function getLocationOfThisUpgrader(): string
+    {
+        if (! $this->locationOfThisUpgrader) {
+            $this->locationOfThisUpgrader = dirname(__DIR__);
+        }
+        return $this->locationOfThisUpgrader;
+    }
+
+    /**
+     * @return string [description]
+     */
+    public function getLocationOfSSUpgradeModule(): string
+    {
+        if (! $this->locationOfSSUpgradeModule) {
+            $this->locationOfSSUpgradeModule = $this->getLocationOfThisUpgrader() .
+                '/vendor/silverstripe/upgrader/bin/upgrade-code';
+        }
+        return $this->locationOfSSUpgradeModule;
+    }
+
+    public function getSessionManager(): SessionManagementInterface
+    {
+        if ($this->sessionManager === null) {
+            $this->sessionManager = new SessionManagement();
+        }
+
+        return $this->sessionManager;
+    }
 
     /**
      * returns an array of existing paths
@@ -435,7 +428,6 @@ class ModuleUpgraderBaseWithVariables
 
         return $array;
     }
-
 
     /**
      * Removes the given task from the list of tasks to execute
@@ -525,7 +517,7 @@ class ModuleUpgraderBaseWithVariables
      * Whether execution should come to a halt when an error is reached
      * @return bool
      */
-    public function getBreakOnAllErrors() : bool
+    public function getBreakOnAllErrors(): bool
     {
         return $this->commandLineExec->getBreakOnAllErrors();
     }
@@ -544,11 +536,10 @@ class ModuleUpgraderBaseWithVariables
      * Whether execution should come to a halt when an error is reached
      * @return bool
      */
-    public function getIsProjectUpgrade() : bool
+    public function getIsProjectUpgrade(): bool
     {
         return $this->isModuleUpgrade ? false : true;
     }
-
 
     /**
      * Appends the given module in the form of all its module data that has to be formatted in an array
@@ -563,7 +554,6 @@ class ModuleUpgraderBaseWithVariables
 
         return $this;
     }
-
 
     public function getExistingModuleDirLocationsWithThemeFolders()
     {
@@ -585,7 +575,6 @@ class ModuleUpgraderBaseWithVariables
         $locations = array_values($this->getExistingModuleDirLocations());
         return array_shift($locations);
     }
-
 
     /**
      * Locates the directory in which the code is kept within the module directory
@@ -622,7 +611,6 @@ class ModuleUpgraderBaseWithVariables
         return $codeDirs;
     }
 
-
     public function findMyCodeDir($moduleDir)
     {
         if (file_exists($moduleDir)) {
@@ -640,7 +628,7 @@ class ModuleUpgraderBaseWithVariables
         }
     }
 
-    public function getGitRootDir() : string
+    public function getGitRootDir(): string
     {
         if ($this->getIsModuleUpgrade()) {
             $location = $this->getExistingFirstModuleDirLocation();
@@ -654,8 +642,7 @@ class ModuleUpgraderBaseWithVariables
         return $location;
     }
 
-
-    protected function getPackageFolderNameBasic() : string
+    protected function getPackageFolderNameBasic(): string
     {
         if ($this->isModuleUpgrade) {
             return $this->packageName;
@@ -663,9 +650,7 @@ class ModuleUpgraderBaseWithVariables
         return 'mysite';
     }
 
-
-
-    protected function getIsModuleUpgradeNice() : string
+    protected function getIsModuleUpgradeNice(): string
     {
         return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
     }

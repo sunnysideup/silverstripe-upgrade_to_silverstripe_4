@@ -230,7 +230,10 @@ abstract class Task
                 if (property_exists($this, $paramKey)) {
                     $this->{$paramKey} = $paramValue;
                 } else {
-                    user_error('You are trying to set ' . $paramKey . ' but it is meaninguless to this class: ' . static::class);
+                    user_error(
+                        'You are trying to set ' . $paramKey . '
+                        but it is meaninguless to this class: ' . static::class
+                    );
                 }
             }
         }
@@ -335,9 +338,11 @@ abstract class Task
                 $keyNotesLogFileLocation = $rootDirForCommand . $fileName;
             }
         }
+        $dir = $this->mu()->getLocationOfSSUpgradeModule();
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'php ' . $this->mu()->getLocationOfSSUpgradeModule() . ' ' . $task . ' ' . $param1 . ' ' . $param2 . ' --root-dir=' . $rootDirForCommand . ' --write -vvv ' . $settings,
+            'php ' . $dir . ' ' . $task . ' ' . $param1 . ' ' . $param2 .
+                ' --root-dir=' . $rootDirForCommand . ' --write -vvv ' . $settings,
             'running php upgrade ' . $task . ' see: https://github.com/silverstripe/silverstripe-upgrader',
             false,
             $keyNotesLogFileLocation

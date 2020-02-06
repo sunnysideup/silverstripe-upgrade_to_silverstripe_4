@@ -6,6 +6,7 @@ use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
 class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 {
+
     /**
      * Starts the output to the commandline / browser
      */
@@ -201,7 +202,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         return $this->commandLineExec;
     }
 
-    protected function applyRecipe($recipeName = null)
+    public function applyRecipe($recipeName = null)
     {
         if ($recipeName === null) {
             $recipeName = $this->getRecipe();

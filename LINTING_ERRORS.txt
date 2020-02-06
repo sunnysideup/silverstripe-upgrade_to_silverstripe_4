@@ -1,0 +1,4 @@
+EasyCodingStandard v6.1.0
+Config file: /home/thiemen/.composer/vendor/sunnysideup/easy-coding-standards/ecs.yml
+EasyCodingStandard v6.1.0
+Config file: /home/thiemen/.composer/vendor/sunnysideup/easy-coding-standards/ecs.yml

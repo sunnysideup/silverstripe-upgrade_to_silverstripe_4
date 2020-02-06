@@ -25,8 +25,8 @@ class Ss31ToSs37 extends BaseClass
         'ResetWebRootDir-1' => [],
 
         'CheckoutDevMaster-1' => [],
-        'AddLegacyBranchFor37' => [
-            'nameOfLegacyBranch' => 'upgrade37',
+        'AddLegacyBranch' => [
+            'nameOfLegacyBranch' => 'pre-upgrade3.1',
         ],
 
         'ResetWebRootDir-2' => [],

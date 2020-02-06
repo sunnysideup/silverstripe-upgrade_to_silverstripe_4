@@ -6,9 +6,11 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 class CreateListOfTasks
 {
+    protected $mu = null;
+
     public function run()
     {
-        $mu = new ModuleUpgrader();
+        $this->mu = new ModuleUpgrader();
         foreach (array_keys($this->mu->getAvailableRecipes()) as $recipeKey) {
             $html = '';
             $this->mu->applyRecipe($recipeKey);
@@ -56,14 +58,18 @@ class CreateListOfTasks
                     user_error($properClass . ' could not be found as class', E_USER_ERROR);
                 }
             }
-            $dir = __DIR__ . '/../docs/en/';
+            $dir = $this->mu->checkIfPathExistsAndCleanItUp(__DIR__ . '/../../docs/en/');
+            if ($dir) {
 
-            $html = str_replace(' _', ' \_', $html);
+                $html = str_replace(' _', ' \_', $html);
 
-            file_put_contents(
-                $dir . '/AvailableTasks.md',
-                $html
-            );
+                file_put_contents(
+                    rtrim($dir, '/') . '/AvailableTasks.md',
+                    $html
+                );
+            } else {
+                user_error('Coult not find '.$dir.' directory');
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ class AddUpgradeBranch extends Task
     public function getDescription()
     {
         return '
-            Creates a starter branch: "' . $this->mu()->getnameOfUpgradeBranch() . '" of your module/app
+            Creates a starter branch: "' . $this->mu()->getNameOfUpgradeStarterBranch() . '" of your module/app
             from the ' . $this->mu()->getNameOfBranchForBaseCode() . ' branch.
             These branch names can be customised.
             ';
@@ -35,16 +35,17 @@ class AddUpgradeBranch extends Task
         $this->mu()->execMe(
             $gitRootDir,
             '
-            if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->mu()->getNameOfUpgradeBranch() . "'" . '); then
+            if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->mu()->getNameOfUpgradeStarterBranch() . "'" . '); then
                     echo branch exists
                 else
                     git checkout origin ' . $this->mu()->getNameOfBranchForBaseCode() . '
                     git pull origin ' . $this->mu()->getNameOfBranchForBaseCode() . '
-                    git checkout -b ' . $this->mu()->getNameOfUpgradeBranch() . '
-                    git push origin ' . $this->mu()->getNameOfUpgradeBranch() . '
+                    git checkout -b ' . $this->mu()->getNameOfUpgradeStarterBranch() . '
+                    git push origin ' . $this->mu()->getNameOfUpgradeStarterBranch() . '
 
             fi',
-            'create upgrade branch: ' . $this->mu()->getNameOfUpgradeBranch() . ' from ' . $this->mu()->getNameOfBranchForBaseCode() . ' in ' . $gitRootDir,
+            'create upgrade branch: ' . $this->mu()->getNameOfUpgradeStarterBranch() .
+                ' from ' . $this->mu()->getNameOfBranchForBaseCode() . ' in ' . $gitRootDir,
             false
         );
     }

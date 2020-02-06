@@ -4,7 +4,7 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Interfaces;
 
 interface SessionManagementInterface
 {
-    public function initSession();
+    public static function initSession(string $sessionFileLocation);
 
     public function getSessionFileLocation(): string;
 

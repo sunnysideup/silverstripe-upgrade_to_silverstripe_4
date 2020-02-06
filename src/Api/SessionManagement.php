@@ -4,34 +4,36 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
 
+use Sunnysideup\UpgradeToSilverstripe4\Traits\Creator;
+
 class SessionManagement implements SessionManagementInterface
 {
-    /**
-     * @var string
-     */
-    protected $sessionFileName = 'Session_For';
+    use Creator;
 
-    public function initSession()
+    protected $sessionFileLocation = '';
+
+    /**
+     * @param  string                     $sessionFileLocation
+     * @return SessionManagementInterface
+     */
+    public static function initSession(string $sessionFileLocation): SessionManagementInterface
     {
-        if (! file_exists($this->getSessionFileLocation())) {
-            $this->setSessionData(['Started' => date('Y-m-d h:i ')]);
-        }
+        $obj = self::create();
+        $obj->setSessionFileLocation($sessionFileLocation);
+
+        return $obj;
+    }
+
+    public function setSessionFileLocation($sessionFileLocation): SessionManagementInterface
+    {
+        $this->sessionFileLocation = $sessionFileLocation;
 
         return $this;
     }
 
     public function getSessionFileLocation(): string
     {
-        return trim(
-            $this->getAboveWebRootDirLocation() .
-            '/' .
-            $this->sessionFileName .
-            '_' .
-            $this->getVendorNamespace() .
-            '_' .
-            $this->getPackageNamespace() .
-            '.json'
-        );
+        return $this->sessionFileLocation;
     }
 
     public function deleteSession()
@@ -50,7 +52,6 @@ class SessionManagement implements SessionManagementInterface
 
     public function getSessionData(): array
     {
-        $this->initSession();
         $data = file_get_contents($this->getSessionFileLocation());
         if (! $data) {
             user_error('Could not read from: ' . $this->getSessionFileLocation());
@@ -63,6 +64,9 @@ class SessionManagement implements SessionManagementInterface
      */
     public function setSessionData(array $session): SessionManagementInterface
     {
+        if (! file_exists($this->getSessionFileLocation())) {
+            $ession['Started'] = date('Y-m-d h:i ');
+        }
         $data = json_encode($session, JSON_PRETTY_PRINT);
         try {
             $file = fopen($this->getSessionFileLocation(), 'w');

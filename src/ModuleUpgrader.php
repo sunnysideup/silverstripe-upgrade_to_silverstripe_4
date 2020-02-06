@@ -3,9 +3,12 @@
 namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
+use Sunnysideup\UpgradeToSilverstripe4\Traits\Creator;
 
 class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 {
+    use Creator;
+
     /**
      * Starts the output to the commandline / browser
      */
@@ -22,23 +25,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     public function __destruct()
     {
         $this->endPHP2CommandLine();
-    }
-
-    public function destroy()
-    {
-        self::$singleton = null;
-    }
-
-    /**
-     * Create the only instance of me and return it
-     * @return ModuleUpgrader
-     */
-    public static function create()
-    {
-        if (self::$singleton === null) {
-            self::$singleton = new self();
-        }
-        return self::$singleton;
     }
 
     ###############################
@@ -83,27 +69,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     public function colourPrint($mixedVar, string $colour = 'dark_gray', $newLineCount = 1)
     {
         return $this->commandLineExec->colourPrint($mixedVar, $colour, $newLineCount);
-    }
-
-    /**
-     * returns path in a consistent format
-     * e.g. /var/www
-     *
-     * @param  string $path
-     *
-     * @return string | null
-     */
-    public function checkIfPathExistsAndCleanItUp($path, $returnEvenIfItDoesNotExists = false)
-    {
-        // $originalPath = $path;
-        $path = str_replace('///', '/', $path);
-        $path = str_replace('//', '/', $path);
-        if (file_exists($path)) {
-            $path = realpath($path);
-        }
-        if (file_exists($path) || $returnEvenIfItDoesNotExists) {
-            return rtrim($path, '/');
-        }
     }
 
     ###############################
@@ -222,21 +187,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                 );
             }
         }
-    }
-
-    /**
-     * What is the index of given task within the sequence
-     *
-     * @param string $s name of the task to find
-     *
-     * @return mixed the key/index of task
-     */
-    protected function positionForTask($s)
-    {
-        if (isset($this->listOfTasks[$s])) {
-            return $s;
-        }
-        return array_search($s, $this->listOfTasks, true);
     }
 
     protected function loadNextStepInstructions()

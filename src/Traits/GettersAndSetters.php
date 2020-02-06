@@ -24,9 +24,6 @@ trait GettersAndSetters
             $var = lcfirst(ltrim($function, $getOrSet));
             if (property_exists($this, $var)) {
                 if ($getOrSet === 'get') {
-                    if (strpos($var, 'DirLocation') !== false || strpos($var, 'FileLocation') !== false) {
-                        return $this->checkIfPathExistsAndCleanItUp($this->{$var}, true);
-                    }
                     return $this->{$var};
                 } elseif ($getOrSet === 'set') {
                     $this->{$var} = $args[0];

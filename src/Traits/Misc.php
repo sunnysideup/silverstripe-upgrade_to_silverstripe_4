@@ -5,6 +5,28 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Traits;
 trait Misc
 {
     /**
+     * returns path in a consistent format
+     * e.g. /var/www
+     *
+     * @param  string $path
+     *
+     * @return string
+     */
+    public function checkIfPathExistsAndCleanItUp($path, $returnEvenIfItDoesNotExists = false): string
+    {
+        // $originalPath = $path;
+        $path = str_replace('///', '/', $path);
+        $path = str_replace('//', '/', $path);
+        if (file_exists($path)) {
+            $path = realpath($path);
+        }
+        if (file_exists($path) || $returnEvenIfItDoesNotExists) {
+            return rtrim($path, '/');
+        }
+        user_error('Could not find path: ' . $path);
+    }
+
+    /**
      * Cleans an input string and returns a more natural human readable version
      * @param  string $str input string
      * @param  array  $noStrip

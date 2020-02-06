@@ -5,6 +5,7 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
 use Sunnysideup\UpgradeToSilverstripe4\Api\SessionManagement;
+use Sunnysideup\UpgradeToSilverstripe4\Interfaces\ModuleUpgraderInterface;
 use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
 use Sunnysideup\UpgradeToSilverstripe4\Traits\GettersAndSetters;
 
@@ -15,7 +16,7 @@ use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
 
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
 
-class ModuleUpgraderBaseWithVariables
+class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 {
     use GettersAndSetters;
     use Misc;
@@ -314,9 +315,14 @@ class ModuleUpgraderBaseWithVariables
 
     /**
      *Reference to the commandline printer that outputs everything to the command line
-     * @var PHP2CommandLineSingleton|nullgut
+     * @var SessionManagementInterface|null
      */
     protected $sessionManager = null;
+
+    /**
+     * @var string
+     */
+    protected $sessionFileName = 'Session_For';
 
     /**
      * does the exec output Key Notes?
@@ -328,12 +334,6 @@ class ModuleUpgraderBaseWithVariables
      * @var string
      */
     protected $originComposerFileLocation = '';
-
-    /**
-     * Holds the only instance of me
-     * @var ModuleUpgrader|null
-     */
-    protected static $singleton = null;
 
     /**
      * Is this the last TASK we are running?
@@ -371,6 +371,51 @@ class ModuleUpgraderBaseWithVariables
      */
     protected $moduleDirLocations = [];
 
+    public function getRecipe(): string
+    {
+        return $this->recipe;
+    }
+
+    public function getAvailableRecipes(): array
+    {
+        return $this->availableRecipes;
+    }
+
+    public function getListOfTasks(): array
+    {
+        return $this->listOfTasks;
+    }
+
+    public function getIsModuleUpgrade(): bool
+    {
+        return $this->isModuleUpgrade;
+    }
+
+    public function getDefaultNamespaceForTasks(): string
+    {
+        return $this->defaultNamespaceForTasks;
+    }
+
+    public function getVendorNamespace(): string
+    {
+        return $this->vendorNamespace;
+    }
+
+    public function getPackageNamespace(): string
+    {
+        return $this->packageNamespace;
+    }
+
+    public function getAboveWebRootDirLocation()
+    {
+        return $this->aboveWebRootDirLocation;
+    }
+
+    public function getWebRootDirLocation(): string
+    {
+        return $this->webRootDirLocation;
+    }
+
     /**
      * @return string
      */
@@ -397,7 +442,17 @@ class ModuleUpgraderBaseWithVariables
     public function getSessionManager(): SessionManagementInterface
     {
         if ($this->sessionManager === null) {
-            $this->sessionManager = new SessionManagement();
+            $sessionFileLocation = trim(
+                $this->getAboveWebRootDirLocation() .
+                '/' .
+                $this->sessionFileName .
+                '_' .
+                $this->getVendorNamespace() .
+                '_' .
+                $this->getPackageNamespace() .
+                '.json'
+            );
+            $this->sessionManager = SessionManagement::initSession($sessionFileLocation);
         }
 
         return $this->sessionManager;
@@ -435,9 +490,9 @@ class ModuleUpgraderBaseWithVariables
      * @param  string $variableName name of the task
      * @param  mixed $variableValue name of the task
      *
-     * @return ModuleUpgrader
+     * @return  ModuleUpgraderInterface
      */
-    public function setVariableForTask($taskName, $variableName, $variableValue)
+    public function setVariableForTask($taskName, $variableName, $variableValue): ModuleUpgraderInterface
     {
         $key = $this->positionForTask($taskName);
         if ($key !== false) {
@@ -456,9 +511,9 @@ class ModuleUpgraderBaseWithVariables
      * Removes the given task from the list of tasks to execute
      * @param  string $s name of the task to remove
      *
-     * @return ModuleUpgrader
+     * @return ModuleUpgraderInterface
      */
-    public function removeFromListOfTasks($s)
+    public function removeFromListOfTasks($s): ModuleUpgraderInterface
     {
         $key = $this->positionForTask($s);
         if ($key !== false) {
@@ -477,9 +532,9 @@ class ModuleUpgraderBaseWithVariables
      * @param bool          $insertBeforeOrAfter If to insert before or after
      * @param bool          $isBefore
      *
-     * @return ModuleUpgrader
+     * @return ModuleUpgraderInterface
      */
-    public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore)
+    public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore): ModuleUpgraderInterface
     {
         if (! is_array($oneOrMoreTasks)) {
             $oneOrMoreTasks = [$oneOrMoreTasks];
@@ -504,9 +559,9 @@ class ModuleUpgraderBaseWithVariables
 
     /**
      * @param bool $b
-     * @return ModuleUpgraderBaseWithVariables
+     * @return ModuleUpgraderInterface
      */
-    public function setRunImmediately(bool $b)
+    public function setRunImmediately(bool $b): ModuleUpgraderInterface
     {
         $this->commandLineExec->setRunImmediately($b);
 
@@ -546,9 +601,9 @@ class ModuleUpgraderBaseWithVariables
      * to the array of modules that will be worked with during the upgrade procedure.
      *
      * @param array $a data to append
-     * @return ModuleUpgrader
+     * @return ModuleUpgraderInterface
      */
-    public function addModule(array $a)
+    public function addModule(array $a): ModuleUpgraderInterface
     {
         $this->arrayOfModules[] = $a;
 
@@ -640,6 +695,21 @@ class ModuleUpgraderBaseWithVariables
         }
 
         return $location;
+    }
+
+    /**
+     * What is the index of given task within the sequence
+     *
+     * @param string $s name of the task to find
+     *
+     * @return mixed the key/index of task
+     */
+    protected function positionForTask($s)
+    {
+        if (isset($this->listOfTasks[$s])) {
+            return $s;
+        }
+        return array_search($s, $this->listOfTasks, true);
     }
 
     protected function getPackageFolderNameBasic(): string

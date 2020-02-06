@@ -27,7 +27,7 @@ class CreateListOfTasks
                 }
                 if (class_exists($properClass)) {
                     $count++;
-                    // $runItNow = $this->mu->shouldWeRunIt($shortClassCode);
+                    // $runItNow = $this->mu->shouldWeRunIt((string) $shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     if ($obj->getTaskName()) {

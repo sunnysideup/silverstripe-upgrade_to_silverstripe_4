@@ -52,7 +52,7 @@ class SessionManagement implements SessionManagementInterface
 
     public function getSessionData(): array
     {
-        $data = file_get_contents($this->getSessionFileLocation());
+        $data = (string) file_get_contents($this->getSessionFileLocation()) ?? '{}';
         if (! $data) {
             user_error('Could not read from: ' . $this->getSessionFileLocation());
         }
@@ -67,13 +67,13 @@ class SessionManagement implements SessionManagementInterface
         if (! file_exists($this->getSessionFileLocation())) {
             $ession['Started'] = date('Y-m-d h:i ');
         }
-        $data = json_encode($session, JSON_PRETTY_PRINT);
+        $data = (string) json_encode($session, JSON_PRETTY_PRINT) ?? '';
         try {
             $file = fopen($this->getSessionFileLocation(), 'w');
             if ($file === false) {
                 throw new \RuntimeException('Failed to open file: ' . $this->getSessionFileLocation());
             }
-            $writeOutcome = fwrite($file, $data);
+            $writeOutcome = fwrite($file, (string) $data);
             if ($writeOutcome === false) {
                 throw new \RuntimeException('Failed to write file: ' . $this->getSessionFileLocation());
             }

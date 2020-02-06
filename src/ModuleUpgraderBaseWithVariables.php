@@ -636,7 +636,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         }
         if (count($codeDirs) === 0) {
             user_error('
-                Could not find any code dirs. The locations searched: ' . print_r($locations, 1)
+                Could not find any code dirs. The locations searched: ' . print_r($locations, true)
                 . ' Using the ' . $this->getIsModuleUpgradeNice() . ' approach');
         }
 

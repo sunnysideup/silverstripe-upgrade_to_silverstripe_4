@@ -61,7 +61,7 @@ class FixBadUseStatements extends Task
         //replacement data patterns that will be searched for
 
         if ($this->debug) {
-            $this->mu()->colourPrint(print_r($this->replacementArray, 1));
+            $this->mu()->colourPrint($this->replacementArray);
         }
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             //Start search machine from the module location. replace API

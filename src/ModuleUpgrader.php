@@ -109,7 +109,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                     $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
                 }
                 if (class_exists($properClass)) {
-                    $runItNow = $this->shouldWeRunIt($shortClassCode);
+                    $runItNow = $this->shouldWeRunIt((string) $shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     if ($obj->getTaskName()) {
@@ -463,7 +463,7 @@ Session has completed.
      * @param  string $name whatever is listed in the listOfTasks
      * @return bool
      */
-    protected function shouldWeRunIt($name): bool
+    protected function shouldWeRunIt(string $name): bool
     {
         $runMe = true;
         if ($this->onlyRun) {

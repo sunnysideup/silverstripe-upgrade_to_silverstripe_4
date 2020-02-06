@@ -170,41 +170,45 @@ class FindFiles
     {
         if ($runningInnerLoop || $this->needToFillFileCache) {
             $dir = opendir($path);
-            $file = readdir($dir);
-            while ($file) {
-                $fullPath = $path . '/' . $file;
-                if (($file === '.') ||
-                    ($file === '..') ||
-                    ($fullPath === __FILE__) ||
-                    ($path === '.' && basename(__FILE__) === $file)) {
-                    continue;
-                }
-                //ignore hidden files and folders
-                if (substr($file, 0, 1) === '.') {
-                    continue;
-                }
-                //ignore folders with _manifest_exclude in them!
-                if ($file === '_manifest_exclude') {
-                    $this->ignoreFolderArray[] = $path;
-                    unset($this->fileArray[$path]);
-                    break;
-                }
-                if (filetype($fullPath) === 'dir') {
-                    $conditionA = (in_array($file, $this->ignoreFolderArray, true) &&
-                        ($path === '.' || $path === $this->searchPath));
-                    $conditionB = in_array($path, $this->ignoreFolderArray, true);
-                    if ($conditionA || $conditionB) {
+            if($dir) {
+                $file = readdir($dir);
+                while ($file) {
+                    $fullPath = $path . '/' . $file;
+                    if (($file === '.') ||
+                        ($file === '..') ||
+                        ($fullPath === __FILE__) ||
+                        ($path === '.' && basename(__FILE__) === $file)) {
                         continue;
                     }
-                    $this->getFileArray($fullPath, $runningInnerLoop = true); //recursive traversing here
-                } elseif ($this->matchedExtension($file)) { //checks extension if we need to search this file
-                    if (filesize($fullPath)) {
-                        $this->fileArray[$path][] = $fullPath; //search file data
+                    //ignore hidden files and folders
+                    if (substr($file, 0, 1) === '.') {
+                        continue;
                     }
-                }
-                $file = readdir($dir);
-            } //End of while
-            closedir($dir);
+                    //ignore folders with _manifest_exclude in them!
+                    if ($file === '_manifest_exclude') {
+                        $this->ignoreFolderArray[] = $path;
+                        unset($this->fileArray[$path]);
+                        break;
+                    }
+                    if (filetype($fullPath) === 'dir') {
+                        $conditionA = (in_array($file, $this->ignoreFolderArray, true) &&
+                            ($path === '.' || $path === $this->searchPath));
+                        $conditionB = in_array($path, $this->ignoreFolderArray, true);
+                        if ($conditionA || $conditionB) {
+                            continue;
+                        }
+                        $this->getFileArray($fullPath, $runningInnerLoop = true); //recursive traversing here
+                    } elseif ($this->matchedExtension($file)) { //checks extension if we need to search this file
+                        if (filesize($fullPath)) {
+                            $this->fileArray[$path][] = $fullPath; //search file data
+                        }
+                    }
+                    $file = readdir($dir);
+                } //End of while
+                closedir($dir);
+            } else {
+                user_error('Could not find: '.$path);
+            }
         }
 
         return $this->fileArray;
@@ -226,11 +230,11 @@ class FindFiles
      *
      * @return string
      */
-    private function findExtension($file)
+    private function findExtension($file) : string
     {
         $fileArray = explode('.', $file) ?? [];
 
-        return array_pop($fileArray);
+        return (string) array_pop($fileArray);
     }
 
     /**

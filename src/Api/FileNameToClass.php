@@ -38,7 +38,7 @@ class FileNameToClass
      */
     public function getClassNamespaceFromFile(string $filePathName)
     {
-        $src = file_get_contents($filePathName);
+        $src = (string) file_get_contents($filePathName);
 
         $tokens = token_get_all($src);
         $count = count($tokens);
@@ -76,7 +76,7 @@ class FileNameToClass
      */
     public function getClassNameFromFile(string $filePathName): string
     {
-        $php_code = file_get_contents($filePathName);
+        $php_code = (string) file_get_contents($filePathName);
 
         $classes = [];
         $tokens = token_get_all($php_code);

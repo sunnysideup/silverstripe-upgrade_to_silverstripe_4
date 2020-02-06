@@ -380,7 +380,7 @@ class SearchAndReplaceAPI
                 }
             }
             $folderSimpleTotals = [];
-            $realBase = realpath($this->basePath);
+            $realBase = (string) realpath($this->basePath);
             $this->addToOutput("\n--------------\nSummary: by search key\n--------------\n");
             arsort($this->searchKeyTotals);
             foreach ($this->searchKeyTotals as $searchKey => $total) {
@@ -389,7 +389,7 @@ class SearchAndReplaceAPI
             $this->addToOutput("\n--------------\nSummary: by directory\n--------------\n");
             arsort($this->folderTotals);
             foreach ($this->folderTotals as $folder => $total) {
-                $path = str_replace($realBase, '', realpath($folder));
+                $path = str_replace($realBase, '', (string) realpath($folder));
                 $pathArr = explode('/', $path);
                 if (isset($pathArr[1])) {
                     $folderName = $pathArr[1] . '/';
@@ -473,7 +473,7 @@ class SearchAndReplaceAPI
                     $myReplacementKey
                 );
             }
-            $oldFileContentArray = file($file);
+            $oldFileContentArray = (array) file($file) ?? [];
             $newFileContentArray = [];
             $pattern = "/${searchKey}/U";
             if (! $this->caseSensitive) {
@@ -484,58 +484,63 @@ class SearchAndReplaceAPI
             $insideIgnoreArea = false;
             $completedTask = false;
             foreach ($oldFileContentArray as $oldLineContent) {
-                $newLineContent = $oldLineContent;
+                $newLineContent = (string) $oldLineContent . '';
 
                 if ($completedTask === false) {
-                    $testLine = trim($oldLineContent);
+                    $testLine = (string) trim((string) $oldLineContent);
 
                     //check if it is actually already replaced ...
-                    if (strpos($oldLineContent, $this->startMarker) !== false) {
+                    if (strpos((string) $oldLineContent, $this->startMarker) !== false) {
                         $insidePreviousReplaceComment = true;
                     }
                     foreach ($this->ignoreFrom as $ignoreStarter) {
-                        if (strpos($testLine, $ignoreStarter) === 0) {
+                        if (strpos((string) $testLine, $ignoreStarter) === 0) {
                             $insideIgnoreArea = true;
                         }
                     }
                     if ($insidePreviousReplaceComment || $insideIgnoreArea) {
                         //do nothing ...
                     } else {
-                        $foundInLineCount = preg_match_all($pattern, $oldLineContent, $matches, PREG_PATTERN_ORDER);
+                        $foundInLineCount = preg_match_all(
+                            $pattern,
+                            (string) $oldLineContent,
+                            $matches,
+                            PREG_PATTERN_ORDER
+                        );
                         if ($foundInLineCount) {
                             if ($this->caseSensitive) {
-                                if (strpos($oldLineContent, $this->searchKey) === false) {
+                                if (strpos((string) $oldLineContent,(string) $this->searchKey) === false) {
                                     user_error('Regex found it, but phrase does not exist: ' . $this->searchKey);
                                 }
                             } else {
-                                if (stripos($oldLineContent, $this->searchKey) === false) {
+                                if (stripos((string) $oldLineContent, $this->searchKey) === false) {
                                     user_error('Regex found it, but phrase does not exist: ' . $this->searchKey);
                                 }
                             }
                             $foundCount += $foundInLineCount;
                             if ($this->isReplacingEnabled) {
-                                $newLineContent = preg_replace($pattern, $myReplacementKey, $oldLineContent);
+                                $newLineContent = preg_replace($pattern, $myReplacementKey, (string) $oldLineContent);
                                 if ($fullComment = $this->getFullComment()) {
                                     $newFileContentArray[] = $fullComment;
                                 }
                             }
                         } else {
                             if ($this->caseSensitive) {
-                                if (strpos($oldLineContent, $this->searchKey) !== false) {
+                                if (strpos((string) $oldLineContent, (string) $this->searchKey) !== false) {
                                     user_error('Should have found: ' . $this->searchKey);
                                 }
                             } else {
-                                if (stripos($oldLineContent, $this->searchKey) !== false) {
+                                if (stripos((string) $oldLineContent, (string) $this->searchKey) !== false) {
                                     user_error('Should have found: ' . $this->searchKey);
                                 }
                             }
                         }
                     }
-                    if (strpos($oldLineContent, $this->endMarker) !== false) {
+                    if (strpos((string) $oldLineContent, (string) $this->endMarker) !== false) {
                         $insidePreviousReplaceComment = false;
                     }
                     foreach ($this->ignoreUntil as $ignoreEnder) {
-                        if (strpos($testLine, $ignoreEnder) === 0) {
+                        if (strpos((string) $testLine, (string) $ignoreEnder) === 0) {
                             $insideIgnoreArea = false;
                         }
                     }
@@ -592,8 +597,12 @@ class SearchAndReplaceAPI
     {
         if (is_writable($file)) {
             $fp = fopen($file, 'w');
-            fwrite($fp, $data);
-            fclose($fp);
+            if ($fp) {
+                fwrite($fp, $data);
+                fclose($fp);
+            } else {
+                user_error('Could not open '.$file);
+            }
         } else {
             user_error(
                 "********** ERROR: Can not replace text. File ${file} is not writable.",
@@ -704,11 +713,11 @@ class SearchAndReplaceAPI
         return true;
     }
 
-    private function hasStringPresentInFile($fileName, $string)
+    private function hasStringPresentInFile(string $fileName, string $string) : bool
     {
         // get the file contents, assuming the file to be readable (and exist)
         $contents = file_get_contents($fileName);
-        if (strpos($contents, $string) !== false) {
+        if (strpos((string) $contents, (string) $string) !== false) {
             return true;
         }
         return false;

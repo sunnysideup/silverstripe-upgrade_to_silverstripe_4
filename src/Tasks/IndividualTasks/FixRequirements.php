@@ -59,7 +59,7 @@ class FixRequirements extends Task
         ];
 
         if ($this->debug) {
-            $this->mu()->colourPrint(print_r($replacementArray, 1));
+            $this->mu()->colourPrint($replacementArray);
         }
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             //Start search machine from the module location. replace API

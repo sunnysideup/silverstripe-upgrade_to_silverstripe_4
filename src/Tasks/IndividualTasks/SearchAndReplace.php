@@ -114,7 +114,7 @@ class SearchAndReplace extends Task
         $replacementArray = $replacementDataObject->getReplacementArrays();
 
         if ($this->debug) {
-            $this->mu()->colourPrint(print_r($replacementArray, 1));
+            $this->mu()->colourPrint($replacementArray);
         }
 
         //replace API

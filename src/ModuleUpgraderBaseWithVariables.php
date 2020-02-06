@@ -21,6 +21,24 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     use GettersAndSetters;
     use Misc;
 
+    /**
+     * Starts the output to the commandline / browser
+     */
+    public function __construct()
+    {
+        global $argv;
+        $this->argv = $argv;
+        $this->startPHP2CommandLine();
+    }
+
+    /**
+     * Ends output to commandline / browser
+     */
+    public function __destruct()
+    {
+        $this->endPHP2CommandLine();
+    }
+
     #########################################
     # Arguments
     #########################################
@@ -552,7 +570,8 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     {
         $array = [];
         foreach ($this->moduleDirLocations as $location) {
-            if ($location = $this->checkIfPathExistsAndCleanItUp($location)) {
+            $location = (string) $this->checkIfPathExistsAndCleanItUp($location, true);
+            if ($location) {
                 $array[$location] = $location;
             }
         }
@@ -587,7 +606,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this->isModuleUpgrade ? false : true;
     }
 
-    public function getExistingModuleDirLocationsWithThemeFolders()
+    public function getExistingModuleDirLocationsWithThemeFolders() : array
     {
         $array = $this->getExistingModuleDirLocations();
         if ($this->themeDirLocation) {
@@ -723,5 +742,34 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     protected function getIsModuleUpgradeNice(): string
     {
         return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
+    }
+
+
+    /**
+     * Starts the logger. Extra checking may be put in here to see if you
+     * want to start the logger or not in different scenarios.
+     *
+     * For now it defaults to always existing
+     * @return PHP2CommandLineSingleton
+     */
+    protected function startPHP2CommandLine(): PHP2CommandLineSingleton
+    {
+        $this->commandLineExec = PHP2CommandLineSingleton::create();
+
+        return $this->commandLineExec;
+    }
+
+
+
+    /**
+     * deconstructs Command Line
+     * important as this outputs the whole thing
+     */
+    protected function endPHP2CommandLine()
+    {
+        if ($this->commandLineExec !== null) {
+            PHP2CommandLineSingleton::delete();
+            $this->commandLineExec = null;
+        }
     }
 }

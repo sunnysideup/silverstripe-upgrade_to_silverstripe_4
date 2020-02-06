@@ -9,23 +9,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 {
     use Creator;
 
-    /**
-     * Starts the output to the commandline / browser
-     */
-    public function __construct()
-    {
-        global $argv;
-        $this->argv = $argv;
-        $this->startPHP2CommandLine();
-    }
-
-    /**
-     * Ends output to commandline / browser
-     */
-    public function __destruct()
-    {
-        $this->endPHP2CommandLine();
-    }
 
     ###############################
     # USEFUL COMMANDS
@@ -152,20 +135,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->endPHP2CommandLine();
     }
 
-    /**
-     * Starts the logger. Extra checking may be put in here to see if you
-     * want to start the logger or not in different scenarios.
-     *
-     * For now it defaults to always existing
-     * @return PHP2CommandLineSingleton
-     */
-    public function startPHP2CommandLine(): PHP2CommandLineSingleton
-    {
-        $this->commandLineExec = PHP2CommandLineSingleton::create();
-
-        return $this->commandLineExec;
-    }
-
     public function applyRecipe(?string $recipeName = null)
     {
         if ($recipeName === null) {
@@ -210,17 +179,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         );
     }
 
-    /**
-     * deconstructs Command Line
-     * important as this outputs the whole thing
-     */
-    protected function endPHP2CommandLine()
-    {
-        if ($this->commandLineExec !== null) {
-            PHP2CommandLineSingleton::delete();
-            $this->commandLineExec = null;
-        }
-    }
 
     /**
      * Loads in and sets all the meta data for a module from the inputed array
@@ -391,8 +349,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Session file: ' . $this->getSessionManager()->getSessionFileLocation(), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Last Step: ' .
-            ($this->getSessionManager()->getSessionValue('Completed') ?: 'not set'), 'light_cyan');
+        $this->colourPrint('- Last Step: ' . ($this->getLastMethodRun() ?: 'not set'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
         $this->colourPrint('- Log File Location: ' . ($this->logFileLocation ?: 'not logged'), 'light_cyan');
         $this->colourPrint('- ---', 'light_cyan');
@@ -416,7 +373,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             }
             if ($this->onlyRun) {
             } else {
-                $lastMethod = $this->getSessionManager()->getSessionValue('Completed');
+                $lastMethod = $this->getLastMethodRun();
                 if ($lastMethod) {
                     $this->verbose = false;
                     $arrayKeys = array_keys($this->listOfTasks);
@@ -454,6 +411,11 @@ Session has completed.
                 }
             }
         }
+    }
+
+    protected function getLastMethodRun() : string
+    {
+        return $this->getSessionManager()->getSessionValue('Completed');
     }
 
     /**

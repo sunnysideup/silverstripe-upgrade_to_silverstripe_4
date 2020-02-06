@@ -52,7 +52,7 @@ class SessionManagement implements SessionManagementInterface
 
     public function getSessionData(): array
     {
-        $data = (string) file_get_contents($this->getSessionFileLocation()) ?? '{}';
+        $data = file_get_contents($this->getSessionFileLocation()) ?? '{}';
         if (! $data) {
             user_error('Could not read from: ' . $this->getSessionFileLocation());
         }
@@ -65,9 +65,9 @@ class SessionManagement implements SessionManagementInterface
     public function setSessionData(array $session): SessionManagementInterface
     {
         if (! file_exists($this->getSessionFileLocation())) {
-            $ession['Started'] = date('Y-m-d h:i ');
+            $session['Started'] = date('Y-m-d h:i ');
         }
-        $data = (string) json_encode($session, JSON_PRETTY_PRINT) ?? '';
+        $data = json_encode($session, JSON_PRETTY_PRINT);
         try {
             $file = fopen($this->getSessionFileLocation(), 'w');
             if ($file === false) {

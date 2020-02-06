@@ -81,6 +81,8 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->loadNextStepInstructions();
         $this->loadGlobalVariables();
         foreach ($this->arrayOfModules as $moduleDetails) {
+            $hasRun = false;
+            $nextStep = '';
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
             $this->printVarsForModule($moduleDetails);
@@ -95,8 +97,12 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                     $runItNow = $this->shouldWeRunIt((string) $shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
-                    if ($obj->getTaskName()) {
-                        $params['taskName'] = $obj->getTaskName();
+                    $taskName = $obj->getTaskName();
+                    if ($taskName) {
+                        $params['taskName'] = $taskName;
+                    }
+                    if ($hasRun && ! $nextStep) {
+                        $nextStep = $params['taskName'];
                     }
                     if ($runItNow) {
                         $this->colourPrint('# --------------------', 'yellow', 3);
@@ -107,6 +113,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                         $obj->run();
                         if ($this->runInteractively) {
                             $this->getSessionManager()->setSessionValue('Completed', $class);
+                            $hasRun = true;
                         }
                     } else {
                         if (! $this->runInteractively) {
@@ -129,6 +136,11 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         }
         $this->colourPrint(
             '===================== END =======================',
+            'light_red',
+            5
+        );
+        $this->colourPrint(
+            'Next: '.$nextStep,
             'light_red',
             5
         );
@@ -316,48 +328,11 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         }
     }
 
-    protected function printVarsForModule($moduleDetails)
+    protected function printVarsForModule(array $moduleDetails)
     {
-        //output the confirmation.
-        $this->colourPrint('---------------------', 'light_cyan');
-        $this->colourPrint('UPGRADE DETAILS', 'light_cyan');
-        $this->colourPrint('---------------------', 'light_cyan');
-        $this->colourPrint('- Type: ' . $this->getIsModuleUpgradeNice(), 'light_cyan');
-        $this->colourPrint('- Recipe: ' . ($this->getRecipe() ?: 'no recipe selected'), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Vendor Name: ' . $this->vendorName, 'light_cyan');
-        $this->colourPrint('- Package Name: ' . $this->packageName, 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Upgrade as Fork: ' . ($this->upgradeAsFork ? 'yes' : 'no'), 'light_cyan');
-        $this->colourPrint('- Run Interactively: ' . ($this->runInteractively ? 'yes' : 'no'), 'light_cyan');
-        $this->colourPrint('- Run Irreversibly: ' . ($this->runIrreversibly ? 'yes' : 'no'), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Vendor Namespace: ' . $this->vendorNamespace, 'light_cyan');
-        $this->colourPrint('- Package Namespace: ' . $this->packageNamespace, 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Upgrade Dir (root of install): ' . $this->getWebRootDirLocation(), 'light_cyan');
-        $this->colourPrint('- Package Folder Name For Install: ' . $this->packageFolderNameForInstall, 'light_cyan');
-        $this->colourPrint('- Module / Project Dir(s): ' . implode(', ', $this->moduleDirLocations), 'light_cyan');
-        $this->colourPrint('- Theme Dir: ' . ($this->themeDirLocation ?: 'not set'), 'light_cyan');
-        $this->colourPrint('- Git and Composer Root Dir: ' . $this->getGitRootDir(), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Git Repository Link (SSH): ' . $this->gitLink, 'light_cyan');
-        $this->colourPrint('- Git Repository Link (HTTPS): ' . $this->gitLinkAsHTTPS, 'light_cyan');
-        $this->colourPrint('- Git Repository Link (RAW): ' . $this->gitLinkAsRawHTTPS, 'light_cyan');
-        $this->colourPrint('- Origin composer file location: ' .
-            ($this->originComposerFileLocation ?: 'not set'), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Session file: ' . $this->getSessionManager()->getSessionFileLocation(), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Last Step: ' . ($this->getLastMethodRun() ?: 'not set'), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- Log File Location: ' . ($this->logFileLocation ?: 'not logged'), 'light_cyan');
-        $this->colourPrint('- ---', 'light_cyan');
-        $this->colourPrint('- List of Steps: ' . $this->newLine() . '    -' .
-            implode($this->newLine() . '    -', array_keys($this->listOfTasks)), 'light_cyan');
-        $this->colourPrint('---------------------', 'light_cyan');
-        $this->colourPrint('- parameter "again" ... runs last comand again', 'light_cyan');
-        $this->colourPrint('- parameter "restart" ... starts process from beginning', 'light_cyan');
+        $obj = new ModuleUpgraderInfo();
+
+        return $obj->printVarsForModule($this, $moduleDetails);
     }
 
     /**
@@ -413,7 +388,7 @@ Session has completed.
         }
     }
 
-    protected function getLastMethodRun() : string
+    public function getLastMethodRun() : string
     {
         return $this->getSessionManager()->getSessionValue('Completed');
     }
@@ -452,11 +427,4 @@ Session has completed.
         return $runMe;
     }
 
-    protected function newLine()
-    {
-        if (PHP_SAPI === 'cli') {
-            return PHP_EOL;
-        }
-        return nl2br("\n");
-    }
 }

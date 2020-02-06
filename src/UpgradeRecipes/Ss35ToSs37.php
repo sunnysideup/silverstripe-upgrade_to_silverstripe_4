@@ -8,7 +8,7 @@ class Ss35ToSs37 extends BaseClass
      * name of the branch created to do the upgrade
      * @var string branch name
      */
-    protected $nameOfTempBranch = 'automatedbranch/upgrade/to37';
+    protected $nameOfTempBranch = 'upgrades/automatedbranch/35to37';
 
     /**
      * The default namespace for all tasks

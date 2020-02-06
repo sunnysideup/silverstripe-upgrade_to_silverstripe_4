@@ -4,6 +4,15 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Traits;
 
 trait Misc
 {
+
+    public function newLine()
+    {
+        if (PHP_SAPI === 'cli') {
+            return PHP_EOL;
+        }
+        return nl2br("\n");
+    }
+
     /**
      * returns path in a consistent format
      * e.g. /var/www

@@ -739,7 +739,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return 'mysite';
     }
 
-    protected function getIsModuleUpgradeNice(): string
+    public function getIsModuleUpgradeNice(): string
     {
         return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
     }

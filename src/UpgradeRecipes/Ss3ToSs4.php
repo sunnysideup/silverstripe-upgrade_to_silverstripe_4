@@ -8,7 +8,7 @@ class Ss3ToSs4 extends BaseClass
      * name of the branch created to do the upgrade
      * @var string branch name
      */
-    protected $nameOfTempBranch = 'automatedbranch/upgrade/3to4';
+    protected $nameOfTempBranch = 'upgrades/automatedbranch/3to4';
 
     /**
      * The default namespace for all tasks

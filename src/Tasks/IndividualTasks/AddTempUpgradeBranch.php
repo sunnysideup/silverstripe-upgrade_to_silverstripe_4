@@ -65,7 +65,7 @@ class AddTempUpgradeBranch extends Task
 
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
-            'git checkout -b ' . $this->mu()->getNameOfTempBranch() . ' ' . $this->mu()->getNameOfUpgradeStarterBranch(),
+            'git checkout -b ' . $this->mu()->getNameOfTempBranch() . ' origin/' . $this->mu()->getNameOfUpgradeStarterBranch(),
             'create and checkout new branch: ' . $this->mu()->getNameOfTempBranch(),
             false
         );
@@ -73,6 +73,6 @@ class AddTempUpgradeBranch extends Task
 
     protected function hasCommitAndPush()
     {
-        return false;
+        return true;
     }
 }

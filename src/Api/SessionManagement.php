@@ -52,11 +52,18 @@ class SessionManagement implements SessionManagementInterface
 
     public function getSessionData(): array
     {
-        $data = file_get_contents($this->getSessionFileLocation()) ?? '{}';
-        if (! $data) {
-            user_error('Could not read from: ' . $this->getSessionFileLocation());
+        if (file_exists($this->getSessionFileLocation())) {
+            $data = file_get_contents($this->getSessionFileLocation()) ?? '{}';
+            if (! $data) {
+                user_error('Could not read from: ' . $this->getSessionFileLocation());
+            }
+
+            return json_decode($data, true);
+        } else {
+            $this->setSessionData([]);
+
+            return $this->getSessionData();
         }
-        return json_decode($data, true);
     }
 
     /**

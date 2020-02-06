@@ -202,7 +202,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         return $this->commandLineExec;
     }
 
-    public function applyRecipe($recipeName = null)
+    public function applyRecipe(?string $recipeName = null)
     {
         if ($recipeName === null) {
             $recipeName = $this->getRecipe();
@@ -213,8 +213,8 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                 $obj = new $recipeClass();
                 $vars = $obj->getVariables();
                 foreach ($vars as $variable => $value) {
-                    $method = 'set' . ucwords($variable);
-                    $this->{$method}($value);
+                    $methodSet = 'set' . ucwords($variable);
+                    $this->{$methodSet}($value);
                 }
             } else {
                 user_error(

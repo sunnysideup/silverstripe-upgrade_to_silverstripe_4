@@ -1,4 +1,4 @@
-<h1>List of Tasks in run order for recipe: SS35-37</h1><h2></h2><h4>1/13: Check Folders Are Ready</h4><p>
+<h1>List of Tasks in run order for recipe: SS35-37</h1><h2>Prepare Codebase</h2><h4>1/13: Check Folders Are Ready</h4><p>
             Checks that all the directories needed to run this tool exist and are writable.
             <br /><strong>Code: </strong>CheckThatFoldersAreReady<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/CheckThatFoldersAreReady.php">CheckThatFoldersAreReady</a></p><h4>2/13: Remove and reset Web Root</h4><p>
             Delete the web root directory to allow for a fresh install.<br /><strong>Code: </strong>ResetWebRootDir-1<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/ResetWebRootDir.php">ResetWebRootDir</a></p><h4>3/13: Checkout the master of this module.</h4><p>
@@ -11,7 +11,7 @@
             Creates a starter branch: "upgrades/starting-point" of your module/app
             from the master branch.
             These branch names can be customised.
-            <br /><strong>Code: </strong>AddUpgradeBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeBranch.php">AddUpgradeBranch</a></p><h4>8/13: Update composer.json requirements</h4><p>
+            <br /><strong>Code: </strong>AddUpgradeBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeBranch.php">AddUpgradeBranch</a></p><h2>Upgrade Structure</h2><h4>8/13: Update composer.json requirements</h4><p>
             Change requirements in composer.json file from
             an Old Package to a New Package:error
             For example, we upgrade silverstripe/framework requirement from 3 to 4.<br /><strong>Code: </strong>UpdateComposerRequirements-1<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/UpdateComposerRequirements.php">UpdateComposerRequirements</a></p><h4>9/13: Update composer.json requirements</h4><p>
@@ -23,7 +23,7 @@
             For example, we upgrade silverstripe/framework requirement from 3 to 4.<br /><strong>Code: </strong>UpdateComposerRequirements-3<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/UpdateComposerRequirements.php">UpdateComposerRequirements</a></p><h4>11/13: Update composer.json requirements</h4><p>
             Change requirements in composer.json file from
             an Old Package to a New Package:error
-            For example, we upgrade silverstripe/framework requirement from 3 to 4.<br /><strong>Code: </strong>UpdateComposerRequirements-4<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/UpdateComposerRequirements.php">UpdateComposerRequirements</a></p><h4>12/13: Search and Replace</h4><p>
+            For example, we upgrade silverstripe/framework requirement from 3 to 4.<br /><strong>Code: </strong>UpdateComposerRequirements-4<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/UpdateComposerRequirements.php">UpdateComposerRequirements</a></p><h2>Prepare Code</h2><h4>12/13: Search and Replace</h4><p>
             Replaces a bunch of code snippets in preparation of the upgrade.
             Controversial replacements will be replaced with a comment
             next to it so you can review replacements easily.<br /><strong>Code: </strong>SearchAndReplace-2<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/SearchAndReplace.php">SearchAndReplace</a></p><h4>13/13: PHP Compatibility Check</h4><p>Outputs a file showing errors prevent code from being compatible with php7.2<br /><strong>Code: </strong>PHPCompatabilityCheck<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/PHPCompatabilityCheck.php">PHPCompatabilityCheck</a></p>

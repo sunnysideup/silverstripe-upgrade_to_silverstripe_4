@@ -10,7 +10,7 @@ class CreateListOfTasks
 
     public function run()
     {
-        $this->mu = new ModuleUpgrader();
+        $this->mu = ModuleUpgrader::create();
         foreach (array_keys($this->mu->getAvailableRecipes()) as $recipeKey) {
             $html = '';
             $this->mu->applyRecipe($recipeKey);
@@ -60,9 +60,7 @@ class CreateListOfTasks
             }
             $dir = $this->mu->checkIfPathExistsAndCleanItUp(__DIR__ . '/../../docs/en/');
             if ($dir) {
-
                 $html = str_replace(' _', ' \_', $html);
-
                 file_put_contents(
                     rtrim($dir, '/') . '/AvailableTasks.md',
                     $html

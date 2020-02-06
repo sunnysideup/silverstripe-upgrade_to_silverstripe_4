@@ -52,7 +52,7 @@ class ModuleUpgraderBaseWithVariables
 
     /**
      * A list of task groups
-     *
+     * this will be set from recipe - so we need this!
      * @var array
      */
     protected $taskSteps = [];

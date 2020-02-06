@@ -170,7 +170,7 @@ class FindFiles
     {
         if ($runningInnerLoop || $this->needToFillFileCache) {
             $dir = opendir($path);
-            if($dir) {
+            if ($dir) {
                 $file = readdir($dir);
                 while ($file) {
                     $fullPath = $path . '/' . $file;
@@ -207,7 +207,7 @@ class FindFiles
                 } //End of while
                 closedir($dir);
             } else {
-                user_error('Could not find: '.$path);
+                user_error('Could not find: ' . $path);
             }
         }
 
@@ -230,7 +230,7 @@ class FindFiles
      *
      * @return string
      */
-    private function findExtension($file) : string
+    private function findExtension($file): string
     {
         $fileArray = explode('.', $file) ?? [];
 

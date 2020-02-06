@@ -509,7 +509,7 @@ class SearchAndReplaceAPI
                         );
                         if ($foundInLineCount) {
                             if ($this->caseSensitive) {
-                                if (strpos((string) $oldLineContent,(string) $this->searchKey) === false) {
+                                if (strpos((string) $oldLineContent, (string) $this->searchKey) === false) {
                                     user_error('Regex found it, but phrase does not exist: ' . $this->searchKey);
                                 }
                             } else {
@@ -601,7 +601,7 @@ class SearchAndReplaceAPI
                 fwrite($fp, $data);
                 fclose($fp);
             } else {
-                user_error('Could not open '.$file);
+                user_error('Could not open ' . $file);
             }
         } else {
             user_error(
@@ -713,7 +713,7 @@ class SearchAndReplaceAPI
         return true;
     }
 
-    private function hasStringPresentInFile(string $fileName, string $string) : bool
+    private function hasStringPresentInFile(string $fileName, string $string): bool
     {
         // get the file contents, assuming the file to be readable (and exist)
         $contents = file_get_contents($fileName);

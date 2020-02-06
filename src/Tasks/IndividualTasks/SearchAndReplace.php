@@ -132,7 +132,8 @@ class SearchAndReplace extends Task
                 } else {
                     $textSearchMachine->setSearchPath($path);
                     foreach ($pathArray as $extension => $extensionArray) {
-                        $textSearchMachine->setExtensions(explode('|', $extension)); //setting extensions to search files within
+                        //setting extensions to search files within
+                        $textSearchMachine->setExtensions(explode('|', $extension));
                         $this->mu()->colourPrint(
                             "++++++++++++++++++++++++++++++++++++\n" .
                             "CHECKING\n" .
@@ -147,7 +148,8 @@ class SearchAndReplace extends Task
                             $ignoreCase = isset($findDetails['I']) ? $findDetails['I'] : false;
                             $caseSensitive = ! $ignoreCase;
                             //$replace = $replaceArray[1]; unset($replaceArray[1]);
-                            //$fullReplacement = (isset($replaceArray[2]) ? "/* ".$replaceArray[2]." */\n" : "").$replaceArray[1];
+                            //$fullReplacement =
+                            //   (isset($replaceArray[2]) ? "/* ".$replaceArray[2]." */\n" : "").$replaceArray[1];
                             $fullReplacement = $replace;
                             $isStraightReplace = true;
                             if ($comment) {
@@ -157,7 +159,11 @@ class SearchAndReplace extends Task
                                 user_error("no find is specified, replace is: ${replace}");
                             }
                             if (! $fullReplacement) {
-                                user_error("no replace is specified, find is: ${find}. We suggest setting your final replace to a single space if you would like to replace with NOTHING.");
+                                user_error('
+                                    No replace is specified, find is: ${find}.
+                                    We suggest setting your final replace to a single space if
+                                    you would like to replace with NOTHING.
+                                ');
                             }
                             $replaceKey = $isStraightReplace ? 'BASIC' : 'COMPLEX';
 

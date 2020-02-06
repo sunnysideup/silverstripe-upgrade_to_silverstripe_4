@@ -6,7 +6,10 @@ use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
 
 class SessionManagement implements SessionManagementInterface
 {
-
+    /**
+     * @var string
+     */
+    protected $sessionFileName = 'Session_For';
 
     public function initSession()
     {
@@ -16,11 +19,6 @@ class SessionManagement implements SessionManagementInterface
 
         return $this;
     }
-
-    /**
-     * @var string
-     */
-    protected $sessionFileName = 'Session_For';
 
     public function getSessionFileLocation(): string
     {
@@ -35,7 +33,6 @@ class SessionManagement implements SessionManagementInterface
             '.json'
         );
     }
-
 
     public function deleteSession()
     {

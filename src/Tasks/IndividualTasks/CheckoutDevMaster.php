@@ -20,13 +20,14 @@ class CheckoutDevMaster extends Task
 
     public function getTitle()
     {
-        return 'Checkout the ' . $this->branchOrTagToUse . ' of this module.';
+        return 'Checkout the ' . $this->branchOrTagToUse . ' branch of this module';
     }
 
     public function getDescription()
     {
         return '
-            Checks out ' . $this->branchOrTagToUse . ' of project/module using composer for a module or git checkout for a project';
+            Checks out ' . $this->branchOrTagToUse . ' (customisable)
+            of project/module using composer for a module or git checkout for a project.';
     }
 
     /**
@@ -41,13 +42,16 @@ class CheckoutDevMaster extends Task
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
                     'composer init -s dev -n',
-                    'Start composer - setting it to dev means that it is more likely to install dependencies that do not have tags',
+                    'Start composer - setting it to dev means that
+                        it is more likely to install dependencies that do not have tags',
                     false
                 );
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
-                    'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' . $this->mu()->getNameOfBranchForBaseCode() . ' ' . $this->composerOptions,
-                    'checkout ' . $this->mu()->getNameOfBranchForBaseCode() . ' of ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                    'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' .
+                        $this->mu()->getNameOfBranchForBaseCode() . ' ' . $this->composerOptions,
+                    'checkout ' . $this->mu()->getNameOfBranchForBaseCode() . ' of ' .
+                        $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                     false
                 );
                 $this->mu()->execMe(

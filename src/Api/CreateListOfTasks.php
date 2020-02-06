@@ -67,7 +67,7 @@ class CreateListOfTasks
                 $html
             );
         } else {
-            user_error('Coult not find '.$dir.' directory');
+            user_error('Coult not find ' . $dir . ' directory');
         }
     }
 }

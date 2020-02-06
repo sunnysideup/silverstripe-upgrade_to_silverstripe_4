@@ -6,7 +6,6 @@ use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
 class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 {
-
     /**
      * Starts the output to the commandline / browser
      */

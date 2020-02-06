@@ -11,8 +11,8 @@ class CreateListOfTasks
     public function run()
     {
         $this->mu = ModuleUpgrader::create();
+        $html = '';
         foreach (array_keys($this->mu->getAvailableRecipes()) as $recipeKey) {
-            $html = '';
             $this->mu->applyRecipe($recipeKey);
             $html .= '<h1>List of Tasks in run order for recipe: ' . $recipeKey . '</h1>';
             $count = 0;

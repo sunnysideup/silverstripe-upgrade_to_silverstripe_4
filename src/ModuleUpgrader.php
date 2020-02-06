@@ -9,7 +9,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 {
     use Creator;
 
-
     ###############################
     # USEFUL COMMANDS
     ###############################
@@ -140,7 +139,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             5
         );
         $this->colourPrint(
-            'Next: '.$nextStep,
+            'Next: ' . $nextStep,
             'light_red',
             5
         );
@@ -170,6 +169,11 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         }
     }
 
+    public function getLastMethodRun(): string
+    {
+        return $this->getSessionManager()->getSessionValue('Completed');
+    }
+
     protected function loadNextStepInstructions()
     {
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
@@ -190,7 +194,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             true
         );
     }
-
 
     /**
      * Loads in and sets all the meta data for a module from the inputed array
@@ -388,11 +391,6 @@ Session has completed.
         }
     }
 
-    public function getLastMethodRun() : string
-    {
-        return $this->getSessionManager()->getSessionValue('Completed');
-    }
-
     /**
      * start the method ...
      * - should we run it?
@@ -426,5 +424,4 @@ Session has completed.
 
         return $runMe;
     }
-
 }

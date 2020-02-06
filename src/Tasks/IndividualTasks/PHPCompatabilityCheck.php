@@ -14,6 +14,8 @@ class PHPCompatabilityCheck extends Task
 {
     protected $taskStep = 's00';
 
+    protected $phpVersion = '7.2';
+
     public function getTitle()
     {
         return 'PHP Compatibility Check';
@@ -21,10 +23,8 @@ class PHPCompatabilityCheck extends Task
 
     public function getDescription()
     {
-        return 'Outputs a file showing errors prevent code from being compatible with php '.$this->phpVersion;
+        return 'Outputs a file showing errors prevent code from being compatible with php ' . $this->phpVersion;
     }
-
-    protected $phpVersion = '7.2';
 
     public function setPhpVersion(string $phpVersion)
     {

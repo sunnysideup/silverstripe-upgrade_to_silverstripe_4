@@ -4,7 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 class ModuleUpgraderInfo
 {
-
     public function printVarsForModule($mu, $moduleDetails)
     {
         //output the confirmation.
@@ -16,13 +15,11 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- Recipe: ' . ($mu->getRecipe() ?: 'no recipe selected'), 'light_cyan');
 
-
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Vendor Name: ' . $mu->getVendorName(), 'light_cyan');
 
         $mu->colourPrint('- Package Name: ' . $mu->getPackageName(), 'light_cyan');
-
 
         $mu->colourPrint('- ---', 'light_cyan');
 
@@ -32,13 +29,11 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- Run Irreversibly: ' . ($mu->getRunIrreversibly() ? 'yes' : 'no'), 'light_cyan');
 
-
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Vendor Namespace: ' . $mu->getVendorNamespace(), 'light_cyan');
 
         $mu->colourPrint('- Package Namespace: ' . $mu->getPackageNamespace(), 'light_cyan');
-
 
         $mu->colourPrint('- ---', 'light_cyan');
 
@@ -57,7 +52,6 @@ class ModuleUpgraderInfo
             'light_cyan'
         );
 
-
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Upgrade Dir (root of install): ' . $mu->getWebRootDirLocation(), 'light_cyan');
@@ -70,7 +64,6 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- Git and Composer Root Dir: ' . $mu->getGitRootDir(), 'light_cyan');
 
-
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Git Repository Link (SSH): ' . $mu->getGitLink(), 'light_cyan');
@@ -82,21 +75,17 @@ class ModuleUpgraderInfo
         $mu->colourPrint('- Origin composer file location: ' .
             ($mu->getOriginComposerFileLocation() ?: 'not set'), 'light_cyan');
 
-
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Session file: ' . $mu->getSessionManager()->getSessionFileLocation(), 'light_cyan');
-
 
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Last Step: ' . ($mu->getLastMethodRun() ?: 'not set'), 'light_cyan');
 
-
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Log File Location: ' . ($mu->getLogFileLocation() ?: 'not logged'), 'light_cyan');
-
 
         $mu->colourPrint('- ---', 'light_cyan');
 

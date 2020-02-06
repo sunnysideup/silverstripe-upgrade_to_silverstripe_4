@@ -4,7 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Traits;
 
 trait Misc
 {
-
     public function newLine()
     {
         if (PHP_SAPI === 'cli') {

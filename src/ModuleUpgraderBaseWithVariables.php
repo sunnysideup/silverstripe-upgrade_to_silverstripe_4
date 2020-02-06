@@ -21,24 +21,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     use GettersAndSetters;
     use Misc;
 
-    /**
-     * Starts the output to the commandline / browser
-     */
-    public function __construct()
-    {
-        global $argv;
-        $this->argv = $argv;
-        $this->startPHP2CommandLine();
-    }
-
-    /**
-     * Ends output to commandline / browser
-     */
-    public function __destruct()
-    {
-        $this->endPHP2CommandLine();
-    }
-
     #########################################
     # Arguments
     #########################################
@@ -390,6 +372,24 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     protected $moduleDirLocations = [];
 
     /**
+     * Starts the output to the commandline / browser
+     */
+    public function __construct()
+    {
+        global $argv;
+        $this->argv = $argv;
+        $this->startPHP2CommandLine();
+    }
+
+    /**
+     * Ends output to commandline / browser
+     */
+    public function __destruct()
+    {
+        $this->endPHP2CommandLine();
+    }
+
+    /**
      * Appends the given module in the form of all its module data that has to be formatted in an array
      * to the array of modules that will be worked with during the upgrade procedure.
      *
@@ -606,7 +606,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this->isModuleUpgrade ? false : true;
     }
 
-    public function getExistingModuleDirLocationsWithThemeFolders() : array
+    public function getExistingModuleDirLocationsWithThemeFolders(): array
     {
         $array = $this->getExistingModuleDirLocations();
         if ($this->themeDirLocation) {
@@ -693,6 +693,11 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $location;
     }
 
+    public function getIsModuleUpgradeNice(): string
+    {
+        return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
+    }
+
     /**
      * Removes the given task from the list of tasks to execute
      * @param  string $taskName name of the task
@@ -739,12 +744,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return 'mysite';
     }
 
-    public function getIsModuleUpgradeNice(): string
-    {
-        return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
-    }
-
-
     /**
      * Starts the logger. Extra checking may be put in here to see if you
      * want to start the logger or not in different scenarios.
@@ -758,8 +757,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
         return $this->commandLineExec;
     }
-
-
 
     /**
      * deconstructs Command Line

@@ -26,7 +26,8 @@ class CheckoutUpgradeStarterBranch extends Task
     public function getDescription()
     {
         return '
-            Checks out ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' of project/module using composer for a module or git checkout for a project';
+            Checks out ' . $this->mu()->getNameOfUpgradeStarterBranch() . '
+            of project/module using composer for a module or git checkout for a project';
     }
 
     /**
@@ -72,7 +73,8 @@ class CheckoutUpgradeStarterBranch extends Task
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'composer init -s dev -n',
-            'Start composer - setting it to dev means that it is more likely to install dependencies that do not have tags',
+            'Start composer - setting it to dev means that it is more likely
+            to install dependencies that do not have tags',
             false
         );
         $this->mu()->execMe(

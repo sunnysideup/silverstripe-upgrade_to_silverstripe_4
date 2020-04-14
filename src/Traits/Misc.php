@@ -32,6 +32,8 @@ trait Misc
             return rtrim($path, '/');
         }
         user_error('Could not find path: ' . $path);
+
+        return '';
     }
 
     /**

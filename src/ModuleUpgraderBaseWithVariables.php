@@ -662,7 +662,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $codeDirs;
     }
 
-    public function findMyCodeDir($moduleDir)
+    public function findMyCodeDir($moduleDir) : string
     {
         if (file_exists($moduleDir)) {
             $test1 = $moduleDir . '/code';
@@ -677,6 +677,9 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
                 user_error('Can not find code/src dir for ' . $moduleDir, E_USER_NOTICE);
             }
         }
+
+        //return empty string
+        return '';
     }
 
     public function getGitRootDir(): string

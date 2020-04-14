@@ -32,7 +32,7 @@ class CreatePublicFolder extends Task
         if ($this->mu->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'mkdir -v ./public',
+                'mkdir -vp ./public',
                 'Creating new public folder: ' . $this->mu()->getWebRootDirLocation() . '/public',
                 false
             );

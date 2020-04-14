@@ -32,7 +32,7 @@ class CreateClientFolder extends Task
             $newClientFolder = $moduleDir . '/client/ ';
             $this->mu()->execMe(
                 $moduleDir,
-                'mkdir -v ' . $newClientFolder,
+                'mkdir -vp ' . $newClientFolder,
                 'Creating new client folder: ' . $newClientFolder,
                 false
             );

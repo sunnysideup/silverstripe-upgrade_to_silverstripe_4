@@ -31,15 +31,17 @@ class UpgradeDevBuild extends Task
 
     public function runActualTask($params = [])
     {
-        $command = <<<EOT
-        if (isset(\$data['scripts'])) {
-            foreach (\$data['scripts'] as \$type => \$commands) {
-                foreach (\$commands as \$key => \$command) {
-                    \$data[\$type][\$key] = str_replace('php framework/cli-script.php', 'vendor/bin/sake', \$command);
-                    \$data[\$type][\$key] = str_replace('framework/sake ', 'vendor/bin/sake ', \$command);
+        $command = <<<'EOT'
+
+        if (isset($data['scripts'])) {
+            foreach ($data['scripts'] as $type => $commands) {
+                foreach ($commands as $key => $command) {
+                    $data[$type][$key] = str_replace('php framework/cli-script.php', 'vendor/bin/sake', $command);
+                    $data[$type][$key] = str_replace('framework/sake ', 'vendor/bin/sake ', $command);
                 }
             }
         }
+
 EOT;
         $comment = 'Updating framework/sake to vendor/bin/sake';
         $this->updateJSONViaCommandLine(

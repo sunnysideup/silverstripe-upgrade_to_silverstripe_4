@@ -29,7 +29,7 @@ class FindFilesWithMoreThanOneClass extends Task
             $searchPath = $this->mu()->findMyCodeDir($moduleDir);
             if (file_exists($searchPath)) {
                 $this->mu()->colourPrint(
-                    'Searching in ' . $searchPath. ' for files with more than one class.',
+                    'Searching in ' . $searchPath . ' for files with more than one class.',
                     'blue'
                 );
                 $fileFinder = new FindFiles();
@@ -65,7 +65,7 @@ class FindFilesWithMoreThanOneClass extends Task
                         'red'
                     );
                 }
-            } elseif($searchPath) {
+            } elseif ($searchPath) {
                 $this->mu()->colourPrint(
                     'Could not find the following path: "' . $searchPath,
                     'blue'

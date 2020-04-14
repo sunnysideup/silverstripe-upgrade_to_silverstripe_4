@@ -36,7 +36,7 @@ class MoveCodeToSRC extends Task
                 $moduleDir,
                 '
 if test -d ' . $old . '; then
-    mv -vn ' . $old . ' ' . $new . ';
+    git mv -vn ' . $old . ' ' . $new . ';
 else
     echo \' !!!!!!!!! Error in moving ' . $moduleDir . '/' . $old . ' to ' . $moduleDir . '/' . $new . ' !!!!!!!!! \';
 fi;',

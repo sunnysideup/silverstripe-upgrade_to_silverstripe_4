@@ -69,6 +69,7 @@ class Ss3ToSs4 extends BaseClass
         //Step3: FixBeforeStart
         'ChangeEnvironment' => [],
         'MoveCodeToSRC' => [],
+        'MoveMysiteToApp' => [],
         'CreateClientFolder' => [],
         'SearchAndReplace' => [],
         'FixRequirements' => [],

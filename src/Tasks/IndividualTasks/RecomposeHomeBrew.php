@@ -13,7 +13,7 @@ class RecomposeHomeBrew extends Task
     protected $taskStep = 's20';
 
     protected $requireLinesToAdd = [
-        'silverstripe/framework' => '',
+        'silverstripe/recipe-cms' => '^4.4',
 
         'silverstripe/assets' => '',
         'silverstripe/config' => '',
@@ -57,8 +57,15 @@ class RecomposeHomeBrew extends Task
         'unset($data["require"]["silverstripe/cms"]);' .
         'unset($data["require"]["silverstripe/framework"]);' .
         'unset($data["require"]["silverstripe/reports"]);' .
+        'unset($data["require"]["silverstripe/assets"]);' .
+        'unset($data["require"]["silverstripe/config"]);' .
         'unset($data["require"]["silverstripe/siteconfig"]);' .
+        'unset($data["require"]["silverstripe/graphql"]);' .
+        'unset($data["require"]["silverstripe/versioned"]);' .
+        'unset($data["require"]["silverstripe/versioned-admin"]);' .
+        'unset($data["require"]["silverstripe/campaign-admin"]);' .
         'unset($data["require"]["silverstripe/recipe-cms"]);' .
+        'unset($data["require"]["silverstripe/assets"]);' .
         'unset($data["require"]["composer/installers"]);';
         foreach ($this->requireLinesToAdd as $key => $value) {
             $command .=

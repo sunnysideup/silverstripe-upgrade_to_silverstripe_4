@@ -57,6 +57,7 @@ class Ss3ToSs4 extends BaseClass
         'RecomposeHomeBrew' => [],
         'UpdateComposerRequirements' => [],
         'RemoveInstallerFolder' => [],
+        'UpgradeDevBuild' => [],
         'ResetWebRootDir-3' => [],
 
         //Step2: MoveToNewVersion

@@ -49,12 +49,18 @@ class PHPCompatabilityCheck extends Task
             'Adding php compatability info',
             false
         );
+        $this->mu()->execMe(
+            $webRoot,
+            'composer require --dev phpcompatibility/php-compatibility',
+            'Adding php compatability info',
+            false
+        );
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             echo 'TO BE COMPLETED - SEE: https://decentproductivity.com/codesniffer-and-phpcompatibility/';
             $logFile = $this->mu()->getLogFolderDirLocation() . '/' . $baseNameSpace . '-php-compatibility-report';
             $this->mu()->execMe(
                 $webRoot,
-                'phpcs -p ' . $codeDir .
+                './vendor/bin/phpcs -p ' . $codeDir .
                 ' --standard=PHPCompatibility' .
                 ' --extensions=php --runtime-set testVersion ' . $this->phpVersion .
                 ' --report-full=' . $logFile .

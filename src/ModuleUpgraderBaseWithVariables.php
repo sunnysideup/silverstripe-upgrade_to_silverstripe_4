@@ -570,7 +570,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     {
         $array = [];
         foreach ($this->moduleDirLocations as $location) {
-            $location = (string) $this->checkIfPathExistsAndCleanItUp($location, true);
+            $location = (string) $this->checkIfPathExistsAndCleanItUp($location, false);
             if ($location) {
                 $array[$location] = $location;
             }

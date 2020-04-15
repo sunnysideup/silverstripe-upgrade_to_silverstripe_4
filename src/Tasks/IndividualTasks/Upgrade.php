@@ -20,8 +20,9 @@ class Upgrade extends Task
 
     /**
      * @todo Prompt does not show up sometimes, leaving the program hanging
+     * --prompt
      */
-    protected $settings = '--prompt';
+    protected $settings = '';
 
     public function getTitle()
     {

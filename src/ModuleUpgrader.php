@@ -64,14 +64,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     public function run()
     {
         $this->applyRecipe();
-        for ($i = 0; $i < 5; $i++) {
-            $this->colourPrint(
-                str_repeat('_', 72),
-                'light_red',
-                5
-            );
-        }
-        //Init UTIL and helper objects
         $this->colourPrint(
             '===================== START ======================',
             'light_red',
@@ -111,8 +103,10 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                         $this->colourPrint('# --------------------', 'dark_grey');
                         $obj->run();
                         if ($this->runInteractively) {
-                            $this->getSessionManager()->setSessionValue('Completed', $class);
                             $hasRun = true;
+                            if($this->outOfOrderTask === false) {
+                                $this->getSessionManager()->setSessionValue('Completed', $class);
+                            }
                         }
                     } else {
                         if (! $this->runInteractively) {
@@ -179,6 +173,9 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
         $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
+        if($this->onlyRun) {
+            $this->outOfOrderTask = true;
+        }
     }
 
     protected function loadGlobalVariables()

@@ -19,7 +19,7 @@ class FinalDevBuild extends Task
     public function getDescription()
     {
         return '
-            Run a dev/build as a smoke test to see if all is well.';
+            Runs a dev/build as a smoke test to see if all is well.';
     }
 
     public function runActualTask($params = [])

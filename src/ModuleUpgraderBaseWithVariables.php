@@ -133,9 +133,15 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
     /**
      * finish the run with a merge into master.
-     * @var boolean
+     * @var bool
      */
     protected $runIrreversibly = false;
+
+    /**
+     * is this out of order - i.e. no influence on next task
+     * @var bool
+     */
+    protected $outOfOrderTask = false;
 
     #########################################
     # MODULES

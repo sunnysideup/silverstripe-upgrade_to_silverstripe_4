@@ -91,6 +91,7 @@ class Ss3ToSs4 extends BaseClass
         // 'WebRootUpdate' => [],
         //step6: Check
         'ApplyPSR2' => [],
+        'AddDotEnvFile' => [],
         'FinalDevBuild' => [],
         'RunImageTask' => [],
         'DoMigrateSiteTreeLinkingTask' => [],

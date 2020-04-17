@@ -14,7 +14,7 @@ class CheckoutUpgradeStarterBranch extends Task
 
     protected $useGitClone = false;
 
-    protected $composerOptions = '--prefer-source --update-no-dev';
+    protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
 
     public function getTitle()
     {

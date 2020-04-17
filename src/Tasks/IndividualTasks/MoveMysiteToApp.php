@@ -41,7 +41,7 @@ class MoveMysiteToApp extends Task
                         '
 
 if test -d ' . $old . '; then
-    git mv -vn ' . $old . ' ' . $new . ';
+    mv -vn ' . $old . ' ' . $new . ';
 else
     echo \' !!!!!!!!! Error in moving ' . $moduleDir . '/' . $old . ' to ' . $moduleDir . '/' . $new . ' !!!!!!!!! \';
 fi;',

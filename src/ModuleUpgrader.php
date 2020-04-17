@@ -178,6 +178,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     {
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
+        $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
     }
 
     protected function loadGlobalVariables()
@@ -340,7 +341,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 
     /**
      * work out the current one to run!
-     *
      * @return string
      */
     protected function workOutMethodsToRun()
@@ -389,6 +389,8 @@ Session has completed.
                 }
             }
         }
+
+        return $ths->onlyRun;
     }
 
     /**

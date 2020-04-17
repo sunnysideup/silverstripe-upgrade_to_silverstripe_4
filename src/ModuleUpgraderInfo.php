@@ -4,8 +4,13 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 class ModuleUpgraderInfo
 {
+
+    protected $mu = null;
+
     public function printVarsForModule($mu, $moduleDetails)
     {
+        $this->mu = $mu;
+
         //output the confirmation.
         $mu->colourPrint('---------------------', 'light_cyan');
         $mu->colourPrint('UPGRADE DETAILS', 'light_cyan');
@@ -83,19 +88,36 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- Last Step: ' . ($mu->getLastMethodRun() ?: 'not set'), 'light_cyan');
 
+        $mu->colourPrint('- Current Step: ' . ($mu->getOnlyRun() ?: 'not set'), 'light_cyan');
+
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Log File Location: ' . ($mu->getLogFileLocation() ?: 'not logged'), 'light_cyan');
 
         $mu->colourPrint('- ---', 'light_cyan');
 
-        $mu->colourPrint('- List of Steps: ' . $mu->newLine() . '    -' .
-            implode($mu->newLine() . '    -', array_keys($mu->getListOfTasks())), 'light_cyan');
+        $mu->colourPrint('- List of Steps: ' . $mu->newLine() . $this->listOfTasks(), 'light_cyan');
 
         $mu->colourPrint('---------------------', 'light_cyan');
 
         $mu->colourPrint('- parameter "again" ... runs last comand again', 'light_cyan');
 
         $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'light_cyan');
+
+        $mu->colourPrint('- parameter "task=MySpecificTask" ... runs MySpecificTask', 'light_cyan');
+
+    }
+
+    protected function listOfTasks() : string
+    {
+        $tasks = array_keys($this->mu->getListOfTasks());
+        $count = 0;
+        $string = '';
+        foreach($tasks as $task) {
+            $count++;
+            $string .= $this->mu->newLine().'- '.$count.': '.$task;
+        }
+
+        return $string;
     }
 }

@@ -36,13 +36,13 @@ class ApplyPSR2 extends Task
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $this->mu()->execMe(
                 $webRoot,
-                'vendor/bin/php-sslint-ecs check ' . $codeDir . ' --fix',
+                'dir=' . $codeDir . ' vendor/bin/php-sslint-ecs',
                 'Apply PSR-2-etc... to ' . $codeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                'vendor/bin/php-sslint-stan check ' . $codeDir . ' --fix',
+                'dir=' . $codeDir . ' vendor/bin/php-sslint-stan',
                 'Apply PSR-2-etc... to ' . $codeDir . ' (' . $baseNameSpace . ')',
                 false
             );

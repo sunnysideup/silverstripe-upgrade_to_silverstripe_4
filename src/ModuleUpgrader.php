@@ -387,7 +387,7 @@ Session has completed.
             }
         }
 
-        return $ths->onlyRun;
+        return $this->onlyRun;
     }
 
     /**

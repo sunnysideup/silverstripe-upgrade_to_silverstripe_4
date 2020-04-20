@@ -14,20 +14,25 @@ class RecomposeHomeBrew extends Task
 
     protected $requireLinesToAdd = [
         'silverstripe/recipe-cms' => '^4.4',
+    ];
 
-        'silverstripe/assets' => '',
-        'silverstripe/config' => '',
-        'silverstripe/admin' => '',
+    protected $requireLinesToRemove = [
+        'silverstripe/recipe-cms',
+        'silverstripe/admin',
+        'silverstripe/assets',
+        'silverstripe/config',
+        'silverstripe/admin',
 
-        'silverstripe/cms' => '',
-        'silverstripe/asset-admin' => '',
-        'silverstripe/campaign-admin' => '',
-        'silverstripe/versioned-admin' => '',
-        'silverstripe/errorpage' => '',
-        'silverstripe/graphql' => '',
-        'silverstripe/reports' => '',
-        'silverstripe/siteconfig' => '',
-        'silverstripe/versioned' => '',
+        'silverstripe/cms',
+        'silverstripe/framework',
+        'silverstripe/asset-admin',
+        'silverstripe/campaign-admin',
+        'silverstripe/errorpage',
+        'silverstripe/graphql',
+        'silverstripe/reports',
+        'silverstripe/siteconfig',
+        'silverstripe/versioned-admin',
+        'silverstripe/versioned',
     ];
 
     public function getTitle()
@@ -44,29 +49,20 @@ class RecomposeHomeBrew extends Task
 
     public function runActualTask($params = [])
     {
+        $command = '';
         foreach ($this->requireLinesToAdd as $package => $constraint) {
             if ($constraint === '') {
-                if ($package === 'silverstripe/framework') {
+                if ($package === 'silverstripe/recipe-cms') {
                     $this->requireLinesToAdd[$package] = $this->mu()->getFrameworkComposerRestraint();
                 } else {
                     $this->requireLinesToAdd[$package] = '*';
                 }
             }
         }
-        $command =
-        'unset($data["require"]["silverstripe/cms"]);' .
-        'unset($data["require"]["silverstripe/framework"]);' .
-        'unset($data["require"]["silverstripe/reports"]);' .
-        'unset($data["require"]["silverstripe/assets"]);' .
-        'unset($data["require"]["silverstripe/config"]);' .
-        'unset($data["require"]["silverstripe/siteconfig"]);' .
-        'unset($data["require"]["silverstripe/graphql"]);' .
-        'unset($data["require"]["silverstripe/versioned"]);' .
-        'unset($data["require"]["silverstripe/versioned-admin"]);' .
-        'unset($data["require"]["silverstripe/campaign-admin"]);' .
-        'unset($data["require"]["silverstripe/recipe-cms"]);' .
-        'unset($data["require"]["silverstripe/assets"]);' .
-        'unset($data["require"]["composer/installers"]);';
+        foreach ($this->requireLinesToRemove as $package) {
+            $command .=
+            'unset($data["require"]["'.$package.'"]);';
+        }
         foreach ($this->requireLinesToAdd as $key => $value) {
             $command .=
         '$data["require"]["' . $key . '"] = "' . $value . '"; ';
@@ -74,7 +70,7 @@ class RecomposeHomeBrew extends Task
         $this->updateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),
             $command,
-            'adding framework via recipes'
+            'adding cms recipe version: '.$this->mu()->getFrameworkComposerRestraint()
         );
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 ');
     }

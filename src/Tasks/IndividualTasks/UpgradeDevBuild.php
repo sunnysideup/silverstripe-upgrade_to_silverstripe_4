@@ -33,11 +33,11 @@ class UpgradeDevBuild extends Task
     {
         $command = <<<'EOT'
 
-        if (isset($data['scripts'])) {
-            foreach ($data['scripts'] as $type => $commands) {
+        if (isset($data["scripts"])) {
+            foreach ($data["scripts"] as $type => $commands) {
                 foreach ($commands as $key => $command) {
-                    $data[$type][$key] = str_replace('php framework/cli-script.php', 'vendor/bin/sake', $command);
-                    $data[$type][$key] = str_replace('framework/sake ', 'vendor/bin/sake ', $command);
+                    $data[$type][$key] = str_replace("php framework/cli-script.php", "vendor/bin/sake", $command);
+                    $data[$type][$key] = str_replace("framework/sake ", "vendor/bin/sake ", $command);
                 }
             }
         }

@@ -58,7 +58,11 @@ class AddDotEnvFile extends Task
 
     protected function getEnvtContentAddValues(string $string)
     {
-        $string = str_replace('--DB-NAME--HERE--', $this->mu->getVendorNamespace().$this->mu->getPackageNamespace());
+        $string = str_replace(
+            '--DB-NAME--HERE--',
+            $this->mu->getVendorNamespace().$this->mu->getPackageNamespace(),
+            $string
+        );
 
         return $string;
     }

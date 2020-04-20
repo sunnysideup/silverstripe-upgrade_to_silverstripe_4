@@ -31,7 +31,6 @@ trait Misc
         if (file_exists($path) || $returnEvenIfItDoesNotExists) {
             return rtrim($path, '/');
         }
-        user_error('Could not find path: ' . $path);
 
         return '';
     }

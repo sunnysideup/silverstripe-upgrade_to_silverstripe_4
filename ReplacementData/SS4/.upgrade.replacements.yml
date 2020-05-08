@@ -123,6 +123,9 @@
         "file_get_contents":
             R: "file_get_contents"
             C: "Use new asset abstraction (https://docs.silverstripe.org/en/4/changelogs/4.0.0#asset-storage"
+        "attachFileFromString":
+            R: "addAttachmentFromData"
+            C: "Check new way of attaching file to eamil"
         "CronTask":
             R: "CronTaskController"
             C: "CronTask does not exist anymore. You have to include silverstripe/crontask"

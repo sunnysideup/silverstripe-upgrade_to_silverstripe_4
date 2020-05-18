@@ -108,14 +108,15 @@ class ModuleUpgraderInfo
 
     }
 
-    protected function listOfTasks() : string
+    protected function listOfTasks($currentOne = '') : string
     {
         $tasks = array_keys($this->mu->getListOfTasks());
         $count = 0;
         $string = '';
         foreach($tasks as $task) {
             $count++;
-            $string .= $this->mu->newLine().'- '.$count.': '.$task;
+            $hyphen = ($currentOne === $task ? '->' : '-');
+            $string .= $this->mu->newLine().$hyphen.' '.$count.': '.$task;
         }
 
         return $string;

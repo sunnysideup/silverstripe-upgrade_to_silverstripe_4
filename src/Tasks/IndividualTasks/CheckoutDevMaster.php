@@ -26,7 +26,7 @@ class CheckoutDevMaster extends Task
     public function getDescription()
     {
         return '
-            Checks out ' . $this->branchOrTagToUse . ' (customisable)
+            Checks out ' . $this->branchOrTagToUse . ' (customisable using setNameOfBranchForBaseCode)
             of project/module using composer for a module or git checkout for a project.';
     }
 
@@ -49,8 +49,8 @@ class CheckoutDevMaster extends Task
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
                     'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' .
-                        $this->mu()->getNameOfBranchForBaseCode() . ' ' . $this->composerOptions,
-                    'checkout ' . $this->mu()->getNameOfBranchForBaseCode() . ' of ' .
+                        $this->mu()->getNameOfBranchForBaseCodeForComposer() . ' ' . $this->composerOptions,
+                    'checkout ' . $this->mu()->getNameOfBranchForBaseCodeForComposer() . ' of ' .
                         $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                     false
                 );

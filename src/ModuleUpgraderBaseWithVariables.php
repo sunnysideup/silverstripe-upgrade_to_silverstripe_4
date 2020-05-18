@@ -155,7 +155,8 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      *          'PackageName' => 'Package1',
      *          'PackageNamespace' => 'Package1',
      *          'GitLink' => 'git@github.com:foor/bar-1.git',
-     *          'UpgradeAsFork' => false
+     *          'UpgradeAsFork' => false,
+     *          'NameOfBranchForBaseCode' => 'develop',
      *      ],
      *      [
      *          'VendorName' => 'A',
@@ -163,7 +164,8 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      *          'PackageName' => 'Package2',
      *          'PackageNamespace' => 'Package2',
      *          'GitLink' => 'git@github.com:foor/bar-2.git',
-     *          'UpgradeAsFork' => false
+     *          'UpgradeAsFork' => false,
+     *          'NameOfBranchForBaseCode' => 'master',
      *      ],
      * required are:
      * - VendorName
@@ -480,51 +482,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this;
     }
 
-    public function getRecipe(): string
-    {
-        return $this->recipe;
-    }
-
-    public function getAvailableRecipes(): array
-    {
-        return $this->availableRecipes;
-    }
-
-    public function getListOfTasks(): array
-    {
-        return $this->listOfTasks;
-    }
-
-    public function getIsModuleUpgrade(): bool
-    {
-        return $this->isModuleUpgrade;
-    }
-
-    public function getDefaultNamespaceForTasks(): string
-    {
-        return $this->defaultNamespaceForTasks;
-    }
-
-    public function getVendorNamespace(): string
-    {
-        return $this->vendorNamespace;
-    }
-
-    public function getPackageNamespace(): string
-    {
-        return $this->packageNamespace;
-    }
-
-    public function getAboveWebRootDirLocation()
-    {
-        return $this->aboveWebRootDirLocation;
-    }
-
-    public function getWebRootDirLocation(): string
-    {
-        return $this->webRootDirLocation;
-    }
-
     /**
      * @return string
      */
@@ -631,6 +588,18 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     {
         $locations = array_values($this->getExistingModuleDirLocations());
         return array_shift($locations);
+    }
+
+    public function getNameOfBranchForBaseCodeForComposer() : string
+    {
+        if($this->nameOfBranchForBaseCode) {
+            if(substr($this->nameOfBranchForBaseCode, 0, 4) === 'dev-') {
+                return $this->nameOfBranchForBaseCode;
+            } else {
+                return 'dev-'.$this->nameOfBranchForBaseCode;
+            }
+        }
+        return 'dev-master';
     }
 
     /**

@@ -274,6 +274,9 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         //UpgradeAsFork
         $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
 
+        //NameOfBranchForBaseCode
+        $this->nameOfBranchForBaseCode = $moduleDetails['NameOfBranchForBaseCode'] ?? $this->nameOfBranchForBaseCode;
+
         //LogFileLocation
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {

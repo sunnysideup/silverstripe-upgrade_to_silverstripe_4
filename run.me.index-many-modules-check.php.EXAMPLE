@@ -23,7 +23,8 @@ foreach($modules as $module) {
               'PackageFolderNameForInstall' => $module['folder'],
               'GitLink' => $module['repo'],
               'UpgradeAsFork' => false,
-              'IsModuleUpgrade' => true
+              'IsModuleUpgrade' => true,
+              'NameOfBranchForBaseCode' => 'develop',
             ]
         ]
     )

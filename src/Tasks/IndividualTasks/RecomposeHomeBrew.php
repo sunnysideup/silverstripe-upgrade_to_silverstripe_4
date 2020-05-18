@@ -61,7 +61,7 @@ class RecomposeHomeBrew extends Task
         }
         foreach ($this->requireLinesToRemove as $package) {
             $command .=
-            'unset($data["require"]["'.$package.'"]);';
+            'unset($data["require"]["' . $package . '"]);';
         }
         foreach ($this->requireLinesToAdd as $key => $value) {
             $command .=
@@ -70,7 +70,7 @@ class RecomposeHomeBrew extends Task
         $this->updateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),
             $command,
-            'adding cms recipe version: '.$this->mu()->getFrameworkComposerRestraint()
+            'adding cms recipe version: ' . $this->mu()->getFrameworkComposerRestraint()
         );
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 ');
     }

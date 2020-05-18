@@ -590,14 +590,13 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return array_shift($locations);
     }
 
-    public function getNameOfBranchForBaseCodeForComposer() : string
+    public function getNameOfBranchForBaseCodeForComposer(): string
     {
-        if($this->nameOfBranchForBaseCode) {
-            if(substr($this->nameOfBranchForBaseCode, 0, 4) === 'dev-') {
+        if ($this->nameOfBranchForBaseCode) {
+            if (substr($this->nameOfBranchForBaseCode, 0, 4) === 'dev-') {
                 return $this->nameOfBranchForBaseCode;
-            } else {
-                return 'dev-'.$this->nameOfBranchForBaseCode;
             }
+            return 'dev-' . $this->nameOfBranchForBaseCode;
         }
         return 'dev-master';
     }

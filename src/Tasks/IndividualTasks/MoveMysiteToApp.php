@@ -29,13 +29,12 @@ class MoveMysiteToApp extends Task
      */
     public function runActualTask($params = [])
     {
-
         if ($this->mu()->getIsProjectUpgrade()) {
-            $rootDir = $this->mu()->getWebRootDirLocation() ;
+            $rootDir = $this->mu()->getWebRootDirLocation();
             $old = './mysite/';
             $new = './app/';
-            if(file_exists($rootDir . '/' . $old)) {
-                if(! file_exists($rootDir . '/'. $new)) {
+            if (file_exists($rootDir . '/' . $old)) {
+                if (! file_exists($rootDir . '/' . $new)) {
                     $this->mu()->execMe(
                         $rootDir,
                         '
@@ -45,19 +44,18 @@ if test -d ' . $old . '; then
 else
     echo \' !!!!!!!!! Error in moving ' . $moduleDir . '/' . $old . ' to ' . $moduleDir . '/' . $new . ' !!!!!!!!! \';
 fi;',
-
-                        'moving ' . $old . ' to ' . $new . ' in '.$rootDir.' -v is verbose, -n is only if destination does not exists',
+                        'moving ' . $old . ' to ' . $new . ' in ' . $rootDir . ' -v is verbose, -n is only if destination does not exists',
                         false
                     );
                 } else {
                     $this->mu()->colourPrint(
-                        $rootDir . '/' . $new.' already exists',
+                        $rootDir . '/' . $new . ' already exists',
                         'red'
                     );
                 }
             } else {
                 $this->mu()->colourPrint(
-                    'Can not find: '.$rootDir . '/' . $old,
+                    'Can not find: ' . $rootDir . '/' . $old,
                     'red'
                 );
             }

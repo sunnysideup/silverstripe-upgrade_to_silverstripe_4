@@ -4,7 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4;
 
 class ModuleUpgraderInfo
 {
-
     protected $mu = null;
 
     public function printVarsForModule($mu, $moduleDetails)
@@ -105,18 +104,17 @@ class ModuleUpgraderInfo
         $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'light_cyan');
 
         $mu->colourPrint('- parameter "task=MySpecificTask" ... runs MySpecificTask', 'light_cyan');
-
     }
 
-    protected function listOfTasks($currentOne = '') : string
+    protected function listOfTasks($currentOne = ''): string
     {
         $tasks = array_keys($this->mu->getListOfTasks());
         $count = 0;
         $string = '';
-        foreach($tasks as $task) {
+        foreach ($tasks as $task) {
             $count++;
             $hyphen = ($currentOne === $task ? '->' : '-');
-            $string .= $this->mu->newLine().$hyphen.' '.$count.': '.$task;
+            $string .= $this->mu->newLine() . $hyphen . ' ' . $count . ': ' . $task;
         }
 
         return $string;

@@ -104,7 +104,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                         $obj->run();
                         if ($this->runInteractively) {
                             $hasRun = true;
-                            if($this->outOfOrderTask === false) {
+                            if ($this->outOfOrderTask === false) {
                                 $this->getSessionManager()->setSessionValue('Completed', $class);
                             }
                         }
@@ -173,7 +173,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
         $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
-        if($this->onlyRun) {
+        if ($this->onlyRun) {
             $this->outOfOrderTask = true;
         }
     }

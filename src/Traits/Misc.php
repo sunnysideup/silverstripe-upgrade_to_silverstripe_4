@@ -82,9 +82,9 @@ trait Misc
     protected function getCommandLineOrArgumentAsString(string $variableName = ''): string
     {
         if (PHP_SAPI === 'cli') {
-            if(isset($this->argv[1])) {
+            if (isset($this->argv[1])) {
                 $data = explode('=', $this->argv[1]);
-                if(count($data) === 2 && trim($data[0]) === $variableName) {
+                if (count($data) === 2 && trim($data[0]) === $variableName) {
                     return trim($data[1]);
                 }
             }

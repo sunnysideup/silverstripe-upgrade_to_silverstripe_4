@@ -11,11 +11,6 @@ class AddDotEnvFile extends Task
 {
     protected $taskStep = 's60';
 
-    public function getTitle()
-    {
-        return 'Adds a .env file';
-    }
-
     protected $envContent = [
         'SS_DATABASE_CLASS="MySQLPDODatabase"',
         'SS_DATABASE_NAME="--DB-NAME--HERE--"',
@@ -29,6 +24,11 @@ class AddDotEnvFile extends Task
         'SS_ENVIRONMENT_TYPE="dev"',
     ];
 
+    public function getTitle()
+    {
+        return 'Adds a .env file';
+    }
+
     public function getDescription()
     {
         return 'Adds a basic .env file in case that is needed.';
@@ -37,34 +37,31 @@ class AddDotEnvFile extends Task
     public function runActualTask($params = [])
     {
         if (! file_exists($this->mu()->getWebRootDirLocation() . '/.env')) {
-            foreach($this->envContent as $line) {
+            foreach ($this->envContent as $line) {
                 $line = $this->getEnvtContentAddValues($line);
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
-                    'echo \''.\addcslashes($line, '\'').'\' >> .env',
-                    'adding a line to .env: '.$line,
+                    'echo \'' . \addcslashes($line, '\'') . '\' >> .env',
+                    'adding a line to .env: ' . $line,
                     false
                 );
             }
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
                 'echo \'.env\' >> .gitignore',
-                'Add .env to .gitignore '.$line,
+                'Add .env to .gitignore ' . $line,
                 false
             );
         }
-
     }
 
     protected function getEnvtContentAddValues(string $string)
     {
-        $string = str_replace(
+        return str_replace(
             '--DB-NAME--HERE--',
-            $this->mu->getVendorNamespace().$this->mu->getPackageNamespace(),
+            $this->mu->getVendorNamespace() . $this->mu->getPackageNamespace(),
             $string
         );
-
-        return $string;
     }
 
     protected function hasCommitAndPush()

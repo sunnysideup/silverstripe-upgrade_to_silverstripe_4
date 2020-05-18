@@ -40,8 +40,8 @@ class DatabaseMigrationLegacyYML extends Task
             $dir = dirname($newFile);
             $this->mu()->execMe(
                 $moduleDir,
-                'mkdir -pv \''.$dir.'\'',
-                'creating: '.$dir,
+                'mkdir -pv \'' . $dir . '\'',
+                'creating: ' . $dir,
                 false
             );
             $this->mu()->execMe(

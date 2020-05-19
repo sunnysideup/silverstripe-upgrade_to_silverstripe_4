@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -19,8 +20,7 @@ class CheckoutUpgradeStarterBranch extends Task
     public function getTitle()
     {
         return 'Checkout the ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' of this module/app.
-            The name of the branch can be changed by using the following method: setNameOfBranchForBaseCode
-        ';
+            The name of the branch can be changed by using the following method: setNameOfBranchForBaseCode';
     }
 
     public function getDescription()
@@ -54,18 +54,13 @@ class CheckoutUpgradeStarterBranch extends Task
 
     protected function gitClone()
     {
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'git clone ' . $this->mu()->getGitLink() . ' ' . $this->mu()->getGitRootDir(),
-            'clone ' . $this->mu()->getGitLink(),
-            false
-        );
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git checkout ' . $this->mu()->getNameOfUpgradeStarterBranch(),
-            'checkout ' . $this->mu()->getNameOfUpgradeStarterBranch(),
-            false
-        );
+        Git::inst($this->mu())
+            ->Clone(
+                $this->mu()->getWebRootDirLocation(),
+                $this->mu()->getGitLink(),
+                $this->mu()->getGitRootDir(),
+                $this->mu()->getNameOfUpgradeStarterBranch()
+            );
     }
 
     protected function composerRequire()

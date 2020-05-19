@@ -40,34 +40,13 @@ class ComposerInstallProject extends Task
                 false
             );
         }
-
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'git clone ' . $this->mu()->getGitLink() . ' ' . $cloneDir,
-            'cloning module ' . $this->mu()->getGitLink() . ' into ' . $cloneDir . ' - we clone to keep all vcs data (composer does not allow this for branch)',
-            false
-        );
-
-        $this->mu()->execMe(
-            $cloneDir,
-            'git branch -a',
-            'check branch exists',
-            false
-        );
-
-        $this->mu()->execMe(
-            $cloneDir,
-            'git checkout ' . $this->mu()->getNameOfTempBranch(),
-            'switch branch',
-            false
-        );
-
-        $this->mu()->execMe(
-            $cloneDir,
-            'git branch',
-            'confirm branch',
-            false
-        );
+        Git::inst($this->mu())
+            ->Clone(
+                $this->mu()->getWebRootDirLocation(),
+                $this->mu()->getGitLink(),
+                $this->mu()->getGitRootDir(),
+                $this->mu()->getNameOfTempBranch()
+            );
         if ($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $cloneDir,

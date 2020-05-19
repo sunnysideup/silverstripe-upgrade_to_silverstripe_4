@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -25,9 +26,10 @@ class AddLegacyBranch extends Task
     public function getDescription()
     {
         return '
-            Creates a legacy branch: "' . $this->nameOfLegacyBranch . '" of your module so that you
+            Creates a legacy branch: "' . $this->nameOfLegacyBranch . '" of your module
+            from the "' . $this->mu()->getNameOfBranchForBaseCode() . '" branch so that you
             can keep making bugfixes to older versions.
-            You can set the name of the legacy branch as you see fit.';
+            In the recipes you can see how to set the name of the legacy branch.';
     }
 
     /**
@@ -36,18 +38,10 @@ class AddLegacyBranch extends Task
     public function runActualTask($params = [])
     {
         $gitRootDir = $this->mu()->getGitRootDir();
-        $this->mu()->execMe(
+        Git::inst($this->mu())->createNewBranchIfItDoesNotExist(
             $gitRootDir,
-            '
-            if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->nameOfLegacyBranch . "'" . '); then
-                    echo branch exists
-                else
-                    git checkout -b ' . $this->nameOfLegacyBranch . ' ' . $this->mu()->getNameOfBranchForBaseCode() . '
-                    git push origin ' . $this->nameOfLegacyBranch . ';
-
-            fi',
-            'create legacy branch ' . $this->nameOfLegacyBranch . ' from the ' . $this->mu()->getNameOfBranchForBaseCode() . ' branch in ' . $gitRootDir,
-            false
+            $this->nameOfLegacyBranch,
+            $this->mu()->getNameOfBranchForBaseCode()
         );
     }
 

@@ -39,23 +39,13 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
 
     public function runActualTask($params = [])
     {
-        $branchName = $this->mu()->getNameOfTempBranch();
         if ($this->mu()->getRunIrreversibly()) {
-            $this->mu()->execMe(
-                $this->mu()->getGitRootDir(),
-                '
-                    git checkout ' . $branchName . '
-                    git pull origin ' . $branchName . '
-                    git checkout ' . $this->mu()->getNameOfBranchForBaseCode() . '
-                    git merge --squash ' . $branchName . '
-                    git commit . -m "MAJOR: upgrade to Silverstripe 4"
-                    git push origin ' . $this->mu()->getNameOfBranchForBaseCode() . '
-                    git branch -D ' . $branchName . '
-                    git push origin --delete ' . $branchName . '
-                ',
-                'merging ' . $branchName . ' into ' . $this->mu()->getNameOfBranchForBaseCode() . ' in ' . $this->mu()->getGitRootDir(),
-                false
-            );
+            Git::inst($this->mu())
+                ->Merge(
+                    $this->mu()->getGitRootDir(),
+                    $this->mu()->getNameOfTempBranch(),
+                    $this->mu()->getNameOfBranchForBaseCode()
+                );
         }
     }
 

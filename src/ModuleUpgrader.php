@@ -126,17 +126,17 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                     );
                 }
             }
+            $this->colourPrint(
+                '===================== END =======================',
+                'light_red',
+                5
+            );
+            $this->colourPrint(
+                'Next: ' . $nextStep,
+                'light_red',
+                5
+            );
         }
-        $this->colourPrint(
-            '===================== END =======================',
-            'light_red',
-            5
-        );
-        $this->colourPrint(
-            'Next: ' . $nextStep,
-            'light_red',
-            5
-        );
         $this->endPHP2CommandLine();
     }
 

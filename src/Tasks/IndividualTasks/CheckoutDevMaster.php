@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -74,18 +75,13 @@ class CheckoutDevMaster extends Task
 
     protected function gitClone()
     {
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'git clone ' . $this->mu()->getGitLink() . ' ' . $this->mu()->getGitRootDir(),
-            'clone ' . $this->mu()->getGitLink(),
-            false
-        );
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git checkout ' . $this->branchOrTagToUse,
-            'checkout ' . $this->branchOrTagToUse,
-            false
-        );
+        Git::inst($this->mu())
+            ->Clone(
+                $this->mu()->getWebRootDirLocation(),
+                $this->mu()->getGitLink(),
+                $this->mu()->getGitRootDir(),
+                $this->branchOrTagToUse
+            );
     }
 
     protected function hasCommitAndPush()

@@ -15,7 +15,7 @@ class PHPCompatabilityCheck extends Task
 {
     protected $taskStep = 's00';
 
-    protected $phpVersion = '5.5';
+    protected $phpVersion = '7.4';
 
     public function getTitle()
     {
@@ -80,16 +80,15 @@ class PHPCompatabilityCheck extends Task
             'Showing all errors',
             false
         );
-        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
-            $file = str_replace('\\', '-', $baseNameSpace);
+        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
+            // $file = str_replace('\\', '-', $baseNameSpace);
             $this->mu()->execMe(
                 $webRoot,
-                './vendor/bin/phpcs'.
+                './vendor/bin/phpcs' .
                 ' -p ' . $codeDir .
                 ' --standard=PHPCompatibility' .
-                ' --extensions=php '.
+                ' --extensions=php ' .
                 ' --runtime-set testVersion ' . $this->phpVersion,
-
                 'Running PHP Compatibility Check in: ' . $this->mu()->getWebRootDirLocation(),
                 false
             );

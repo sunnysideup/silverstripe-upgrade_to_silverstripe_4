@@ -248,6 +248,9 @@
         'canCreate($member = null)':
             R: 'canCreate($member = null, $context = [])'
             I: true
+        'public function setValue($value)':
+            R: 'public function setValue($value, $data = null)'
+            I: true
         'canDelete($member = null)':
             R: 'canDelete($member = null, $context = [])'
             I: true

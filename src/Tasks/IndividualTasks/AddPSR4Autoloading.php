@@ -93,12 +93,8 @@ class AddPSR4Autoloading extends Task
                 );
             }
         }
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'composer dumpautoload',
-            'run composer dumpautoload',
-            false
-        );
+        Composer::inst($this->mu())
+            ->DumpAutoload($this->mu()->getWebRootDirLocation());
     }
 
     protected function hasCommitAndPush()

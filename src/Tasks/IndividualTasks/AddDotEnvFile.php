@@ -16,7 +16,7 @@ class AddDotEnvFile extends Task
         'SS_DATABASE_NAME="--DB-NAME--HERE--"',
         'SS_DATABASE_PASSWORD="x"',
         'SS_DATABASE_SERVER="localhost"',
-        'SS_DATABASE_USERNAME="root',
+        'SS_DATABASE_USERNAME="root"',
         '',
         'SS_DEFAULT_ADMIN_PASSWORD="x"',
         'SS_DEFAULT_ADMIN_USERNAME="x"',

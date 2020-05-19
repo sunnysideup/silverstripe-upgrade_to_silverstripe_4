@@ -4,6 +4,8 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
+
 
 /**
  * Fixes the folder name cases in to make them PSR4 compatible
@@ -58,7 +60,7 @@ class AddPSR4Autoloading extends Task
         $webRootLocation = $this->mu()->getWebRootDirLocation();
         $command = $baseCommands . $addPage;
         $comment = 'Adding autoload Page and Page controller details in ' . $webRootLocation . '/composer.json';
-        $this->updateJSONViaCommandLine(
+        ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
             $webRootLocation,
             $command,
             $comment
@@ -72,7 +74,7 @@ class AddPSR4Autoloading extends Task
             $comment = 'Adding autoload psr-4 details in ' .
                 $webRootLocation . '/composer.json: ' .
                 $baseNameSpace . ' => ' . $location;
-            $this->updateJSONViaCommandLine(
+            ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
                 $webRootLocation,
                 $command,
                 $comment
@@ -87,7 +89,7 @@ class AddPSR4Autoloading extends Task
                 $comment = 'Adding autoload psr-4 details in ' .
                     $moduleLocation . '/composer.json: ' .
                     $baseNameSpace . ' => ' . $location;
-                $this->updateJSONViaCommandLine(
+                ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
                     $moduleLocation,
                     $command,
                     $comment

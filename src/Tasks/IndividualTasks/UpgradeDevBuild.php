@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 
 /**
  * Remove installer folder from composer.json file so that package
@@ -44,7 +45,7 @@ class UpgradeDevBuild extends Task
 
 EOT;
         $comment = 'Updating framework/sake to vendor/bin/sake';
-        $this->updateJSONViaCommandLine(
+        ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),
             $command,
             $comment

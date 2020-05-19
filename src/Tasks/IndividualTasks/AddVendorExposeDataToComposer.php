@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 
 /**
  * Updates the composer requirements to reflect the new version and package names
@@ -59,7 +60,7 @@ class AddVendorExposeDataToComposer extends Task
             'if(!isset($data["extra"]["expose"])) { '
                 . '    $data["extra"]["expose"] = ["' . implode('", "', $expose) . '"]; '
                 . '}';
-            $this->updateJSONViaCommandLine(
+            ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
                 $this->mu()->getGitRootDir(),
                 $command,
                 'exposing: ' . implode(', ', $expose)

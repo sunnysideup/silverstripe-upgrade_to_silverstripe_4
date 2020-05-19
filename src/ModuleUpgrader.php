@@ -282,7 +282,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         if ($this->logFolderDirLocation) {
             $this->logFileLocation =
                 $this->logFolderDirLocation . '/' . $this->packageName .
-                '-upgrade-log.' . time() .
+                '-upgrade-log-' . date('Y-m-d') .
                 '.txt';
             $this->commandLineExec->setLogFileLocation($this->logFileLocation);
         } else {

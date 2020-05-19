@@ -20,7 +20,6 @@ class Git
 
     public function Clone(string $dir, string $gitLink, string $gitRootDir, string $branchName)
     {
-        $this->fetchAll($dir);
 
         $this->mu()->execMe(
             $dir,
@@ -46,6 +45,8 @@ class Git
             'confirm branch',
             false
         );
+
+        $this->fetchAll($gitRootDir);
     }
 
     /**

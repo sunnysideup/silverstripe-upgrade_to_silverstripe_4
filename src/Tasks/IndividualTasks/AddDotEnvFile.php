@@ -49,7 +49,7 @@ class AddDotEnvFile extends Task
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
                 'echo \'.env\' >> .gitignore',
-                'Add .env to .gitignore ' . $line,
+                'Add .env to .gitignore ',
                 false
             );
         }

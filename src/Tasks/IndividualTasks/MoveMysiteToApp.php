@@ -38,11 +38,10 @@ class MoveMysiteToApp extends Task
                     $this->mu()->execMe(
                         $rootDir,
                         '
-
 if test -d ' . $old . '; then
     mv -vn ' . $old . ' ' . $new . ';
 else
-    echo \' !!!!!!!!! Error in moving ' . $moduleDir . '/' . $old . ' to ' . $moduleDir . '/' . $new . ' !!!!!!!!! \';
+    echo \' !!!!!!!!! Error in moving ' . $rootDir . '/' . $old . ' to ' . $rootDir . '/' . $new . ' !!!!!!!!! \';
 fi;',
                         'moving ' . $old . ' to ' . $new . ' in ' . $rootDir . ' -v is verbose, -n is only if destination does not exists',
                         false

@@ -120,6 +120,21 @@
 
 
     php:
+        "file_get_contents":
+            R: "file_get_contents"
+            C: "Use new asset abstraction (https://docs.silverstripe.org/en/4/changelogs/4.0.0#asset-storage"
+        "attachFileFromString":
+            R: "addAttachmentFromData"
+            C: "Check new way of attaching file to eamil"
+        "CronTask":
+            R: "CronTaskController"
+            C: "CronTask does not exist anymore. You have to include silverstripe/crontask"
+        "Member_ForgotPasswordEmail":
+            R: "Email"
+            C: "Member_ForgotPasswordEmail does not exist anymore. ss_template = 'ForgotPasswordEmail', Subject = Your password has been changed"
+        "Member_ChangePasswordEmail":
+            R: "Email"
+            C: "Member_ForgotPasswordEmail does not exist anymore. ss_template = 'ChangePasswordEmail', Subject = Your password reset link"
         "SS_Log::add_writer":
             R: "SS_Log::add_writer"
             C: "replace with ... "
@@ -232,6 +247,9 @@
             R: '= [];'
         'canCreate($member = null)':
             R: 'canCreate($member = null, $context = [])'
+            I: true
+        'public function setValue($value)':
+            R: 'public function setValue($value, $data = null)'
             I: true
         'canDelete($member = null)':
             R: 'canDelete($member = null, $context = [])'
@@ -394,7 +412,7 @@
             R: "public function includeInHTML($content)"
             I: true
         'Cache::factory(':
-            R: 'SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class ''. '
+            R: 'SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class . ''.'' . '
             C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
         '$cache->load(':
             R: '$cache->has('
@@ -421,12 +439,12 @@
         '$this->owner->class;':
             R: 'get_class($this->owner);'
         '$this->owner->class':
-            R: '$this->owner->class'
+            R: 'get_class($this->owner)'
             C: 'See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#object-replace'
         '$this->class]':
-            R: 'get_class($this)]'
+            R: 'static::class]'
         '$this->class)':
-            R: 'get_class($this))'
+            R: 'static::class)'
         '$this->class;':
             R: 'get_class($this);'
         '$this->class ==':

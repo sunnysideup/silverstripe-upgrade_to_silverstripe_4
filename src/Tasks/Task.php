@@ -6,6 +6,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 
 abstract class Task
 {
@@ -280,33 +281,12 @@ abstract class Task
             $moduleDirs = [$this->mu()->getWebRootDirLocation()];
         }
         foreach ($moduleDirs as $moduleDir) {
-            $message = $this->getCommitMessage();
-            $this->mu()->execMe(
-                $moduleDir,
-                'git add . -A',
-                'git add all',
-                false
-            );
-
-            $this->mu()->execMe(
-                $moduleDir,
-                // 'if ! git diff --quiet; then git commit . -m "'.addslashes($message).'"; fi;',
-                '
-                if [ -z "$(git status --porcelain)" ]; then
-                    echo \'OKI DOKI - Nothing to commit\';
-                else
-                    git commit . -m "' . addslashes($message) . '"
-                fi',
-                'commit changes: ' . $message,
-                false
-            );
-
-            $this->mu()->execMe(
-                $moduleDir,
-                'git push origin ' . $this->mu()->getNameOfTempBranch(),
-                'pushing changes to origin on the ' . $this->mu()->getNameOfTempBranch() . ' branch',
-                false
-            );
+            return Git::inst($this->mu())
+                ->commitAndPush(
+                    $moduleDir,
+                    $this->getCommitMessage(),
+                    $this->mu()->getNameOfTempBranch()
+                );
         }
     }
 

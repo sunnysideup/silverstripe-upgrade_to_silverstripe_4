@@ -64,14 +64,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     public function run()
     {
         $this->applyRecipe();
-        for ($i = 0; $i < 5; $i++) {
-            $this->colourPrint(
-                str_repeat('_', 72),
-                'light_red',
-                5
-            );
-        }
-        //Init UTIL and helper objects
         $this->colourPrint(
             '===================== START ======================',
             'light_red',
@@ -111,8 +103,10 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                         $this->colourPrint('# --------------------', 'dark_grey');
                         $obj->run();
                         if ($this->runInteractively) {
-                            $this->getSessionManager()->setSessionValue('Completed', $class);
                             $hasRun = true;
+                            if ($this->outOfOrderTask === false) {
+                                $this->getSessionManager()->setSessionValue('Completed', $class);
+                            }
                         }
                     } else {
                         if (! $this->runInteractively) {
@@ -132,17 +126,17 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                     );
                 }
             }
+            $this->colourPrint(
+                '===================== END =======================',
+                'light_red',
+                5
+            );
+            $this->colourPrint(
+                'Next: ' . $nextStep,
+                'light_red',
+                5
+            );
         }
-        $this->colourPrint(
-            '===================== END =======================',
-            'light_red',
-            5
-        );
-        $this->colourPrint(
-            'Next: ' . $nextStep,
-            'light_red',
-            5
-        );
         $this->endPHP2CommandLine();
     }
 
@@ -178,6 +172,10 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     {
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
+        $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
+        if ($this->onlyRun) {
+            $this->outOfOrderTask = true;
+        }
     }
 
     protected function loadGlobalVariables()
@@ -276,12 +274,15 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         //UpgradeAsFork
         $this->upgradeAsFork = empty($moduleDetails['UpgradeAsFork']) ? false : true;
 
+        //NameOfBranchForBaseCode
+        $this->nameOfBranchForBaseCode = $moduleDetails['NameOfBranchForBaseCode'] ?? $this->nameOfBranchForBaseCode;
+
         //LogFileLocation
         $this->logFileLocation = '';
         if ($this->logFolderDirLocation) {
             $this->logFileLocation =
                 $this->logFolderDirLocation . '/' . $this->packageName .
-                '-upgrade-log.' . time() .
+                '-upgrade-log-' . date('Y-m-d') .
                 '.txt';
             $this->commandLineExec->setLogFileLocation($this->logFileLocation);
         } else {
@@ -340,7 +341,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 
     /**
      * work out the current one to run!
-     *
      * @return string
      */
     protected function workOutMethodsToRun()
@@ -389,6 +389,8 @@ Session has completed.
                 }
             }
         }
+
+        return $this->onlyRun;
     }
 
     /**

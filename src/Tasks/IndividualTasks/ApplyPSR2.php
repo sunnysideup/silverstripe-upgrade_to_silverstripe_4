@@ -28,23 +28,23 @@ class ApplyPSR2 extends Task
         //1. install upgrader
         $this->mu()->execMe(
             $webRoot,
-            'composer require --dev symplify/easy-coding-standard',
+            'composer require --dev sunnysideup/easy-coding-standards:dev-master',
             'Adding easy coding standards',
             false
         );
-        //2. copy ecs.yml
-        $this->mu()->execMe(
-            $webRoot,
-            'cp ' . $this->mu()->getLocationOfThisUpgrader() . '/ecs.yml ' . $webRoot . '/',
-            'copying ecs.yml file',
-            false
-        );
-        //3. apply
+        //1. apply
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+            $relativeDir = str_replace($webRoot, '', $codeDir);
             $this->mu()->execMe(
                 $webRoot,
-                'vendor/bin/ecs check ' . $codeDir . ' --fix',
-                'Apply PSR-2-etc... to ' . $codeDir . ' (' . $baseNameSpace . ')',
+                'dir=' . $relativeDir . ' vendor/bin/php-sslint-ecs',
+                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
+                false
+            );
+            $this->mu()->execMe(
+                $webRoot,
+                'dir=' . $relativeDir . ' vendor/bin/php-sslint-stan',
+                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
         }

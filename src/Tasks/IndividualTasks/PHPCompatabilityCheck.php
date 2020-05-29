@@ -1,7 +1,8 @@
 <?php
 
 //requires https://github.com/squizlabs/PHP_CodeSniffer
-//requires https://github.com/PHPCompatibility/PHPCompatibility
+//requires https://github.com/PHPCompatibility/PHPCompatibility\
+//see: https://decentproductivity.com/codesniffer-and-phpcompatibility/'
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
@@ -14,7 +15,7 @@ class PHPCompatabilityCheck extends Task
 {
     protected $taskStep = 's00';
 
-    protected $phpVersion = '7.2';
+    protected $phpVersion = '7.4';
 
     public function getTitle()
     {
@@ -49,16 +50,45 @@ class PHPCompatabilityCheck extends Task
             'Adding php compatability info',
             false
         );
-        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
-            echo 'TO BE COMPLETED - SEE: https://decentproductivity.com/codesniffer-and-phpcompatibility/';
-            $logFile = $this->mu()->getLogFolderDirLocation() . '/' . $baseNameSpace . '-php-compatibility-report';
+        $this->mu()->execMe(
+            $webRoot,
+            'composer require --dev phpcompatibility/php-compatibility',
+            'Adding php compatability info',
+            false
+        );
+        $this->mu()->execMe(
+            $webRoot,
+            './vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility',
+            'Adding php compatability info',
+            false
+        );
+        $this->mu()->execMe(
+            $webRoot,
+            './vendor/bin/phpcs --config-set colors 1',
+            'Adding colour',
+            false
+        );
+        $this->mu()->execMe(
+            $webRoot,
+            './vendor/bin/phpcs --config-set severity 1',
+            'Showing all errors',
+            false
+        );
+        $this->mu()->execMe(
+            $webRoot,
+            './vendor/bin/phpcs --config-show',
+            'Showing all errors',
+            false
+        );
+        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
+            // $file = str_replace('\\', '-', $baseNameSpace);
             $this->mu()->execMe(
                 $webRoot,
-                'phpcs -p ' . $codeDir .
+                './vendor/bin/phpcs' .
+                ' -p ' . $codeDir .
                 ' --standard=PHPCompatibility' .
-                ' --extensions=php --runtime-set testVersion ' . $this->phpVersion .
-                ' --report-full=' . $logFile .
-                ' -n',
+                ' --extensions=php ' .
+                ' --runtime-set testVersion ' . $this->phpVersion,
                 'Running PHP Compatibility Check in: ' . $this->mu()->getWebRootDirLocation(),
                 false
             );

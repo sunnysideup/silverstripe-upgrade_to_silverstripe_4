@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 
 /**
  * Remove installer folder from composer.json file so that package
@@ -38,7 +39,7 @@ class RemoveInstallerFolder extends Task
             . '    unset($data["extra"]["installer-name"]);'
             . '}';
             $comment = 'Removing extra.installer-name variable';
-            $this->updateJSONViaCommandLine(
+            ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
                 $this->mu()->getGitRootDir(),
                 $command,
                 $comment

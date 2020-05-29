@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 
 /**
  * Runs the silverstripe/upgrade task "recompose". See:
@@ -13,21 +14,26 @@ class RecomposeHomeBrew extends Task
     protected $taskStep = 's20';
 
     protected $requireLinesToAdd = [
-        'silverstripe/framework' => '',
+        'silverstripe/recipe-cms' => '^4.4',
+    ];
 
-        'silverstripe/assets' => '',
-        'silverstripe/config' => '',
-        'silverstripe/admin' => '',
+    protected $requireLinesToRemove = [
+        'silverstripe/recipe-cms',
+        'silverstripe/admin',
+        'silverstripe/assets',
+        'silverstripe/config',
+        'silverstripe/admin',
 
-        'silverstripe/cms' => '',
-        'silverstripe/asset-admin' => '',
-        'silverstripe/campaign-admin' => '',
-        'silverstripe/versioned-admin' => '',
-        'silverstripe/errorpage' => '',
-        'silverstripe/graphql' => '',
-        'silverstripe/reports' => '',
-        'silverstripe/siteconfig' => '',
-        'silverstripe/versioned' => '',
+        'silverstripe/cms',
+        'silverstripe/framework',
+        'silverstripe/asset-admin',
+        'silverstripe/campaign-admin',
+        'silverstripe/errorpage',
+        'silverstripe/graphql',
+        'silverstripe/reports',
+        'silverstripe/siteconfig',
+        'silverstripe/versioned-admin',
+        'silverstripe/versioned',
     ];
 
     public function getTitle()
@@ -44,30 +50,28 @@ class RecomposeHomeBrew extends Task
 
     public function runActualTask($params = [])
     {
+        $command = '';
         foreach ($this->requireLinesToAdd as $package => $constraint) {
             if ($constraint === '') {
-                if ($package === 'silverstripe/framework') {
+                if ($package === 'silverstripe/recipe-cms') {
                     $this->requireLinesToAdd[$package] = $this->mu()->getFrameworkComposerRestraint();
                 } else {
                     $this->requireLinesToAdd[$package] = '*';
                 }
             }
         }
-        $command =
-        'unset($data["require"]["silverstripe/cms"]);' .
-        'unset($data["require"]["silverstripe/framework"]);' .
-        'unset($data["require"]["silverstripe/reports"]);' .
-        'unset($data["require"]["silverstripe/siteconfig"]);' .
-        'unset($data["require"]["silverstripe/recipe-cms"]);' .
-        'unset($data["require"]["composer/installers"]);';
+        foreach ($this->requireLinesToRemove as $package) {
+            $command .=
+            'unset($data["require"]["' . $package . '"]);';
+        }
         foreach ($this->requireLinesToAdd as $key => $value) {
             $command .=
         '$data["require"]["' . $key . '"] = "' . $value . '"; ';
         }
-        $this->updateJSONViaCommandLine(
+        ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),
             $command,
-            'adding framework via recipes'
+            'adding cms recipe version: ' . $this->mu()->getFrameworkComposerRestraint()
         );
         $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 ');
     }

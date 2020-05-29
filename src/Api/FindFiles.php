@@ -171,7 +171,13 @@ class FindFiles
         if ($runningInnerLoop || $this->needToFillFileCache) {
             $dir = opendir($path);
             if ($dir) {
-                while ($file = readdir($dir)) {
+                $keepGoing = true;
+                while ($keepGoing) {
+                    $file = readdir($dir);
+                    if (! $file) {
+                        $keepGoing = false;
+                        continue;
+                    }
                     $fullPath = $path . '/' . $file;
                     if (($file === '.') ||
                         ($file === '..') ||
@@ -202,7 +208,6 @@ class FindFiles
                             $this->fileArray[$path][] = $fullPath; //search file data
                         }
                     }
-                    $file = readdir($dir);
                 } //End of while
                 closedir($dir);
             } else {

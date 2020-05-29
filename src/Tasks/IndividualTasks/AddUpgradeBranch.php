@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -21,8 +22,9 @@ class AddUpgradeBranch extends Task
     {
         return '
             Creates a starter branch: "' . $this->mu()->getNameOfUpgradeStarterBranch() . '" of your module/app
-            from the ' . $this->mu()->getNameOfBranchForBaseCode() . ' branch.
-            These branch names can be customised.
+            from the "' . $this->mu()->getNameOfBranchForBaseCode() . '" branch.
+            If it does not exist.
+            These branch names can be customised with setNameOfUpgradeStarterBranch and setNameOfBranchForBaseCode.
             ';
     }
 
@@ -31,22 +33,10 @@ class AddUpgradeBranch extends Task
      */
     public function runActualTask($params = [])
     {
-        $gitRootDir = $this->mu()->getGitRootDir();
-        $this->mu()->execMe(
-            $gitRootDir,
-            '
-            if $(git ls-remote --heads ${REPO} ${BRANCH} | grep -q ' . "'refs/heads/" . $this->mu()->getNameOfUpgradeStarterBranch() . "'" . '); then
-                    echo branch exists
-                else
-                    git checkout origin ' . $this->mu()->getNameOfBranchForBaseCode() . '
-                    git pull origin ' . $this->mu()->getNameOfBranchForBaseCode() . '
-                    git checkout -b ' . $this->mu()->getNameOfUpgradeStarterBranch() . '
-                    git push origin ' . $this->mu()->getNameOfUpgradeStarterBranch() . '
-
-            fi',
-            'create upgrade branch: ' . $this->mu()->getNameOfUpgradeStarterBranch() .
-                ' from ' . $this->mu()->getNameOfBranchForBaseCode() . ' in ' . $gitRootDir,
-            false
+        Git::inst($this->mu())->createNewBranchIfItDoesNotExist(
+            $this->mu()->getGitRootDir(),
+            $this->mu()->getNameOfUpgradeStarterBranch(),
+            $this->mu()->getNameOfBranchForBaseCode()
         );
     }
 

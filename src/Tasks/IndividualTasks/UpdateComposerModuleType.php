@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 
 /**
  * Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.
@@ -32,7 +33,7 @@ class UpdateComposerModuleType extends Task
             . '    $data["type"] = "silverstripe-vendormodule";'
             . '}';
             $comment = 'Update composer module type from silverstripe-module to silverstripe-vendormodule';
-            $this->updateJSONViaCommandLine(
+            ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
                 $this->mu()->getGitRootDir(),
                 $command,
                 $comment

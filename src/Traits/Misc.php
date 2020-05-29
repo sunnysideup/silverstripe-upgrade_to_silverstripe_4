@@ -31,7 +31,8 @@ trait Misc
         if (file_exists($path) || $returnEvenIfItDoesNotExists) {
             return rtrim($path, '/');
         }
-        user_error('Could not find path: ' . $path);
+
+        return '';
     }
 
     /**
@@ -76,6 +77,19 @@ trait Misc
         }
 
         return true;
+    }
+
+    protected function getCommandLineOrArgumentAsString(string $variableName = ''): string
+    {
+        if (PHP_SAPI === 'cli') {
+            if (isset($this->argv[1])) {
+                $data = explode('=', $this->argv[1]);
+                if (count($data) === 2 && trim($data[0]) === $variableName) {
+                    return trim($data[1]);
+                }
+            }
+        }
+        return $_GET[$variableName] ?? '';
     }
 
     protected function getCommandLineOrArgumentAsBoolean(string $variableName = ''): bool

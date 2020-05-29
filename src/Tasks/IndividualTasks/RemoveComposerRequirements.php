@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 
 /**
  * Updates the composer requirements to reflect the new version and package names
@@ -35,7 +36,7 @@ class RemoveComposerRequirements extends Task
 
         $comment = 'remove the requirement for ' . $package . ' from ' . $this->mu()->getGitRootDir();
 
-        $this->updateJSONViaCommandLine(
+        ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),
             $command,
             $comment

@@ -59,11 +59,10 @@ class SessionManagement implements SessionManagementInterface
             }
 
             return json_decode($data, true);
-        } else {
-            $this->setSessionData([]);
-
-            return $this->getSessionData();
         }
+        $this->setSessionData([]);
+
+        return $this->getSessionData();
     }
 
     /**

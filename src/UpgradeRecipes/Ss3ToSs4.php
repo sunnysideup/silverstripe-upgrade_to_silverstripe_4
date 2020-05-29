@@ -57,6 +57,7 @@ class Ss3ToSs4 extends BaseClass
         'RecomposeHomeBrew' => [],
         'UpdateComposerRequirements' => [],
         'RemoveInstallerFolder' => [],
+        'UpgradeDevBuild' => [],
         'ResetWebRootDir-3' => [],
 
         //Step2: MoveToNewVersion
@@ -68,6 +69,7 @@ class Ss3ToSs4 extends BaseClass
         //Step3: FixBeforeStart
         'ChangeEnvironment' => [],
         'MoveCodeToSRC' => [],
+        'MoveMysiteToApp' => [],
         'CreateClientFolder' => [],
         'SearchAndReplace' => [],
         'FixRequirements' => [],
@@ -89,6 +91,7 @@ class Ss3ToSs4 extends BaseClass
         // 'WebRootUpdate' => [],
         //step6: Check
         'ApplyPSR2' => [],
+        'AddDotEnvFile' => [],
         'FinalDevBuild' => [],
         'RunImageTask' => [],
         'DoMigrateSiteTreeLinkingTask' => [],

@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -16,7 +17,7 @@ class CheckoutDevMaster extends Task
 
     protected $useGitClone = false;
 
-    protected $composerOptions = '--prefer-source --update-no-dev';
+    protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
 
     public function getTitle()
     {
@@ -26,7 +27,7 @@ class CheckoutDevMaster extends Task
     public function getDescription()
     {
         return '
-            Checks out ' . $this->branchOrTagToUse . ' (customisable)
+            Checks out ' . $this->branchOrTagToUse . ' (customisable using setNameOfBranchForBaseCode)
             of project/module using composer for a module or git checkout for a project.';
     }
 
@@ -49,8 +50,8 @@ class CheckoutDevMaster extends Task
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
                     'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' .
-                        $this->mu()->getNameOfBranchForBaseCode() . ' ' . $this->composerOptions,
-                    'checkout ' . $this->mu()->getNameOfBranchForBaseCode() . ' of ' .
+                        $this->mu()->getNameOfBranchForBaseCodeForComposer() . ' ' . $this->composerOptions,
+                    'checkout ' . $this->mu()->getNameOfBranchForBaseCodeForComposer() . ' of ' .
                         $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                     false
                 );
@@ -74,18 +75,13 @@ class CheckoutDevMaster extends Task
 
     protected function gitClone()
     {
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'git clone ' . $this->mu()->getGitLink() . ' ' . $this->mu()->getGitRootDir(),
-            'clone ' . $this->mu()->getGitLink(),
-            false
-        );
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git checkout ' . $this->branchOrTagToUse,
-            'checkout ' . $this->branchOrTagToUse,
-            false
-        );
+        Git::inst($this->mu())
+            ->Clone(
+                $this->mu()->getWebRootDirLocation(),
+                $this->mu()->getGitLink(),
+                $this->mu()->getGitRootDir(),
+                $this->branchOrTagToUse
+            );
     }
 
     protected function hasCommitAndPush()

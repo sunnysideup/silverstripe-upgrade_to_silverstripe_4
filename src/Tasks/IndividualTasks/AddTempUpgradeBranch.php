@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -29,46 +30,16 @@ class AddTempUpgradeBranch extends Task
 
     public function runActualTask($params = [])
     {
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git fetch --all ',
-            'get the lastest git data',
-            false
-        );
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'if git show-ref --quiet refs/heads/' . $this->mu()->getNameOfTempBranch() . '; then git branch -d ' . $this->mu()->getNameOfTempBranch() . '; git push origin --delete ' . $this->mu()->getNameOfTempBranch() . '; fi',
-            'delete upgrade branch (' . $this->mu()->getNameOfTempBranch() . ') locally',
-            false
-        );
-
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git push origin --delete ' . $this->mu()->getNameOfTempBranch(),
-            'delete upgrade branch (' . $this->mu()->getNameOfTempBranch() . ') remotely',
-            false
-        );
-
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git checkout ' . $this->mu()->getNameOfUpgradeStarterBranch(),
-            'check out : ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' as a starting point',
-            false
-        );
-
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git pull origin ' . $this->mu()->getNameOfUpgradeStarterBranch(),
-            'get the latest details for : ' . $this->mu()->getNameOfUpgradeStarterBranch() . '',
-            false
-        );
-
-        $this->mu()->execMe(
-            $this->mu()->getGitRootDir(),
-            'git checkout -b ' . $this->mu()->getNameOfTempBranch() . ' origin/' . $this->mu()->getNameOfUpgradeStarterBranch(),
-            'create and checkout new branch: ' . $this->mu()->getNameOfTempBranch(),
-            false
-        );
+        Git::inst($this->mu())
+            ->deleteBranch(
+                $this->mu()->getGitRootDir(),
+                $this->mu()->getNameOfTempBranch()
+            )
+            ->createNewBranch(
+                $this->mu()->getGitRootDir(),
+                $this->mu()->getNameOfTempBranch(),
+                $this->mu()->getNameOfUpgradeStarterBranch()
+            );
     }
 
     protected function hasCommitAndPush()

@@ -133,9 +133,15 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
     /**
      * finish the run with a merge into master.
-     * @var boolean
+     * @var bool
      */
     protected $runIrreversibly = false;
+
+    /**
+     * is this out of order - i.e. no influence on next task
+     * @var bool
+     */
+    protected $outOfOrderTask = false;
 
     #########################################
     # MODULES
@@ -149,7 +155,8 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      *          'PackageName' => 'Package1',
      *          'PackageNamespace' => 'Package1',
      *          'GitLink' => 'git@github.com:foor/bar-1.git',
-     *          'UpgradeAsFork' => false
+     *          'UpgradeAsFork' => false,
+     *          'NameOfBranchForBaseCode' => 'develop',
      *      ],
      *      [
      *          'VendorName' => 'A',
@@ -157,7 +164,8 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      *          'PackageName' => 'Package2',
      *          'PackageNamespace' => 'Package2',
      *          'GitLink' => 'git@github.com:foor/bar-2.git',
-     *          'UpgradeAsFork' => false
+     *          'UpgradeAsFork' => false,
+     *          'NameOfBranchForBaseCode' => 'master',
      *      ],
      * required are:
      * - VendorName
@@ -474,51 +482,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this;
     }
 
-    public function getRecipe(): string
-    {
-        return $this->recipe;
-    }
-
-    public function getAvailableRecipes(): array
-    {
-        return $this->availableRecipes;
-    }
-
-    public function getListOfTasks(): array
-    {
-        return $this->listOfTasks;
-    }
-
-    public function getIsModuleUpgrade(): bool
-    {
-        return $this->isModuleUpgrade;
-    }
-
-    public function getDefaultNamespaceForTasks(): string
-    {
-        return $this->defaultNamespaceForTasks;
-    }
-
-    public function getVendorNamespace(): string
-    {
-        return $this->vendorNamespace;
-    }
-
-    public function getPackageNamespace(): string
-    {
-        return $this->packageNamespace;
-    }
-
-    public function getAboveWebRootDirLocation()
-    {
-        return $this->aboveWebRootDirLocation;
-    }
-
-    public function getWebRootDirLocation(): string
-    {
-        return $this->webRootDirLocation;
-    }
-
     /**
      * @return string
      */
@@ -570,7 +533,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     {
         $array = [];
         foreach ($this->moduleDirLocations as $location) {
-            $location = (string) $this->checkIfPathExistsAndCleanItUp($location, true);
+            $location = (string) $this->checkIfPathExistsAndCleanItUp($location, false);
             if ($location) {
                 $array[$location] = $location;
             }
@@ -627,6 +590,17 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return array_shift($locations);
     }
 
+    public function getNameOfBranchForBaseCodeForComposer(): string
+    {
+        if ($this->nameOfBranchForBaseCode) {
+            if (substr($this->nameOfBranchForBaseCode, 0, 4) === 'dev-') {
+                return $this->nameOfBranchForBaseCode;
+            }
+            return 'dev-' . $this->nameOfBranchForBaseCode;
+        }
+        return 'dev-master';
+    }
+
     /**
      * Locates the directory in which the code is kept within the module directory
      *
@@ -662,7 +636,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $codeDirs;
     }
 
-    public function findMyCodeDir($moduleDir)
+    public function findMyCodeDir($moduleDir): string
     {
         if (file_exists($moduleDir)) {
             $test1 = $moduleDir . '/code';
@@ -677,6 +651,9 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
                 user_error('Can not find code/src dir for ' . $moduleDir, E_USER_NOTICE);
             }
         }
+
+        //return empty string
+        return '';
     }
 
     public function getGitRootDir(): string

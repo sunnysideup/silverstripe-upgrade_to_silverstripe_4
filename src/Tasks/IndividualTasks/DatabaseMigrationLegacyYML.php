@@ -38,13 +38,16 @@ class DatabaseMigrationLegacyYML extends Task
                 return $oldFile . ' NOT FOUND!!!';
             }
             $dir = dirname($newFile);
-            if (! file_exists($dir)) {
-                mkdir($dir);
-            }
+            $this->mu()->execMe(
+                $moduleDir,
+                'mkdir -pv \'' . $dir . '\'',
+                'creating: ' . $dir,
+                false
+            );
             $this->mu()->execMe(
                 $moduleDir,
                 'if test -f ' . $oldFile . '; then cp -vn ' . $oldFile . ' ' . $newFile . '; fi;',
-                'moving ' . $oldFile . ' to ' . $newFile . ' -v is verbose, -n is only if destination does not exists',
+                'moving ' . $oldFile . ' to ' . $newFile . ' -v is verbose, -n is only if destination does not exists.',
                 false
             );
             if (! file_exists($newFile)) {

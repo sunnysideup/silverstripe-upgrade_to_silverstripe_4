@@ -146,6 +146,7 @@ Note that you can run this step by step and that you can also use the following 
 
 - restart
 - again
+- task=MyTask
 - more options become available all the time!
 
 e.g.

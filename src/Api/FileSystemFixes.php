@@ -99,13 +99,14 @@ class FileSystemFixes
         return false;
     }
 
-    protected function removeCommonStart(string $s, string $other): string
+    protected function removeCommonStart(string $path, string $other): string
     {
         $x = 0;
-        while ($x < 999 && substr($a, 0, $x) === substr($other, 0, $x)) {
+        $len = strlen($path);
+        while ($x < $len && substr($path, 0, $x) === substr($other, 0, $x)) {
             $x++;
         }
 
-        return substr($a, $x, strlen($a) - $x);
+        return substr($path, $x, $len - $x);
     }
 }

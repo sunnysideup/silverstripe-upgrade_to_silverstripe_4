@@ -120,6 +120,8 @@
 
 
     php:
+        "Member::get_unique_identifier_field()":
+            R: "Member::config()->get('unique_identifier_field')"
         "file_get_contents":
             R: "file_get_contents"
             C: "Use new asset abstraction (https://docs.silverstripe.org/en/4/changelogs/4.0.0#asset-storage"
@@ -144,9 +146,12 @@
         " => 'Image'":
             R: " => 'Image'"
             C: 'you may want to add ownership (owns)'
-        "NumericField":
-            R: "NumericField"
-            C: 'check the number of decimals required and add as ->Step(123)'
+        "new NumericField":
+            R: "NumericField::create"
+            C: 'check the number of decimals required and add as ->setScale(2)'
+        "NumericField::create":
+            R: "NumericField::create"
+            C: 'check the number of decimals required and add as ->setScale(2)'
         'framework/sake':
             R: 'vendor/bin/sake'
         'framework/cli-script.php':
@@ -364,13 +369,13 @@
             C: "Please review update and fix as required"
             I: true
         'Session::get_all()':
-            R: "SilverStripe\\Control\\Controller::curr()->getRequest()->getSession()->getAll()"
+            R: "Controller::curr()->getRequest()->getSession()->getAll()"
             C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
         'Session::clear_all()':
-            R: "SilverStripe\\Control\\Controller::curr()->getRequest()->getSession()->clearAll()"
+            R: "Controller::curr()->getRequest()->getSession()->clearAll()"
             C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
         'Session::':
-            R: "SilverStripe\\Control\\Controller::curr()->getRequest()->getSession()->"
+            R: "Controller::curr()->getRequest()->getSession()->"
             C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
         'SSViewer::set_source_file_comments(':
             R: "Config::modify()->update('SSViewer', 'source_file_comments', "

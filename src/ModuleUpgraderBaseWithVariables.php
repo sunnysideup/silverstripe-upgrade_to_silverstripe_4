@@ -494,7 +494,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     }
 
     /**
-     * @return string [description]
+     * @return string
      */
     public function getLocationOfSSUpgradeModule(): string
     {

@@ -31,21 +31,12 @@ class MoveMysiteToApp extends Task
     {
         if ($this->mu()->getIsProjectUpgrade()) {
             $rootDir = $this->mu()->getWebRootDirLocation();
-            $old = './mysite/';
-            $new = './app/';
+            $old = '/mysite/';
+            $new = '/app/';
             if (file_exists($rootDir . '/' . $old)) {
                 if (! file_exists($rootDir . '/' . $new)) {
-                    $this->mu()->execMe(
-                        $rootDir,
-                        '
-if test -d ' . $old . '; then
-    mv -vn ' . $old . ' ' . $new . ';
-else
-    echo \' !!!!!!!!! Error in moving ' . $rootDir . '/' . $old . ' to ' . $rootDir . '/' . $new . ' !!!!!!!!! \';
-fi;',
-                        'moving ' . $old . ' to ' . $new . ' in ' . $rootDir . ' -v is verbose, -n is only if destination does not exists',
-                        false
-                    );
+                    $fixer = new FileSystemFixes($this->mu());
+                    $this->mu()->moveFolderOrFile($rootDir.$old, $rootDir.$new);
                 } else {
                     $this->mu()->colourPrint(
                         $rootDir . '/' . $new . ' already exists',

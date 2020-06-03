@@ -23,6 +23,10 @@ class FindFiles
 
     private $findAllExts = false;
 
+    private $recursive = true;
+
+    private $ignoreHiddenFilesAndFolders = true;
+
     // files
 
     /**
@@ -35,11 +39,11 @@ class FindFiles
 
     /**
      *   Sets folders to ignore
-     *   @param array $ignoreFolderArray
+     * @param array $ignoreFolderArray
      *
-     *   @return FindFiles
+     * @return FindFiles
      */
-    public function setIgnoreFolderArray($ignoreFolderArray = [])
+    public function setIgnoreFolderArray(?array $ignoreFolderArray = []) : FindFiles
     {
         if ($this->ignoreFolderArray === $ignoreFolderArray) {
             //do nothing
@@ -53,10 +57,10 @@ class FindFiles
 
     /**
      *   Sets folders to ignore
-     *   @param array $ignoreFolderArray
-     *   @return self
+     * @param array $ignoreFolderArray
+     * @return FindFiles
      */
-    public function addToIgnoreFolderArray($ignoreFolderArray = [])
+    public function addToIgnoreFolderArray(?array $ignoreFolderArray = []) : FindFiles
     {
         $oldIgnoreFolderArray = $this->ignoreFolderArray;
         $this->ignoreFolderArray = array_unique(
@@ -74,8 +78,9 @@ class FindFiles
 
     /**
      * remove ignore folders
+     * @return FindFiles
      */
-    public function resetIgnoreFolderArray()
+    public function resetIgnoreFolderArray() : FindFiles
     {
         $this->ignoreFolderArray = [];
         $this->resetFileCache();
@@ -85,9 +90,10 @@ class FindFiles
 
     /**
      *   Sets extensions to look
-     *   @param bool $boolean
+     * @param bool $boolean - optional
+     * @return FindFiles
      */
-    public function setFindAllExts($boolean = true)
+    public function setFindAllExts(bool $boolean = true) : FindFiles
     {
         $this->findAllExts = $boolean;
         $this->resetFileCache();
@@ -95,7 +101,12 @@ class FindFiles
         return $this;
     }
 
-    public function setSearchPath($pathLocation)
+    /**
+     *
+     * @param  string    $pathLocation
+     * @return FindFiles
+     */
+    public function setSearchPath(string $pathLocation) : FindFiles
     {
         if ($pathLocation !== $this->searchPath) {
             $this->searchPath = $pathLocation;
@@ -107,9 +118,10 @@ class FindFiles
 
     /**
      *   Sets extensions to look
-     *   @param array $extensions
+     * @param array $extensions - optional
+     * @return FindFiles
      */
-    public function setExtensions($extensions = [])
+    public function setExtensions(?array $extensions = []) : FindFiles
     {
         $this->extensions = $extensions;
         if (count($this->extensions)) {
@@ -117,6 +129,31 @@ class FindFiles
         } else {
             $this->findAllExts = true;
         }
+        $this->resetFileCache();
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param  bool      $bool
+     * @return FindFiles
+     */
+    public function setRecursive(bool $bool): FindFiles
+    {
+        $this->recursive = $bool;
+        $this->resetFileCache();
+
+        return $this;
+    }
+    /**
+     *
+     * @param bool $bool
+     * @return FindFiles
+     */
+    public function setIgnoreHiddenFilesAndFolders(bool $bool): FindFiles
+    {
+        $this->ignoreHiddenFilesAndFolders = $bool;
         $this->resetFileCache();
 
         return $this;
@@ -186,7 +223,7 @@ class FindFiles
                         continue;
                     }
                     //ignore hidden files and folders
-                    if (substr($file, 0, 1) === '.') {
+                    if ($this->ignoreHiddenFilesAndFolders && substr($file, 0, 1) === '.' ) {
                         continue;
                     }
                     //ignore folders with _manifest_exclude in them!
@@ -202,7 +239,9 @@ class FindFiles
                         if ($conditionA || $conditionB) {
                             continue;
                         }
-                        $this->getFileArray($fullPath, $runningInnerLoop = true); //recursive traversing here
+                        if ($this->recursive) {
+                            $this->getFileArray($fullPath, $runningInnerLoop = true); //recursive traversing here
+                        }
                     } elseif ($this->matchedExtension($file)) { //checks extension if we need to search this file
                         if (filesize($fullPath)) {
                             $this->fileArray[$path][] = $fullPath; //search file data

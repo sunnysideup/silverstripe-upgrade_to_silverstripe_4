@@ -23,19 +23,17 @@ class CreateClientFolder extends Task
             Takes the javascript, css, and images folders and puts them in a newly created client folder.';
     }
 
+    protected $clientFolderName = 'client';
+
     /**
      * @param  array  $params not currently used for this task
      */
     public function runActualTask($params = [])
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-            $newClientFolder = $moduleDir . '/client/ ';
-            $this->mu()->execMe(
-                $moduleDir,
-                'mkdir -vp ' . $newClientFolder,
-                'Creating new client folder: ' . $newClientFolder,
-                false
-            );
+            $fixer = new FileSystemFixes($this->mu());
+            $newClientFolder = $moduleDir . '/'.$this->clientFolderName.'/ ';
+            $fixer->mkDir($moduleDir, $newClientFolder);
             $foldersToMoveName = [
                 'javascript',
                 'js',
@@ -45,13 +43,7 @@ class CreateClientFolder extends Task
             ];
             foreach ($foldersToMoveName as $folderToMoveName) {
                 $folderToMove = $moduleDir . '/' . $folderToMoveName . '/ ';
-                $this->mu()->execMe(
-                    $moduleDir,
-                    'if test -d ' . $folderToMove . '; then mv -vn ' . $folderToMove . ' ' . $newClientFolder . '; fi;',
-                    'Moving ' . $folderToMove . ' to ' . $newClientFolder . '
-                        -v is verbose, -n is only if does not exists already.',
-                    false
-                );
+                $fixer->moveFolderOrFile($folderToMove, $newClientFolder);
             }
         }
     }

@@ -70,8 +70,10 @@ class Ss3ToSs4 extends BaseClass
         'ChangeEnvironment' => [],
         'MoveCodeToSRC' => [],
         'MoveMysiteToApp' => [],
+        'MoveTemplates' => [],
         'CreateClientFolder' => [],
         'SearchAndReplace' => [],
+        'FixTemplateIncludeStatements' => [],
         'FixRequirements' => [],
         'UpperCaseFolderNamesForPSR4' => [],
 

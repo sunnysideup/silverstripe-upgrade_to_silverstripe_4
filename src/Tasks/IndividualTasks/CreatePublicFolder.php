@@ -23,6 +23,8 @@ class CreatePublicFolder extends Task
             For projects only, we create a public folder: ' . $this->mu()->getWebRootDirLocation() . '/public';
     }
 
+    protected $publicFolderName = 'public';
+
     /**
      * [runActualTask description]
      * @param  array  $params not currently used for this task
@@ -30,12 +32,9 @@ class CreatePublicFolder extends Task
     public function runActualTask($params = [])
     {
         if ($this->mu->getIsProjectUpgrade()) {
-            $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'mkdir -vp ./public',
-                'Creating new public folder: ' . $this->mu()->getWebRootDirLocation() . '/public',
-                false
-            );
+            $newFolder  = $this->mu()->getWebRootDirLocation() . '/'. $this->publicFolderName;
+            $fixer = new FileSystemFixes($this->mu());
+            $fixer->mkDir($this->mu()->getWebRootDirLocation(), $newFolder);
         }
     }
 

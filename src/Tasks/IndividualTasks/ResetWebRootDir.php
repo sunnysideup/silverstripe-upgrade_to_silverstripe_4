@@ -30,12 +30,10 @@ class ResetWebRootDir extends Task
             'remove the upgrade dir: ' . $this->mu()->getWebRootDirLocation(),
             false
         );
-
-        $this->mu()->execMe(
+        $fixer = new FileSystemFixes($this->mu());
+        $fixer->mkDir(
             $this->mu()->getAboveWebRootDirLocation(),
-            'mkdir ' . $this->mu()->getWebRootDirLocation() . '',
-            'create upgrade directory: ' . $this->mu()->getWebRootDirLocation(),
-            false
+            $this->mu()->getWebRootDirLocation()
         );
     }
 

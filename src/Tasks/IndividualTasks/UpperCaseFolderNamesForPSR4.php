@@ -56,12 +56,8 @@ class UpperCaseFolderNamesForPSR4 extends Task
                         $this->mu()->colourPrint('No need to move ' . str_replace($codeDir, '', $name) . ' as it is already in CamelCase', 'dark_gray');
                     } else {
                         $this->mu()->colourPrint('New name for directory: ' . $newName, 'green');
-                        $this->mu()->execMe(
-                            $this->mu()->getWebRootDirLocation(),
-                            'mv ' . $name . ' ' . $newName,
-                            'renaming code dir (' . $baseNameSpace . ') form ' . str_replace($codeDir, '', $name) . ' to ' . str_replace($codeDir, '', $newName),
-                            false
-                        );
+                        $fixer = new FileSystemFixes($this->mu());
+                        $this->mu()->moveFolderOrFile($name, $newName);
                     }
                     //rename($name, $newname); - first check the output, then remove the comment...
                 }

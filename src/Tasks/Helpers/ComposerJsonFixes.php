@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 class ComposerJsonFixes
 {
-
     protected static $inst = null;
 
     protected $myMu = null;
@@ -52,8 +51,8 @@ class ComposerJsonFixes
             false
         );
     }
+
     /**
-     *
      * @param ModuleUpgrader $mu
      * @return ComposerJsonFixes
      */
@@ -65,7 +64,6 @@ class ComposerJsonFixes
     }
 
     /**
-     *
      * @return ModuleUpgrader
      */
     protected function mu()

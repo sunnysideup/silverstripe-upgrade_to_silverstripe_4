@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Updates the composer requirements to reflect the new version and package names

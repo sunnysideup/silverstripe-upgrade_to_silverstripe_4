@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -36,7 +37,7 @@ class MoveMysiteToApp extends Task
             if (file_exists($rootDir . '/' . $old)) {
                 if (! file_exists($rootDir . '/' . $new)) {
                     $fixer = new FileSystemFixes($this->mu());
-                    $this->mu()->moveFolderOrFile($rootDir.$old, $rootDir.$new);
+                    $fixer->moveFolderOrFile($rootDir . $old, $rootDir . $new);
                 } else {
                     $this->mu()->colourPrint(
                         $rootDir . '/' . $new . ' already exists',

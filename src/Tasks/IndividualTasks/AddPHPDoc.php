@@ -10,7 +10,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class AddPHPDoc extends Task
 {
-
     protected $taskStep = 's60';
 
     public function getTitle()

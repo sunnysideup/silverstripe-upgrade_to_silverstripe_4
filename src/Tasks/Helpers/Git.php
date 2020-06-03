@@ -1,6 +1,7 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers;
+
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 class Git
@@ -20,7 +21,6 @@ class Git
 
     public function Clone(string $dir, string $gitLink, string $gitRootDir, string $branchName)
     {
-
         $this->mu()->execMe(
             $dir,
             'git clone ' . $gitLink . ' ' . $gitRootDir,
@@ -50,7 +50,6 @@ class Git
     }
 
     /**
-     *
      * @param string $dir
      * @param string $message
      * @param string $branchName
@@ -92,7 +91,6 @@ class Git
     }
 
     /**
-     *
      * @param  string $dir
      * @param  string $branchName
      *
@@ -109,45 +107,6 @@ class Git
     }
 
     /**
-     *
-     * @param  string $dir
-     * @param  string $branchName
-     *
-     * @return Git
-     */
-    protected function deleteBranchLocally(string $dir, string $branchName)
-    {
-        $this->mu()->execMe(
-            $dir,
-            'if git show-ref --quiet refs/heads/' . $branchName . '; then git branch -d ' . $branchName . '; git push origin --delete ' . $this->mu()->getNameOfTempBranch() . '; fi',
-            'delete branch (' . $branchName . ') locally',
-            false
-        );
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param  string $dir
-     * @param  string $branchName
-     *
-     * @return Git
-     */
-    protected function deleteBranchRemotely(string $dir, string $branchName)
-    {
-        $this->mu()->execMe(
-            $dir,
-            'git push origin --delete ' . $branchName,
-            'delete branch (' . $branchName . ') remotely',
-            false
-        );
-
-        return $this;
-    }
-
-    /**
-     *
      * @param  string $dir
      * @param  string $newBranchName
      * @param  string $fromBranchName
@@ -175,7 +134,6 @@ class Git
     }
 
     /**
-     *
      * @param  string $dir
      * @param  string $newBranchName
      * @param  string $fromBranch
@@ -220,7 +178,6 @@ class Git
     }
 
     /**
-     *
      * @param string $dir
      * @param string $fromBranch
      * @param string $intoBranch
@@ -248,7 +205,42 @@ class Git
     }
 
     /**
+     * @param  string $dir
+     * @param  string $branchName
      *
+     * @return Git
+     */
+    protected function deleteBranchLocally(string $dir, string $branchName)
+    {
+        $this->mu()->execMe(
+            $dir,
+            'if git show-ref --quiet refs/heads/' . $branchName . '; then git branch -d ' . $branchName . '; git push origin --delete ' . $this->mu()->getNameOfTempBranch() . '; fi',
+            'delete branch (' . $branchName . ') locally',
+            false
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param  string $dir
+     * @param  string $branchName
+     *
+     * @return Git
+     */
+    protected function deleteBranchRemotely(string $dir, string $branchName)
+    {
+        $this->mu()->execMe(
+            $dir,
+            'git push origin --delete ' . $branchName,
+            'delete branch (' . $branchName . ') remotely',
+            false
+        );
+
+        return $this;
+    }
+
+    /**
      * @param ModuleUpgrader $mu
      * @return Git
      */
@@ -260,7 +252,6 @@ class Git
     }
 
     /**
-     *
      * @return ModuleUpgrader
      */
     protected function mu()
@@ -269,7 +260,6 @@ class Git
     }
 
     /**
-     *
      * @param  string $dir
      */
     protected function fetchAll(string $dir)

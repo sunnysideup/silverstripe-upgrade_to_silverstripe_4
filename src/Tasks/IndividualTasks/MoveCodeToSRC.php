@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * This task adds a legacy branch to the git repo of the original to act as a backup/legacy version for
@@ -34,7 +34,7 @@ class MoveCodeToSRC extends Task
             $old = '/code/';
             $new = '/src/';
             $fixer = new FileSystemFixes($this->mu());
-            $this->mu()->moveFolderOrFile($moduleDir.$old, $moduleDir.$new);
+            $fixer->moveFolderOrFile($moduleDir . $old, $moduleDir . $new);
         }
     }
 

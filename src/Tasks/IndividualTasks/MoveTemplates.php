@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * This task adds a legacy branch to the git repo of the original to act as a backup/legacy version for
@@ -12,17 +12,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 class MoveTemplates extends Task
 {
     protected $taskStep = 's30';
-
-    public function getTitle()
-    {
-        return 'Move templates into namespacing';
-    }
-
-    public function getDescription()
-    {
-        return '
-            Takes the content of the template folder and moves it to the templates/Vendor/PackageName/ Folder.';
-    }
 
     protected $templateFolder = 'templates';
 
@@ -36,6 +25,17 @@ class MoveTemplates extends Task
         'Form' => 'Form',
     ];
 
+    public function getTitle()
+    {
+        return 'Move templates into namespacing';
+    }
+
+    public function getDescription()
+    {
+        return '
+            Takes the content of the template folder and moves it to the templates/Vendor/PackageName/ Folder.';
+    }
+
     /**
      * @param  array  $params not currently used for this task
      */
@@ -46,12 +46,12 @@ class MoveTemplates extends Task
         foreach ($codeDirs as $baseNameSpace => $codeDir) {
             $baseDir = dirname($codeDir);
             $relativeFolder = str_replace('\\', '/', $baseNameSpace);
-            $oldDir =  $baseDir . '/'.$this->templates;
-            $newDir =  $baseDir . '/'.$this->templates. '/' . $relativeFolder;
-            foreach($this->expectedFolders as $from => $to) {
+            $oldDir = $baseDir . '/' . $this->templates;
+            $newDir = $baseDir . '/' . $this->templates . '/' . $relativeFolder;
+            foreach ($this->expectedFolders as $from => $to) {
                 $fixer->moveFolderOrFile(
-                    $oldDir.'/'.$from,
-                    $newDir.'/'.$to
+                    $oldDir . '/' . $from,
+                    $newDir . '/' . $to
                 );
             }
             $this->moveAllInFolder($oldDir, $newDir);

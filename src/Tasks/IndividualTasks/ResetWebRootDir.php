@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**

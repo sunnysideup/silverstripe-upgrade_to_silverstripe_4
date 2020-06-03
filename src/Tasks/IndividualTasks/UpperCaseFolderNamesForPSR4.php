@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -36,7 +37,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
 
     public function runActualTask($params = [])
     {
-        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
             $di = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($codeDir, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST
@@ -57,7 +58,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
                     } else {
                         $this->mu()->colourPrint('New name for directory: ' . $newName, 'green');
                         $fixer = new FileSystemFixes($this->mu());
-                        $this->mu()->moveFolderOrFile($name, $newName);
+                        $fixer->moveFolderOrFile($name, $newName);
                     }
                     //rename($name, $newname); - first check the output, then remove the comment...
                 }

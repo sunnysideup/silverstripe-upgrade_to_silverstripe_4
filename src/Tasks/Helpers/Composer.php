@@ -1,6 +1,7 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers;
+
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 class Composer
@@ -29,7 +30,6 @@ class Composer
     }
 
     /**
-     *
      * @param ModuleUpgrader $mu
      * @return Composer
      */
@@ -41,12 +41,10 @@ class Composer
     }
 
     /**
-     *
      * @return ModuleUpgrader
      */
     protected function mu()
     {
         return $this->myMu;
     }
-
 }

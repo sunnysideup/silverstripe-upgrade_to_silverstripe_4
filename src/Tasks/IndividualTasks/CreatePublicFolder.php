@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -11,6 +12,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class CreatePublicFolder extends Task
 {
     protected $taskStep = 's10';
+
+    protected $publicFolderName = 'public';
 
     public function getTitle()
     {
@@ -23,8 +26,6 @@ class CreatePublicFolder extends Task
             For projects only, we create a public folder: ' . $this->mu()->getWebRootDirLocation() . '/public';
     }
 
-    protected $publicFolderName = 'public';
-
     /**
      * [runActualTask description]
      * @param  array  $params not currently used for this task
@@ -32,7 +33,7 @@ class CreatePublicFolder extends Task
     public function runActualTask($params = [])
     {
         if ($this->mu->getIsProjectUpgrade()) {
-            $newFolder  = $this->mu()->getWebRootDirLocation() . '/'. $this->publicFolderName;
+            $newFolder = $this->mu()->getWebRootDirLocation() . '/' . $this->publicFolderName;
             $fixer = new FileSystemFixes($this->mu());
             $fixer->mkDir($this->mu()->getWebRootDirLocation(), $newFolder);
         }

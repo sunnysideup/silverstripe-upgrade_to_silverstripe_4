@@ -2,12 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
-
-
 class FileSystemFixes
 {
-
     protected $myMu = null;
 
     public function __construct($myMu)
@@ -15,12 +11,7 @@ class FileSystemFixes
         $this->myMu = $myMu;
     }
 
-    protected function mu()
-    {
-        return $this->myMu;
-    }
-
-    public function mkDir(string $baseFolder, string $dir) : FileSystemFixes
+    public function mkDir(string $baseFolder, string $dir): FileSystemFixes
     {
         $this->mu()->execMe(
             $baseFolder,
@@ -33,8 +24,7 @@ class FileSystemFixes
         return $this;
     }
 
-
-    public function moveAllInFolder(string $oldDir, string $newDir) : FileSystemFixes
+    public function moveAllInFolder(string $oldDir, string $newDir): FileSystemFixes
     {
         $findFiles = new FindFiles();
         $list = $findFiles
@@ -47,14 +37,13 @@ class FileSystemFixes
         return $this;
     }
 
-
-    public function moveFoldersOrFilesWithin(string $oldDir, string $newDir, array $foldersOrFilesWithin) : FileSystemFixes
+    public function moveFoldersOrFilesWithin(string $oldDir, string $newDir, array $foldersOrFilesWithin): FileSystemFixes
     {
-        if(count($foldersOrFilesWithin)) {
+        if (count($foldersOrFilesWithin)) {
             foreach ($foldersOrFilesWithin as $folderOrFileWithin) {
                 $folderOrFileWithin = basename($folderOrFileWithin);
-                $oldDir = $oldDir . '/' . $folderOrFileWithin . '/ ';
-                $newDir = $newDir . '/' . $folderOrFileWithin . '/ ';
+                $oldDir .= '/' . $folderOrFileWithin . '/ ';
+                $newDir .= '/' . $folderOrFileWithin . '/ ';
                 $this->moveFolderOrFile($oldDir, $newDir);
             }
         }
@@ -62,7 +51,7 @@ class FileSystemFixes
         return $this;
     }
 
-    public function moveFolderOrFile(string $oldPath, string $newPath, ?bool $isCopy = false) : FileSystemFixes
+    public function moveFolderOrFile(string $oldPath, string $newPath, ?bool $isCopy = false): FileSystemFixes
     {
         $action = 'mv';
         $actionName = 'Moving';
@@ -70,12 +59,12 @@ class FileSystemFixes
             $action = 'cp';
             $actionName = 'Copying';
         }
-        if($this->test($oldPath, false)) {
+        if ($this->test($oldPath, false)) {
             $parentFolder = dirname($oldPath);
             $this->mu()->execMe(
                 $parentFolder,
-                'if test -d ' . $oldPath . '; then '.$action.' -vn ' . $oldPath . ' ' . $newPath . '; fi;',
-                $actionName. ' ' .
+                'if test -d ' . $oldPath . '; then ' . $action . ' -vn ' . $oldPath . ' ' . $newPath . '; fi;',
+                $actionName . ' ' .
                 $this->removeCommonStart($oldPath, $newPath) . ' to ' . $this->removeCommonStart($newPath, $oldPath) . '
                     if test -d ... tests if the file / dir exists
                     -v ... verbose,
@@ -88,33 +77,35 @@ class FileSystemFixes
         return $this;
     }
 
-    public function copyFolderOrFile(string $oldPath, string $newPath) : FileSystemFixes
+    public function copyFolderOrFile(string $oldPath, string $newPath): FileSystemFixes
     {
         return $this->moveFolderOrFile($oldPath, $newPath, true);
     }
 
-    protected function test(string $path, ?bool $showError = true) : bool
+    protected function mu()
     {
-        if (file_exists($path)) {
-
-            return true;
-        } else {
-            if($showError) {
-                user_error('Could not create / copy / find '.$path, E_USER_NOTICE);
-            }
-
-            return false;
-        }
+        return $this->myMu;
     }
 
-    protected function removeCommonStart(string $s, string $other) : string
+    protected function test(string $path, ?bool $showError = true): bool
+    {
+        if (file_exists($path)) {
+            return true;
+        }
+        if ($showError) {
+            user_error('Could not create / copy / find ' . $path, E_USER_NOTICE);
+        }
+
+        return false;
+    }
+
+    protected function removeCommonStart(string $s, string $other): string
     {
         $x = 0;
-        while($x < 999 && substr($a, 0 , $x) === substr($other, 0 , $x)) {
+        while ($x < 999 && substr($a, 0, $x) === substr($other, 0, $x)) {
             $x++;
         }
 
         return substr($a, $x, strlen($a) - $x);
     }
-
 }

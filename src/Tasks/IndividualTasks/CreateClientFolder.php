@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -11,6 +12,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class CreateClientFolder extends Task
 {
     protected $taskStep = 's30';
+
+    protected $clientFolderName = 'client';
 
     public function getTitle()
     {
@@ -23,8 +26,6 @@ class CreateClientFolder extends Task
             Takes the javascript, css, and images folders and puts them in a newly created client folder.';
     }
 
-    protected $clientFolderName = 'client';
-
     /**
      * @param  array  $params not currently used for this task
      */
@@ -32,7 +33,7 @@ class CreateClientFolder extends Task
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $fixer = new FileSystemFixes($this->mu());
-            $newClientFolder = $moduleDir . '/'.$this->clientFolderName.'/ ';
+            $newClientFolder = $moduleDir . '/' . $this->clientFolderName . '/ ';
             $fixer->mkDir($moduleDir, $newClientFolder);
             $foldersToMoveName = [
                 'javascript',

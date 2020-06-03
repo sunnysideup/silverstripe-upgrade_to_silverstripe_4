@@ -71,7 +71,7 @@ class FixTemplateIncludeStatements extends Task
                 foreach ($this->findArray as $finalFind) {
                     $caseSensitive = false;
                     $replacementType = 'BASIC';
-                    $finalReplace = '<% include '.$baseNameSpace . '\Includes';
+                    $finalReplace = '<% include ' . $baseNameSpace . '\Includes';
                     $this->mu()->colourPrint(
                         '    --- FIND: ' . $finalFind . "\n" .
                         '    --- REPLACE: ' . $finalReplace . "\n"

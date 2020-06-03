@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')

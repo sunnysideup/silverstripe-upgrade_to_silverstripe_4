@@ -43,7 +43,7 @@ class FindFiles
      *
      * @return FindFiles
      */
-    public function setIgnoreFolderArray(?array $ignoreFolderArray = []) : FindFiles
+    public function setIgnoreFolderArray(?array $ignoreFolderArray = []): FindFiles
     {
         if ($this->ignoreFolderArray === $ignoreFolderArray) {
             //do nothing
@@ -60,7 +60,7 @@ class FindFiles
      * @param array $ignoreFolderArray
      * @return FindFiles
      */
-    public function addToIgnoreFolderArray(?array $ignoreFolderArray = []) : FindFiles
+    public function addToIgnoreFolderArray(?array $ignoreFolderArray = []): FindFiles
     {
         $oldIgnoreFolderArray = $this->ignoreFolderArray;
         $this->ignoreFolderArray = array_unique(
@@ -80,7 +80,7 @@ class FindFiles
      * remove ignore folders
      * @return FindFiles
      */
-    public function resetIgnoreFolderArray() : FindFiles
+    public function resetIgnoreFolderArray(): FindFiles
     {
         $this->ignoreFolderArray = [];
         $this->resetFileCache();
@@ -93,7 +93,7 @@ class FindFiles
      * @param bool $boolean - optional
      * @return FindFiles
      */
-    public function setFindAllExts(bool $boolean = true) : FindFiles
+    public function setFindAllExts(bool $boolean = true): FindFiles
     {
         $this->findAllExts = $boolean;
         $this->resetFileCache();
@@ -102,11 +102,10 @@ class FindFiles
     }
 
     /**
-     *
      * @param  string    $pathLocation
      * @return FindFiles
      */
-    public function setSearchPath(string $pathLocation) : FindFiles
+    public function setSearchPath(string $pathLocation): FindFiles
     {
         if ($pathLocation !== $this->searchPath) {
             $this->searchPath = $pathLocation;
@@ -121,7 +120,7 @@ class FindFiles
      * @param array $extensions - optional
      * @return FindFiles
      */
-    public function setExtensions(?array $extensions = []) : FindFiles
+    public function setExtensions(?array $extensions = []): FindFiles
     {
         $this->extensions = $extensions;
         if (count($this->extensions)) {
@@ -135,7 +134,6 @@ class FindFiles
     }
 
     /**
-     *
      * @param  bool      $bool
      * @return FindFiles
      */
@@ -146,8 +144,8 @@ class FindFiles
 
         return $this;
     }
+
     /**
-     *
      * @param bool $bool
      * @return FindFiles
      */
@@ -223,7 +221,7 @@ class FindFiles
                         continue;
                     }
                     //ignore hidden files and folders
-                    if ($this->ignoreHiddenFilesAndFolders && substr($file, 0, 1) === '.' ) {
+                    if ($this->ignoreHiddenFilesAndFolders && substr($file, 0, 1) === '.') {
                         continue;
                     }
                     //ignore folders with _manifest_exclude in them!

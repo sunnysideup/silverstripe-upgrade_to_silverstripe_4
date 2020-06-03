@@ -2,9 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.

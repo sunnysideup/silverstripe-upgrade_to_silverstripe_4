@@ -120,6 +120,10 @@
 
 
     php:
+        "increase_time_limit_to(":
+            "Environment::increaseTimeLimitTo("
+        "increase_memory_limit_to":
+            "Environment::increaseMemoryLimitTo("
         "Member::get_unique_identifier_field()":
             R: "Member::config()->get('unique_identifier_field')"
         "file_get_contents":

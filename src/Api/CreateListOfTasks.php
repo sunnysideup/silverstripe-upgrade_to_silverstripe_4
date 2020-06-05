@@ -6,28 +6,33 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 class CreateListOfTasks
 {
-    protected $mu = null;
+    protected $myMu = null;
+
+    protected function mu()
+    {
+        return $this->myMu;
+    }
 
     public function run()
     {
-        $this->mu = ModuleUpgrader::create();
+        $this->myMu = ModuleUpgrader::create();
         $html = '';
-        foreach (array_keys($this->mu->getAvailableRecipes()) as $recipeKey) {
-            $this->mu->applyRecipe($recipeKey);
+        foreach (array_keys($this->mu()->getAvailableRecipes()) as $recipeKey) {
+            $this->mu()->applyRecipe($recipeKey);
             $html .= '<h1>List of Tasks in run order for recipe: ' . $recipeKey . '</h1>';
             $count = 0;
-            $totalCount = count($this->mu->getListOfTasks());
+            $totalCount = count($this->mu()->getListOfTasks());
             $previousStep = '';
-            foreach ($this->mu->getListOfTasks() as $class => $params) {
+            foreach ($this->mu()->getListOfTasks() as $class => $params) {
                 $properClass = current(explode('-', $class));
                 $nameSpacesArray = explode('\\', $class);
                 $shortClassCode = end($nameSpacesArray);
                 if (! class_exists($properClass)) {
-                    $properClass = $this->mu->getDefaultNamespaceForTasks() . '\\' . $properClass;
+                    $properClass = $this->mu()->getDefaultNamespaceForTasks() . '\\' . $properClass;
                 }
                 if (class_exists($properClass)) {
                     $count++;
-                    // $runItNow = $this->mu->shouldWeRunIt((string) $shortClassCode);
+                    // $runItNow = $this->mu()->shouldWeRunIt((string) $shortClassCode);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     if ($obj->getTaskName()) {
@@ -59,7 +64,7 @@ class CreateListOfTasks
                 }
             }
         }
-        $dir = $this->mu->checkIfPathExistsAndCleanItUp(__DIR__ . '/../../docs/en/');
+        $dir = $this->mu()->checkIfPathExistsAndCleanItUp(__DIR__ . '/../../docs/en/');
         if ($dir) {
             $html = str_replace(' _', ' \_', $html);
             file_put_contents(

@@ -32,15 +32,22 @@ class CreatePublicFolder extends Task
      */
     public function runActualTask($params = [])
     {
-        if ($this->mu->getIsProjectUpgrade()) {
+        if ($this->mu()->getIsProjectUpgrade()) {
             $newFolder = $this->mu()->getWebRootDirLocation() . '/' . $this->publicFolderName;
             $fixer = new FileSystemFixes($this->mu());
             $fixer->mkDir($this->mu()->getWebRootDirLocation(), $newFolder);
+
+            $this->mu()->execMe(
+                $newFolder,
+                'echo \'hello world\' >> test.html',
+                'adding public test file',
+                false
+            );
         }
     }
 
     protected function hasCommitAndPush()
     {
-        return $this->mu->getIsProjectUpgrade();
+        return $this->mu()->getIsProjectUpgrade();
     }
 }

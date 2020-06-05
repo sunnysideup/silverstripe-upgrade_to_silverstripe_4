@@ -47,7 +47,7 @@ class Ss3ToSs4 extends BaseClass
         'FixOutdatedPHPStyles' => [],
         'FindFilesWithMoreThanOneClass' => [],
 
-        'CreatePublicFolder-1' => [],
+        'CreatePublicFolder' => [],
         'AddTableName' => [],
         'ChangeControllerInitToProtected' => [],
         // 'AddTableNamePrivateStatic' => [],
@@ -63,7 +63,6 @@ class Ss3ToSs4 extends BaseClass
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
         'ComposerCompatibilityCheckerStep2' => [],
-        'CreatePublicFolder-2' => [],
         'Recompose' => [],
 
         //Step3: FixBeforeStart

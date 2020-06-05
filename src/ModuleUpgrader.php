@@ -128,12 +128,12 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             }
             $this->colourPrint(
                 '===================== END =======================',
-                'light_red',
+                'yellow',
                 5
             );
             $this->colourPrint(
                 'Next: ' . $nextStep,
-                'light_red',
+                'yellow',
                 5
             );
         }

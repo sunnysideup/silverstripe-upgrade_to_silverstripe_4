@@ -32,7 +32,11 @@ class FileSystemFixes
             ->setRecursive(false)
             ->setFindAllExts(true)
             ->getFlatFileArray();
-        $this->moveFoldersOrFilesWithin($oldDir, $newDir, $list);
+        if(is_array($list)) {
+            $this->moveFoldersOrFilesWithin($oldDir, $newDir, $list);
+        } else {
+            $this->mu()->colourPrint($list);
+        }
 
         return $this;
     }

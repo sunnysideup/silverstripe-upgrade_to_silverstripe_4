@@ -413,6 +413,7 @@ Session has completed.
                 $runMe = false;
                 if ($name === $this->startFrom) {
                     $this->startFrom = '';
+                    $runMe = true;
                 }
             }
             if ($this->endWith) {

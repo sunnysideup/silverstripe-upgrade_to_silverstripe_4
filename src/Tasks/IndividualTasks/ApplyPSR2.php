@@ -37,13 +37,13 @@ class ApplyPSR2 extends Task
             $relativeDir = str_replace($webRoot, '', $codeDir);
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' vendor/bin/php-sslint-ecs',
+                'dir=' . $relativeDir . ' vendor/bin/sslint-ecs',
                 'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' vendor/bin/php-sslint-stan',
+                'dir=' . $relativeDir . ' vendor/bin/sslint-stan',
                 'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );

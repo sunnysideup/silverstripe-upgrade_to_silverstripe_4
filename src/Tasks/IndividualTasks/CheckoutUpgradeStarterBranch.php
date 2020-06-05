@@ -19,8 +19,9 @@ class CheckoutUpgradeStarterBranch extends Task
 
     public function getTitle()
     {
-        return 'Checkout the ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' of this module/app.
-            The name of the branch can be changed by using the following method: setNameOfBranchForBaseCode';
+        return 'Checkout the ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' of this module/app.'."\n".
+            'The name of the branch can be changed by using the following method: setNameOfBranchForBaseCode.'."\n".
+            'This task may not work if composer is not up-to-date!';
     }
 
     public function getDescription()

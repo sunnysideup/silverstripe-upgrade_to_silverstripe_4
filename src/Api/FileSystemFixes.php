@@ -32,7 +32,7 @@ class FileSystemFixes
             ->setRecursive(false)
             ->setFindAllExts(true)
             ->getFlatFileArray();
-        if(is_array($list)) {
+        if (is_array($list)) {
             $this->moveFoldersOrFilesWithin($oldDir, $newDir, $list);
         } else {
             $this->mu()->colourPrint($list);
@@ -100,7 +100,7 @@ class FileSystemFixes
             return true;
         }
         if ($showError) {
-            user_error('Could not create, copy, or find "' . $path.'"', E_USER_NOTICE);
+            user_error('Could not create, copy, or find "' . $path . '"', E_USER_NOTICE);
         }
 
         return false;

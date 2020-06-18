@@ -8,11 +8,6 @@ class CreateListOfTasks
 {
     protected $myMu = null;
 
-    protected function mu()
-    {
-        return $this->myMu;
-    }
-
     public function run()
     {
         $this->myMu = ModuleUpgrader::create();
@@ -74,5 +69,10 @@ class CreateListOfTasks
         } else {
             user_error('Coult not find ' . $dir . ' directory');
         }
+    }
+
+    protected function mu()
+    {
+        return $this->myMu;
     }
 }

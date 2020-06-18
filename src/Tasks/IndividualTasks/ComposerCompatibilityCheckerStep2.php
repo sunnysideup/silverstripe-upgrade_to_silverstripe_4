@@ -210,7 +210,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
 
     protected function getJsonFileLocationJSONResults(): string
     {
-        return $this->mu()->getWebRootDirLocation()  . '/' .  $this->resultsFileAsJSON;
+        return $this->mu()->getWebRootDirLocation() . '/' . $this->resultsFileAsJSON;
     }
 
     protected function hasCommitAndPush()

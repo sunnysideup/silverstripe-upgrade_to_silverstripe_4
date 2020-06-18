@@ -91,11 +91,6 @@ class LoadReplacementData
         $this->compileFlatArray();
     }
 
-    protected function mu()
-    {
-        return $this->myMu;
-    }
-
     public function setToFolder(string $s)
     {
         $this->toFolder = $s;
@@ -121,6 +116,11 @@ class LoadReplacementData
     public function getFlatReplacedArray(): array
     {
         return $this->flatReplacedArray;
+    }
+
+    protected function mu()
+    {
+        return $this->myMu;
     }
 
     protected function defaultLocation()

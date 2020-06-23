@@ -32,7 +32,11 @@ class FileSystemFixes
             ->setRecursive(false)
             ->setFindAllExts(true)
             ->getFlatFileArray();
-        $this->moveFoldersOrFilesWithin($oldDir, $newDir, $list);
+        if (is_array($list)) {
+            $this->moveFoldersOrFilesWithin($oldDir, $newDir, $list);
+        } else {
+            $this->mu()->colourPrint($list);
+        }
 
         return $this;
     }
@@ -53,6 +57,8 @@ class FileSystemFixes
 
     public function moveFolderOrFile(string $oldPath, string $newPath, ?bool $isCopy = false): FileSystemFixes
     {
+        $oldPath = trim($oldPath);
+        $newPath = trim($newPath);
         $action = 'mv';
         $actionName = 'Moving';
         if ($isCopy) {
@@ -63,10 +69,10 @@ class FileSystemFixes
             $parentFolder = dirname($oldPath);
             $this->mu()->execMe(
                 $parentFolder,
-                'if test -d ' . $oldPath . '; then ' . $action . ' -vn ' . $oldPath . ' ' . $newPath . '; fi;',
+                'if test -e ' . $oldPath . '; then ' . $action . ' -vn ' . $oldPath . ' ' . $newPath . '; fi;',
                 $actionName . ' ' .
                 $this->removeCommonStart($oldPath, $newPath) . ' to ' . $this->removeCommonStart($newPath, $oldPath) . '
-                    if test -d ... tests if the file / dir exists
+                    if test -e ... True if the FILE exists and is a file, regardless of type (node, directory, socket, etc.).
                     -v ... verbose,
                     -n ... only if does not exists already.',
                 false
@@ -89,11 +95,12 @@ class FileSystemFixes
 
     protected function test(string $path, ?bool $showError = true): bool
     {
-        if (file_exists($path)) {
+        clearstatcache();
+        if (file_exists(trim($path))) {
             return true;
         }
         if ($showError) {
-            user_error('Could not create / copy / find ' . $path, E_USER_NOTICE);
+            user_error('Could not create, copy, or find "' . $path . '"', E_USER_NOTICE);
         }
 
         return false;

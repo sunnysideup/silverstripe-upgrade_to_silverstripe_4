@@ -19,7 +19,7 @@ class Git
         return self::$inst;
     }
 
-    public function Clone(string $dir, string $gitLink, string $gitRootDir, string $branchName)
+    public function Clone(string $dir, string $gitLink, string $gitRootDir, ?string $branchName = 'master')
     {
         $this->mu()->execMe(
             $dir,

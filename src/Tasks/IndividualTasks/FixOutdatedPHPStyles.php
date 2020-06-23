@@ -2,11 +2,14 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 class FixOutdatedPHPStyles extends Task
 {
     protected $taskStep = 's10';
+
+    protected $composerOptions = '';
 
     public function getTitle()
     {
@@ -22,12 +25,11 @@ class FixOutdatedPHPStyles extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-
-        $this->mu()->execMe(
-            $webRoot,
-            'composer require --dev sunnysideup/huringa:dev-master',
-            'adding huringa',
-            false
+        Composer::inst($this->mu())->Require(
+            'sunnysideup/huringa',
+            'dev-master',
+            true,
+            $this->composerOptions
         );
 
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();

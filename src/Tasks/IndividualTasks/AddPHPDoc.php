@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -11,6 +12,11 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class AddPHPDoc extends Task
 {
     protected $taskStep = 's60';
+
+    /**
+     * @var string
+     */
+    protected $composerOptions = '';
 
     public function getTitle()
     {
@@ -27,7 +33,7 @@ class AddPHPDoc extends Task
         $ideannotatorConfig = "
 ---
 Only:
-environment: dev
+  environment: dev
 ---
 SilverLeague\IDEAnnotator\DataObjectAnnotator:
     enabled: true
@@ -37,11 +43,11 @@ SilverLeague\IDEAnnotator\DataObjectAnnotator:
         ";
         $webRoot = $this->mu()->getWebRootDirLocation();
 
-        $this->mu()->execMe(
-            $webRoot,
-            'composer require silverleague/ideannotator:3.0.0 --dev',
-            'Install tool',
-            false
+        Composer::inst($this->mu())->Require(
+            'silverleague/ideannotator',
+            '3.0.0',
+            true,
+            $this->composerOptions
         );
 
         $this->mu()->execMe(

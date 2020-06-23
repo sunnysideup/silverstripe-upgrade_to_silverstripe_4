@@ -61,8 +61,8 @@ class ComposerCompatibilityCheckerStep2 extends Task
 
         $libraries = $jsonData['installed'];
 
+        $this->resetProject();
         foreach ($libraries as $library) {
-            $this->resetProject();
             $commit = '';
             $name = $library['name'];
             $version = $library['version'];
@@ -76,11 +76,12 @@ class ComposerCompatibilityCheckerStep2 extends Task
                 'composer require ' . $name . " '" . $version . "' 2>&1 ",
                 'adding module'
             );
+            $message = 'composer require ' . $name . ':' . $version . ' ... ';
             if (in_array('  [InvalidArgumentException]', $libraryOutput, true)) {
-                $message = 'composer require ' . $name . " '" . $version . "' unsuccessful, could not find a matching version of package.\n";
+                $message .= "unsuccessful, could not find a matching version of package.\n";
                 $this->mu()->colourPrint($message);
             } elseif (in_array('Installation failed, reverting ./composer.json to its original content.', $libraryOutput, true)) {
-                $message = 'composer require ' . $name . " '" . $version . "' unsuccessful, searching for next best version.\n";
+                $message .= "unsuccessful, searching for next best version.\n";
                 $this->mu()->colourPrint($message);
                 unset($show);
                 $show = $this->mu()->execMe(
@@ -106,14 +107,15 @@ class ComposerCompatibilityCheckerStep2 extends Task
                         'show details of module',
                         false
                     );
+                    $message = 'composer require ' . $name . ':' . $newVersion . ' ...... ';
                     if (! in_array('Installation failed', $output, true)) {
                         $versionFound = true;
-                        $message = 'composer require ' . $name . " '" . $newVersion . "' is the next best version.\n";
+                        $message .= "successful!, it is the next best version.\n";
                         $this->mu()->colourPrint($message);
                         $this->addToOutputArray($name, $newVersion);
                         break;
                     }
-                    $message = 'composer require ' . $name . " '" . $newVersion . "' unsuccessful, searching for next best version.\n";
+                    $message .= "unsuccessful, searching for next best version.\n";
                     $this->mu()->colourPrint($message, false);
                 }
 
@@ -122,7 +124,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
                     $this->mu()->colourPrint($message);
                 }
             } else {
-                $message = 'composer require ' . $name . " '" . $version . "' successful!\n ";
+                $message .= "successful!\n ";
                 $this->mu()->colourPrint($message);
                 $version = $commit ?: $version;
                 $this->addToOutputArray($name, $version);
@@ -205,12 +207,12 @@ class ComposerCompatibilityCheckerStep2 extends Task
 
     protected function getJsonFileLocation(): string
     {
-        return $this->mu()->getWebRootDirLocation() . $this->infoFileFileName;
+        return $this->mu()->getWebRootDirLocation() . '/' . $this->infoFileFileName;
     }
 
     protected function getJsonFileLocationJSONResults(): string
     {
-        return $this->mu()->getWebRootDirLocation() . $this->resultsFileAsJSON;
+        return $this->mu()->getWebRootDirLocation() . '/' . $this->resultsFileAsJSON;
     }
 
     protected function hasCommitAndPush()

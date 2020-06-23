@@ -35,7 +35,7 @@ class LoadReplacementData
      * Module Object
      * @var ModuleUpgrader
      */
-    protected $mu = null;
+    protected $myMu = null;
 
     /**
      * folder containing the replacement file
@@ -84,7 +84,7 @@ class LoadReplacementData
      */
     public function __construct($mu, $alternativeReplacementDataFolder = '', $toFolder = 'SS4')
     {
-        $this->mu = $mu;
+        $this->myMu = $mu;
         $this->folderContainingReplacementData = $alternativeReplacementDataFolder ?: $this->defaultLocation();
         $this->toFolder = $toFolder;
 
@@ -118,9 +118,14 @@ class LoadReplacementData
         return $this->flatReplacedArray;
     }
 
+    protected function mu()
+    {
+        return $this->myMu;
+    }
+
     protected function defaultLocation()
     {
-        return $this->mu->getLocationOfThisUpgrader() . DIRECTORY_SEPARATOR . 'ReplacementData';
+        return $this->mu()->getLocationOfThisUpgrader() . DIRECTORY_SEPARATOR . 'ReplacementData';
     }
 
     protected function compileFlatArray()
@@ -160,9 +165,9 @@ class LoadReplacementData
                 $nextConfig = ConfigFile::loadConfig($file);
                 // Merge
                 $config = $this->mergeConfig($config, $nextConfig);
-                $this->mu->colourPrint('loaded replacement file: ' . $file);
+                $this->mu()->colourPrint('loaded replacement file: ' . $file);
             } else {
-                $this->mu->colourPrint('could not find: ' . $file);
+                $this->mu()->colourPrint('could not find: ' . $file);
             }
         }
         ksort($config);
@@ -178,10 +183,10 @@ class LoadReplacementData
     protected function getPaths(): array
     {
         $array = [];
-        foreach ($this->mu->getExistingModuleDirLocations() as $moduleDir) {
+        foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $array[$moduleDir] = $moduleDir;
         }
-        $globalFixes = $this->mu->checkIfPathExistsAndCleanItUp($this->folderContainingReplacementData);
+        $globalFixes = $this->mu()->checkIfPathExistsAndCleanItUp($this->folderContainingReplacementData);
         if ($globalFixes) {
             $array[$globalFixes] = $globalFixes;
         }

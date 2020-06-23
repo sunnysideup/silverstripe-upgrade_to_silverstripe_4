@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -47,13 +48,11 @@ class CheckoutDevMaster extends Task
                         it is more likely to install dependencies that do not have tags',
                     false
                 );
-                $this->mu()->execMe(
-                    $this->mu()->getWebRootDirLocation(),
-                    'composer require ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ':' .
-                        $this->mu()->getNameOfBranchForBaseCodeForComposer() . ' ' . $this->composerOptions,
-                    'checkout ' . $this->mu()->getNameOfBranchForBaseCodeForComposer() . ' of ' .
-                        $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
-                    false
+                Composer::inst($this->mu())->Require(
+                    $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                    $this->mu()->getNameOfBranchForBaseCodeForComposer(),
+                    false,
+                    $this->composerOptions
                 );
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),

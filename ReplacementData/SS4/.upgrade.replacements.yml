@@ -120,6 +120,20 @@
 
 
     php:
+        "new DropDownField":
+            R: "new DropdownField"
+        "DropDownField::create":
+            R: "DropdownField::create"
+        "TagField":
+            R: "TagField"
+            C: "Check for fourth parameter to set Title (e.g. Title, Name)"
+        "LinkField":
+            R: "LinkField"
+            C: "You may need to run the following class: https://github.com/sunnysideup/silverstripe-migration-task/blob/master/src/Tasks/FixSheaDawsonLink.php"
+        "increase_time_limit_to(":
+            R: "Environment::increaseTimeLimitTo("
+        "increase_memory_limit_to":
+            R: "Environment::increaseMemoryLimitTo("
         "Member::get_unique_identifier_field()":
             R: "Member::config()->get('unique_identifier_field')"
         "file_get_contents":

@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -10,6 +11,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class ApplyPSR2 extends Task
 {
     protected $taskStep = 's60';
+
+    protected $composerOptions = '';
 
     public function getTitle()
     {
@@ -25,25 +28,26 @@ class ApplyPSR2 extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        //1. install upgrader
-        $this->mu()->execMe(
-            $webRoot,
-            'composer require --dev sunnysideup/easy-coding-standards:dev-master',
-            'Adding easy coding standards',
-            false
+
+        Composer::inst($this->mu())->Require(
+            'sunnysideup/easy-coding-standards',
+            'dev-master',
+            true,
+            $this->composerOptions
         );
+
         //1. apply
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $relativeDir = str_replace($webRoot, '', $codeDir);
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' vendor/bin/php-sslint-ecs',
+                'dir=' . $relativeDir . ' vendor/bin/sslint-ecs',
                 'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' vendor/bin/php-sslint-stan',
+                'dir=' . $relativeDir . ' vendor/bin/sslint-stan',
                 'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );

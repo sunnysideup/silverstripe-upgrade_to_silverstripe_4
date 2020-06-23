@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -19,8 +20,9 @@ class CheckoutUpgradeStarterBranch extends Task
 
     public function getTitle()
     {
-        return 'Checkout the ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' of this module/app.
-            The name of the branch can be changed by using the following method: setNameOfBranchForBaseCode';
+        return 'Checkout the ' . $this->mu()->getNameOfUpgradeStarterBranch() . ' of this module/app.' . "\n" .
+            'The name of the branch can be changed by using the following method: setNameOfBranchForBaseCode.' . "\n" .
+            'This task may not work if composer is not up-to-date!';
     }
 
     public function getDescription()
@@ -74,11 +76,11 @@ class CheckoutUpgradeStarterBranch extends Task
         );
         $packageNameFull = $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName();
         $branchAdjusted = 'dev-' . $this->mu()->getNameOfUpgradeStarterBranch();
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'composer require ' . $packageNameFull . ':' . $branchAdjusted . ' ' . $this->composerOptions,
-            'checkout ' . $branchAdjusted . ' of ' . $packageNameFull,
-            false
+        Composer::inst($this->mu())->Require(
+            $packageNameFull,
+            $branchAdjusted,
+            false,
+            $this->composerOptions
         );
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),

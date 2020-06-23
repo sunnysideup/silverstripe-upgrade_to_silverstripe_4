@@ -702,7 +702,7 @@ class SearchAndReplaceAPI
             if ($passed === false) {
                 $this->appendToLog(
                     $fileName,
-                    "********** skipping file ('.${fileBaseName}.'), as it does not contain following: " .
+                    "********** skipping file (${fileBaseName}), as it does not contain: " .
                     implode(', ', $this->fileNameMustContain)
                 );
 

@@ -41,20 +41,24 @@ class MoveTemplates extends Task
      */
     public function runActualTask($params = [])
     {
-        $fixer = new FileSystemFixes($this->mu());
-        $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
-        foreach ($codeDirs as $baseNameSpace => $codeDir) {
-            $baseDir = dirname($codeDir);
-            $relativeFolder = str_replace('\\', '/', $baseNameSpace);
-            $oldDir = $baseDir . '/' . $this->templates;
-            $newDir = $baseDir . '/' . $this->templates . '/' . $relativeFolder;
-            foreach ($this->expectedFolders as $from => $to) {
-                $fixer->moveFolderOrFile(
-                    $oldDir . '/' . $from,
-                    $newDir . '/' . $to
-                );
+        if ($this->mu->getIsModuleUpgrade()) {
+            $fixer = new FileSystemFixes($this->mu());
+            $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
+            foreach ($codeDirs as $baseNameSpace => $codeDir) {
+                $baseDir = dirname($codeDir);
+                $relativeFolder = str_replace('\\', '/', $baseNameSpace);
+                $oldDir = $baseDir . '/' . $this->templateFolder;
+                $newDir = $baseDir . '/' . $this->templateFolder . '/' . $relativeFolder;
+                foreach ($this->expectedFolders as $from => $to) {
+                    $fixer->moveFolderOrFile(
+                        $oldDir . '/' . $from,
+                        $newDir . '/' . $to
+                    );
+                }
+                $fixer->moveAllInFolder($oldDir, $newDir);
             }
-            $this->moveAllInFolder($oldDir, $newDir);
+        } else {
+            $this->mu()->colourPrint('SKIPPING you will have to move templates manually.', 'light_red');
         }
     }
 

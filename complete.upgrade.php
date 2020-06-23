@@ -12,15 +12,15 @@ $obj = ModuleUpgrader::create()
     ->setArrayOfModules(
         [
             1 => [
-              'VendorName' => 'sunnysideup',
-              'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'mysites',
-              'PackageNamespace' => 'SilverstripeUpgrade',
-              'PackageFolderNameForInstall' => 'upgradenow',
-              'GitLink' => 'git@bitbucket.org:sunnysideupnz/upgradesilverstripe.com.git',
-              'IsModuleUpgrade' => false,
-              // 'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/upgradesilverstripe.com/raw/a88492066701dfa7fbb8685c4b923587de8ff0c2/composer.json'
-            ]
+                'VendorName' => 'sunnysideup',
+                'VendorNamespace' => 'Sunnysideup',
+                'PackageName' => 'mysites',
+                'PackageNamespace' => 'SilverstripeUpgrade',
+                'PackageFolderNameForInstall' => 'upgradenow',
+                'GitLink' => 'git@bitbucket.org:sunnysideupnz/upgradesilverstripe.com.git',
+                'IsModuleUpgrade' => false,
+                // 'OriginComposerFileLocation' => 'https://bitbucket.org/sunnysideupnz/upgradesilverstripe.com/raw/a88492066701dfa7fbb8685c4b923587de8ff0c2/composer.json'
+            ],
         ]
     )
     ->setRunInteractively(false)

@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -14,6 +15,18 @@ class ComposerInstallProject extends Task
     protected $taskStep = 's20';
 
     protected $versionToLoad = '';
+
+    /**
+     * e.g. sunnysideup/ecommerce => master
+     * e.g. sunnysideup/test => 1.2.3
+     * @var array
+     */
+    protected $alsoRequire = [];
+
+    /**
+     * @var string
+     */
+    protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
 
     public function getTitle()
     {
@@ -34,8 +47,11 @@ class ComposerInstallProject extends Task
         }
         if ($this->mu()->getIsModuleUpgrade()) {
             $alt = $this->mu()->getParentProjectForModule();
-            if($alt) {
+            if ($alt) {
                 $altBranch = $this->mu()->getParentProjectForModuleBranchOrTag();
+                if (! $altBranch) {
+                    $altBranch = 'master';
+                }
                 Git::inst($this->mu())
                     ->Clone(
                         $this->mu()->getWebRootDirLocation(),
@@ -46,7 +62,7 @@ class ComposerInstallProject extends Task
             } else {
                 $this->mu()->execMe(
                     $this->mu()->getAboveWebRootDirLocation(),
-                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project '.$this->parentProject.' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
+                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project ' . $this->parentProject . ' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
                     'set up vanilla install using version: ' . $this->versionToLoad,
                     false
                 );
@@ -59,6 +75,14 @@ class ComposerInstallProject extends Task
                 $this->mu()->getGitRootDir(),
                 $this->mu()->getNameOfTempBranch()
             );
+        foreach ($this->alsoRequire as $package => $version) {
+            Composer::inst()->Require(
+                $package,
+                $version,
+                false,
+                $this->composerOptions
+            );
+        }
         if ($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $this->mu()->getGitRootDir(),

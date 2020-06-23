@@ -10,6 +10,8 @@ class Composer
 
     protected $myMu = null;
 
+    protected $defaultOptions = '';
+
     public static function inst($mu)
     {
         if (self::$inst === null) {
@@ -25,6 +27,23 @@ class Composer
             $dir,
             'composer dumpautoload',
             'run composer dumpautoload',
+            false
+        );
+    }
+
+    public function Require(string $package, ?string $version = '', ?bool $devOnly = false, ? string $options = '')
+    {
+        $devFlag = $devOnly ? '--dev' : '';
+        if (! $options) {
+            $options = $this->defaultOptions;
+        }
+        if ($version) {
+            $version = ':' . $version;
+        }
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
+            'running composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             false
         );
     }

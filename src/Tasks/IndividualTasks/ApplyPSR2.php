@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -10,6 +11,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class ApplyPSR2 extends Task
 {
     protected $taskStep = 's60';
+
+    protected $composerOptions = '';
 
     public function getTitle()
     {
@@ -25,13 +28,14 @@ class ApplyPSR2 extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        //1. install upgrader
-        $this->mu()->execMe(
-            $webRoot,
-            'composer require --dev sunnysideup/easy-coding-standards:dev-master',
-            'Adding easy coding standards',
-            false
+
+        Composer::inst()->Require(
+            'sunnysideup/easy-coding-standards',
+            'dev-master',
+            true,
+            $this->composerOptions
         );
+
         //1. apply
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $relativeDir = str_replace($webRoot, '', $codeDir);

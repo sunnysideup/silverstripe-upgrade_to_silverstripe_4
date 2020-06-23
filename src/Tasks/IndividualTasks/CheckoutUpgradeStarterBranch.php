@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -75,11 +76,11 @@ class CheckoutUpgradeStarterBranch extends Task
         );
         $packageNameFull = $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName();
         $branchAdjusted = 'dev-' . $this->mu()->getNameOfUpgradeStarterBranch();
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'composer require ' . $packageNameFull . ':' . $branchAdjusted . ' ' . $this->composerOptions,
-            'checkout ' . $branchAdjusted . ' of ' . $packageNameFull,
-            false
+        Composer::inst()->Require(
+            $packageNameFull,
+            $branchAdjusted,
+            false,
+            $this->composerOptions
         );
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),

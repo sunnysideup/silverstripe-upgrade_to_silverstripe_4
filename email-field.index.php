@@ -3,7 +3,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
-
 $obj = ModuleUpgrader::create()
     ->setRecipe('SS4')
 
@@ -18,12 +17,12 @@ $obj = ModuleUpgrader::create()
     ->setArrayOfModules(
         [
             1 => [
-              'VendorName' => 'sunnysideup',  //e.g. as listed in composer.json file, not so relevant for projects
-              'VendorNamespace' => 'Sunnysideup', //namespace to be used for project
-              'PackageName' => 'email_address_database_field', //e.g. as listed in composer.json file, not so relevant for projects
-              'PackageNamespace' => 'EmailAddressDatabaseField', //second part of the namespace i.e. VendorNamespace/PackageNamespace
-              'IsModuleUpgrade' => true, //is it a module or a website project?
-            ]
+                'VendorName' => 'sunnysideup',  //e.g. as listed in composer.json file, not so relevant for projects
+                'VendorNamespace' => 'Sunnysideup', //namespace to be used for project
+                'PackageName' => 'email_address_database_field', //e.g. as listed in composer.json file, not so relevant for projects
+                'PackageNamespace' => 'EmailAddressDatabaseField', //second part of the namespace i.e. VendorNamespace/PackageNamespace
+                'IsModuleUpgrade' => true, //is it a module or a website project?
+            ],
         ]
     )
     ->setFrameworkComposerRestraint('^4.4')

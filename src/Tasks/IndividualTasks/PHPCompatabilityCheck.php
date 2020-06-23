@@ -6,6 +6,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -14,6 +15,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class PHPCompatabilityCheck extends Task
 {
     protected $taskStep = 's00';
+
+    protected $composerOptions = '';
 
     protected $phpVersion = '7.4';
 
@@ -37,25 +40,19 @@ class PHPCompatabilityCheck extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
+        Composer::inst()->Require(
+            'squizlabs/php_codesniffer',
+            '',
+            true,
+            $this->composerOptions
+        );
+        Composer::inst()->Require(
+            'phpcompatibility/php-compatibility',
+            '',
+            true,
+            $this->composerOptions
+        );
 
-        $this->mu()->execMe(
-            $webRoot,
-            'composer require --dev squizlabs/php_codesniffer',
-            'Adding php code sniffers',
-            false
-        );
-        $this->mu()->execMe(
-            $webRoot,
-            'composer require --dev phpcompatibility/php-compatibility',
-            'Adding php compatability info',
-            false
-        );
-        $this->mu()->execMe(
-            $webRoot,
-            'composer require --dev phpcompatibility/php-compatibility',
-            'Adding php compatability info',
-            false
-        );
         $this->mu()->execMe(
             $webRoot,
             './vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility',

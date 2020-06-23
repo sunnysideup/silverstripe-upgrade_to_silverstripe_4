@@ -26,8 +26,16 @@ $obj = ModuleUpgrader::create()
         ]
     )
 
+    ->setVariableForTask(
+        'ComposerInstallProject',
+        'alsoRequire',
+        [
+            'sunnysideup/ecommerce' => 'dev-master'
+        ]
+    )
+
     ->setNameOfTempBranch('4.1-TEMP-upgrade')
 
-    ->setFrameworkComposerRestraint('^4.4')
+    ->setFrameworkComposerRestraint('^4.5')
 
     ->run();

@@ -39,7 +39,7 @@ class CreatePublicFolder extends Task
 
             $this->mu()->execMe(
                 $newFolder,
-                'echo \'hello world\' >> test.html',
+                'echo \'hello world\' >> hello-world.html',
                 'adding public test file',
                 false
             );

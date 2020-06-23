@@ -392,6 +392,17 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     protected $moduleDirLocations = [];
 
     /**
+     * records variables for tasks, like this:
+     *      [
+     *          'TaskName' => [
+     *              'VariableName' => 'VariableValue',
+     *          ],
+     *      ]
+     * @var array
+     */
+    protected $customVariablesForTasks = [];
+
+    /**
      * Starts the output to the commandline / browser
      */
     public function __construct()
@@ -695,17 +706,12 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      *
      * @return  ModuleUpgraderInterface
      */
-    public function setVariableForTask($taskName, $variableName, $variableValue): ModuleUpgraderInterface
+    public function setVariableForTask(string $taskName, string $variableName, $variableValue): ModuleUpgraderInterface
     {
-        $key = $this->positionForTask($taskName);
-        if ($key !== false) {
-            $this->listOfTasks[$taskName][$variableName] = $variableValue;
-        } else {
-            user_error(
-                'Could not find ' . $taskName . '.
-                Choose from ' . implode(', ', array_keys($this->listOfTasks))
-            );
+        if (! isset($this->customVariablesForTasks[$taskName])) {
+            $this->customVariablesForTasks[$taskName] = [];
         }
+        $this->customVariablesForTasks[$taskName][$variableName] = $variableValue;
 
         return $this;
     }

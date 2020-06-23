@@ -71,6 +71,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         );
         $this->loadNextStepInstructions();
         $this->loadGlobalVariables();
+        $this->loadCustomVariablesForTasks();
         foreach ($this->arrayOfModules as $moduleDetails) {
             $hasRun = false;
             $nextStep = '';
@@ -191,6 +192,25 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             $this->webRootDirLocation . '/themes',
             true
         );
+    }
+
+    protected function loadCustomVariablesForTasks()
+    {
+        foreach ($this->customVariablesForTasks as $taskName => $variableAndValue) {
+            foreach ($variableAndValue as $variableName => $variableValue) {
+                $key = $this->positionForTask($taskName);
+                if ($key !== false) {
+                    $this->listOfTasks[$taskName][$variableName] = $variableValue;
+                    print_r($this->listOfTasks);
+                } else {
+                    user_error(
+                        'Could not find ' . $taskName . '.
+                        Choose from ' . implode(', ', array_keys($this->listOfTasks))
+                    );
+                    die('----');
+                }
+            }
+        }
     }
 
     /**

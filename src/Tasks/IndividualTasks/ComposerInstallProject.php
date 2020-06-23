@@ -64,7 +64,7 @@ class ComposerInstallProject extends Task
             } else {
                 $this->mu()->execMe(
                     $this->mu()->getAboveWebRootDirLocation(),
-                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project '.$this->defaultSilverstripeProject.' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
+                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project ' . $this->defaultSilverstripeProject . ' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
                     'set up vanilla install of ' . $this->defaultSilverstripeProject . ' - version: ' . $this->versionToLoad,
                     false
                 );

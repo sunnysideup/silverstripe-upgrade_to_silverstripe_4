@@ -75,6 +75,18 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     protected $frameworkComposerRestraint = '';
 
     /**
+     * e.g. git@github.com:sunnysideup/silverstripe-ecommerce_test.git
+     * @var string
+     */
+    protected $parentProjectForModule = '';
+
+    /**
+     * e.g. master or 4.2.2
+     * @var string
+     */
+    protected $parentProjectForModuleBranchOrTag = 'master';
+
+    /**
      * Should the session details be deleted before we start?
      * @var bool
      */

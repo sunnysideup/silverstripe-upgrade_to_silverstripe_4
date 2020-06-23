@@ -32,14 +32,25 @@ class ComposerInstallProject extends Task
         if (! $this->versionToLoad) {
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
-        $cloneDir = $this->mu()->getGitRootDir();
         if ($this->mu()->getIsModuleUpgrade()) {
-            $this->mu()->execMe(
-                $this->mu()->getAboveWebRootDirLocation(),
-                $this->mu()->getComposerEnvironmentVars() . ' composer create-project silverstripe/installer ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
-                'set up vanilla install using version: ' . $this->versionToLoad,
-                false
-            );
+            $alt = $this->mu()->getParentProjectForModule();
+            if($alt) {
+                $altBranch = $this->mu()->getParentProjectForModuleBranchOrTag();
+                Git::inst($this->mu())
+                    ->Clone(
+                        $this->mu()->getWebRootDirLocation(),
+                        $alt,
+                        $this->mu()->getGitRootDir(),
+                        $altBranch
+                    );
+            } else {
+                $this->mu()->execMe(
+                    $this->mu()->getAboveWebRootDirLocation(),
+                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project '.$this->parentProject.' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
+                    'set up vanilla install using version: ' . $this->versionToLoad,
+                    false
+                );
+            }
         }
         Git::inst($this->mu())
             ->Clone(
@@ -50,7 +61,7 @@ class ComposerInstallProject extends Task
             );
         if ($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
-                $cloneDir,
+                $this->mu()->getGitRootDir(),
                 'composer update -vvv',
                 'run composer update',
                 false

@@ -120,6 +120,10 @@
 
 
     php:
+        "new DropDownField":
+            R: "new DropdownField"
+        "DropDownField::create":
+            R: "DropdownField::create"
         "TagField":
             R: "TagField"
             C: "Check for fourth parameter to set Title (e.g. Title, Name)"

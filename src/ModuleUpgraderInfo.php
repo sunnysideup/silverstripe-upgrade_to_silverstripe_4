@@ -124,7 +124,7 @@ class ModuleUpgraderInfo
             if (count($variables)) {
                 $varString = '';
                 $callback = function ($value, $key) use (&$varString) {
-                    $varString .= $this->mu->newLine() . ' .... ' . $key . ' = ' . $value . "\n";
+                    $varString .= $this->mu->newLine() . ' ... ' . $key . ' = ' . $value . "\n";
                 };
 
                 array_walk_recursive($variables, $callback);

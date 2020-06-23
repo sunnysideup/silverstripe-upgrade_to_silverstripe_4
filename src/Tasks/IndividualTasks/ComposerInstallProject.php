@@ -76,7 +76,7 @@ class ComposerInstallProject extends Task
                 $this->mu()->getNameOfTempBranch()
             );
         foreach ($this->alsoRequire as $package => $version) {
-            Composer::inst()->Require(
+            Composer::inst($this->mu())->Require(
                 $package,
                 $version,
                 false,

@@ -76,7 +76,7 @@ class CheckoutUpgradeStarterBranch extends Task
         );
         $packageNameFull = $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName();
         $branchAdjusted = 'dev-' . $this->mu()->getNameOfUpgradeStarterBranch();
-        Composer::inst()->Require(
+        Composer::inst($this->mu())->Require(
             $packageNameFull,
             $branchAdjusted,
             false,

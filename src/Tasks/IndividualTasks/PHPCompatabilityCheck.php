@@ -40,13 +40,13 @@ class PHPCompatabilityCheck extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        Composer::inst()->Require(
+        Composer::inst($this->mu())->Require(
             'squizlabs/php_codesniffer',
             '',
             true,
             $this->composerOptions
         );
-        Composer::inst()->Require(
+        Composer::inst($this->mu())->Require(
             'phpcompatibility/php-compatibility',
             '',
             true,

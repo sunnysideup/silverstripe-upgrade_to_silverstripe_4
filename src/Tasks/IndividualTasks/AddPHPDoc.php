@@ -43,7 +43,7 @@ SilverLeague\IDEAnnotator\DataObjectAnnotator:
         ";
         $webRoot = $this->mu()->getWebRootDirLocation();
 
-        Composer::inst()->Require(
+        Composer::inst($this->mu())->Require(
             'silverleague/ideannotator',
             '3.0.0',
             true,

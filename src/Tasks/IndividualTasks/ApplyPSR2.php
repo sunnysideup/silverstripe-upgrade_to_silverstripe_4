@@ -29,7 +29,7 @@ class ApplyPSR2 extends Task
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
 
-        Composer::inst()->Require(
+        Composer::inst($this->mu())->Require(
             'sunnysideup/easy-coding-standards',
             'dev-master',
             true,

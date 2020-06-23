@@ -48,7 +48,7 @@ class CheckoutDevMaster extends Task
                         it is more likely to install dependencies that do not have tags',
                     false
                 );
-                Composer::inst()->Require(
+                Composer::inst($this->mu())->Require(
                     $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                     $this->mu()->getNameOfBranchForBaseCodeForComposer(),
                     false,

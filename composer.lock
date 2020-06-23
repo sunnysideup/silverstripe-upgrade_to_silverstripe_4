@@ -880,12 +880,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "9b920998840d9a8f9f7263b27060d28c22fc4ab5"
+                "reference": "566e2076ed4682b57b76b7adeaf0a891009e9f78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/9b920998840d9a8f9f7263b27060d28c22fc4ab5",
-                "reference": "9b920998840d9a8f9f7263b27060d28c22fc4ab5",
+                "url": "https://api.github.com/repos/nette/schema/zipball/566e2076ed4682b57b76b7adeaf0a891009e9f78",
+                "reference": "566e2076ed4682b57b76b7adeaf0a891009e9f78",
                 "shasum": ""
             },
             "require": {
@@ -900,7 +900,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.1-dev"
                 }
             },
             "autoload": {
@@ -930,7 +930,7 @@
                 "config",
                 "nette"
             ],
-            "time": "2020-01-07T10:37:59+00:00"
+            "time": "2020-06-03T08:48:19+00:00"
         },
         {
             "name": "nette/utils",
@@ -1619,12 +1619,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "6b456a744a1f92cc016fba7e6b1f4056e4953661"
+                "reference": "326b064d804043005526f5a0494cfb49edb59bb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/6b456a744a1f92cc016fba7e6b1f4056e4953661",
-                "reference": "6b456a744a1f92cc016fba7e6b1f4056e4953661",
+                "url": "https://api.github.com/repos/symfony/console/zipball/326b064d804043005526f5a0494cfb49edb59bb0",
+                "reference": "326b064d804043005526f5a0494cfb49edb59bb0",
                 "shasum": ""
             },
             "require": {
@@ -1688,7 +1688,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-24T08:33:35+00:00"
+            "time": "2020-05-30T20:06:45+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -1696,12 +1696,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "31f0a3601a6fd6570cd7038d3a38f80f4e2cb820"
+                "reference": "b27f491309db5757816db672b256ea2e03677d30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/31f0a3601a6fd6570cd7038d3a38f80f4e2cb820",
-                "reference": "31f0a3601a6fd6570cd7038d3a38f80f4e2cb820",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/b27f491309db5757816db672b256ea2e03677d30",
+                "reference": "b27f491309db5757816db672b256ea2e03677d30",
                 "shasum": ""
             },
             "require": {
@@ -1738,7 +1738,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-20T08:37:50+00:00"
+            "time": "2020-05-30T18:50:54+00:00"
         },
         {
             "name": "symfony/finder",
@@ -2149,12 +2149,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "3bc410c407cba1ef8a03ca46de69a08c8b04f54a"
+                "reference": "c714958428a85c86ab97e3a0c96db4c4f381b7f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/3bc410c407cba1ef8a03ca46de69a08c8b04f54a",
-                "reference": "3bc410c407cba1ef8a03ca46de69a08c8b04f54a",
+                "url": "https://api.github.com/repos/symfony/process/zipball/c714958428a85c86ab97e3a0c96db4c4f381b7f5",
+                "reference": "c714958428a85c86ab97e3a0c96db4c4f381b7f5",
                 "shasum": ""
             },
             "require": {
@@ -2190,7 +2190,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2020-05-23T19:47:49+00:00"
+            "time": "2020-05-30T20:06:45+00:00"
         },
         {
             "name": "symfony/service-contracts",

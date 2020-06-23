@@ -28,6 +28,8 @@ class ComposerInstallProject extends Task
      */
     protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
 
+    protected $defaultSilverstripeProject = 'silverstripe/installer';
+
     public function getTitle()
     {
         return 'use Composer to install vanilla Silverstripe project and add project / module to it.';
@@ -62,8 +64,8 @@ class ComposerInstallProject extends Task
             } else {
                 $this->mu()->execMe(
                     $this->mu()->getAboveWebRootDirLocation(),
-                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project ' . $this->parentProject . ' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
-                    'set up vanilla install using version: ' . $this->versionToLoad,
+                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project '.$this->defaultSilverstripeProject.' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
+                    'set up vanilla install of ' . $this->defaultSilverstripeProject . ' - version: ' . $this->versionToLoad,
                     false
                 );
             }

@@ -201,7 +201,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                 $key = $this->positionForTask($taskName);
                 if ($key !== false) {
                     $this->listOfTasks[$taskName][$variableName] = $variableValue;
-                    print_r($this->listOfTasks);
                 } else {
                     user_error(
                         'Could not find ' . $taskName . '.

@@ -19,7 +19,7 @@ class ComposerJsonFixes
         return self::$inst;
     }
 
-    public function getJSON(string $dir)
+    public function getJSON(string $dir): array
     {
         $location = $dir . '/composer.json';
         $jsonString = file_get_contents($location);
@@ -27,11 +27,12 @@ class ComposerJsonFixes
         return json_decode($jsonString, true);
     }
 
-    public function setJSON(string $dir, array $data)
+    public function setJSON(string $dir, array $data): self
     {
         $location = $dir . '/composer.json';
         $newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents("'.${location}.'", $newJsonString);
+
         return $this;
     }
 

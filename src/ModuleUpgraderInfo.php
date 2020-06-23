@@ -109,26 +109,25 @@ class ModuleUpgraderInfo
     protected function listOfTasks($currentOne = ''): string
     {
         $tasks = $this->mu->getListOfTasks();
-        $customVariables = $this->mu->getCustomVariablesForTasks();
         if (count($tasks) === 0) {
             user_error('Please make sure to select a task or set a valid recipe (e.g. SS4)');
         }
+        if (! $currentOne) {
+            $currentOne = $this->mu->getOnlyRun();
+        }
+        $customVariables = $this->mu->getCustomVariablesForTasks();
         $count = 0;
         $string = '';
         foreach ($tasks as $task => $variables) {
             $customVars = $customVariables[$task] ?? [];
             $variables += $customVars;
             $count++;
-            $hyphen = ($currentOne === $task ? '->' : '-');
-            $string .= $this->mu->newLine() . $hyphen . ' ' . $count . ': ' . $task;
+            $add = ($currentOne === $task ? ' (CURRENT ONE)' : '');
+            $string .= $this->mu->newLine() . '- ' . $count . ': ' . $task . $add;
             if (count($variables)) {
-                $varString = '';
-                $callback = function ($value, $key) use (&$varString) {
-                    $varString .= $this->mu->newLine() . ' ... ' . $key . ' = ' . $value . "\n";
-                };
-
-                array_walk_recursive($variables, $callback);
-                $string .= $varString;
+                foreach ($variables as $variableName => $variableValue) {
+                    $string .= $this->mu->newLine() . '  .... ' . $variableName . ' = ' . print_r($variableValue, 1) . $this->mu->newLine();
+                }
             }
         }
 

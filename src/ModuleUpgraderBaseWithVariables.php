@@ -496,16 +496,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     }
 
     /**
-     * @param bool $b
-     */
-    public function setBreakOnAllErrors(bool $b)
-    {
-        $this->commandLineExec->setBreakOnAllErrors($b);
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getLocationOfThisUpgrader(): string
@@ -572,6 +562,17 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         }
 
         return $array;
+    }
+
+    /**
+     * Whether execution should come to a halt when an error is reached
+     * @return self
+     */
+    public function setBreakOnAllErrors(bool $b): self
+    {
+        $this->commandLineExec->setBreakOnAllErrors($b);
+
+        return $this;
     }
 
     /**

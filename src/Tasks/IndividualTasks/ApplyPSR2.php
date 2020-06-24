@@ -29,7 +29,7 @@ class ApplyPSR2 extends Task
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
 
-        Composer::inst($this->mu())->Require(
+        Composer::inst($this->mu())->RequireGlobal(
             'sunnysideup/easy-coding-standards',
             'dev-master',
             true,
@@ -41,14 +41,14 @@ class ApplyPSR2 extends Task
             $relativeDir = str_replace($webRoot, '', $codeDir);
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' vendor/bin/sslint-ecs',
+                'dir=' . $relativeDir . ' sslint-ecs',
                 'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' vendor/bin/sslint-stan',
-                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
+                'level=1 dir=' . $relativeDir . ' sslint-stan > ' . $relativeDir . '/KNOWN_ISSUES',
+                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $relativeDir . '/KNOWN_ISSUES',
                 false
             );
         }

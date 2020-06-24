@@ -10,6 +10,9 @@
 
 '.':
     '*':
+        'classNameOfVariations':
+            R: 'MyClassnameOfVariations'
+            C: 'This has been replaced to avoid confusions with replacements of className / class'
         'EcommerceCountry_VisitorCountryProvider':
             R: 'EcommerceCountryVisitorCountryProvider'
         'EcommerceSideReport_FeaturedProducts':

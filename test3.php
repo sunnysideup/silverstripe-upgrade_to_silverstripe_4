@@ -13,7 +13,7 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 $obj = ModuleUpgrader::create()
     ->setRecipe('SS4')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setWebRootName('ecommerce_product_variation')
+    ->setWebRootName('ecommerce_assign_orders')
     ->setRunInteractively(true)
     // ->setRunIrreversibly(true)
     ->setArrayOfModules(
@@ -21,8 +21,8 @@ $obj = ModuleUpgrader::create()
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'ecommerce_product_variation',
-              'PackageNamespace' => 'EcommerceProductVariation',
+              'PackageName' => 'ecommerce_assign_orders',
+              'PackageNamespace' => 'EcommerceAssignOrders',
               'IsModuleUpgrade' => true,
             ]
         ]

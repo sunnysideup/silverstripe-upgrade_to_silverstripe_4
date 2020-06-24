@@ -21,17 +21,41 @@ class Composer
         return self::$inst;
     }
 
-    public function DumpAutoload(string $dir)
+    public function DumpAutoload(): self
     {
         $this->mu()->execMe(
-            $dir,
+            $this->mu()->getWebRootDirLocation(),
             'composer dumpautoload',
             'run composer dumpautoload',
             false
         );
+
+        return $this;
     }
 
-    public function Require(string $package, ?string $version = '', ?bool $devOnly = false, ? string $options = '')
+    public function ClearCache(): self
+    {
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'composer clear-cache',
+            'clear composer cache',
+            false
+        );
+
+        return $this;
+    }
+
+    public function RequireGlobal(string $package, ?string $version = '', ?bool $devOnly = false, ?string $options = ''): self
+    {
+        return $this->requireAny($package, $version, $devOnly, $options, true);
+    }
+
+    public function Require(string $package, ?string $version = '', ?bool $devOnly = false, ?string $options = ''): self
+    {
+        return $this->requireAny($package, $version, $devOnly, $options, false);
+    }
+
+    protected function requireAny(string $package, ?string $version = '', ?bool $devOnly = false, ?string $options = '', ?bool $isGlobal = false): self
     {
         $devFlag = $devOnly ? '--dev' : '';
         if (! $options) {
@@ -46,6 +70,8 @@ class Composer
             'running composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             false
         );
+
+        return $this;
     }
 
     /**

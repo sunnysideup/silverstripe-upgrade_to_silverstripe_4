@@ -49,6 +49,8 @@ class InspectAPIChanges extends Task
             false
         );
 
+        $this->mu()->setBreakOnAllErrors(true);
+
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
             $rootDir = '';
             if ($this->mu()->getIsModuleUpgrade()) {
@@ -65,6 +67,8 @@ class InspectAPIChanges extends Task
             );
             $this->setCommitMessage('MAJOR: core upgrade to SS4: running INSPECT on ' . $this->param1);
         }
+
+        $this->mu()->setBreakOnAllErrors(false);
     }
 
     protected function hasCommitAndPush()

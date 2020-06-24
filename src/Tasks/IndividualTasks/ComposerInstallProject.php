@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -24,9 +25,30 @@ class ComposerInstallProject extends Task
     protected $alsoRequire = [];
 
     /**
+     * @var array
+     */
+    protected $ignoredPackageForModuleRequirements = [
+        'php',
+        'silverstripe/recipe-plugin',
+        'silverstripe/recipe-cms',
+        'silverstripe/admin',
+        'silverstripe/asset-admin',
+        'silverstripe/assets',
+        'silverstripe/campaign-admin',
+        'silverstripe/config',
+        'silverstripe/cms',
+        'silverstripe/framework',
+        'silverstripe/errorpage',
+        'silverstripe/reports',
+        'silverstripe/siteconfig',
+        'silverstripe/versioned-admin',
+        'silverstripe/versioned',
+    ];
+
+    /**
      * @var string
      */
-    protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     protected $defaultSilverstripeProject = 'silverstripe/installer';
 
@@ -48,6 +70,8 @@ class ComposerInstallProject extends Task
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
         if ($this->mu()->getIsModuleUpgrade()) {
+            $this->workoutExtraRequirementsFromModule();
+
             $alt = $this->mu()->getParentProjectForModule();
             if ($alt) {
                 $altBranch = $this->mu()->getParentProjectForModuleBranchOrTag();
@@ -78,13 +102,16 @@ class ComposerInstallProject extends Task
                 $this->mu()->getNameOfTempBranch()
             );
         foreach ($this->alsoRequire as $package => $version) {
-            Composer::inst($this->mu())->Require(
-                $package,
-                $version,
-                false,
-                $this->composerOptions
-            );
+            Composer::inst($this->mu())
+                ->ClearCache()
+                ->Require(
+                    $package,
+                    $version,
+                    false,
+                    $this->composerOptions
+                );
         }
+
         if ($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $this->mu()->getGitRootDir(),
@@ -92,6 +119,26 @@ class ComposerInstallProject extends Task
                 'run composer update',
                 false
             );
+        }
+    }
+
+    protected function workoutExtraRequirementsFromModule()
+    {
+        $composerJson = ComposerJsonFixes::inst($this->mu())
+            ->getJSON($this->mu()->getGitRootDir());
+        if (isset($composerJson['require'])) {
+            foreach ($composerJson as $package => $version) {
+                if (in_array($package, $this->ignoredPackageForModuleRequirements, true)) {
+                    $this->mu()->colourPrint('Skipping ' . $package . ' as requirement');
+                } else {
+                    if ($version === 'dev-master') {
+                        $this->mu()->colourPrint('Sticking with dev-master as version for ' . $package);
+                    } else {
+                        $version = '*';
+                    }
+                    $this->alsoRequire[$package] = $version;
+                }
+            }
         }
     }
 

@@ -19,9 +19,6 @@
             "role": "lead developer"
         }
     ],
-    "extra": {
-        "installer-name": "upgrade_silverstripe"
-    },
     "require": {
         "sunnysideup/php_2_command_line":              "dev-master"
     },

@@ -105,7 +105,9 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- parameter "task=MySpecificTask" ... runs MySpecificTask', 'white');
 
-        $mu->colourPrint('- parameter "startFrom=MySpecificTask" ... runs MySpecificTask', 'white');
+        $mu->colourPrint('- parameter "startFrom=MySpecificTask" ... runs all steps from MySpecificTask', 'white');
+
+        $mu->colourPrint('- parameter "endWith=MySpecificTask" ... runs all steps up to MySpecificTask', 'white');
     }
 
     protected function listOfTasks($currentOne = ''): string

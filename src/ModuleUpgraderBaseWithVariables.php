@@ -695,7 +695,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      *
      * @return  ModuleUpgraderInterface
      */
-    public function setVariableForTask($taskName, $variableName, $variableValue): ModuleUpgraderInterface
+    public function setVariableForTask(string $taskName, string $variableName, $variableValue): ModuleUpgraderInterface
     {
         $key = $this->positionForTask($taskName);
         if ($key !== false) {

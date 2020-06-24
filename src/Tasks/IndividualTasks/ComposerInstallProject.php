@@ -21,7 +21,9 @@ class ComposerInstallProject extends Task
      * e.g. sunnysideup/test => 1.2.3
      * @var array
      */
-    protected $alsoRequire = [];
+    protected $alsoRequire = [
+        'sunnysideup/ecommerce' => 'dev-master',
+    ];
 
     /**
      * @var string

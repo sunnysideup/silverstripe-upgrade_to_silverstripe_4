@@ -175,6 +175,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
         $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
+        $this->endWith = $this->getCommandLineOrArgumentAsString('endWith');
         $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
         if ($this->onlyRun) {
             $this->outOfOrderTask = true;

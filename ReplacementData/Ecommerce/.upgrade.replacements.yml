@@ -1,5 +1,6 @@
 ####
-#### FORMAT
+#### FORMAT:
+####
 ####    PATH (relative to root folder of module)
 ####        LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
 ####            FindKey

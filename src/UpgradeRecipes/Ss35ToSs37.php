@@ -60,8 +60,10 @@ class Ss35ToSs37 extends BaseClass
             'NewVersion' => '~3.7',
         ],
 
-        'SearchAndReplace-2' => [
-            'ToFolder' => 'SS37',
+        'SearchAndReplace' => [
+            'SourceFolders' => [
+                'SS37',
+            ],
         ],
         'PHPCompatabilityCheck' => [],
     ];

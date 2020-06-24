@@ -6,8 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 class CreateListOfTasks
 {
-    protected $myMu = null;
-
     public function run()
     {
         $this->myMu = ModuleUpgrader::create();

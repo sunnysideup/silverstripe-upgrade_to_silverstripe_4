@@ -2,22 +2,11 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers;
 
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeToSilverstripe4\Traits\HelperInst;
 
 class Git
 {
-    protected static $inst = null;
-
-    protected $myMu = null;
-
-    public static function inst($mu)
-    {
-        if (self::$inst === null) {
-            self::$inst = new Git();
-            self::$inst->setMu($mu);
-        }
-        return self::$inst;
-    }
+    use HelperInst;
 
     public function Clone(string $dir, string $gitLink, string $gitRootDir, ?string $branchName = 'master')
     {
@@ -241,25 +230,6 @@ class Git
     }
 
     /**
-     * @param ModuleUpgrader $mu
-     * @return Git
-     */
-    protected function setMu(ModuleUpgrader $mu)
-    {
-        $this->myMu = $mu;
-
-        return $this;
-    }
-
-    /**
-     * @return ModuleUpgrader
-     */
-    protected function mu()
-    {
-        return $this->myMu;
-    }
-
-    /**
      * @param  string $dir
      */
     protected function fetchAll(string $dir)
@@ -268,7 +238,9 @@ class Git
             $dir,
             'git fetch --all && git branch -a && git status',
             'get the latest',
-            false
+            false,
+            '',
+            false //verbose = false!
         );
 
         return $this;

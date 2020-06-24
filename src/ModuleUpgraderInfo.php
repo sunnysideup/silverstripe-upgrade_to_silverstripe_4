@@ -101,20 +101,38 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- parameter "again" ... runs last comand again', 'light_cyan');
 
-        $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'light_cyan');
+        $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'white');
 
-        $mu->colourPrint('- parameter "task=MySpecificTask" ... runs MySpecificTask', 'light_cyan');
+        $mu->colourPrint('- parameter "task=MySpecificTask" ... runs MySpecificTask', 'white');
+
+        $mu->colourPrint('- parameter "startFrom=MySpecificTask" ... runs all steps from MySpecificTask', 'white');
+
+        $mu->colourPrint('- parameter "endWith=MySpecificTask" ... runs all steps up to MySpecificTask', 'white');
     }
 
     protected function listOfTasks($currentOne = ''): string
     {
-        $tasks = array_keys($this->mu->getListOfTasks());
+        $tasks = $this->mu->getListOfTasks();
+        if (count($tasks) === 0) {
+            user_error('Please make sure to select a task or set a valid recipe (e.g. SS4)');
+        }
+        if (! $currentOne) {
+            $currentOne = $this->mu->getOnlyRun();
+        }
+        $customVariables = $this->mu->getCustomVariablesForTasks();
         $count = 0;
         $string = '';
-        foreach ($tasks as $task) {
+        foreach ($tasks as $task => $variables) {
+            $customVars = $customVariables[$task] ?? [];
+            $variables += $customVars;
             $count++;
-            $hyphen = ($currentOne === $task ? '->' : '-');
-            $string .= $this->mu->newLine() . $hyphen . ' ' . $count . ': ' . $task;
+            $add = ($currentOne === $task ? ' (CURRENT ONE)' : '');
+            $string .= $this->mu->newLine() . '- ' . $count . ': ' . $task . $add;
+            if (count($variables)) {
+                foreach ($variables as $variableName => $variableValue) {
+                    $string .= $this->mu->newLine() . '  .... ' . $variableName . ' = ' . print_r($variableValue, 1) . $this->mu->newLine();
+                }
+            }
         }
 
         return $string;

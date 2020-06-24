@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -26,9 +27,30 @@ class ComposerInstallProject extends Task
     ];
 
     /**
+     * @var array
+     */
+    protected $ignoredPackageForModuleRequirements = [
+        'php',
+        'silverstripe/recipe-plugin',
+        'silverstripe/recipe-cms',
+        'silverstripe/admin',
+        'silverstripe/asset-admin',
+        'silverstripe/assets',
+        'silverstripe/campaign-admin',
+        'silverstripe/config',
+        'silverstripe/cms',
+        'silverstripe/framework',
+        'silverstripe/errorpage',
+        'silverstripe/reports',
+        'silverstripe/siteconfig',
+        'silverstripe/versioned-admin',
+        'silverstripe/versioned',
+    ];
+
+    /**
      * @var string
      */
-    protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     protected $defaultSilverstripeProject = 'silverstripe/installer';
 
@@ -46,6 +68,7 @@ class ComposerInstallProject extends Task
 
     public function runActualTask($params = [])
     {
+        $this->mu()->setBreakOnAllErrors(true);
         if (! $this->versionToLoad) {
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
@@ -66,7 +89,7 @@ class ComposerInstallProject extends Task
             } else {
                 $this->mu()->execMe(
                     $this->mu()->getAboveWebRootDirLocation(),
-                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project '.$this->defaultSilverstripeProject.' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
+                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project ' . $this->defaultSilverstripeProject . ' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
                     'set up vanilla install of ' . $this->defaultSilverstripeProject . ' - version: ' . $this->versionToLoad,
                     false
                 );
@@ -79,13 +102,18 @@ class ComposerInstallProject extends Task
                 $this->mu()->getGitRootDir(),
                 $this->mu()->getNameOfTempBranch()
             );
+        if ($this->mu()->getIsModuleUpgrade()) {
+            $this->workoutExtraRequirementsFromModule();
+        }
         foreach ($this->alsoRequire as $package => $version) {
-            Composer::inst($this->mu())->Require(
-                $package,
-                $version,
-                false,
-                $this->composerOptions
-            );
+            Composer::inst($this->mu())
+                ->ClearCache()
+                ->Require(
+                    $package,
+                    $version,
+                    false,
+                    $this->composerOptions
+                );
         }
         if ($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
@@ -94,6 +122,29 @@ class ComposerInstallProject extends Task
                 'run composer update',
                 false
             );
+        }
+        $this->mu()->setBreakOnAllErrors(false);
+    }
+
+    protected function workoutExtraRequirementsFromModule()
+    {
+        $composerJson = ComposerJsonFixes::inst($this->mu())
+            ->getJSON($this->mu()->getGitRootDir());
+        if (isset($composerJson['require'])) {
+            foreach ($composerJson['require'] as $package => $version) {
+                if (in_array($package, $this->ignoredPackageForModuleRequirements, true)) {
+                    $this->mu()->colourPrint('Skipping ' . $package . ' as requirement');
+                } else {
+                    if ($version === 'dev-master') {
+                        $this->mu()->colourPrint('Sticking with dev-master as version for ' . $package);
+                    } else {
+                        $version = '*';
+                    }
+                    if (! isset($this->alsoRequire[$package])) {
+                        $this->alsoRequire[$package] = $version;
+                    }
+                }
+            }
         }
     }
 

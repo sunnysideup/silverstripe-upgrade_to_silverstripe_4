@@ -33,6 +33,7 @@ class FixOutdatedPHPStyles extends Task
         );
 
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
+        $this->mu()->setBreakOnAllErrors(true);
         foreach ($codeDirs as $codeDir) {
             $this->mu()->execMe(
                 $webRoot,
@@ -43,6 +44,7 @@ class FixOutdatedPHPStyles extends Task
 
             $this->setCommitMessage('MAJOR: fixing outdated code styles using sunnysideup/huringa in ' . $codeDir);
         }
+        $this->mu()->setBreakOnAllErrors(false);
     }
 
     protected function hasCommitAndPush()

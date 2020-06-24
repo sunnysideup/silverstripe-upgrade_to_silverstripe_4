@@ -16,7 +16,7 @@ class CheckoutUpgradeStarterBranch extends Task
 
     protected $useGitClone = false;
 
-    protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
     {
@@ -76,12 +76,14 @@ class CheckoutUpgradeStarterBranch extends Task
         );
         $packageNameFull = $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName();
         $branchAdjusted = 'dev-' . $this->mu()->getNameOfUpgradeStarterBranch();
-        Composer::inst($this->mu())->Require(
-            $packageNameFull,
-            $branchAdjusted,
-            false,
-            $this->composerOptions
-        );
+        Composer::inst($this->mu())
+            ->ClearCache()
+            ->Require(
+                $packageNameFull,
+                $branchAdjusted,
+                false,
+                $this->composerOptions
+            );
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),

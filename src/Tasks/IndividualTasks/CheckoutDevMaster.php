@@ -18,7 +18,7 @@ class CheckoutDevMaster extends Task
 
     protected $useGitClone = false;
 
-    protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
     {
@@ -48,12 +48,14 @@ class CheckoutDevMaster extends Task
                         it is more likely to install dependencies that do not have tags',
                     false
                 );
-                Composer::inst($this->mu())->Require(
-                    $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
-                    $this->mu()->getNameOfBranchForBaseCodeForComposer(),
-                    false,
-                    $this->composerOptions
-                );
+                Composer::inst($this->mu())
+                    ->ClearCache()
+                    ->Require(
+                        $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                        $this->mu()->getNameOfBranchForBaseCodeForComposer(),
+                        false,
+                        $this->composerOptions
+                    );
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
                     'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),

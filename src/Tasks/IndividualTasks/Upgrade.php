@@ -39,6 +39,7 @@ class Upgrade extends Task
 
     public function runActualTask($params = [])
     {
+        $this->mu()->setBreakOnAllErrors(true);
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
             $actualDir = dirname($codeDir);
             $this->param1 = $actualDir;
@@ -51,6 +52,7 @@ class Upgrade extends Task
             );
             $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 1 (upgrade) on ' . $actualDir);
         }
+        $this->mu()->setBreakOnAllErrors(false);
     }
 
     protected function hasCommitAndPush()

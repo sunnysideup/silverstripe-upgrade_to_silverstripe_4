@@ -1,12 +1,15 @@
 {
     "name": "sunnysideup/upgrade_to_silverstripe_4",
     "type": "silverstripe-module",
-    "description": "Upgrade modules to silverstripe 4",
+    "description": "Upgrade modules to silverstripe 4 and beyond",
     "keywords": [
         "Silverstripe-CMS",
         "CMS",
         "Silverstripe",
-        "upgrade"
+        "upgrade",
+        "upgrader",
+        "upgrades",
+        "SS4"
     ],
     "license": "BSD-3-Clause",
     "authors": [
@@ -16,12 +19,11 @@
             "role": "lead developer"
         }
     ],
-    "extra": {
-        "installer-name": "upgrade_silverstripe"
-    },
     "require": {
-        "silverstripe/upgrader":                       "dev-master",
         "sunnysideup/php_2_command_line":              "dev-master"
+    },
+    "require-dev": {
+        "silverstripe/upgrader":                       "dev-master"
     },
     "autoload": {
         "psr-4": {

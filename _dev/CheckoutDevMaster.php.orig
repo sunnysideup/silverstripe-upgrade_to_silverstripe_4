@@ -14,7 +14,7 @@ class CheckoutDevMaster extends Task
 
     protected $useGitClone = false;
 
-    protected $composerOptions = '--prefer-source --update-no-dev --no-cache';
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
     {

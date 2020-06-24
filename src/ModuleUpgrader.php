@@ -26,11 +26,12 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
      * @return array
      */
     public function execMe(
-        $newDir,
-        $command,
-        $comment,
-        $alwaysRun = false,
-        $keyNotesLogFileLocation = ''
+        string $newDir,
+        string $command,
+        string $comment,
+        ?bool $alwaysRun = false,
+        ?string $keyNotesLogFileLocation = '',
+        ?bool $verbose = true
     ) {
         if ($keyNotesLogFileLocation) {
             $this->commandLineExec
@@ -41,7 +42,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                 ->setMakeKeyNotes(false);
         }
 
-        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
+        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun, $verbose);
     }
 
     /**
@@ -71,6 +72,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
         );
         $this->loadNextStepInstructions();
         $this->loadGlobalVariables();
+        $this->loadCustomVariablesForTasks();
         foreach ($this->arrayOfModules as $moduleDetails) {
             $hasRun = false;
             $nextStep = '';
@@ -172,6 +174,8 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
     {
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
+        $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
+        $this->endWith = $this->getCommandLineOrArgumentAsString('endWith');
         $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
         if ($this->onlyRun) {
             $this->outOfOrderTask = true;
@@ -191,6 +195,24 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             $this->webRootDirLocation . '/themes',
             true
         );
+    }
+
+    protected function loadCustomVariablesForTasks()
+    {
+        foreach ($this->customVariablesForTasks as $taskName => $variableAndValue) {
+            foreach ($variableAndValue as $variableName => $variableValue) {
+                $key = $this->positionForTask($taskName);
+                if ($key !== false) {
+                    $this->listOfTasks[$taskName][$variableName] = $variableValue;
+                } else {
+                    user_error(
+                        'Could not find ' . $taskName . '.
+                        Choose from ' . implode(', ', array_keys($this->listOfTasks))
+                    );
+                    die('----');
+                }
+            }
+        }
     }
 
     /**

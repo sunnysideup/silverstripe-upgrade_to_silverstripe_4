@@ -123,12 +123,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "811c569dd23a19b02116ac0613e2f67a76c15931"
+                "reference": "39da74948fd424cf0e8321b96f04c2a1b2480a15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/811c569dd23a19b02116ac0613e2f67a76c15931",
-                "reference": "811c569dd23a19b02116ac0613e2f67a76c15931",
+                "url": "https://api.github.com/repos/composer/semver/zipball/39da74948fd424cf0e8321b96f04c2a1b2480a15",
+                "reference": "39da74948fd424cf0e8321b96f04c2a1b2480a15",
                 "shasum": ""
             },
             "require": {
@@ -176,7 +176,7 @@
                 "validation",
                 "versioning"
             ],
-            "time": "2020-03-17T11:42:48+00:00"
+            "time": "2020-01-14T12:12:58+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -373,12 +373,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jean85/pretty-package-versions.git",
-                "reference": "245cbea12f937d96a9b3c5500e9ab7f2ee643cc6"
+                "reference": "e9f4324e88b8664be386d90cf60fbc202e1f7fc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/245cbea12f937d96a9b3c5500e9ab7f2ee643cc6",
-                "reference": "245cbea12f937d96a9b3c5500e9ab7f2ee643cc6",
+                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/e9f4324e88b8664be386d90cf60fbc202e1f7fc9",
+                "reference": "e9f4324e88b8664be386d90cf60fbc202e1f7fc9",
                 "shasum": ""
             },
             "require": {
@@ -416,7 +416,7 @@
                 "release",
                 "versions"
             ],
-            "time": "2020-06-19T15:34:02+00:00"
+            "time": "2020-06-23T06:23:06+00:00"
         },
         {
             "name": "m1/env",
@@ -1582,15 +1582,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sunnysideup/silverstripe-php_2_command_line.git",
-                "reference": "652d1566393d2d16323a64f072b5e57e8dca61dd"
+                "reference": "9f22c8728782e6a2c2d632db2445e6eae52e4267"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/652d1566393d2d16323a64f072b5e57e8dca61dd",
-                "reference": "652d1566393d2d16323a64f072b5e57e8dca61dd",
+                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/9f22c8728782e6a2c2d632db2445e6eae52e4267",
+                "reference": "9f22c8728782e6a2c2d632db2445e6eae52e4267",
                 "shasum": ""
             },
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sunnysideup\\PHP2CommandLine\\": "src/"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
@@ -1610,7 +1615,7 @@
                 "php",
                 "script"
             ],
-            "time": "2019-07-06T19:05:43+00:00"
+            "time": "2020-06-23T06:45:39+00:00"
         },
         {
             "name": "symfony/console",
@@ -2275,20 +2280,6 @@
                 "interoperability",
                 "standards"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-06-18T19:55:03+00:00"
         },
         {
@@ -2361,6 +2352,5 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

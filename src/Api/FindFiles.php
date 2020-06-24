@@ -4,6 +4,19 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 class FindFiles
 {
+
+    protected $myMu = null;
+
+    protected $defaultOptions = '';
+
+    public static function inst() : self
+    {
+        if (self::$inst === null) {
+            self::$inst = new FindFiles();
+        }
+        return self::$inst;
+    }
+
     //generic search settings
 
     private $needToFillFileCache = true;

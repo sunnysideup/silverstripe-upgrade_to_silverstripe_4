@@ -14,6 +14,8 @@ class ApplyPSR2 extends Task
 
     protected $composerOptions = '';
 
+    protected $lintingIssuesFileName = '';
+
     public function getTitle()
     {
         return 'Apply PSR2 Cleanup.';
@@ -29,16 +31,24 @@ class ApplyPSR2 extends Task
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
 
-        Composer::inst($this->mu())->RequireGlobal(
-            'sunnysideup/easy-coding-standards',
-            'dev-master',
-            true,
-            $this->composerOptions
-        );
+        Composer::inst($this->mu())
+            ->RequireGlobal(
+                'sunnysideup/easy-coding-standards',
+                'dev-master',
+                true,
+                $this->composerOptions
+            );
 
         //1. apply
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
+            $knowknownIssueFile = $codeDir . '/' . $this->lintingIssuesFileName;
             $relativeDir = str_replace($webRoot, '', $codeDir);
+            $this->mu()->execMe(
+                $webRoot,
+                'rm '.$this->$knowknownIssueFile.' -f',
+                'removing '.$knowknownIssueFile,
+                false
+            );
             $this->mu()->execMe(
                 $webRoot,
                 'dir=' . $relativeDir . ' sslint-ecs',
@@ -47,8 +57,20 @@ class ApplyPSR2 extends Task
             );
             $this->mu()->execMe(
                 $webRoot,
-                'level=1 dir=' . $relativeDir . ' sslint-stan > ' . $relativeDir . '/KNOWN_ISSUES',
-                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $relativeDir . '/KNOWN_ISSUES',
+                'dir=' . $relativeDir . ' sslint-ecs',
+                'Apply PSR-2-etc... second time ' . $relativeDir . ' (' . $baseNameSpace . ')',
+                false
+            );
+            $this->mu()->execMe(
+                $webRoot,
+                'dir=' . $relativeDir . ' sslint-ecs > ' . $knownIssueFile,
+                'Apply PSR-2-etc... third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to '.$knowknownIssueFile,
+                false
+            );
+            $this->mu()->execMe(
+                $webRoot,
+                'level=1 dir=' . $relativeDir . ' sslint-stan >> ' .$knowknownIssueFile,
+                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $knowknownIssueFile,
                 false
             );
         }

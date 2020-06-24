@@ -66,11 +66,11 @@ class ComposerInstallProject extends Task
 
     public function runActualTask($params = [])
     {
+        $this->mu()->setBreakOnAllErrors(true);
         if (! $this->versionToLoad) {
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
         if ($this->mu()->getIsModuleUpgrade()) {
-            $this->workoutExtraRequirementsFromModule();
 
             $alt = $this->mu()->getParentProjectForModule();
             if ($alt) {
@@ -101,6 +101,9 @@ class ComposerInstallProject extends Task
                 $this->mu()->getGitRootDir(),
                 $this->mu()->getNameOfTempBranch()
             );
+        if ($this->mu()->getIsModuleUpgrade()) {
+            $this->workoutExtraRequirementsFromModule();
+        }
         foreach ($this->alsoRequire as $package => $version) {
             Composer::inst($this->mu())
                 ->ClearCache()
@@ -111,7 +114,6 @@ class ComposerInstallProject extends Task
                     $this->composerOptions
                 );
         }
-
         if ($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $this->mu()->getGitRootDir(),
@@ -120,6 +122,7 @@ class ComposerInstallProject extends Task
                 false
             );
         }
+        $this->mu()->setBreakOnAllErrors(false);
     }
 
     protected function workoutExtraRequirementsFromModule()
@@ -127,7 +130,7 @@ class ComposerInstallProject extends Task
         $composerJson = ComposerJsonFixes::inst($this->mu())
             ->getJSON($this->mu()->getGitRootDir());
         if (isset($composerJson['require'])) {
-            foreach ($composerJson as $package => $version) {
+            foreach ($composerJson['require'] as $package => $version) {
                 if (in_array($package, $this->ignoredPackageForModuleRequirements, true)) {
                     $this->mu()->colourPrint('Skipping ' . $package . ' as requirement');
                 } else {
@@ -136,7 +139,9 @@ class ComposerInstallProject extends Task
                     } else {
                         $version = '*';
                     }
-                    $this->alsoRequire[$package] = $version;
+                    if(! isset($this->alsoRequire[$package])) {
+                        $this->alsoRequire[$package] = $version;
+                    }
                 }
             }
         }

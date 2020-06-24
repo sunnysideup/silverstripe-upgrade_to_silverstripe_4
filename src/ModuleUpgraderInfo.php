@@ -101,9 +101,11 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- parameter "again" ... runs last comand again', 'light_cyan');
 
-        $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'light_cyan');
+        $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'white');
 
-        $mu->colourPrint('- parameter "task=MySpecificTask" ... runs MySpecificTask', 'light_cyan');
+        $mu->colourPrint('- parameter "task=MySpecificTask" ... runs MySpecificTask', 'white');
+
+        $mu->colourPrint('- parameter "startFrom=MySpecificTask" ... runs MySpecificTask', 'white');
     }
 
     protected function listOfTasks($currentOne = ''): string

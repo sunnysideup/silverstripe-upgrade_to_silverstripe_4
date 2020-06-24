@@ -64,9 +64,13 @@ class Composer
         if ($version) {
             $version = ':' . $version;
         }
+        $globalPhrase = '';
+        if ($isGlobal) {
+            $globalPhrase = 'global';
+        }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
+            'composer '.$globalPhrase.' require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             'running composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             false
         );

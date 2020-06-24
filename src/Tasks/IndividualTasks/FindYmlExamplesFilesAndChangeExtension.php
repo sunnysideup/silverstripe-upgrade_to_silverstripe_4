@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
 
 /**
  * Run a dev/build as a smoke test to see if all is well
@@ -29,6 +30,11 @@ class FindYmlExamplesFilesAndChangeExtension extends Task
 
     public function runActualTask($params = [])
     {
+        $files = FindFiles::inst()
+            ->setSearchPath($this->mu()->getGitRootDir())
+            ->setExtensions($this->extensions)
+            ->getFlatFileArray();
+        print_r($files);
     }
 
     protected function hasCommitAndPush()

@@ -121,6 +121,10 @@
 
 
     php:
+        "OptionSetField":
+            R: "OptionsetField"
+        " convert::":
+            R: " Convert::"
         "new DropDownField":
             R: "new DropdownField"
         "DropDownField::create":

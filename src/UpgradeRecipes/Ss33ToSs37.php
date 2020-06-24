@@ -64,7 +64,7 @@ class Ss33ToSs37 extends BaseClass
             'SourceFolders' => [
                 'SS36',
                 'SS37',
-            ]
+            ],
         ],
 
         'PHPCompatabilityCheck' => [],

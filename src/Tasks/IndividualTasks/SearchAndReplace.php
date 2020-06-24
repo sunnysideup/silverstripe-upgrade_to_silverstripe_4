@@ -59,7 +59,7 @@ class SearchAndReplace extends Task
      * @var array
      */
     protected $sourceFolders = [
-        'SS4'
+        'SS4',
     ];
 
     public function getTitle()
@@ -108,8 +108,7 @@ class SearchAndReplace extends Task
 
         //replacement data
         $replacementDataObjects = $this->getReplacementDataObjects();
-        foreach($replacementDataObjects as $replacementDataObject) {
-
+        foreach ($replacementDataObjects as $replacementDataObject) {
             if ($this->checkReplacementIssues) {
                 $this->checkReplacementDataIssues($replacementDataObject);
             }
@@ -197,15 +196,18 @@ class SearchAndReplace extends Task
         return true;
     }
 
-    protected function getReplacementDataObjects() : array
+    protected function getReplacementDataObjects(): array
     {
-        foreach($this->sourceFolders as $sourceFolder) {
-            return new LoadReplacementData(
+        $array = [];
+        foreach ($this->sourceFolders as $sourceFolder) {
+            $array[] = new LoadReplacementData(
                 $this->mu(),
                 $this->folderContainingReplacementData,
                 $sourceFolder
             );
         }
+
+        return $array;
     }
 
     /**

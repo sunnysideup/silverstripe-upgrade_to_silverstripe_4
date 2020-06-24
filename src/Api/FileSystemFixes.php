@@ -66,9 +66,16 @@ class FileSystemFixes
             $actionName = 'Copying';
         }
         if ($this->test($oldPath, false)) {
-            $parentFolder = dirname($oldPath);
+            $oldParentFolder = dirname($oldPath);
+            $newParentFolder = dirname($newPath);
             $this->mu()->execMe(
-                $parentFolder,
+                $oldParentFolder,
+                'mkdir -p ' . $newParentFolder,
+                'First we ensure new parent folder ' . $newParentFolder . ' exists',
+                false
+            );
+            $this->mu()->execMe(
+                $oldParentFolder,
                 'if test -e ' . $oldPath . '; then ' . $action . ' -vn ' . $oldPath . ' ' . $newPath . '; fi;',
                 $actionName . ' ' .
                 $this->removeCommonStart($oldPath, $newPath) . ' to ' . $this->removeCommonStart($newPath, $oldPath) . '

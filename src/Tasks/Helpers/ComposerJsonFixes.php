@@ -2,22 +2,11 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers;
 
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeToSilverstripe4\Traits\HelperInst;
 
 class ComposerJsonFixes
 {
-    protected static $inst = null;
-
-    protected $myMu = null;
-
-    public static function inst($mu)
-    {
-        if (self::$inst === null) {
-            self::$inst = new ComposerJsonFixes();
-            self::$inst->setMu($mu);
-        }
-        return self::$inst;
-    }
+    use HelperInst;
 
     public function getJSON(string $dir): array
     {
@@ -51,24 +40,5 @@ class ComposerJsonFixes
             $comment . ' --- in ' . $location,
             false
         );
-    }
-
-    /**
-     * @param ModuleUpgrader $mu
-     * @return ComposerJsonFixes
-     */
-    protected function setMu(ModuleUpgrader $mu)
-    {
-        $this->myMu = $mu;
-
-        return $this;
-    }
-
-    /**
-     * @return ModuleUpgrader
-     */
-    protected function mu()
-    {
-        return $this->myMu;
     }
 }

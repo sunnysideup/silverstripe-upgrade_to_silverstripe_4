@@ -41,12 +41,12 @@ class ApplyPSR2 extends Task
 
         //1. apply
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
-            $knowknownIssueFile = $codeDir . '/' . $this->lintingIssuesFileName;
+            $knowsIssuesFileName = $codeDir . '/' . $this->lintingIssuesFileName;
             $relativeDir = str_replace($webRoot, '', $codeDir);
             $this->mu()->execMe(
                 $webRoot,
-                'rm '.$this->$knowknownIssueFile.' -f',
-                'removing '.$knowknownIssueFile,
+                'rm ' . $knowsIssuesFileName . ' -f',
+                'removing ' . $knowsIssuesFileName,
                 false
             );
             $this->mu()->execMe(
@@ -63,14 +63,14 @@ class ApplyPSR2 extends Task
             );
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' sslint-ecs > ' . $knownIssueFile,
-                'Apply PSR-2-etc... third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to '.$knowknownIssueFile,
+                'dir=' . $relativeDir . ' sslint-ecs > ' . $knowsIssuesFileName,
+                'Apply PSR-2-etc... third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to ' . $knowsIssuesFileName,
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                'level=1 dir=' . $relativeDir . ' sslint-stan >> ' .$knowknownIssueFile,
-                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $knowknownIssueFile,
+                'level=1 dir=' . $relativeDir . ' sslint-stan >> ' . $knowsIssuesFileName,
+                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $knowsIssuesFileName,
                 false
             );
         }

@@ -2,24 +2,13 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers;
 
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeToSilverstripe4\Traits\HelperInst;
 
 class Composer
 {
-    protected static $inst = null;
-
-    protected $myMu = null;
+    use HelperInst;
 
     protected $defaultOptions = '';
-
-    public static function inst($mu)
-    {
-        if (self::$inst === null) {
-            self::$inst = new Composer();
-            self::$inst->setMu($mu);
-        }
-        return self::$inst;
-    }
 
     public function DumpAutoload(): self
     {
@@ -70,30 +59,11 @@ class Composer
         }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer '.$globalPhrase.' require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
+            'composer ' . $globalPhrase . ' require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             'running composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             false
         );
 
         return $this;
-    }
-
-    /**
-     * @param ModuleUpgrader $mu
-     * @return Composer
-     */
-    protected function setMu(ModuleUpgrader $mu)
-    {
-        $this->myMu = $mu;
-
-        return $this;
-    }
-
-    /**
-     * @return ModuleUpgrader
-     */
-    protected function mu()
-    {
-        return $this->myMu;
     }
 }

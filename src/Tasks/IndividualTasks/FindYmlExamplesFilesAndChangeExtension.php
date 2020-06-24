@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Run a dev/build as a smoke test to see if all is well

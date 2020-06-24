@@ -71,7 +71,6 @@ class ComposerInstallProject extends Task
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
         if ($this->mu()->getIsModuleUpgrade()) {
-
             $alt = $this->mu()->getParentProjectForModule();
             if ($alt) {
                 $altBranch = $this->mu()->getParentProjectForModuleBranchOrTag();
@@ -139,7 +138,7 @@ class ComposerInstallProject extends Task
                     } else {
                         $version = '*';
                     }
-                    if(! isset($this->alsoRequire[$package])) {
+                    if (! isset($this->alsoRequire[$package])) {
                         $this->alsoRequire[$package] = $version;
                     }
                 }

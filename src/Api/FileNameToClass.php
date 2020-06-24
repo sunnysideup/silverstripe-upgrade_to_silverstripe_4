@@ -21,6 +21,7 @@ class FileNameToClass
      * build and return an object of a class from its file path
      *
      * @param string $filePathName
+     * @return mixed
      */
     public function getClassObjectFromFile(string $filePathName)
     {
@@ -36,7 +37,7 @@ class FileNameToClass
      *
      * @return string|null
      */
-    public function getClassNamespaceFromFile(string $filePathName)
+    public function getClassNamespaceFromFile(string $filePathName): ?string
     {
         $src = (string) file_get_contents($filePathName);
 

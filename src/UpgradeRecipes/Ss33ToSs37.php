@@ -60,13 +60,13 @@ class Ss33ToSs37 extends BaseClass
             'Package' => 'silverstripe/siteconfig',
             'NewVersion' => '~3.7',
         ],
-        'SearchAndReplace-1' => [
-            'ToFolder' => 'SS36',
+        'SearchAndReplace' => [
+            'SourceFolders' => [
+                'SS36',
+                'SS37',
+            ]
         ],
 
-        'SearchAndReplace-2' => [
-            'ToFolder' => 'SS37',
-        ],
         'PHPCompatabilityCheck' => [],
     ];
 

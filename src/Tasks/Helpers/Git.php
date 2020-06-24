@@ -268,7 +268,9 @@ class Git
             $dir,
             'git fetch --all && git branch -a && git status',
             'get the latest',
-            false
+            false,
+            '',
+            false //verbose = false!
         );
 
         return $this;

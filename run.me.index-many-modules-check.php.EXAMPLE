@@ -40,8 +40,10 @@ foreach($modules as $module) {
                 'useGitClone' => true,
                 'branchOrTagToUse' => $module['tag'],
             ],
-            'SearchAndReplaceWithoutCommit' => [
-                'ToFolder' => 'SS37',
+            'SearchAndReplace' => [
+                'SourceFolders' => [
+                    'SS37'
+                ],
             ],
         ]
     )

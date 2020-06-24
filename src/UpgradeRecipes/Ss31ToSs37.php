@@ -43,14 +43,12 @@ class Ss31ToSs37 extends BaseClass
             'Package' => 'silverstripe/cms',
             'NewVersion' => '~3.7',
         ],
-        'SearchAndReplace-1' => [
-            'ToFolder' => 'SS34',
-        ],
-        'SearchAndReplace-2' => [
-            'ToFolder' => 'SS36',
-        ],
-        'SearchAndReplace-3' => [
-            'ToFolder' => 'SS37',
+        'SearchAndReplace' => [
+            'SourceFolders' => [
+                'SS34',
+                'SS36',
+                'SS37',
+            ],
         ],
         'PHPCompatabilityCheck' => [],
     ];

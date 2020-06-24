@@ -26,11 +26,12 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
      * @return array
      */
     public function execMe(
-        $newDir,
-        $command,
-        $comment,
-        $alwaysRun = false,
-        $keyNotesLogFileLocation = ''
+        string $newDir,
+        string $command,
+        string $comment,
+        ?bool $alwaysRun = false,
+        ?string $keyNotesLogFileLocation = '',
+        ?bool $verbose = true
     ) {
         if ($keyNotesLogFileLocation) {
             $this->commandLineExec
@@ -41,7 +42,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                 ->setMakeKeyNotes(false);
         }
 
-        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun);
+        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun, $verbose);
     }
 
     /**

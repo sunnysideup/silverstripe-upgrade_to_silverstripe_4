@@ -288,12 +288,6 @@
         '->dontEscape':
             R: '->dontEscape'
             C: 'dontEscape is not longer in use for form fields, please use HTMLReadonlyField (or similar) instead.'
-        'private static $db =':
-            R: 'private static $db ='
-            C: 'Make sure to add a private static $table_name!'
-        'private static $has_one =':
-            R: 'private static $has_one ='
-            C: 'Make sure to add a private static $table_name!'
         '$this->process_combined_files();':
             R: '$this->processCombinedFiles();'
             C: 'this is likely to be part of the Requirements_Backend calls'

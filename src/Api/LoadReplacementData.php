@@ -48,7 +48,7 @@ class LoadReplacementData
      * name of the sub-folder for the replacement data.
      * @var string
      */
-    protected $toFolder = 'SS4';
+    protected $toFolders = 'SS4';
 
     /**
      * array of replacements

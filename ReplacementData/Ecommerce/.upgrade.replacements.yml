@@ -1,0 +1,149 @@
+####
+#### FORMAT
+####    PATH (relative to root folder of module)
+####        LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
+####            FindKey
+####                R: replace with entry - you can leave empty to keep it as the find... in that case you should add a comment
+####                C: comment - this makes it a complex replacement.
+####                I: ignore case (default is case sensitive)
+
+'.':
+    '*':
+        'EcommerceCountry_VisitorCountryProvider':
+            R: 'EcommerceCountryVisitorCountryProvider'
+        'EcommerceSideReport_FeaturedProducts':
+            R: 'EcommerceSideReportFeaturedProducts'
+        'EcommerceSideReport_EcommercePages':
+            R: 'EcommerceSideReportEcommercePages'
+        'EcommerceSideReport_NoInternalIDProducts':
+            R: 'EcommerceSideReportNoInternalIDProducts'
+        'EcommerceSideReport_NoPriceProducts':
+            R: 'EcommerceSideReportNoPriceProducts'
+        'EcommerceSideReport_AllProducts':
+            R: 'EcommerceSideReportAllProducts'
+        'EcommerceSideReport_NotForSale':
+            R: 'EcommerceSideReportNotForSale'
+        'EcommerceSideReport_NoImageProducts':
+            R: 'EcommerceSideReportNoImageProducts'
+        'EcommerceTaskBuilding_Extending':
+            R: 'EcommerceTaskBuildingExtending'
+        'EcommerceTaskBuilding_Model':
+            R: 'EcommerceTaskBuildingModel'
+        'OrderForm_Payment':
+            R: 'OrderFormPayment'
+        'OrderForm_Feedback':
+            R: 'OrderFormFeedback'
+        'OrderForm_Feedback_Validator':
+            R: 'OrderFormFeedbackValidator'
+        'OrderFormAddress_Validator':
+            R: 'OrderFormAddressValidator'
+        'ProductSearchForm_Validator':
+            R: 'ProductSearchFormValidator'
+        'ShopAccountForm_PasswordValidator':
+            R: 'ShopAccountFormPasswordValidator'
+        'ShopAccountForm_Validator':
+            R: 'ShopAccountFormValidator'
+        'OrderModifierForm_Validator':
+            R: 'OrderModifierFormValidator'
+        'OrderForm_Cancel_Validator':
+            R: 'OrderFormCancelValidator'
+        'OrderStatusLogForm_Validator':
+            R: 'OrderStatusLogFormValidator'
+        'Product_ProductImageUploadField':
+            R: 'ProductProductImageUploadField'
+        'ProductSearchForm_Short':
+            R: 'ProductSearchFormShort'
+        'OrderForm_Cancel':
+            R: 'OrderFormCancel'
+        'Order_StatusEmail':
+            R: 'OrderStatusEmail'
+        'Order_InvoiceEmail':
+            R: 'OrderInvoiceEmail'
+        'Order_ErrorEmail':
+            R: 'OrderErrorEmail'
+        'Order_Email':
+            R: 'OrderEmail'
+        'Ecommerce_Dummy_Mailer':
+            R: 'EcommerceDummyMailer'
+        'Order_ReceiptEmail':
+            R: 'OrderReceiptEmail'
+        'OrderEmailRecord_Review':
+            R: 'OrderEmailRecordReview'
+        'OrderModifierForm_Controller':
+            R: 'OrderModifierFormController'
+        'OrderStatusLogForm_Controller':
+            R: 'OrderStatusLogFormController'
+        'ShoppingCart_Controller':
+            R: 'ShoppingCartController'
+        'CMSPageAddController_Products':
+            R: 'CMSPageAddControllerProducts'
+        'OrderFilters_MemberAndAddress':
+            R: 'OrderFiltersMemberAndAddress'
+        'OrderFilters_MustHaveAtLeastOnePayment':
+            R: 'OrderFiltersMustHaveAtLeastOnePayment'
+        'OrderFilters_AroundDateFilter':
+            R: 'OrderFiltersAroundDateFilter'
+        'OrderFilters_HasBeenCancelled':
+            R: 'OrderFiltersHasBeenCancelled'
+        'OrderFilters_MultiOptionsetStatusIDFilter':
+            R: 'OrderFiltersMultiOptionsetStatusIDFilter'
+        'Product_Image':
+            R: 'ProductImage'
+        'Product_OrderItem':
+            R: 'ProductOrderItem'
+        'OrderStep_Sent':
+            R: 'OrderStepSent'
+        'OrderStep_Submitted':
+            R: 'OrderStepSubmitted'
+        'OrderStep_SendAdminNotification':
+            R: 'OrderStepSendAdminNotification'
+        'OrderStep_Archived':
+            R: 'OrderStepArchived'
+        'OrderStep_Confirmed':
+            R: 'OrderStepConfirmed'
+        'OrderStep_Paid':
+            R: 'OrderStepPaid'
+        'OrderStep_SentReceipt':
+            R: 'OrderStepSentReceipt'
+        'OrderStep_SentInvoice':
+            R: 'OrderStepSentInvoice'
+        'OrderStep_Created':
+            R: 'OrderStepCreated'
+        'OrderStatusLog_DispatchElectronicOrder':
+            R: 'OrderStatusLogDispatchElectronicOrder'
+        'OrderStatusLog_Archived':
+            R: 'OrderStatusLogArchived'
+        'OrderStatusLog_Submitted':
+            R: 'OrderStatusLogSubmitted'
+        'OrderStatusLog_Cancel':
+            R: 'OrderStatusLogCancel'
+        'OrderStatusLog_PaymentCheck':
+            R: 'OrderStatusLogPaymentCheck'
+        'OrderStatusLog_Dispatch':
+            R: 'OrderStatusLogDispatch'
+        'OrderStatusLog_DispatchPhysicalOrder':
+            R: 'OrderStatusLogDispatchPhysicalOrder'
+        'CheckoutPage_StepDescription':
+            R: 'CheckoutPageStepDescription'
+        'OrderAttribute_Group':
+            R: 'OrderAttributeGroup'
+        'OrderModifier_Descriptor':
+            R: 'OrderModifierDescriptor'
+        'EcommercePayment_Test':
+            R: 'EcommercePaymentTest'
+        'EcommercePayment_TestSuccess':
+            R: 'EcommercePaymentTestSuccess'
+        'EcommercePayment_TestFailure':
+            R: 'EcommercePaymentTestFailure'
+        'EcommercePayment_TestPending':
+            R: 'EcommercePaymentTestPending'
+        'EcommercePayment_Success':
+            R: 'EcommercePaymentSuccess'
+        'EcommercePayment_Failure':
+            R: 'EcommercePaymentFailure'
+        'EcommercePayment_Processing':
+            R: 'EcommercePaymentProcessing'
+        'EcommercePayment_Result':
+            R: 'EcommercePaymentResult'
+        'ExchangeRateProvider_Dummy':
+            R: 'ExchangeRateProviderDummy'

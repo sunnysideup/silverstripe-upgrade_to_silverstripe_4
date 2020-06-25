@@ -1,39 +1,4 @@
 {
-    "name": "sunnysideup/upgrade_to_silverstripe_4",
-    "type": "silverstripe-module",
-    "description": "Upgrade modules to silverstripe 4 and beyond",
-    "keywords": [
-        "Silverstripe-CMS",
-        "CMS",
-        "Silverstripe",
-        "upgrade",
-        "upgrader",
-        "upgrades",
-        "SS4"
-    ],
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Nicolaas Francken",
-            "email": "modules@sunnysideup.co.nz",
-            "role": "lead developer"
-        }
-    ],
-    "require": {
-        "sunnysideup/php_2_command_line":              "dev-master"
-    },
-    "require-dev": {
-        "silverstripe/upgrader":                       "dev-master"
-    },
-    "autoload": {
-        "psr-4": {
-            "Sunnysideup\\UpgradeToSilverstripe4\\":"src/",
-            "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/"
-        }
-    },
     "minimum-stability": "dev",
-    "suggest": {
-        "hirak/prestissimo": "INSTALL GLOBAL!",
-        "sunnysideup/easy-coding-standards": "INSTALL GLOBAL!"
-    }
+    "require": {}
 }

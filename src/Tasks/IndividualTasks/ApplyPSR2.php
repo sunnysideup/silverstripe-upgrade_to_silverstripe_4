@@ -14,7 +14,7 @@ class ApplyPSR2 extends Task
 
     protected $composerOptions = '';
 
-    protected $lintingIssuesFileName = '';
+    protected $lintingIssuesFileName = 'LINTING_ERRORS';
 
     public function getTitle()
     {

@@ -41,11 +41,12 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             $this->commandLineExec
                 ->setMakeKeyNotes(false);
         }
-        if($this->getBreakOnAllErrors()) {
+        $this->commandLineExec->setErrorMessage('');
+        if ($this->getBreakOnAllErrors()) {
             $this->commandLineExec->setErrorMessage('
 ------------------------------------------------------------------------
-To continue, please use the following parameter: startFrom='.$this->currentlyRunning.'
-e.g. php runme.php startFrom='.$this->currentlyRunning.'
+To continue, please use the following parameter: startFrom=' . $this->currentlyRunning . '
+e.g. php runme.php startFrom=' . $this->currentlyRunning . '
 ------------------------------------------------------------------------
             ');
         }

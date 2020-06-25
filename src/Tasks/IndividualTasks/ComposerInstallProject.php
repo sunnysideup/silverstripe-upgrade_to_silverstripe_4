@@ -68,7 +68,6 @@ class ComposerInstallProject extends Task
 
     public function runActualTask($params = [])
     {
-
         $this->mu()->setBreakOnAllErrors(true);
         $this->mu()->execMe(
             $this->mu()->getAboveWebRootDirLocation(),

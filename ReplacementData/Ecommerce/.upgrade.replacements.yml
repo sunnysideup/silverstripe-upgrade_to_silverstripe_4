@@ -10,6 +10,10 @@
 
 '.':
     '*':
+        'Before: ''app/*'''
+            R: 'Before: [''#app'']'
+        'After: ''framework/*'',''cms/*'',''ecommerce/*''':
+            R: 'After: [''#coreconfig'', ''#cmsextensions'', '''#ecommerce'']'
         CheckoutPage_Controller:
             R: 'CheckoutPageController'
         ProductGroup_Controller:

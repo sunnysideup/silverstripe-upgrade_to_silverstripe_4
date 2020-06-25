@@ -3,7 +3,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
-die('DONE');
+
 /**
  * below are examples
  * of most of the config options
@@ -13,7 +13,7 @@ die('DONE');
 $obj = ModuleUpgrader::create()
     ->setRecipe('SS4')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setWebRootName('ecommerce_assign_orders')
+    ->setWebRootName('ecommerce_second_hand_product')
     ->setRunInteractively(true)
     // ->setRunIrreversibly(true)
     ->setArrayOfModules(
@@ -21,8 +21,8 @@ $obj = ModuleUpgrader::create()
             1 => [
               'VendorName' => 'sunnysideup',
               'VendorNamespace' => 'Sunnysideup',
-              'PackageName' => 'ecommerce_assign_orders',
-              'PackageNamespace' => 'EcommerceAssignOrders',
+              'PackageName' => 'ecommerce_second_hand_product',
+              'PackageNamespace' => 'EcommerceSecondHandProduct',
               'IsModuleUpgrade' => true,
             ]
         ]

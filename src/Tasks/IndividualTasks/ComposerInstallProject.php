@@ -68,7 +68,14 @@ class ComposerInstallProject extends Task
 
     public function runActualTask($params = [])
     {
+
         $this->mu()->setBreakOnAllErrors(true);
+        $this->mu()->execMe(
+            $this->mu()->getAboveWebRootDirLocation(),
+            'rm ' . $this->mu()->getWebRootDirLocation() . ' -rf',
+            'remove the upgrade dir: ' . $this->mu()->getWebRootDirLocation(),
+            false
+        );
         if (! $this->versionToLoad) {
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }

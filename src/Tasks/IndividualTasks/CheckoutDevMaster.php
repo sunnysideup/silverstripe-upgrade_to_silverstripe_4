@@ -37,6 +37,7 @@ class CheckoutDevMaster extends Task
      */
     public function runActualTask($params = [])
     {
+        $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
             if ($this->useGitClone) {
                 $this->gitClone();
@@ -72,6 +73,7 @@ class CheckoutDevMaster extends Task
                 false
             );
         }
+        $this->mu()->setBreakOnAllErrors(false);
     }
 
     protected function gitClone()

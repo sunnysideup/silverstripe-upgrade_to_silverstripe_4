@@ -50,9 +50,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
 ------------------------------------------------------------------------
             ');
         }
-        $outcome = $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun, $verbose);
-
-        return $outcome;
+        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun, $verbose);
     }
 
     /**

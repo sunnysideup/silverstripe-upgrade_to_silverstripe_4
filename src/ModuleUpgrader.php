@@ -184,9 +184,15 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
     {
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
-        $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
-        $this->endWith = $this->getCommandLineOrArgumentAsString('endWith');
-        $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
+        if($this->getCommandLineOrArgumentAsString('startFrom')) {
+            $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
+        }
+        if($this->getCommandLineOrArgumentAsString('endWith')) {
+            $this->endWith = $this->getCommandLineOrArgumentAsString('endWith');
+        }
+        if($this->getCommandLineOrArgumentAsString('task')) {
+            $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
+        }
         if ($this->onlyRun) {
             $this->outOfOrderTask = true;
         }

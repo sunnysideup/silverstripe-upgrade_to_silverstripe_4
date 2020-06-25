@@ -10,7 +10,7 @@
 
 '.':
     '*':
-        'Before: ''app/*'''
+        'Before: ''app/*''':
             R: 'Before: [''#app'']'
         'After: ''framework/*'',''cms/*'',''ecommerce/*''':
             R: 'After: [''#coreconfig'', ''#cmsextensions'', '''#ecommerce'']'

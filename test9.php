@@ -3,6 +3,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
+die('requires master');
 
 /**
  * below are examples

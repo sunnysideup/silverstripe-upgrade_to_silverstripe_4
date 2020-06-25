@@ -121,6 +121,10 @@
 
 
     php:
+        db::alteration_message:
+            R: 'DB::alteration_message'
+        Db::alteration_message:
+            R: 'DB::alteration_message'
         "OptionSetField":
             R: "OptionsetField"
         " convert::":
@@ -136,9 +140,9 @@
             R: "LinkField"
             C: "You may need to run the following class: https://github.com/sunnysideup/silverstripe-migration-task/blob/master/src/Tasks/FixSheaDawsonLink.php"
         "increase_time_limit_to(":
-            R: "Environment::increaseTimeLimitTo("
+            R: "Silverstripe\\Core\\Environment::increaseTimeLimitTo("
         "increase_memory_limit_to(":
-            R: "Environment::increaseMemoryLimitTo("
+            R: "Silverstripe\\Core\\Environment::increaseMemoryLimitTo("
         "Member::get_unique_identifier_field()":
             R: "Member::config()->get('unique_identifier_field')"
         "file_get_contents":

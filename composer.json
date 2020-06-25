@@ -31,5 +31,9 @@
             "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "suggest": {
+        "hirak/prestissimo": "INSTALL GLOBAL!",
+        "sunnysideup/easy-coding-standards": "INSTALL GLOBAL!"
+    }
 }

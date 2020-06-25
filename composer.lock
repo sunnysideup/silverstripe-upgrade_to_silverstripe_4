@@ -4,8 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef5b419461cb54e8efa2523a2f1c30b2",
+    "content-hash": "e4a981992ab9e85afc6ecada43fd22c9",
     "packages": [
+        {
+            "name": "sunnysideup/php_2_command_line",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sunnysideup/silverstripe-php_2_command_line.git",
+                "reference": "2d9933a306d79eff10576158ece01dbc4e379c40"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/2d9933a306d79eff10576158ece01dbc4e379c40",
+                "reference": "2d9933a306d79eff10576158ece01dbc4e379c40",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sunnysideup\\PHP2CommandLine\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolaas Francken",
+                    "email": "modules@sunnysideup.co.nz",
+                    "role": "lead developer"
+                }
+            ],
+            "description": "Runs a bash script using PHP",
+            "keywords": [
+                "bash",
+                "cli",
+                "command line",
+                "php",
+                "script"
+            ],
+            "time": "2020-06-25T01:43:29+00:00"
+        }
+    ],
+    "packages-dev": [
         {
             "name": "composer/ca-bundle",
             "version": "dev-master",
@@ -119,20 +162,20 @@
         },
         {
             "name": "composer/semver",
-            "version": "dev-master",
+            "version": "1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "39da74948fd424cf0e8321b96f04c2a1b2480a15"
+                "reference": "854423eadba4e1421dcdadb0deeb3134a9b91d88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/39da74948fd424cf0e8321b96f04c2a1b2480a15",
-                "reference": "39da74948fd424cf0e8321b96f04c2a1b2480a15",
+                "url": "https://api.github.com/repos/composer/semver/zipball/854423eadba4e1421dcdadb0deeb3134a9b91d88",
+                "reference": "854423eadba4e1421dcdadb0deeb3134a9b91d88",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.2 || ^7.0 || ^8.0"
+                "php": "^5.3.2 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.5 || ^5.0.5"
@@ -176,7 +219,7 @@
                 "validation",
                 "versioning"
             ],
-            "time": "2020-01-14T12:12:58+00:00"
+            "time": "2020-04-21T08:26:55+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1577,58 +1620,17 @@
             "time": "2020-05-15T11:14:04+00:00"
         },
         {
-            "name": "sunnysideup/php_2_command_line",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sunnysideup/silverstripe-php_2_command_line.git",
-                "reference": "9f22c8728782e6a2c2d632db2445e6eae52e4267"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/9f22c8728782e6a2c2d632db2445e6eae52e4267",
-                "reference": "9f22c8728782e6a2c2d632db2445e6eae52e4267",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Sunnysideup\\PHP2CommandLine\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolaas Francken",
-                    "email": "modules@sunnysideup.co.nz",
-                    "role": "lead developer"
-                }
-            ],
-            "description": "Runs a bash script using PHP",
-            "keywords": [
-                "bash",
-                "cli",
-                "command line",
-                "php",
-                "script"
-            ],
-            "time": "2020-06-23T06:45:39+00:00"
-        },
-        {
             "name": "symfony/console",
             "version": "4.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "a3660e1c74be6d5a02b884f57e80a4e440a705ef"
+                "reference": "fb66fad45b5f3647b948417ae5ab3b992ede76bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/a3660e1c74be6d5a02b884f57e80a4e440a705ef",
-                "reference": "a3660e1c74be6d5a02b884f57e80a4e440a705ef",
+                "url": "https://api.github.com/repos/symfony/console/zipball/fb66fad45b5f3647b948417ae5ab3b992ede76bc",
+                "reference": "fb66fad45b5f3647b948417ae5ab3b992ede76bc",
                 "shasum": ""
             },
             "require": {
@@ -1692,7 +1694,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2020-06-15T12:37:55+00:00"
+            "time": "2020-06-24T13:34:53+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -2342,12 +2344,11 @@
             "time": "2020-05-11T07:51:54+00:00"
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "silverstripe/upgrader": 20,
-        "sunnysideup/php_2_command_line": 20
+        "sunnysideup/php_2_command_line": 20,
+        "silverstripe/upgrader": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

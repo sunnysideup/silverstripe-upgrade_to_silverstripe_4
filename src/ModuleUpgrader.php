@@ -41,19 +41,15 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             $this->commandLineExec
                 ->setMakeKeyNotes(false);
         }
-
-        $outcome = $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun, $verbose);
         if($this->getBreakOnAllErrors()) {
-            if($this->commandLineExec->getHasError()) {
-                die('
+            $this->commandLineExec->setErrorMessage('
 ------------------------------------------------------------------------
-Could not progress, please use startFrom parameter to start again
 To continue, please use the following parameter: startFrom='.$this->currentlyRunning.'
-e.g. php runme.php  startFrom='.$this->currentlyRunning.'
+e.g. php runme.php startFrom='.$this->currentlyRunning.'
 ------------------------------------------------------------------------
-                ');
-            }
+            ');
         }
+        $outcome = $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun, $verbose);
     }
 
     /**
@@ -90,9 +86,9 @@ e.g. php runme.php  startFrom='.$this->currentlyRunning.'
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
             $this->printVarsForModule($moduleDetails);
-            foreach ($this->listOfTasks as $taskCode => $params) {
+            foreach ($this->listOfTasks as $class => $params) {
                 //get class without number
-                $properClass = current(explode('-', $taskCode));
+                $properClass = current(explode('-', $class));
                 $nameSpacesArray = explode('\\', $properClass);
                 $shortClassCode = end($nameSpacesArray);
                 if (! class_exists($properClass)) {
@@ -110,7 +106,7 @@ e.g. php runme.php  startFrom='.$this->currentlyRunning.'
                         $nextStep = $params['taskName'];
                     }
                     if ($runItNow) {
-                        $this->currentlyRunning = $taskCode;
+                        $this->currentlyRunning = $class;
                         $this->colourPrint('# --------------------', 'yellow', 3);
                         $this->colourPrint('# ' . $obj->getTitle() . ' (' . $params['taskName'] . ')', 'yellow');
                         $this->colourPrint('# --------------------', 'yellow');
@@ -120,10 +116,9 @@ e.g. php runme.php  startFrom='.$this->currentlyRunning.'
                         if ($this->runInteractively) {
                             $hasRun = true;
                             if ($this->outOfOrderTask === false) {
-                                $this->getSessionManager()->setSessionValue('Completed', $taskCode);
+                                $this->getSessionManager()->setSessionValue('Completed', $class);
                             }
                         }
-                        $this->currentlyRunning = '';
                     } else {
                         if (! $this->runInteractively) {
                             $this->colourPrint('# --------------------', 'yellow', 3);

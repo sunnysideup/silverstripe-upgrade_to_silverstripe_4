@@ -10,10 +10,28 @@
 
 '.':
     '*':
+        CheckoutPage_Controller:
+            R: 'CheckoutPageController'
+        ProductGroup_Controller:
+            R: ProductGroupController
+        AccountPage_Controller:
+            R: AccountPageController
+        Product_Controller:
+            R: Product_Controller
+        OrderConfirmationPage_Controller:
+            R: OrderConfirmationPageController
+        ProductGroupSearchPage_Controller:
+            R: ProductGroupSearchPageController
+        CartPage_Controller:
+            R: CartPageController
+        CheckoutPage_Controller:
+            R: CheckoutPageController
         'classNameOfVariations':
             R: 'MyClassnameOfVariations'
             C: 'This has been replaced to avoid confusions with replacements of className / class'
         'EcommerceCountry_VisitorCountryProvider':
+            R: 'EcommerceCountryVisitorCountryProvider'
+        'Product_Control':
             R: 'EcommerceCountryVisitorCountryProvider'
         'EcommerceSideReport_FeaturedProducts':
             R: 'EcommerceSideReportFeaturedProducts'

@@ -99,6 +99,12 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     protected $runLastOneAgain = false;
 
     /**
+     * command that is currently running
+     * @var string
+     */
+    protected $currentlyRunning = '';
+
+    /**
      * are we upgrading a module or a whole project?
      * @var bool
      */

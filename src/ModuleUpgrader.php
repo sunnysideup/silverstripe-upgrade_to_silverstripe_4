@@ -42,7 +42,18 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                 ->setMakeKeyNotes(false);
         }
 
-        return $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun, $verbose);
+        $outcome = $this->commandLineExec->execMe($newDir, $command, $comment, $alwaysRun, $verbose);
+        if($this->getBreakOnAllErrors()) {
+            if($this->commandLineExec->getHasError()) {
+                die('
+------------------------------------------------------------------------
+Could not progress, please use startFrom parameter to start again
+To continue, please use the following parameter: startFrom='.$this->currentlyRunning.'
+e.g. php runme.php  startFrom='.$this->currentlyRunning.'
+------------------------------------------------------------------------
+                ');
+            }
+        }
     }
 
     /**
@@ -79,9 +90,10 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
             $this->printVarsForModule($moduleDetails);
-            foreach ($this->listOfTasks as $class => $params) {
-                $properClass = current(explode('-', $class));
-                $nameSpacesArray = explode('\\', $class);
+            foreach ($this->listOfTasks as $taskCode => $params) {
+                //get class without number
+                $properClass = current(explode('-', $taskCode));
+                $nameSpacesArray = explode('\\', $properClass);
                 $shortClassCode = end($nameSpacesArray);
                 if (! class_exists($properClass)) {
                     $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
@@ -98,6 +110,7 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                         $nextStep = $params['taskName'];
                     }
                     if ($runItNow) {
+                        $this->currentlyRunning = $taskCode;
                         $this->colourPrint('# --------------------', 'yellow', 3);
                         $this->colourPrint('# ' . $obj->getTitle() . ' (' . $params['taskName'] . ')', 'yellow');
                         $this->colourPrint('# --------------------', 'yellow');
@@ -107,9 +120,10 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
                         if ($this->runInteractively) {
                             $hasRun = true;
                             if ($this->outOfOrderTask === false) {
-                                $this->getSessionManager()->setSessionValue('Completed', $class);
+                                $this->getSessionManager()->setSessionValue('Completed', $taskCode);
                             }
                         }
+                        $this->currentlyRunning = '';
                     } else {
                         if (! $this->runInteractively) {
                             $this->colourPrint('# --------------------', 'yellow', 3);

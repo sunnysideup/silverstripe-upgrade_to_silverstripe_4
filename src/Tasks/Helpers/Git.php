@@ -135,8 +135,14 @@ class Git
         $this->checkoutBranch($dir, $fromBranch);
         $this->mu()->execMe(
             $dir,
-            'git checkout -b ' . $newBranchName . ' ' . $fromBranch . '  && git push origin ' . $newBranchName,
+            'git checkout -b ' . $newBranchName . ' ' . $fromBranch,
             'create and checkout new branch: ' . $newBranchName . ' from ' . $fromBranch,
+            false
+        );
+        $this->mu()->execMe(
+            $dir,
+            'git push -u origin ' . $newBranchName,
+            'push it ' . $fromBranch,
             false
         );
     }

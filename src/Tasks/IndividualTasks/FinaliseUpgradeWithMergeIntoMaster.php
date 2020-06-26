@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Adds a new branch to your repository that is going to be used for upgrading it.

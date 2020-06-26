@@ -184,13 +184,13 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
     {
         $this->restartSession = $this->getCommandLineOrArgumentAsBoolean('restart');
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
-        if($this->getCommandLineOrArgumentAsString('startFrom')) {
+        if ($this->getCommandLineOrArgumentAsString('startFrom')) {
             $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
         }
-        if($this->getCommandLineOrArgumentAsString('endWith')) {
+        if ($this->getCommandLineOrArgumentAsString('endWith')) {
             $this->endWith = $this->getCommandLineOrArgumentAsString('endWith');
         }
-        if($this->getCommandLineOrArgumentAsString('task')) {
+        if ($this->getCommandLineOrArgumentAsString('task')) {
             $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
         }
         if ($this->onlyRun) {

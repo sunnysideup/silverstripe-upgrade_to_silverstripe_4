@@ -38,7 +38,7 @@
             R: 'resources/themes/'
 
         '$ClassName':
-            R: '$`ClassName.ShortName'
+            R: '$ClassName.ShortName'
             C: 'Check if the class name can still be used as such. The ShortName provides the name without NameSpace'
 
         '.setWidth(':

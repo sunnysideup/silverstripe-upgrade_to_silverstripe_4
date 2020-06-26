@@ -132,8 +132,8 @@ upgrade module.
 
 2.  Create a php file (e.g. `/index.php`) in your root dir, i.e. `/var/www/silverstripe-upgrade_to_silverstripe_4/` (or anywhere else where you can run it) - using the examples provided:
 
-  - [full](/run.me.index.full.php.EXAMPLE) - overview of all settings available
-  - [short](/run.me.index.short.php.EXAMPLE) - least amount of settings required
+  - [full](/examples/run.me.index.full.php.EXAMPLE) - overview of all settings available
+  - [short](/examples/run.me.index.short.php.EXAMPLE) - least amount of settings required
 
 
 3. Run the file to upgrade your module / project - e.g.
@@ -237,7 +237,7 @@ That is, your actual module will be cloned in the `[rootdir]/[upgrade directory]
 `->setArrayOfModules([])`:
 This contains a list of modules you intend to update.
 We recommend updating one module / project at a time.
-For details see: [example index file](/example-index.full.php).
+For details see: [example files](/examples/).
 
 ### temp branch
 
@@ -325,30 +325,6 @@ specific stuff for your composer.
 `->setLocationOfSSUpgradeModule('~/.composer/vendor/bin/upgrade-code')`:
 this module is also installed with this tool (via composer requirements)
 so, in general, there is no need to set this.
-
-
-### include upgrading `_ss_environment` file?
-
-`->setIncludeEnvironmentFileUpdate(false|true)`:
-we recommend to set this to false
-as it is easier to do this manually.
-See https://github.com/silverstripe/silverstripe-upgrader/blob/master/README.md#environment
-for details.
-
-
-### run reorganise task?
-
-`->setIncludeReorganiseTask(false|true)`:
-do you want the folder names to be changed?
-See https://github.com/silverstripe/silverstripe-upgrader/blob/master/README.md#reorganise
-for details.
-
-
-### run webroot task
-
-`->setIncludeWebRootUpdateTask(false|true)`:
-See https://github.com/silverstripe/silverstripe-upgrader/blob/master/README.md#webroot
-for details
 
 
 # Important references:

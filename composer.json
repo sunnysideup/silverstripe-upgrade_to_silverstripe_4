@@ -33,7 +33,7 @@
     },
     "minimum-stability": "dev",
     "suggest": {
-        "hirak/prestissimo": "INSTALL GLOBAL!",
-        "sunnysideup/easy-coding-standards": "INSTALL GLOBAL!"
+        "hirak/prestissimo": "INSTALL GLOBAL! if you can",
+        "sunnysideup/easy-coding-standards": "INSTALL GLOBAL! if you can"
     }
 }

@@ -1,3 +1,0 @@
-{
-    "Completed": "CheckThatFoldersAreReady"
-}

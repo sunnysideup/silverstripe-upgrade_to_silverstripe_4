@@ -1,6 +1,6 @@
 {
     "name": "sunnysideup/upgrade_to_silverstripe_4",
-    "type": "silverstripe-module",
+    "type": "library",
     "description": "Upgrade modules to silverstripe 4 and beyond",
     "keywords": [
         "Silverstripe-CMS",

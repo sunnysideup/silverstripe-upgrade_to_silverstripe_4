@@ -39,9 +39,14 @@ class Composer
         return $this->requireAny($package, $version, $devOnly, $options, true);
     }
 
-    public function Require(string $package, ?string $version = '', ?bool $devOnly = false, ?string $options = ''): self
+    public function Require(string $package, ?string $version = '', ?string $options = ''): self
     {
-        return $this->requireAny($package, $version, $devOnly, $options, false);
+        return $this->requireAny($package, $version, false, $options, false);
+    }
+
+    public function RequireDev(string $package, ?string $version = '', ?string $options = ''): self
+    {
+        return $this->requireAny($package, $version, true, $options, false);
     }
 
     protected function requireAny(string $package, ?string $version = '', ?bool $devOnly = false, ?string $options = '', ?bool $isGlobal = false): self

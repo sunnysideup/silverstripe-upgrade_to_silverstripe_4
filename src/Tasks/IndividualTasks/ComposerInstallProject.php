@@ -22,9 +22,7 @@ class ComposerInstallProject extends Task
      * e.g. sunnysideup/test => 1.2.3
      * @var array
      */
-    protected $alsoRequire = [
-        'sunnysideup/ecommerce' => 'dev-master',
-    ];
+    protected $alsoRequire = [];
 
     /**
      * @var array
@@ -101,15 +99,25 @@ class ComposerInstallProject extends Task
                 );
             }
         }
-        Git::inst($this->mu())
-            ->Clone(
-                $this->mu()->getWebRootDirLocation(),
-                $this->mu()->getGitLink(),
-                $this->mu()->getGitRootDir(),
-                $this->mu()->getNameOfTempBranch()
-            );
-        if ($this->mu()->getIsModuleUpgrade()) {
-            $this->workoutExtraRequirementsFromModule();
+        if ($this->installModuleAsVendorModule) {
+            Composer::inst($this->mu())
+                ->ClearCache()
+                ->Require(
+                    $this->mu()->getVendorNamespace() . '/' . $this->mu()->getPackageNamespace(),
+                    $this->mu()->getNameOfTempBranch(),
+                    $this->composerOptions
+                );
+        } else {
+            Git::inst($this->mu())
+                ->Clone(
+                    $this->mu()->getWebRootDirLocation(),
+                    $this->mu()->getGitLink(),
+                    $this->mu()->getGitRootDir(),
+                    $this->mu()->getNameOfTempBranch()
+                );
+            if ($this->mu()->getIsModuleUpgrade()) {
+                $this->workoutExtraRequirementsFromModule();
+            }
         }
         foreach ($this->alsoRequire as $package => $version) {
             Composer::inst($this->mu())
@@ -117,7 +125,6 @@ class ComposerInstallProject extends Task
                 ->Require(
                     $package,
                     $version,
-                    false,
                     $this->composerOptions
                 );
         }

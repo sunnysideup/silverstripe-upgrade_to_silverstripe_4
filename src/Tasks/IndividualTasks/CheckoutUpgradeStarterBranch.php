@@ -83,7 +83,6 @@ class CheckoutUpgradeStarterBranch extends Task
             ->Require(
                 $packageNameFull,
                 $branchAdjusted,
-                false,
                 $this->composerOptions
             );
         $this->mu()->execMe(

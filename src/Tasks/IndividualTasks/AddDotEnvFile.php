@@ -59,7 +59,7 @@ class AddDotEnvFile extends Task
     {
         return str_replace(
             '--DB-NAME--HERE--',
-            $this->mu()->getVendorNamespace() . $this->mu()->getPackageNamespace(),
+            'upgrader' . $this->mu()->getVendorNamespace() . $this->mu()->getPackageNamespace(),
             $string
         );
     }

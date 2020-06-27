@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -18,6 +19,27 @@ class AddPHPDoc extends Task
      */
     protected $composerOptions = '';
 
+    protected $configFileName = 'ideannotator.yml';
+
+    protected $ideAnnotatorVersion = 'dev-master';
+
+    protected $ideannotatorConfig = <<<yml
+---
+Name: ideannotator
+Only:
+  environment: dev
+---
+# This is added automatically. Please do not edit.
+# This is added automatically. Please do not edit.
+# This is added automatically. Please do not edit.
+SilverLeague\IDEAnnotator\DataObjectAnnotator:
+  enabled: true
+  use_short_name: true
+  enabled_modules:
+    - REPLACE_WITH_MODULE_NAME
+
+yml;
+
     public function getTitle()
     {
         return 'Add PHP Doc Comments to Classes';
@@ -30,50 +52,93 @@ class AddPHPDoc extends Task
 
     public function runActualTask($params = [])
     {
-        $ideannotatorConfig = "
----
-Only:
-  environment: dev
----
-SilverLeague\IDEAnnotator\DataObjectAnnotator:
-    enabled: true
-    use_short_name: true
-    enabled_modules:
-        - app
-        ";
-        $webRoot = $this->mu()->getWebRootDirLocation();
+        $this->mu()->getWebRootDirLocation();
 
-        Composer::inst($this->mu())->Require(
-            'silverleague/ideannotator',
-            '3.0.0',
-            true,
-            $this->composerOptions
-        );
+        Composer::inst($this->mu())
+            ->RequireDev(
+                'silverleague/ideannotator',
+                $this->ideAnnotatorVersion,
+                $this->composerOptions
+            );
 
+        foreach ($this->findModuleNames() as $moduleName) {
+            $this->updateModuleConfigFile($moduleName);
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'vendor/bin/sake dev/tasks/SilverLeague-IDEAnnotator-Tasks-DataObjectAnnotatorTask module=' . $moduleName . ' flush=1',
+                'Running IDEAnnotator Task to add PHP documentation to ' . $moduleName,
+                false
+            );
+        }
+    }
+
+    protected function updateComposerFile(string $moduleName)
+    {
+        if ($this->mu()->getIsModuleUpgrade()) {
+            $moduleLocation = $this->findModuleNameLocation($moduleName);
+            $json = ComposerJsonFixes::inst($this->mu())
+                ->getJSON($moduleLocation);
+            if (! isset($json['require-dev'])) {
+                $json['require-dev'] = [];
+            }
+            $json['require-dev']['silverleague/ideannotator'] = $this->ideAnnotatorVersion;
+            $json = ComposerJsonFixes::inst($this->mu())
+                ->setJSON($moduleLocation, $json);
+        }
+    }
+
+    protected function updateModuleConfigFile(string $moduleName)
+    {
+        $moduleLocation = $this->findModuleNameLocation($moduleName);
+
+        $fileLocation = $moduleLocation . '/_config/' . $this->configFileName;
         $this->mu()->execMe(
-            $webRoot,
-            'rm app/_config/ideannotator.yml',
+            $this->mu()->getWebRootDirLocation(),
+            'rm ' . $fileLocation . '-f ',
             'Remove existing configuration',
             false
         );
-
+        $ideannotatorConfigForModule = $this->ideannotatorConfig;
+        $ideannotatorConfigForModule = str_replace('REPLACE_WITH_MODULE', $moduleName, $ideannotatorConfigForModule);
         $this->mu()->execMe(
-            $webRoot,
-            'echo \'' . $ideannotatorConfig . '\' >> app/_config/ideannotator.yml',
+            $this->mu()->getWebRootDirLocation(),
+            'echo \'' . str_replace('\'', '"', $ideannotatorConfigForModule) . '\' > ' . $fileLocation,
             'Adding IDEAnnotator configuration',
             false
         );
-
-        $this->mu()->execMe(
-            $webRoot,
-            'vendor/bin/sake dev/tasks/SilverLeague-IDEAnnotator-Tasks-DataObjectAnnotatorTask module=app flush=1',
-            'Running IDEAnnotator Task to add PHP documentation',
-            false
-        );
+        if (! file_exists($fileLocation)) {
+            user_error('Could not locate ' . $fileLocation);
+        }
     }
 
-    protected function hasCommitAndPush()
+    protected function findModuleNames(): array
     {
-        return false;
+        $moduleNames = [];
+        if ($this->mu()->getIsModuleUpgrade()) {
+            $moduleNames = [
+                $this->mu()->getVendorNamespace() . '/' . $this->mu()->getPackageNamespace(),
+            ];
+        } else {
+            foreach ($this->mu()->getExistingModuleDirLocations() as $location) {
+                $moduleNames[] = $location;
+            }
+        }
+        return $moduleNames;
+    }
+
+    protected function findModuleNameLocation(string $moduleName): string
+    {
+        if (strpos($moduleName, '/')) {
+            $moduleNameLocation = 'vendor/' . $moduleName;
+        } else {
+            $moduleNameLocation = $moduleName;
+        }
+
+        return $moduleNameLocation;
+    }
+
+    protected function hasCommitAndPush(): bool
+    {
+        return true;
     }
 }

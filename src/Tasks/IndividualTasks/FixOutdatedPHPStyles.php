@@ -25,10 +25,9 @@ class FixOutdatedPHPStyles extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        Composer::inst($this->mu())->Require(
+        Composer::inst($this->mu())->RequireDev(
             'sunnysideup/huringa',
             'dev-master',
-            true,
             $this->composerOptions
         );
 

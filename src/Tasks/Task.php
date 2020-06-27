@@ -178,39 +178,6 @@ abstract class Task
         return $this;
     }
 
-    public function getJSON($dir)
-    {
-        $location = $dir . '/composer.json';
-        $jsonString = file_get_contents($location);
-
-        return json_decode($jsonString, true);
-    }
-
-    public function setJSON($dir, $data)
-    {
-        $location = $dir . '/composer.json';
-        $newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        file_put_contents("'.${location}.'", $newJsonString);
-        return $this;
-    }
-
-    public function updateJSONViaCommandLine($dir, $code, $comment)
-    {
-        $location = $dir . '/composer.json';
-        $this->mu()->execMe(
-            $dir,
-            'php -r  \''
-                . '$jsonString = file_get_contents("' . $location . '"); '
-                . '$data = json_decode($jsonString, true); '
-                . $code
-                . '$newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); '
-                . 'file_put_contents("' . $location . '", $newJsonString); '
-                . '\'',
-            $comment . ' --- in ' . $location,
-            false
-        );
-    }
-
     /**
      * Runs everything that should be run and begining of execution, I.e commiting everything to get or creating a
      * backup branch before making changes

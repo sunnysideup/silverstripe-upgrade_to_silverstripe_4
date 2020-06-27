@@ -8,7 +8,15 @@ class Git
 {
     use HelperInst;
 
-    public function Clone(string $dir, string $gitLink, string $gitRootDir, ?string $branchName = 'master')
+    /**
+     * @param  string $dir
+     * @param  string $gitLink
+     * @param  string $gitRootDir
+     * @param  string $branchName
+     *
+     * @return Git
+     */
+    public function Clone(string $dir, string $gitLink, string $gitRootDir, ?string $branchName = 'master'): Git
     {
         $this->mu()->execMe(
             $dir,
@@ -36,6 +44,8 @@ class Git
         );
 
         $this->fetchAll($gitRootDir);
+
+        return $this;
     }
 
     /**
@@ -45,7 +55,7 @@ class Git
      *
      * @return Git
      */
-    public function CommitAndPush(string $dir, string $message, string $branchName)
+    public function CommitAndPush(string $dir, string $message, string $branchName): Git
     {
         $this->fetchAll($dir);
 
@@ -85,7 +95,7 @@ class Git
      *
      * @return Git
      */
-    public function deleteBranch(string $dir, string $branchName)
+    public function deleteBranch(string $dir, string $branchName): Git
     {
         $this->fetchAll($dir);
 
@@ -101,7 +111,7 @@ class Git
      * @param  string $fromBranchName
      * @return Git
      */
-    public function createNewBranchIfItDoesNotExist(string $dir, string $newBranchName, string $fromBranchName)
+    public function createNewBranchIfItDoesNotExist(string $dir, string $newBranchName, string $fromBranchName): Git
     {
         $this->fetchAll($dir);
 
@@ -128,7 +138,7 @@ class Git
      * @param  string $fromBranch
      * @return Git
      */
-    public function createNewBranch(string $dir, string $newBranchName, string $fromBranch)
+    public function createNewBranch(string $dir, string $newBranchName, string $fromBranch): Git
     {
         $this->fetchAll($dir);
 
@@ -145,6 +155,8 @@ class Git
             'push it ' . $fromBranch,
             false
         );
+
+        return $this;
     }
 
     /**
@@ -152,7 +164,7 @@ class Git
      * @param  string $branch
      * @return Git
      */
-    public function checkoutBranch(string $dir, string $branch)
+    public function checkoutBranch(string $dir, string $branch): Git
     {
         $this->fetchAll($dir);
 
@@ -178,7 +190,7 @@ class Git
      * @param string $intoBranch
      * @return Git
      */
-    public function Merge(string $dir, string $fromBranch, string $intoBranch)
+    public function Merge(string $dir, string $fromBranch, string $intoBranch): Git
     {
         $this->fetchAll($dir);
 
@@ -191,26 +203,8 @@ class Git
                 git merge --squash ' . $fromBranch . '
                 git commit . -m "MAJOR: upgrade merge"
                 git push origin ' . $intoBranch . '
-                git branch -D ' . $fromBranch . '
-                git push origin --delete ' . $fromBranch . '
             ',
             'merging ' . $fromBranch . ' into ' . $intoBranch . ' in ' . $dir,
-            false
-        );
-    }
-
-    /**
-     * @param  string $dir
-     * @param  string $branchName
-     *
-     * @return Git
-     */
-    protected function deleteBranchLocally(string $dir, string $branchName)
-    {
-        $this->mu()->execMe(
-            $dir,
-            'if git show-ref --quiet refs/heads/' . $branchName . '; then git branch -d ' . $branchName . '; git push origin --delete ' . $this->mu()->getNameOfTempBranch() . '; fi',
-            'delete branch (' . $branchName . ') locally',
             false
         );
 
@@ -223,7 +217,7 @@ class Git
      *
      * @return Git
      */
-    protected function deleteBranchRemotely(string $dir, string $branchName)
+    public function deleteBranchRemotely(string $dir, string $branchName): Git
     {
         $this->mu()->execMe(
             $dir,
@@ -238,7 +232,7 @@ class Git
     /**
      * @param  string $dir
      */
-    protected function fetchAll(string $dir)
+    public function fetchAll(string $dir): Git
     {
         $this->mu()->execMe(
             $dir,
@@ -247,6 +241,24 @@ class Git
             false,
             '',
             false //verbose = false!
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param  string $dir
+     * @param  string $branchName
+     *
+     * @return Git
+     */
+    protected function deleteBranchLocally(string $dir, string $branchName): Git
+    {
+        $this->mu()->execMe(
+            $dir,
+            'if git show-ref --quiet refs/heads/' . $branchName . '; then git branch -d ' . $branchName . '; git push origin --delete ' . $this->mu()->getNameOfTempBranch() . '; fi',
+            'delete branch (' . $branchName . ') locally',
+            false
         );
 
         return $this;

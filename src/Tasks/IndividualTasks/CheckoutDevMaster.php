@@ -54,7 +54,6 @@ class CheckoutDevMaster extends Task
                     ->Require(
                         $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                         $this->mu()->getNameOfBranchForBaseCodeForComposer(),
-                        false,
                         $this->composerOptions
                     );
                 $this->mu()->execMe(

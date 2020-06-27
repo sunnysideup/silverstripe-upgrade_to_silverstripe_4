@@ -32,8 +32,9 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                  ';
         }
         return '
-                Merge ' . $this->mu()->getNameOfTempBranch() . ' into ' . $this->mu()->getNameOfBranchForBaseCode() . ' (branch name can be customised).
-                This is currently turned off allowing you to run the upgrader more than once without any consequences to the project at hand.
+                Merge ' . $this->mu()->getNameOfTempBranch() . ' (branch name can be customised)
+                into ' . $this->mu()->getNameOfBranchForBaseCode() . ' (branch name can be customised).
+                This is currently turned off allowing you to run the upgrader more than once without any consequences.
                 You can turn on this task by setting `runIrreversibly` to true in the upgrader.
                 You can do this as follows: `$upgrader->setRunIrreversibly(true)`.';
     }
@@ -41,12 +42,22 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
     public function runActualTask($params = [])
     {
         if ($this->mu()->getRunIrreversibly()) {
+            $this->mu()->setBreakOnAllErrors(true);
             Git::inst($this->mu())
                 ->Merge(
                     $this->mu()->getGitRootDir(),
                     $this->mu()->getNameOfTempBranch(),
                     $this->mu()->getNameOfBranchForBaseCode()
+                )
+                ->deleteBranch(
+                    $this->mu()->getGitRootDir(),
+                    $this->mu()->getNameOfTempBranch(),
+                )
+                ->deleteBranch(
+                    $this->mu()->getGitRootDir(),
+                    $this->mu()->getNameOfUpgradeStarterBranch(),
                 );
+            $this->mu()->setBreakOnAllErrors(false);
         }
     }
 

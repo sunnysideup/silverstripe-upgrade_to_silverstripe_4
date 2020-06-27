@@ -666,7 +666,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $codeDirs;
     }
 
-    public function findMyCodeDir($moduleDir): string
+    public function findMyCodeDir(string $moduleDir): string
     {
         if (file_exists($moduleDir)) {
             $test1 = $moduleDir . '/code';

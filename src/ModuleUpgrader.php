@@ -75,7 +75,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         $this->applyRecipe();
         $this->colourPrint(
             '===================== START ======================',
-            'light_red',
+            'white',
             5
         );
         $this->loadNextStepInstructions();
@@ -96,7 +96,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                     $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
                 }
                 if (class_exists($properClass)) {
-                    $runItNow = $this->shouldWeRunIt((string) $shortClassCode);
+                    $runItNow = $this->shouldWeRunIt((string) $class);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     $taskName = $obj->getTaskName();
@@ -104,7 +104,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         $params['taskName'] = $taskName;
                     }
                     if ($hasRun && ! $nextStep) {
-                        $nextStep = $params['taskName'];
+                        $nextStep = 'xxxx'.$params['taskName'];
                     }
                     if ($runItNow) {
                         $this->currentlyRunning = $class;
@@ -140,7 +140,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             }
             $this->colourPrint(
                 '===================== END =======================',
-                'yellow',
+                'white',
                 5
             );
             $this->colourPrint(

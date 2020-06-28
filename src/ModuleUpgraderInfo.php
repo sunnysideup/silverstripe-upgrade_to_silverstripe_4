@@ -19,6 +19,8 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- Recipe: ' . ($mu->getRecipe() ?: 'no recipe selected'), 'light_cyan');
 
+        $mu->colourPrint('- Available Recipes: ' . implode(', ', array_keys($mu->getAvailableRecipes())), 'light_cyan');
+
         $mu->colourPrint('- ---', 'light_cyan');
 
         $mu->colourPrint('- Vendor Name: ' . $mu->getVendorName(), 'light_cyan');

@@ -15,6 +15,7 @@ use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss33ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
 
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss4Lint;
 
 class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 {
@@ -42,6 +43,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      */
     protected $availableRecipes = [
         'SS4' => Ss3ToSs4::class,
+        'SS4-LINT' => Ss4Lint::class,
         'SS31-37' => Ss31ToSs37::class,
         'SS33-37' => Ss33ToSs37::class,
         'SS35-37' => Ss35ToSs37::class,

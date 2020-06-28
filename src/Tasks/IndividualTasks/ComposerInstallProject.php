@@ -24,6 +24,8 @@ class ComposerInstallProject extends Task
      */
     protected $alsoRequire = [];
 
+    protected $installModuleAsVendorModule = false;
+
     /**
      * @var array
      */

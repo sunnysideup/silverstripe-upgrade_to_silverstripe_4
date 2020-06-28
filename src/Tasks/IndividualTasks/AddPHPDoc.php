@@ -101,7 +101,7 @@ yml;
         FileSystemFixes::inst($this->mu())
             ->removeDirOrFile($fileLocation);
         $ideannotatorConfigForModule = $this->ideannotatorConfig;
-        $ideannotatorConfigForModule = str_replace('REPLACE_WITH_MODULE', $moduleName, $ideannotatorConfigForModule);
+        $ideannotatorConfigForModule = str_replace('REPLACE_WITH_MODULE_NAME', $moduleName, $ideannotatorConfigForModule);
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'echo \'' . str_replace('\'', '"', $ideannotatorConfigForModule) . '\' > ' . $fileLocation,

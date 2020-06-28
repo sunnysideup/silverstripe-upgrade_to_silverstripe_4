@@ -31,14 +31,21 @@ class ApplyPSR2 extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
+        $commandAdd = 'vendor/bin';
+        if(
+            PHP2CommandLineSingleton::commandExists('sslint-ecs') &&
+            PHP2CommandLineSingleton::commandExists('sslint-stan')
+        ) {
 
-        Composer::inst($this->mu())
-            ->RequireGlobal(
-                'sunnysideup/easy-coding-standards',
-                'dev-master',
-                true,
-                $this->composerOptions
-            );
+        } else {
+            $commandAdd = 'vendor/bin';
+            Composer::inst($this->mu())
+                ->RequireDev(
+                    'sunnysideup/easy-coding-standards',
+                    'dev-master',
+                    $this->composerOptions
+                );
+        }
 
         //1. apply
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
@@ -48,26 +55,26 @@ class ApplyPSR2 extends Task
                 ->removeDirOrFile($knownIssuesFileName);
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' sslint-ecs',
-                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ')',
+                'dir=' . $relativeDir . ' '.$commandAdd.'sslint-ecs',
+                'Apply easy coding standards to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' sslint-ecs',
-                'Apply PSR-2-etc... second time ' . $relativeDir . ' (' . $baseNameSpace . ')',
+                'dir=' . $relativeDir . ' '.$commandAdd.'sslint-ecs',
+                'Apply easy coding standards a second time ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                'dir=' . $relativeDir . ' sslint-ecs > ' . $knownIssuesFileName,
-                'Apply PSR-2-etc... third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to ' . $knownIssuesFileName,
+                'dir=' . $relativeDir . ' '.$commandAdd.'sslint-ecs > ' . $knownIssuesFileName,
+                'Apply easy coding standards a third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to ' . $knownIssuesFileName,
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                'level=1 dir=' . $relativeDir . ' sslint-stan >> ' . $knownIssuesFileName,
-                'Apply PSR-2-etc... to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $knownIssuesFileName,
+                'level=1 dir=' . $relativeDir . ' '.$commandAdd.'sslint-stan >> ' . $knownIssuesFileName,
+                'Apply phpstan. to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $knownIssuesFileName,
                 false
             );
         }

@@ -51,59 +51,60 @@ class PHPCompatabilityCheck extends Task
                     false
                 );
             }
-        }
-        Composer::inst($this->mu())
-            ->RequireDev(
-                'squizlabs/php_codesniffer',
-                '',
-                $this->composerOptions
-            )
-            ->RequireDev(
-                'phpcompatibility/php-compatibility',
-                '',
-                $this->composerOptions
-            );
+        } else {
+            Composer::inst($this->mu())
+                ->RequireDev(
+                    'squizlabs/php_codesniffer',
+                    '',
+                    $this->composerOptions
+                )
+                ->RequireDev(
+                    'phpcompatibility/php-compatibility',
+                    '',
+                    $this->composerOptions
+                );
 
-        $this->mu()->execMe(
-            $webRoot,
-            './vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility',
-            'Adding php compatability info',
-            false
-        );
-        $this->mu()->execMe(
-            $webRoot,
-            './vendor/bin/phpcs --config-set colors 1',
-            'Adding colour',
-            false
-        );
-        $this->mu()->execMe(
-            $webRoot,
-            './vendor/bin/phpcs --config-set severity 1',
-            'Showing all errors',
-            false
-        );
-        $this->mu()->execMe(
-            $webRoot,
-            './vendor/bin/phpcs --config-show',
-            'Showing all errors',
-            false
-        );
-        foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
-            // $file = str_replace('\\', '-', $baseNameSpace);
             $this->mu()->execMe(
                 $webRoot,
-                './vendor/bin/phpcs' .
-                ' -p ' . $codeDir .
-                ' --standard=PHPCompatibility' .
-                ' --extensions=php ' .
-                ' --runtime-set testVersion ' . $this->phpVersion,
-                'Running PHP Compatibility Check in: ' . $codeDir,
+                './vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility',
+                'Adding php compatability info',
                 false
             );
+            $this->mu()->execMe(
+                $webRoot,
+                './vendor/bin/phpcs --config-set colors 1',
+                'Adding colour',
+                false
+            );
+            $this->mu()->execMe(
+                $webRoot,
+                './vendor/bin/phpcs --config-set severity 1',
+                'Showing all errors',
+                false
+            );
+            $this->mu()->execMe(
+                $webRoot,
+                './vendor/bin/phpcs --config-show',
+                'Showing all errors',
+                false
+            );
+            foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
+                // $file = str_replace('\\', '-', $baseNameSpace);
+                $this->mu()->execMe(
+                    $webRoot,
+                    './vendor/bin/phpcs' .
+                    ' -p ' . $codeDir .
+                    ' --standard=PHPCompatibility' .
+                    ' --extensions=php ' .
+                    ' --runtime-set testVersion ' . $this->phpVersion,
+                    'Running PHP Compatibility Check in: ' . $codeDir,
+                    false
+                );
+            }
+            Composer::inst($this->mu())
+                ->Remove('squizlabs/php_codesniffer', true)
+                ->Remove('phpcompatibility/php-compatibility', true);
         }
-        Composer::inst($this->mu())
-            ->Remove('squizlabs/php_codesniffer', true)
-            ->Remove('phpcompatibility/php-compatibility', true);
     }
 
     protected function hasCommitAndPush()

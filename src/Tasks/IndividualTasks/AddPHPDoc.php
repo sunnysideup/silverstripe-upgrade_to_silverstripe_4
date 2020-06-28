@@ -96,7 +96,7 @@ yml;
     {
         $moduleLocation = $this->findModuleNameLocation($moduleName);
 
-        $fileLocation = $this->mu()->getWebRootDirLocation() .'/' . $moduleLocation . '/_config/' . $this->configFileName;
+        $fileLocation = $this->mu()->getWebRootDirLocation() . '/' . $moduleLocation . '/_config/' . $this->configFileName;
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'rm ' . $fileLocation . '-f ',

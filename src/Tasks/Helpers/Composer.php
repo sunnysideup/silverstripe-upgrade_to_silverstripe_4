@@ -55,7 +55,7 @@ class Composer
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'composer remove ' . $package . ' ' . $devFlag,
-            'running composer remove ' . $package . ' ' . $devFlag ,
+            'running composer remove ' . $package . ' ' . $devFlag,
             false
         );
 

@@ -106,7 +106,7 @@ class ComposerInstallProject extends Task
                 ->ClearCache()
                 ->Require(
                     $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
-                    'dev-'.$this->mu()->getNameOfTempBranch(),
+                    'dev-' . $this->mu()->getNameOfTempBranch(),
                     $this->composerOptions
                 );
         } else {

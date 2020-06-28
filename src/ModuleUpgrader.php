@@ -285,7 +285,6 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
 
         $this->workoutPackageFolderName($moduleDetails);
 
-
         //ss4 location
         if (isset($moduleDetails['VendorAndPackageFolderNameForInstall'])) {
             $this->vendorAndPackageFolderNameForInstall = $moduleDetails['VendorAndPackageFolderNameForInstall'];
@@ -316,9 +315,9 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         }
     }
 
-    protected function vendorModuleLocation() : string
+    protected function vendorModuleLocation(): string
     {
-        return $this->webRootDirLocation .'/vendor/' . $this->vendorName . '/' . $this->packageName;
+        return $this->webRootDirLocation . '/vendor/' . $this->vendorName . '/' . $this->packageName;
     }
 
     protected function workoutPackageFolderName(array $moduleDetails)

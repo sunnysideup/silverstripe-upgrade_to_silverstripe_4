@@ -555,7 +555,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         //moduleDirLocation
         if ($this->isModuleUpgrade) {
             $vendorModuleLocation = $this->vendorModuleLocation();
-            if(file_exists($vendorModuleLocation)) {
+            if (file_exists($vendorModuleLocation)) {
                 $this->moduleDirLocations = [
                     $vendorModuleLocation,
                 ];

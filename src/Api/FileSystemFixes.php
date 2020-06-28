@@ -1,11 +1,11 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+
 use Sunnysideup\UpgradeToSilverstripe4\Traits\HelperInst;
 
 class FileSystemFixes
 {
-
     use HelperInst;
 
     public function mkDir(string $baseFolder, string $dir): FileSystemFixes

@@ -4,7 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 
 class Ss4Lint extends BaseClass
 {
-
     /**
      * name of the branch to be created that we use a starter branch for upgrade
      * @var string branch name

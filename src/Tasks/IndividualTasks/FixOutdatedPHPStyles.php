@@ -47,7 +47,6 @@ class FixOutdatedPHPStyles extends Task
         $this->mu()->setBreakOnAllErrors(false);
 
         Composer::inst($this->mu())->Remove('sunnysideup/huringa', true);
-
     }
 
     protected function hasCommitAndPush()

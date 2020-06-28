@@ -4,6 +4,13 @@ namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 
 class Ss35ToSs37 extends BaseClass
 {
+
+    /**
+     * name of the branch to be created that we use a starter branch for upgrade
+     * @var string branch name
+     */
+    protected $nameOfUpgradeStarterBranch = 'upgrades/starting-point/ss37-upgrade';
+
     /**
      * name of the branch created to do the upgrade
      * @var string branch name
@@ -41,7 +48,7 @@ class Ss35ToSs37 extends BaseClass
 
         'CheckoutDevMaster-2' => [],
 
-        'AddUpgradeBranch' => [],
+        'AddUpgradeStarterBranch' => [],
 
         'UpdateComposerRequirements-1' => [
             'Package' => 'silverstripe/framework',

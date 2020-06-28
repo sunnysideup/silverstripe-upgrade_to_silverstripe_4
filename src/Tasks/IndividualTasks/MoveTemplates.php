@@ -42,7 +42,7 @@ class MoveTemplates extends Task
     public function runActualTask($params = [])
     {
         if ($this->mu->getIsModuleUpgrade()) {
-            $fixer = new FileSystemFixes($this->mu());
+            $fixer = FileSystemFixes::inst($this->mu());
             $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
             foreach ($codeDirs as $baseNameSpace => $codeDir) {
                 $baseDir = dirname($codeDir);

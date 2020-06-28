@@ -552,6 +552,29 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      */
     public function getExistingModuleDirLocations(): array
     {
+        //moduleDirLocation
+        if ($this->isModuleUpgrade) {
+            $vendorModuleLocation = $this->vendorModuleLocation();
+            if(file_exists($vendorModuleLocation)) {
+                $this->moduleDirLocations = [
+                    $vendorModuleLocation,
+                ];
+            } else {
+                $this->moduleDirLocations = [
+                    $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall,
+                ];
+            }
+            $this->themeDirLocation = '';
+        } else {
+            if (! count($this->moduleDirLocations)) {
+                $this->moduleDirLocations[] = $this->webRootDirLocation . '/mysite';
+                $this->moduleDirLocations[] = $this->webRootDirLocation . '/app';
+            } else {
+                foreach ($this->moduleDirLocations as $key => $location) {
+                    $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
+                }
+            }
+        }
         $array = [];
         foreach ($this->moduleDirLocations as $location) {
             $location = (string) $this->checkIfPathExistsAndCleanItUp($location, false);

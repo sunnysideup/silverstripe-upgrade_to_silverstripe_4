@@ -39,7 +39,7 @@ class DatabaseMigrationLegacyYML extends Task
                 return $oldFile . ' NOT FOUND!!!';
             }
             $dir = dirname($newFile);
-            $fixer = new FileSystemFixes($this->mu());
+            $fixer = FileSystemFixes::inst($this->mu());
             $fixer->mkDir($moduleDir, $dir);
 
             $fixer->copyFolderOrFile($oldFile, $newFile);

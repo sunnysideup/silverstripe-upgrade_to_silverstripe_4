@@ -36,7 +36,7 @@ class MoveMysiteToApp extends Task
             $new = '/app/';
             if (file_exists($rootDir . '/' . $old)) {
                 if (! file_exists($rootDir . '/' . $new)) {
-                    $fixer = new FileSystemFixes($this->mu());
+                    $fixer = FileSystemFixes::inst($this->mu());
                     $fixer->moveFolderOrFile($rootDir . $old, $rootDir . $new);
                 } else {
                     $this->mu()->colourPrint(

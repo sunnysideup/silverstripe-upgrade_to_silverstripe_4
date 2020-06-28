@@ -101,7 +101,7 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('---------------------', 'light_cyan');
 
-        $mu->colourPrint('- parameter "again" ... runs last comand again', 'light_cyan');
+        $mu->colourPrint('- parameter "again" ... runs last comand again', 'white');
 
         $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'white');
 

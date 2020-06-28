@@ -4,6 +4,14 @@ namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 
 class Ss3ToSs4 extends BaseClass
 {
+
+
+    /**
+     * name of the branch to be created that we use a starter branch for upgrade
+     * @var string branch name
+     */
+    protected $nameOfUpgradeStarterBranch = 'upgrades/starting-point/ss4-upgrade';
+
     /**
      * name of the branch created to do the upgrade
      * @var string branch name
@@ -37,7 +45,7 @@ class Ss3ToSs4 extends BaseClass
         'AddLegacyBranch' => [
             'nameOfLegacyBranch' => '3',
         ],
-        'AddUpgradeBranch' => [],
+        'AddUpgradeStarterBranch' => [],
         'PHPCompatabilityCheck' => [],
         'ResetWebRootDir-2' => [],
 

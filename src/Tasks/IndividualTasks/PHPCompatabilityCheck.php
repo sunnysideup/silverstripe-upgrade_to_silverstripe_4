@@ -40,16 +40,17 @@ class PHPCompatabilityCheck extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        Composer::inst($this->mu())->RequireDev(
-            'squizlabs/php_codesniffer',
-            '',
-            $this->composerOptions
-        );
-        Composer::inst($this->mu())->RequireDev(
-            'phpcompatibility/php-compatibility',
-            '',
-            $this->composerOptions
-        );
+        Composer::inst($this->mu())
+            ->RequireDev(
+                'squizlabs/php_codesniffer',
+                '',
+                $this->composerOptions
+            )
+            ->RequireDev(
+                'phpcompatibility/php-compatibility',
+                '',
+                $this->composerOptions
+            );
 
         $this->mu()->execMe(
             $webRoot,
@@ -88,6 +89,9 @@ class PHPCompatabilityCheck extends Task
                 false
             );
         }
+        Composer::inst($this->mu())
+            ->Remove('squizlabs/php_codesniffer', true)
+            ->Remove('phpcompatibility/php-compatibility', true);
     }
 
     protected function hasCommitAndPush()

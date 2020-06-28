@@ -31,7 +31,7 @@ class ResetWebRootDir extends Task
             'remove the upgrade dir: ' . $this->mu()->getWebRootDirLocation(),
             false
         );
-        $fixer = new FileSystemFixes($this->mu());
+        $fixer = FileSystemFixes::inst($this->mu());
         $fixer->mkDir(
             $this->mu()->getAboveWebRootDirLocation(),
             $this->mu()->getWebRootDirLocation()

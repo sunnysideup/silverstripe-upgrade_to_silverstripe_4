@@ -12,7 +12,7 @@ class ApplyPSR2 extends Task
 {
     protected $taskStep = 's60';
 
-    protected $composerOptions = '--dev';
+    protected $composerOptions = '';
 
     protected $lintingIssuesFileName = 'LINTING_ERRORS';
 

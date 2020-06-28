@@ -49,6 +49,19 @@ class Composer
         return $this->requireAny($package, $version, true, $options, false);
     }
 
+    public function Remove(string $package, ?bool $devOnly = false): self
+    {
+        $devFlag = $devOnly ? '--dev' : '';
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'composer remove ' . $package . ' ' . $devFlag,
+            'running composer remove ' . $package . ' ' . $devFlag ,
+            false
+        );
+
+        return $this;
+    }
+
     protected function requireAny(string $package, ?string $version = '', ?bool $devOnly = false, ?string $options = '', ?bool $isGlobal = false): self
     {
         $devFlag = $devOnly ? '--dev' : '';

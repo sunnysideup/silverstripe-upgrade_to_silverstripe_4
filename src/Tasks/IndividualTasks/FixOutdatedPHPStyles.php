@@ -25,6 +25,7 @@ class FixOutdatedPHPStyles extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
+
         Composer::inst($this->mu())->RequireDev(
             'sunnysideup/huringa',
             'dev-master',
@@ -44,6 +45,9 @@ class FixOutdatedPHPStyles extends Task
             $this->setCommitMessage('MAJOR: fixing outdated code styles using sunnysideup/huringa in ' . $codeDir);
         }
         $this->mu()->setBreakOnAllErrors(false);
+
+        Composer::inst($this->mu())->Remove('sunnysideup/huringa', true);
+
     }
 
     protected function hasCommitAndPush()

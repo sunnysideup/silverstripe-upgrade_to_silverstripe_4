@@ -33,7 +33,7 @@ class MoveCodeToSRC extends Task
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $old = '/code/';
             $new = '/src/';
-            $fixer = new FileSystemFixes($this->mu());
+            $fixer = FileSystemFixes::inst($this->mu());
             $fixer->moveFolderOrFile($moduleDir . $old, $moduleDir . $new);
         }
     }

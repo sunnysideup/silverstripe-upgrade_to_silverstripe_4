@@ -9,7 +9,7 @@
             Creates a starter branch: "upgrades/starting-point" of your module/app
             from the master branch.
             These branch names can be customised.
-            <br /><strong>Class Code: </strong>AddUpgradeBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeBranch.php">AddUpgradeBranch</a></p><h4>6/46: PHP Compatibility Check</h4><p>Outputs a file showing errors prevent code from being compatible with php7.2<br /><strong>Class Code: </strong>PHPCompatabilityCheck<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/PHPCompatabilityCheck.php">PHPCompatabilityCheck</a></p><h4>7/46: Remove and reset the web root</h4><p>
+            <br /><strong>Class Code: </strong>AddUpgradeStarterBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeStarterBranch.php">AddUpgradeStarterBranch</a></p><h4>6/46: PHP Compatibility Check</h4><p>Outputs a file showing errors prevent code from being compatible with php7.2<br /><strong>Class Code: </strong>PHPCompatabilityCheck<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/PHPCompatabilityCheck.php">PHPCompatabilityCheck</a></p><h4>7/46: Remove and reset the web root</h4><p>
             Delete the web root directory to allow for a fresh install.<br /><strong>Class Code: </strong>ResetWebRootDir-2<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/ResetWebRootDir.php">ResetWebRootDir</a></p><h4>8/46: Checkout the upgrades/starting-point of this module/app.
             The name of the branch can be changed by using the following method: setNameOfBranchForBaseCode
         </h4><p>
@@ -115,7 +115,7 @@
             Creates a starter branch: "upgrades/starting-point" of your module/app
             from the master branch.
             These branch names can be customised.
-            <br /><strong>Class Code: </strong>AddUpgradeBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeBranch.php">AddUpgradeBranch</a></p><h2>Upgrade Structure</h2><h4>8/13: Update composer.json requirements</h4><p>
+            <br /><strong>Class Code: </strong>AddUpgradeStarterBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeStarterBranch.php">AddUpgradeStarterBranch</a></p><h2>Upgrade Structure</h2><h4>8/13: Update composer.json requirements</h4><p>
             Change requirements in composer.json file from
             an Old Package to a New Package:error
             For example, we upgrade silverstripe/framework requirement from 3 to 4.<br /><strong>Class Code: </strong>UpdateComposerRequirements-1<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/UpdateComposerRequirements.php">UpdateComposerRequirements</a></p><h4>9/13: Update composer.json requirements</h4><p>
@@ -143,7 +143,7 @@
             Creates a starter branch: "upgrades/starting-point" of your module/app
             from the master branch.
             These branch names can be customised.
-            <br /><strong>Class Code: </strong>AddUpgradeBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeBranch.php">AddUpgradeBranch</a></p><h2>Upgrade Structure</h2><h4>8/14: Update composer.json requirements</h4><p>
+            <br /><strong>Class Code: </strong>AddUpgradeStarterBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeStarterBranch.php">AddUpgradeStarterBranch</a></p><h2>Upgrade Structure</h2><h4>8/14: Update composer.json requirements</h4><p>
             Change requirements in composer.json file from
             an Old Package to a New Package:error
             For example, we upgrade silverstripe/framework requirement from 3 to 4.<br /><strong>Class Code: </strong>UpdateComposerRequirements-1<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/UpdateComposerRequirements.php">UpdateComposerRequirements</a></p><h4>9/14: Update composer.json requirements</h4><p>
@@ -174,7 +174,7 @@
             Creates a starter branch: "upgrades/starting-point" of your module/app
             from the master branch.
             These branch names can be customised.
-            <br /><strong>Class Code: </strong>AddUpgradeBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeBranch.php">AddUpgradeBranch</a></p><h2>Upgrade Structure</h2><h4>8/13: Update composer.json requirements</h4><p>
+            <br /><strong>Class Code: </strong>AddUpgradeStarterBranch<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/AddUpgradeStarterBranch.php">AddUpgradeStarterBranch</a></p><h2>Upgrade Structure</h2><h4>8/13: Update composer.json requirements</h4><p>
             Change requirements in composer.json file from
             an Old Package to a New Package:error
             For example, we upgrade silverstripe/framework requirement from 3 to 4.<br /><strong>Class Code: </strong>UpdateComposerRequirements-1<br /><strong>Class Name: </strong><a href="https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/Tasks/IndividualTasks/UpdateComposerRequirements.php">UpdateComposerRequirements</a></p><h4>9/13: Update composer.json requirements</h4><p>

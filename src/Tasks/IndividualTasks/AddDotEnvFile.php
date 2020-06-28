@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileFixes;
 
 /**
  * Run a dev/build as a smoke test to see if all is well
@@ -46,12 +47,11 @@ class AddDotEnvFile extends Task
                     false
                 );
             }
-            $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'echo \'.env\' >> .gitignore',
-                'Add .env to .gitignore ',
-                false
-            );
+            FileFixes::inst($this->mu())
+                ->addLineToFileIfItDoesNotExist(
+                    '.gitignore',
+                    '.env'
+                );
         }
     }
 

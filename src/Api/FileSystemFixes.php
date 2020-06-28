@@ -1,15 +1,12 @@
 <?php
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+use Sunnysideup\UpgradeToSilverstripe4\Traits\HelperInst;
 
 class FileSystemFixes
 {
-    protected $myMu = null;
 
-    public function __construct($myMu)
-    {
-        $this->myMu = $myMu;
-    }
+    use HelperInst;
 
     public function mkDir(string $baseFolder, string $dir): FileSystemFixes
     {
@@ -93,11 +90,6 @@ class FileSystemFixes
     public function copyFolderOrFile(string $oldPath, string $newPath): FileSystemFixes
     {
         return $this->moveFolderOrFile($oldPath, $newPath, true);
-    }
-
-    protected function mu()
-    {
-        return $this->myMu;
     }
 
     protected function test(string $path, ?bool $showError = true): bool

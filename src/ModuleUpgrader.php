@@ -104,7 +104,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         $params['taskName'] = $taskName;
                     }
                     if ($hasRun && ! $nextStep) {
-                        $nextStep = 'xxxx'.$params['taskName'];
+                        $nextStep = $params['taskName'];
                     }
                     if ($runItNow) {
                         $this->currentlyRunning = $class;
@@ -285,22 +285,6 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
 
         $this->workoutPackageFolderName($moduleDetails);
 
-        //moduleDirLocation
-        if ($this->isModuleUpgrade) {
-            $this->moduleDirLocations = [
-                $this->webRootDirLocation . '/' . $this->packageFolderNameForInstall,
-            ];
-            $this->themeDirLocation = '';
-        } else {
-            if (! count($this->moduleDirLocations)) {
-                $this->moduleDirLocations[] = $this->webRootDirLocation . '/mysite';
-                $this->moduleDirLocations[] = $this->webRootDirLocation . '/app';
-            } else {
-                foreach ($this->moduleDirLocations as $key => $location) {
-                    $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
-                }
-            }
-        }
 
         //ss4 location
         if (isset($moduleDetails['VendorAndPackageFolderNameForInstall'])) {
@@ -330,6 +314,11 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         if ($this->restartSession) {
             $this->getSessionManager()->deleteSession();
         }
+    }
+
+    protected function vendorModuleLocation() : string
+    {
+        return $this->webRootDirLocation .'/vendor/' . $this->vendorName . '/' . $this->packageName;
     }
 
     protected function workoutPackageFolderName(array $moduleDetails)

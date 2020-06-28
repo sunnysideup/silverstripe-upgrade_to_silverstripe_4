@@ -25,7 +25,7 @@ class AddPHPDoc extends Task
 
     protected $ideannotatorConfig = <<<yml
 ---
-Name: ideannotator
+Name: ideannotator_REPLACE_WITH_MODULE_NAME
 Only:
   environment: dev
 ---
@@ -55,6 +55,7 @@ yml;
         $this->mu()->getWebRootDirLocation();
 
         Composer::inst($this->mu())
+            ->Remove('phpunit/phpunit', true)
             ->RequireDev(
                 'silverleague/ideannotator',
                 $this->ideAnnotatorVersion,
@@ -62,6 +63,7 @@ yml;
             );
 
         foreach ($this->findModuleNames() as $moduleName) {
+            $this->mu()->setBreakOnAllErrors(true);
             $this->updateModuleConfigFile($moduleName);
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
@@ -69,7 +71,10 @@ yml;
                 'Running IDEAnnotator Task to add PHP documentation to ' . $moduleName,
                 false
             );
+            $this->mu()->setBreakOnAllErrors(false);
         }
+        Composer::inst($this->mu())
+            ->Remove('silverleague/ideannotator', true);
     }
 
     protected function updateComposerFile(string $moduleName)
@@ -91,7 +96,7 @@ yml;
     {
         $moduleLocation = $this->findModuleNameLocation($moduleName);
 
-        $fileLocation = $moduleLocation . '/_config/' . $this->configFileName;
+        $fileLocation = $this->mu()->getWebRootDirLocation() .'/' . $moduleLocation . '/_config/' . $this->configFileName;
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'rm ' . $fileLocation . '-f ',
@@ -116,7 +121,7 @@ yml;
         $moduleNames = [];
         if ($this->mu()->getIsModuleUpgrade()) {
             $moduleNames = [
-                $this->mu()->getVendorNamespace() . '/' . $this->mu()->getPackageNamespace(),
+                $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
             ];
         } else {
             foreach ($this->mu()->getExistingModuleDirLocations() as $location) {

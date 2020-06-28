@@ -105,8 +105,8 @@ class ComposerInstallProject extends Task
             Composer::inst($this->mu())
                 ->ClearCache()
                 ->Require(
-                    $this->mu()->getVendorNamespace() . '/' . $this->mu()->getPackageNamespace(),
-                    $this->mu()->getNameOfTempBranch(),
+                    $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                    'dev-'.$this->mu()->getNameOfTempBranch(),
                     $this->composerOptions
                 );
         } else {

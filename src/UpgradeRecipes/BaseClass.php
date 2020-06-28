@@ -5,6 +5,7 @@ namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 abstract class BaseClass
 {
     protected $varsToProvide = [
+        'nameOfUpgradeStarterBranch',
         'nameOfTempBranch',
         'defaultNamespaceForTasks',
         'taskSteps',

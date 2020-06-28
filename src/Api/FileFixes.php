@@ -21,5 +21,8 @@ class FileFixes
             'Add line ' . $line . ' to ' . $file,
             false
         );
+
+        return $this;
     }
+
 }

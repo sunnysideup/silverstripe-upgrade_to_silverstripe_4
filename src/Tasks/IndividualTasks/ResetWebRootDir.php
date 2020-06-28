@@ -25,17 +25,10 @@ class ResetWebRootDir extends Task
 
     public function runActualTask($params = [])
     {
-        $this->mu()->execMe(
-            $this->mu()->getAboveWebRootDirLocation(),
-            'rm ' . $this->mu()->getWebRootDirLocation() . ' -rf',
-            'remove the upgrade dir: ' . $this->mu()->getWebRootDirLocation(),
-            false
-        );
-        $fixer = FileSystemFixes::inst($this->mu());
-        $fixer->mkDir(
-            $this->mu()->getAboveWebRootDirLocation(),
-            $this->mu()->getWebRootDirLocation()
-        );
+        FileSystemFixes::inst($this->mu())
+            ->removeDirOrFile($this->mu()->getWebRootDirLocation(), $this->mu()->getAboveWebRootDirLocation());
+        FileSystemFixes::inst($this->mu())
+            ->mkDir($this->mu()->getWebRootDirLocation(), $this->mu()->getAboveWebRootDirLocation());
     }
 
     protected function hasCommitAndPush()

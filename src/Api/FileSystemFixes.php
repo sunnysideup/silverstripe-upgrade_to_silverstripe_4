@@ -8,8 +8,11 @@ class FileSystemFixes
 {
     use HelperInst;
 
-    public function mkDir(string $baseFolder, string $dir): FileSystemFixes
+    public function mkDir(string $dir, string $baseFolder = ''): FileSystemFixes
     {
+        if(! $baseFolder) {
+            $baseFolder = $this->mu()->getWebRootDirLocation();
+        }
         $this->mu()->execMe(
             $baseFolder,
             'mkdir -vp ' . $dir,
@@ -17,6 +20,21 @@ class FileSystemFixes
             false
         );
         $this->test($dir);
+
+        return $this;
+    }
+
+    public function removeDirOrFile(string $folderName, string $baseFolder = '') : FileSystemFixes
+    {
+        if(! $baseFolder) {
+            $baseFolder = $this->mu()->getWebRootDirLocation();
+        }
+        $this->mu()->execMe(
+            $baseFolder,
+            'rm ' . $folderName . ' -rf',
+            'removing ' . $folderName,
+            false
+        );
 
         return $this;
     }

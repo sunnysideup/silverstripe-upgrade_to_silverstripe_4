@@ -150,11 +150,8 @@ class ComposerCompatibilityCheckerStep2 extends Task
                 'make temporary copy of composer.json'
             );
         }
-        $this->mu()->execMe(
-            $this->webRootLocation,
-            'rm composer.json',
-            'remove composer.json'
-        );
+        $fixer = FileSystemFixes::inst($this->mu())
+            ->removeDirOrFile($this->webRootLocation . '/composer.json');
         $this->mu()->execMe(
             $this->webRootLocation,
             'cp composer.json.temp.default composer.json',

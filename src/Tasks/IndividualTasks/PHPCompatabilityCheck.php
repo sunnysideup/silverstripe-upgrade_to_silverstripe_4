@@ -8,6 +8,7 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
 /**
  * Delete the web root directory to allow for a fresh install.
@@ -40,6 +41,17 @@ class PHPCompatabilityCheck extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
+        if( PHP2CommandLineSingleton::commandExists('sslint-compat')) {
+            foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
+                // $file = str_replace('\\', '-', $baseNameSpace);
+                $this->mu()->execMe(
+                    $webRoot,
+                    'sslint-compat ' . $codeDir,
+                    'Running PHP Compatibility Check in: ' . $codeDir,
+                    false
+                );
+            }
+        }
         Composer::inst($this->mu())
             ->RequireDev(
                 'squizlabs/php_codesniffer',
@@ -85,7 +97,7 @@ class PHPCompatabilityCheck extends Task
                 ' --standard=PHPCompatibility' .
                 ' --extensions=php ' .
                 ' --runtime-set testVersion ' . $this->phpVersion,
-                'Running PHP Compatibility Check in: ' . $this->mu()->getWebRootDirLocation(),
+                'Running PHP Compatibility Check in: ' . $codeDir,
                 false
             );
         }

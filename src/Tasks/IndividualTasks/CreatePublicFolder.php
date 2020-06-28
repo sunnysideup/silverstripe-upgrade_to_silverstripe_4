@@ -34,8 +34,8 @@ class CreatePublicFolder extends Task
     {
         if ($this->mu()->getIsProjectUpgrade()) {
             $newFolder = $this->mu()->getWebRootDirLocation() . '/' . $this->publicFolderName;
-            $fixer = FileSystemFixes::inst($this->mu());
-            $fixer->mkDir($this->mu()->getWebRootDirLocation(), $newFolder);
+            FileSystemFixes::inst($this->mu())
+                ->mkDir($newFolder);
 
             $this->mu()->execMe(
                 $newFolder,

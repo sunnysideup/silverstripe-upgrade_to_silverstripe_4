@@ -32,9 +32,9 @@ class CreateClientFolder extends Task
     public function runActualTask($params = [])
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
-            $fixer = FileSystemFixes::inst($this->mu());
             $newClientFolder = $moduleDir . '/' . $this->clientFolderName . '/ ';
-            $fixer->mkDir($moduleDir, $newClientFolder);
+            $fixer = FileSystemFixes::inst($this->mu())
+                ->mkDir($newClientFolder);
             $foldersToMoveName = [
                 'javascript',
                 'js',

@@ -4,6 +4,7 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 
 /**
  * Adds a new branch to your repository that is going to be used for upgrading it.
@@ -43,12 +44,8 @@ class ApplyPSR2 extends Task
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $baseNameSpace => $codeDir) {
             $knownIssuesFileName = $codeDir . '/' . $this->lintingIssuesFileName;
             $relativeDir = str_replace($webRoot, '', $codeDir);
-            $this->mu()->execMe(
-                $webRoot,
-                'rm ' . $knownIssuesFileName . ' -f',
-                'removing ' . $knownIssuesFileName,
-                false
-            );
+            FileSystemFixes::inst($this->mu())
+                ->removeDirOrFile($knownIssuesFileName);
             $this->mu()->execMe(
                 $webRoot,
                 'dir=' . $relativeDir . ' sslint-ecs',

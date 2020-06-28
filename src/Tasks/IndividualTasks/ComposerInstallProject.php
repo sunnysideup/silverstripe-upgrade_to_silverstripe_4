@@ -6,6 +6,8 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
+
 
 /**
  * Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')
@@ -69,12 +71,9 @@ class ComposerInstallProject extends Task
     public function runActualTask($params = [])
     {
         $this->mu()->setBreakOnAllErrors(true);
-        $this->mu()->execMe(
-            $this->mu()->getAboveWebRootDirLocation(),
-            'rm ' . $this->mu()->getWebRootDirLocation() . ' -rf',
-            'remove the upgrade dir: ' . $this->mu()->getWebRootDirLocation(),
-            false
-        );
+        $fixer = FileSystemFixes::inst($this->mu())
+            ->removeDirOrFile($this->mu()->getWebRootDirLocation(), $this->mu()->getAboveWebRootDirLocation())
+            ->mkDir($this->mu()->getWebRootDirLocation(), $this->mu()->getAboveWebRootDirLocation());
         if (! $this->versionToLoad) {
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
@@ -109,6 +108,20 @@ class ComposerInstallProject extends Task
                     'dev-' . $this->mu()->getNameOfTempBranch(),
                     $this->composerOptions
                 );
+            if($this->mu()->getNameOfTempBranch() !== 'master') {
+                $gitLink = $this->mu()->getGitLink();
+                $command = '
+                    git init;
+                    git remote add origin '.$gitLink.';
+                    git pull origin master;
+                    git status;';
+                $this->mu()->execMe(
+                    $this->mu()->getGitRootDir(),
+                    $command,
+                    'Make sure it is a git repo',
+                    false
+                );
+            }
         } else {
             Git::inst($this->mu())
                 ->Clone(

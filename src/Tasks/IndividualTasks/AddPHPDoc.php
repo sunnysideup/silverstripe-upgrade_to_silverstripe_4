@@ -5,6 +5,7 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 
 /**
  * Runs through the source code and adds hidden Silverstripe property and method documentation to classes
@@ -97,12 +98,8 @@ yml;
         $moduleLocation = $this->findModuleNameLocation($moduleName);
 
         $fileLocation = $this->mu()->getWebRootDirLocation() . '/' . $moduleLocation . '/_config/' . $this->configFileName;
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'rm ' . $fileLocation . '-f ',
-            'Remove existing configuration',
-            false
-        );
+        FileSystemFixes::inst($this->mu())
+            ->removeDirOrFile($fileLocation);
         $ideannotatorConfigForModule = $this->ideannotatorConfig;
         $ideannotatorConfigForModule = str_replace('REPLACE_WITH_MODULE', $moduleName, $ideannotatorConfigForModule);
         $this->mu()->execMe(

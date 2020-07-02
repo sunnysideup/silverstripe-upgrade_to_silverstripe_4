@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sunnysideup/silverstripe-php_2_command_line.git",
-                "reference": "2d9933a306d79eff10576158ece01dbc4e379c40"
+                "reference": "183df0df7a6f53c3434603d4a14f1ea8b6654870"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/2d9933a306d79eff10576158ece01dbc4e379c40",
-                "reference": "2d9933a306d79eff10576158ece01dbc4e379c40",
+                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/183df0df7a6f53c3434603d4a14f1ea8b6654870",
+                "reference": "183df0df7a6f53c3434603d4a14f1ea8b6654870",
                 "shasum": ""
             },
             "type": "library",
@@ -45,7 +45,7 @@
                 "php",
                 "script"
             ],
-            "time": "2020-06-25T01:43:29+00:00"
+            "time": "2020-06-28T22:09:18+00:00"
         }
     ],
     "packages-dev": [
@@ -162,20 +162,20 @@
         },
         {
             "name": "composer/semver",
-            "version": "1.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "854423eadba4e1421dcdadb0deeb3134a9b91d88"
+                "reference": "811c569dd23a19b02116ac0613e2f67a76c15931"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/854423eadba4e1421dcdadb0deeb3134a9b91d88",
-                "reference": "854423eadba4e1421dcdadb0deeb3134a9b91d88",
+                "url": "https://api.github.com/repos/composer/semver/zipball/811c569dd23a19b02116ac0613e2f67a76c15931",
+                "reference": "811c569dd23a19b02116ac0613e2f67a76c15931",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.2 || ^7.0"
+                "php": "^5.3.2 || ^7.0 || ^8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.5 || ^5.0.5"
@@ -219,7 +219,7 @@
                 "validation",
                 "versioning"
             ],
-            "time": "2020-04-21T08:26:55+00:00"
+            "time": "2020-03-17T11:42:48+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -795,16 +795,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/php-generator.git",
-                "reference": "7051954c534cebafd650efe8b145ac75b223cb66"
+                "reference": "ddc154ba405f6cc84c73152a5790ff49114c7f62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/7051954c534cebafd650efe8b145ac75b223cb66",
-                "reference": "7051954c534cebafd650efe8b145ac75b223cb66",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/ddc154ba405f6cc84c73152a5790ff49114c7f62",
+                "reference": "ddc154ba405f6cc84c73152a5790ff49114c7f62",
                 "shasum": ""
             },
             "require": {
-                "nette/utils": "^2.4.2 || ^3.0",
+                "nette/utils": "^3.1.2",
                 "php": ">=7.1"
             },
             "require-dev": {
@@ -851,7 +851,7 @@
                 "php",
                 "scaffolding"
             ],
-            "time": "2020-06-19T14:31:47+00:00"
+            "time": "2020-06-19T14:31:53+00:00"
         },
         {
             "name": "nette/robot-loader",
@@ -980,12 +980,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "b85c249542f76313678ab9a8ec77ecffeb1d25aa"
+                "reference": "3012f739617e69f6f4652217996de61310fda3b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/b85c249542f76313678ab9a8ec77ecffeb1d25aa",
-                "reference": "b85c249542f76313678ab9a8ec77ecffeb1d25aa",
+                "url": "https://api.github.com/repos/nette/utils/zipball/3012f739617e69f6f4652217996de61310fda3b3",
+                "reference": "3012f739617e69f6f4652217996de61310fda3b3",
                 "shasum": ""
             },
             "require": {
@@ -1050,7 +1050,7 @@
                 "utility",
                 "validation"
             ],
-            "time": "2020-06-09T15:04:58+00:00"
+            "time": "2020-07-01T14:05:55+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1625,12 +1625,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "fb66fad45b5f3647b948417ae5ab3b992ede76bc"
+                "reference": "087861c07733156f690b517c5103de5759a6fcf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/fb66fad45b5f3647b948417ae5ab3b992ede76bc",
-                "reference": "fb66fad45b5f3647b948417ae5ab3b992ede76bc",
+                "url": "https://api.github.com/repos/symfony/console/zipball/087861c07733156f690b517c5103de5759a6fcf3",
+                "reference": "087861c07733156f690b517c5103de5759a6fcf3",
                 "shasum": ""
             },
             "require": {
@@ -1694,7 +1694,21 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2020-06-24T13:34:53+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-06-30T17:40:09+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -2282,6 +2296,20 @@
                 "interoperability",
                 "standards"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-18T19:55:03+00:00"
         },
         {
@@ -2353,5 +2381,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

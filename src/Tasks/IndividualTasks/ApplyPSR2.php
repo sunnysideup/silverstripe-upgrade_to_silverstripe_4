@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;

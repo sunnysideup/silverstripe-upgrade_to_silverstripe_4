@@ -12,6 +12,7 @@ class FindFilesWithSimpleUseStatements extends Task
     protected $listOfOKOnes = [
         'Page',
         'PageController',
+        'Exception',
     ];
 
     public function getTitle()

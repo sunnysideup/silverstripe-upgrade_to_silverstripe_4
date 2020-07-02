@@ -49,11 +49,11 @@ class Ss4Lint extends BaseClass
         'ComposerInstallProject' => [
             'installModuleAsVendorModule' => true,
         ],
-
         'AddDotEnvFile' => [],
-
-        'PHPCompatabilityCheck' => [],
         'FinalDevBuild' => [],
+
+        'FixClassNamesWithUnderscores' => [],
+        'PHPCompatabilityCheck' => [],
         'ApplyPSR2' => [],
         'AddPHPDoc' => [],
 

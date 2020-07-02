@@ -89,12 +89,14 @@ class Ss3ToSs4 extends BaseClass
 
         //Step5: FixUpgrade
         'FixBadUseStatements' => [],
+        'FixBadUseStatements' => [],
         'InspectAPIChanges-1' => [],
         'DatabaseMigrationLegacyYML' => [],
         'Reorganise' => [],
         'UpdateComposerModuleType' => [],
         'AddVendorExposeDataToComposer' => [],
         'InspectAPIChanges-2' => [],
+        'FixClassNamesWithUnderscores' => [],
         // 'WebRootUpdate' => [],
         //step6: Check
         'ApplyPSR2' => [],

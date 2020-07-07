@@ -55,7 +55,7 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                 )
                 ->deleteBranch(
                     $this->mu()->getGitRootDir(),
-                    $this->mu()->getNameOfUpgradeStarterBranch(),
+                    $this->mu()->getNameOfUpgradeStarterBranch()
                 );
             $this->mu()->setBreakOnAllErrors(false);
         }

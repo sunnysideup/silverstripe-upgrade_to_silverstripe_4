@@ -40,7 +40,7 @@ class FixClassNamesWithUnderscores extends Task
                         $this->mu()->colourPrint('Searching ' . $path, 'grey');
                         $shortClassName = str_replace('.php', '', basename($path));
                         if(strpos($shortClassName, '_')) {
-                            $error++;
+                            $errors++;
                             $this->mu()->colourPrint('Found an underscore in: ' . $searchPath, 'red');
                         }
                     }

@@ -72,9 +72,15 @@
             R: '$List(\Page'
         '$List(Page':
             R: '$List(SilverStripe\CMS\Model\SiteTree:'
+        ".Format('U')":
+            R: ".Timestamp"
+            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".Format('d/m/y')":
+            R: ".Format('d/LLL/yy')"
+            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
         '.Format(':
             R: '.Format('
-            C: 'Format function for dates have changed! Please consider something like: PHPNativeFormat as an extension (see http://userguide.icu-project.org/formatparse/datetime)'
+            C: 'Format function for dates have changed! Please consider something like: PHP NativeFormat as an extension (see http://userguide.icu-project.org/formatparse/datetime)'
 
 
     'yml':
@@ -121,6 +127,15 @@
 
 
     php:
+        "->Format('U')":
+            R: "->getTimestamp()"
+            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        "->Format('d/m/y')":
+            R: "->Format('d/LLL/yy')"
+            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ">format('Y-m-d')":
+            R: "->format('Y-MM-d')"
+            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
         db::alteration_message:
             R: 'DB::alteration_message'
         Db::alteration_message:

@@ -127,6 +127,8 @@
 
 
     php:
+        "Member::currentUser()":
+            R: "Security::getCurrentUser()"
         "->Format('U')":
             R: "->getTimestamp()"
             C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"

@@ -13,7 +13,7 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 $obj = ModuleUpgrader::create()
     ->setRecipe('SS4')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
-    ->setWebRootName('ecommerce_dashboard')
+    ->setWebRootName('ecommerce_newsletter_campaign_monitor')
     ->setRunInteractively(true)
     // ->setRunIrreversibly(true)
     ->setArrayOfModules(
@@ -21,8 +21,8 @@ $obj = ModuleUpgrader::create()
             1 => [
                 'VendorName' => 'sunnysideup',
                 'VendorNamespace' => 'Sunnysideup',
-                'PackageName' => 'ecommerce_dashboard',
-                'PackageNamespace' => 'EcommerceDashboard',
+                'PackageName' => 'ecommerce_newsletter_campaign_monitor',
+                'PackageNamespace' => 'EcommerceNewsletterCampaignMonitor',
                 'IsModuleUpgrade' => true,
             ]
         ]
@@ -35,7 +35,6 @@ $obj = ModuleUpgrader::create()
             // 'sunnysideup/ecommerce_product_variation' => 'master',
         ]
     )
-    ->setNameOfUpgradeStarterBranch('upgrades/starting-point')
     ->setVariableForTask(
         'SearchAndReplace',
         'sourceFolders',

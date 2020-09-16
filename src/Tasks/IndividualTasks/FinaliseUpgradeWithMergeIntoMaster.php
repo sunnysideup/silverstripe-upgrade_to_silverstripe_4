@@ -51,11 +51,11 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                 )
                 ->deleteBranch(
                     $this->mu()->getGitRootDir(),
-                    $this->mu()->getNameOfTempBranch(),
+                    $this->mu()->getNameOfTempBranch()
                 )
                 ->deleteBranch(
                     $this->mu()->getGitRootDir(),
-                    $this->mu()->getNameOfUpgradeStarterBranch(),
+                    $this->mu()->getNameOfUpgradeStarterBranch()
                 );
             $this->mu()->setBreakOnAllErrors(false);
         }

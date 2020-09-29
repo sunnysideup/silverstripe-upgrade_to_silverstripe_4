@@ -129,7 +129,7 @@
     php:
         "Requirements::themedCSS('":
             R: "Requirements::themedCSS('client/css/"
-            C: "Check that this still works.  You can put: Requirements::themedCSS('client/css/MyFle'); you also need to make sure you have a templates folder in your modules or Requirements::themedCSS will not work.";
+            C: "Check that this still works.  You can put: Requirements::themedCSS('client/css/MyFle') you also need to make sure you have a templates folder in your modules or Requirements::themedCSS will not work."
         "Member::currentUser()":
             R: "Security::getCurrentUser()"
         "->Format('U')":

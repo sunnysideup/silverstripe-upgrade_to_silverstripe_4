@@ -358,12 +358,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "8d7c8fb942cb9856b7b5c98e68e9c34d56e806a9"
+                "reference": "60d379c243457e073cff02bc323a2a86cb355631"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/8d7c8fb942cb9856b7b5c98e68e9c34d56e806a9",
-                "reference": "8d7c8fb942cb9856b7b5c98e68e9c34d56e806a9",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/60d379c243457e073cff02bc323a2a86cb355631",
+                "reference": "60d379c243457e073cff02bc323a2a86cb355631",
                 "shasum": ""
             },
             "require": {
@@ -401,7 +401,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2020-09-21T06:06:31+00:00"
+            "time": "2020-09-30T07:37:28+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -409,12 +409,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "b2007a51b06f899b278be4d1b31593831c1be65f"
+                "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/b2007a51b06f899b278be4d1b31593831c1be65f",
-                "reference": "b2007a51b06f899b278be4d1b31593831c1be65f",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/53330f47520498c0ae1f61f7e2c90f55690c06a3",
+                "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3",
                 "shasum": ""
             },
             "require": {
@@ -472,7 +472,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2020-09-23T20:12:44+00:00"
+            "time": "2020-09-30T07:37:11+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
@@ -1887,12 +1887,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "5ef0f6c609c1a36f723880dfe78301199bc96868"
+                "reference": "60d08560f9aa72997c44077c40d47aa28a963230"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/5ef0f6c609c1a36f723880dfe78301199bc96868",
-                "reference": "5ef0f6c609c1a36f723880dfe78301199bc96868",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/60d08560f9aa72997c44077c40d47aa28a963230",
+                "reference": "60d08560f9aa72997c44077c40d47aa28a963230",
                 "shasum": ""
             },
             "require": {
@@ -1942,7 +1942,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-02T16:08:58+00:00"
+            "time": "2020-10-02T07:34:48+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2346,12 +2346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
-                "reference": "639447d008615574653fb3bc60d1986d7172eaae"
+                "reference": "dc6ef203f50ab65e7de9663826d2fd2d3c1e90e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/639447d008615574653fb3bc60d1986d7172eaae",
-                "reference": "639447d008615574653fb3bc60d1986d7172eaae",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/dc6ef203f50ab65e7de9663826d2fd2d3c1e90e2",
+                "reference": "dc6ef203f50ab65e7de9663826d2fd2d3c1e90e2",
                 "shasum": ""
             },
             "require": {
@@ -2411,7 +2411,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-14T12:35:20+00:00"
+            "time": "2020-10-01T14:10:30+00:00"
         },
         {
             "name": "symfony/polyfill-php73",
@@ -2638,12 +2638,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "de027d1191cb7c9d1cb0e56dd68ca77891b6ad2e"
+                "reference": "90388a3609590fd1404b37334fa64a95ed1c34de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/de027d1191cb7c9d1cb0e56dd68ca77891b6ad2e",
-                "reference": "de027d1191cb7c9d1cb0e56dd68ca77891b6ad2e",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/90388a3609590fd1404b37334fa64a95ed1c34de",
+                "reference": "90388a3609590fd1404b37334fa64a95ed1c34de",
                 "shasum": ""
             },
             "require": {
@@ -2706,7 +2706,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-28T13:05:58+00:00"
+            "time": "2020-09-29T22:43:35+00:00"
         },
         {
             "name": "symfony/yaml",

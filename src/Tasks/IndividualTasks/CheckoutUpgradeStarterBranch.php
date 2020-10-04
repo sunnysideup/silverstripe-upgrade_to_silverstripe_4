@@ -29,7 +29,11 @@ class CheckoutUpgradeStarterBranch extends Task
     {
         return '
             Checks out ' . $this->mu()->getNameOfUpgradeStarterBranch() . '
-            of project/module using composer for a module or git checkout for a project';
+            of project/module using composer for a module or git checkout for a project
+            =============================================================================
+            NB: this branch may just be created and so composer may fail here,
+            simply start again in a few minutes in this case to make it work.
+            =============================================================================';
     }
 
     /**

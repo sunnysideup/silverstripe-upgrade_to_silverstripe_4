@@ -266,6 +266,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             $this->gitLink = $moduleDetails['GitLink'];
         } else {
             $this->gitLink = 'git@github.com:' . $this->vendorName . '/silverstripe-' . $this->packageName . '.git';
+            $this->gitLink = str_replace('silverstripe-silverstripe-', 'silverstripe-', $this->gitLink);
         }
         //see: https://stackoverflow.com/questions/5573334/remove-a-part-of-a-string-but-only-when-it-is-at-the-end-of-the-string
         $gitLinkWithoutExtension = preg_replace('/' . preg_quote('.git', '/') . '$/', '', $this->gitLink);
@@ -320,10 +321,10 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         return $this->webRootDirLocation . '/vendor/' . $this->vendorName . '/' . $this->packageName;
     }
 
-    protected function workoutPackageFolderName(array $moduleDetails)
+    protected function workoutPackageFolderName(array $moduleDetails) : string
     {
         $this->packageFolderNameForInstall = trim($this->packageFolderNameForInstall);
-        if ($this->packageFolderNameForInstall) {
+        if ($this->packageFolderNameForInstall && $this->testExistenceFromRoot($packageFolderNameForInstall)) {
             //do nothing
         } else {
             $packageFolderNameForInstall = $this->getSessionManager()->getSessionValue(
@@ -343,20 +344,38 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         $array = json_decode($json, true);
                         if (isset($array['extra']['installer-name'])) {
                             $this->packageFolderNameForInstall = $array['extra']['installer-name'];
-                        } else {
-                            $this->packageFolderNameForInstall = $this->getPackageFolderNameBasic();
                         }
-                    } else {
-                        $this->packageFolderNameForInstall = $this->getPackageFolderNameBasic();
                     }
                 }
             }
+        }
+        if (! $this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
+            $this->packageFolderNameForInstall = $this->getPackageFolderNameBasic(false);
+            if(! $this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
+                $this->packageFolderNameForInstall = $this->getPackageFolderNameBasic(true);
+            }
+        }
+        if($this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
             $this->getSessionManager()->setSessionValue(
                 'PackageFolderNameForInstall',
                 $this->packageFolderNameForInstall
             );
         }
+        if($this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
+            user_error('
+                Could not find: '.$this->webRootDirLocation . '/' .$this->packageFolderNameForInstall.',
+                Composer File Used: '.$this->originComposerFileLocation .',
+                Session Value: '.$packageFolderNameForInstall
+            );
+        }
+        return $this->packageFolderNameForInstall;
     }
+
+    protected function testLocationFromRootDir(string $dir) : bool
+    {
+        return (bool) file_exists($this->webRootDirLocation . '/'. $dir);
+    }
+
 
     protected function printVarsForModule(array $moduleDetails)
     {

@@ -27,6 +27,11 @@ class SessionManagement implements SessionManagementInterface
     public function setSessionFileLocation($sessionFileLocation): SessionManagementInterface
     {
         $this->sessionFileLocation = $sessionFileLocation;
+        $link = $sessionFileLocation;
+        $dir = dirname($link);
+        if(! file_exists($dir)) {
+            user_error('Could not find: '.$dir);
+        }
 
         return $this;
     }

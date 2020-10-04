@@ -721,7 +721,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         } else {
             $location = $this->getWebRootDirLocation();
         }
-
         return $location;
     }
 
@@ -763,12 +762,16 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return array_search($s, $this->listOfTasks, true);
     }
 
-    protected function getPackageFolderNameBasic(): string
+    protected function getPackageFolderNameBasic(?bool $withoutSilverstripePrefix = false): string
     {
+        $link = 'mysite';
         if ($this->isModuleUpgrade) {
-            return $this->packageName;
+            $link = $this->packageName;
+            if ($withoutSilverstripePrefix) {
+                $link - str_replace('silverstripe-', '', $this->packageName);
+            }
         }
-        return 'mysite';
+        return $link;
     }
 
     /**

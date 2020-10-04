@@ -278,7 +278,7 @@ abstract class Task
             $rootDirForCommand = $this->mu()->getWebRootDirLocation();
         }
         if (! $keyNotesLogFileLocation) {
-            $fileName = '/upgrade_notes.md';
+            $fileName = '/upgrade_notes';
             if (file_exists($param1)) {
                 $keyNotesLogFileLocation = $param1 . $fileName;
             } else {

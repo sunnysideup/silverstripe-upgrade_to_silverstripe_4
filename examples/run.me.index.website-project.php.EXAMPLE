@@ -19,9 +19,9 @@ $obj = ModuleUpgrader::create()
                 'VendorNamespace' => 'AwesomeProject',
                 'PackageName' => 'app',
                 'PackageNamespace' => 'App',
-                'PackageFolderNameForInstall' => 'awesome',
                 'GitLink' => 'git@bitbucket.org:mybitbucket/awesome.org.nz.git',
                 'IsModuleUpgrade' => false,
+                'NameOfBranchForBaseCode' => 'upgrade',
             ]
         ]
     )

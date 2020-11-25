@@ -58,7 +58,7 @@ class MoveTemplates extends Task
                 $fixer->moveAllInFolder($oldDir, $newDir);
             }
         } else {
-            $this->mu()->colourPrint('SKIPPING you will have to move templates manually.', 'light_red');
+            $this->mu()->colourPrint('SKIPPING you will have to move templates manually because this code has not been completed yet.', 'light_red');
         }
     }
 

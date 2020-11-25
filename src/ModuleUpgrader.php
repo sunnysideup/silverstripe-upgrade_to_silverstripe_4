@@ -200,9 +200,13 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
 
     protected function loadGlobalVariables()
     {
+        $attempt = $this->aboveWebRootDirLocation;
         $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
             $this->aboveWebRootDirLocation
         );
+        if(! $this->aboveWebRootDirLocation) {
+            die('You need the following directory for this application to work: '.$attempt);
+        }
         $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
             $this->aboveWebRootDirLocation . '/' . $this->webRootName,
             true

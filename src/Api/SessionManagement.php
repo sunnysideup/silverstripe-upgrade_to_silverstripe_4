@@ -94,7 +94,7 @@ class SessionManagement implements SessionManagementInterface
             }
         } catch (\Exception $e) {
             // send error message if you can
-            echo 'Caught exception: ' . $e->getMessage();
+            echo 'Caught exception: ' . $e->getMessage(). ' location of file: ' . $this->getSessionFileLocation();
         }
 
         return $this;

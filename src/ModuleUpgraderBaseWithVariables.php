@@ -768,7 +768,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         if ($this->isModuleUpgrade) {
             $link = $this->packageName;
             if ($withoutSilverstripePrefix) {
-                $link - str_replace('silverstripe-', '', $this->packageName);
+                $link = str_replace('silverstripe-', '', $this->packageName);
             }
         }
         return $link;

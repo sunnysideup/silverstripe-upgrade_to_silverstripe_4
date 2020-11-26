@@ -38,9 +38,7 @@ class Ss4Lint extends BaseClass
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
 
-        'CheckoutDevMaster' => [
-            'useGitClone' => true,
-        ],
+        'CheckoutDevMaster' => [],
         'AddUpgradeStarterBranch' => [],
         'AddTempUpgradeBranch' => [],
         'ResetWebRootDir-3' => [],

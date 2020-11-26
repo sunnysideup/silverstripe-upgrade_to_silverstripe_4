@@ -25,6 +25,7 @@ foreach($modules as $module) {
               'UpgradeAsFork' => false,
               'IsModuleUpgrade' => true,
               'NameOfBranchForBaseCode' => 'develop',
+              'UseGitClone' => true,
             ]
         ]
     )
@@ -37,7 +38,6 @@ foreach($modules as $module) {
             'CheckThatFoldersAreReady' => [],
             'ResetWebRootDir' => [],
             'CheckoutDevMaster' => [
-                'useGitClone' => true,
                 'branchOrTagToUse' => $module['tag'],
             ],
             'SearchAndReplace' => [

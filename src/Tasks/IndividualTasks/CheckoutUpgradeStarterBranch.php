@@ -14,8 +14,6 @@ class CheckoutUpgradeStarterBranch extends Task
 {
     protected $taskStep = 's00';
 
-    protected $useGitClone = false;
-
     protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
@@ -43,7 +41,7 @@ class CheckoutUpgradeStarterBranch extends Task
     {
         $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
-            if ($this->useGitClone) {
+            if ($this->mu()->getUseGitClone()) {
                 $this->gitClone();
             } else {
                 $this->composerRequire();

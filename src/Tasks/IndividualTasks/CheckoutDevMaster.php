@@ -16,8 +16,6 @@ class CheckoutDevMaster extends Task
 
     protected $branchOrTagToUse = 'master';
 
-    protected $useGitClone = false;
-
     protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
@@ -43,7 +41,7 @@ simply start again in a few minutes in this case to make it work.
     {
         $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
-            if ($this->useGitClone) {
+            if ($this->mu()->getUseGitClone()) {
                 $this->gitClone();
             } else {
                 $this->mu()->execMe(

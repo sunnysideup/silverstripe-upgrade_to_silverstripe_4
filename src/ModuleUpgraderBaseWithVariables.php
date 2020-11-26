@@ -728,6 +728,14 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     {
         return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
     }
+    public function getUseGitCloneNice(): string
+    {
+        if ($this->getIsModuleUpgrade()) {
+            return $this->getUseGitClone() ? 'not listed on packagist' : 'listed on packagist';
+        } else {
+            return 'not listed on packagist';
+        }
+    }
 
     /**
      * Removes the given task from the list of tasks to execute

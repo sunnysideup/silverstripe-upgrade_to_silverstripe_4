@@ -244,7 +244,8 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
 
         //Is Module Upgrade
         //do this first as a lot of other functions rely on it ...
-        $this->isModuleUpgrade = isset($moduleDetails['IsModuleUpgrade']) ? $moduleDetails['IsModuleUpgrade'] : true;
+        $this->isModuleUpgrade = isset($moduleDetails['IsModuleUpgrade']) ? (bool) $moduleDetails['IsModuleUpgrade'] : true;
+        $this->useGitClone = isset($moduleDetails['UseGitClone']) ? (bool) $moduleDetails['UseGitClone'] : false;
 
         //VendorName
         $this->vendorName = $moduleDetails['VendorName'];

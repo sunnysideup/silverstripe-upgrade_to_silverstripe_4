@@ -373,6 +373,9 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                 Session Value: '.$packageFolderNameForInstall
             );
         }
+        if(!  $this->packageFolderNameForInstall) {
+            $this->packageFolderNameForInstall = $this->getPackageName();
+        }
         return $this->packageFolderNameForInstall;
     }
 

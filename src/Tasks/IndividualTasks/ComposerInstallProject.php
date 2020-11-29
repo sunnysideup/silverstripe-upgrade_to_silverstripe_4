@@ -77,9 +77,11 @@ class ComposerInstallProject extends Task
         if (! $this->versionToLoad) {
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
+
+        //install project / silverstripe clean.
         if ($this->mu()->getIsModuleUpgrade()) {
-            $alt = $this->mu()->getParentProjectForModule();
-            if ($alt) {
+            $alterniveGitLink = $this->mu()->getParentProjectForModule();
+            if ($alterniveGitLink) {
                 $altBranch = $this->mu()->getParentProjectForModuleBranchOrTag();
                 if (! $altBranch) {
                     $altBranch = 'master';
@@ -87,7 +89,7 @@ class ComposerInstallProject extends Task
                 Git::inst($this->mu())
                     ->Clone(
                         $this->mu()->getWebRootDirLocation(),
-                        $alt,
+                        $alterniveGitLink,
                         $this->mu()->getGitRootDir(),
                         $altBranch
                     );

@@ -300,6 +300,9 @@
         'Config::inst()->get(''':
             R: 'Config::inst()->get('''
             C: 'Check if you should be using Name::class here instead of hard-coded class.'
+        'Config::inst()->get("':
+            R: 'Config::inst()->get("'
+            C: 'Check if you should be using Name::class here instead of hard-coded class.'
         '= array();':
             R: '= [];'
         'canCreate($member = null)':

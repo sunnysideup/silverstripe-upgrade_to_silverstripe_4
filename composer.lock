@@ -589,12 +589,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/bootstrap.git",
-                "reference": "27ae1f315d2ee47e81310bece602add3643aa5b7"
+                "reference": "a7345a9b34899ebfa2f39b99b3b57699a15d0b4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/bootstrap/zipball/27ae1f315d2ee47e81310bece602add3643aa5b7",
-                "reference": "27ae1f315d2ee47e81310bece602add3643aa5b7",
+                "url": "https://api.github.com/repos/nette/bootstrap/zipball/a7345a9b34899ebfa2f39b99b3b57699a15d0b4e",
+                "reference": "a7345a9b34899ebfa2f39b99b3b57699a15d0b4e",
                 "shasum": ""
             },
             "require": {
@@ -658,7 +658,7 @@
                 "configurator",
                 "nette"
             ],
-            "time": "2021-01-11T01:16:43+00:00"
+            "time": "2021-01-25T20:10:41+00:00"
         },
         {
             "name": "nette/di",
@@ -666,12 +666,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/di.git",
-                "reference": "53f204814bb0561f0dd63d4b8a063d40b4da9a7e"
+                "reference": "dd90f3a39c535da7a244c5e57288441ee28df4cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/di/zipball/53f204814bb0561f0dd63d4b8a063d40b4da9a7e",
-                "reference": "53f204814bb0561f0dd63d4b8a063d40b4da9a7e",
+                "url": "https://api.github.com/repos/nette/di/zipball/dd90f3a39c535da7a244c5e57288441ee28df4cc",
+                "reference": "dd90f3a39c535da7a244c5e57288441ee28df4cc",
                 "shasum": ""
             },
             "require": {
@@ -729,7 +729,7 @@
                 "nette",
                 "static"
             ],
-            "time": "2021-01-12T15:28:29+00:00"
+            "time": "2021-02-05T02:28:03+00:00"
         },
         {
             "name": "nette/finder",
@@ -737,12 +737,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/finder.git",
-                "reference": "fb90bbc02eadff7b3d2ec81f3a9ec6e451352c28"
+                "reference": "5480882b79f550e223ac448ede3abcea6874d1a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/finder/zipball/fb90bbc02eadff7b3d2ec81f3a9ec6e451352c28",
-                "reference": "fb90bbc02eadff7b3d2ec81f3a9ec6e451352c28",
+                "url": "https://api.github.com/repos/nette/finder/zipball/5480882b79f550e223ac448ede3abcea6874d1a6",
+                "reference": "5480882b79f550e223ac448ede3abcea6874d1a6",
                 "shasum": ""
             },
             "require": {
@@ -789,7 +789,7 @@
                 "iterator",
                 "nette"
             ],
-            "time": "2020-12-08T20:33:07+00:00"
+            "time": "2021-01-25T20:14:58+00:00"
         },
         {
             "name": "nette/neon",
@@ -797,12 +797,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/neon.git",
-                "reference": "ab416612c768468fcce83973f663f282ca8fe5ec"
+                "reference": "2c7d66ec976b71dc95fd9a9e2bba12ffd030284f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/neon/zipball/ab416612c768468fcce83973f663f282ca8fe5ec",
-                "reference": "ab416612c768468fcce83973f663f282ca8fe5ec",
+                "url": "https://api.github.com/repos/nette/neon/zipball/2c7d66ec976b71dc95fd9a9e2bba12ffd030284f",
+                "reference": "2c7d66ec976b71dc95fd9a9e2bba12ffd030284f",
                 "shasum": ""
             },
             "require": {
@@ -851,7 +851,7 @@
                 "nette",
                 "yaml"
             ],
-            "time": "2020-12-08T20:29:37+00:00"
+            "time": "2021-01-25T20:15:07+00:00"
         },
         {
             "name": "nette/php-generator",
@@ -859,12 +859,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/php-generator.git",
-                "reference": "bae60afbd6b9df28613a32b017bb57a7d81d320b"
+                "reference": "c62437196c14645d8ca450749b4106e19632e37e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/bae60afbd6b9df28613a32b017bb57a7d81d320b",
-                "reference": "bae60afbd6b9df28613a32b017bb57a7d81d320b",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/c62437196c14645d8ca450749b4106e19632e37e",
+                "reference": "c62437196c14645d8ca450749b4106e19632e37e",
                 "shasum": ""
             },
             "require": {
@@ -915,7 +915,7 @@
                 "php",
                 "scaffolding"
             ],
-            "time": "2020-12-08T20:25:32+00:00"
+            "time": "2021-01-25T20:15:08+00:00"
         },
         {
             "name": "nette/robot-loader",
@@ -923,12 +923,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/robot-loader.git",
-                "reference": "aa9b72c78c3af1c2b3ac6982b43c566a8efc78c2"
+                "reference": "ab7297491507313c133c5caf470a5c7c90c82cdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/robot-loader/zipball/aa9b72c78c3af1c2b3ac6982b43c566a8efc78c2",
-                "reference": "aa9b72c78c3af1c2b3ac6982b43c566a8efc78c2",
+                "url": "https://api.github.com/repos/nette/robot-loader/zipball/ab7297491507313c133c5caf470a5c7c90c82cdb",
+                "reference": "ab7297491507313c133c5caf470a5c7c90c82cdb",
                 "shasum": ""
             },
             "require": {
@@ -978,20 +978,20 @@
                 "nette",
                 "trait"
             ],
-            "time": "2020-12-08T20:25:15+00:00"
+            "time": "2021-01-25T20:15:09+00:00"
         },
         {
             "name": "nette/schema",
-            "version": "dev-master",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "62d4dd0322867527a30eaaae7c809deae3ed3d4b"
+                "reference": "9962564311f4affebd63f9cab014ab69266306ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/62d4dd0322867527a30eaaae7c809deae3ed3d4b",
-                "reference": "62d4dd0322867527a30eaaae7c809deae3ed3d4b",
+                "url": "https://api.github.com/repos/nette/schema/zipball/9962564311f4affebd63f9cab014ab69266306ce",
+                "reference": "9962564311f4affebd63f9cab014ab69266306ce",
                 "shasum": ""
             },
             "require": {
@@ -1006,7 +1006,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -1036,7 +1036,7 @@
                 "config",
                 "nette"
             ],
-            "time": "2020-11-25T21:55:28+00:00"
+            "time": "2021-01-21T14:49:23+00:00"
         },
         {
             "name": "nette/utils",
@@ -1044,12 +1044,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "72d8f087e7d750521a15e0b25b7a4f6d20ed45dc"
+                "reference": "8d01ec146f41de810b65e4485addde84eb97dbdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/72d8f087e7d750521a15e0b25b7a4f6d20ed45dc",
-                "reference": "72d8f087e7d750521a15e0b25b7a4f6d20ed45dc",
+                "url": "https://api.github.com/repos/nette/utils/zipball/8d01ec146f41de810b65e4485addde84eb97dbdb",
+                "reference": "8d01ec146f41de810b65e4485addde84eb97dbdb",
                 "shasum": ""
             },
             "require": {
@@ -1117,7 +1117,7 @@
                 "utility",
                 "validation"
             ],
-            "time": "2021-01-11T13:17:45+00:00"
+            "time": "2021-01-25T20:41:24+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1693,12 +1693,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "096c4d37e79f70bbac78424468b19878f96e987f"
+                "reference": "1a9570e56519687e766809f9b07b3005c85119d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/096c4d37e79f70bbac78424468b19878f96e987f",
-                "reference": "096c4d37e79f70bbac78424468b19878f96e987f",
+                "url": "https://api.github.com/repos/symfony/console/zipball/1a9570e56519687e766809f9b07b3005c85119d9",
+                "reference": "1a9570e56519687e766809f9b07b3005c85119d9",
                 "shasum": ""
             },
             "require": {
@@ -1771,7 +1771,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-11T08:57:50+00:00"
+            "time": "2021-01-28T22:01:20+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -1779,12 +1779,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "a27af3baa56c66d37d066e27d4b11ae6b3d51c3b"
+                "reference": "83a6feed14846d2d9f3916adbaf838819e4e3380"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/a27af3baa56c66d37d066e27d4b11ae6b3d51c3b",
-                "reference": "a27af3baa56c66d37d066e27d4b11ae6b3d51c3b",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/83a6feed14846d2d9f3916adbaf838819e4e3380",
+                "reference": "83a6feed14846d2d9f3916adbaf838819e4e3380",
                 "shasum": ""
             },
             "require": {
@@ -1830,7 +1830,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-11T08:57:50+00:00"
+            "time": "2021-01-27T09:09:26+00:00"
         },
         {
             "name": "symfony/finder",
@@ -1838,12 +1838,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "491036ddb6ccce7ed9253429ee20dfc788a686d1"
+                "reference": "64aa7b2541df01864f446ecda75332f63434cb82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/491036ddb6ccce7ed9253429ee20dfc788a686d1",
-                "reference": "491036ddb6ccce7ed9253429ee20dfc788a686d1",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/64aa7b2541df01864f446ecda75332f63434cb82",
+                "reference": "64aa7b2541df01864f446ecda75332f63434cb82",
                 "shasum": ""
             },
             "require": {
@@ -1888,7 +1888,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-11T08:57:50+00:00"
+            "time": "2021-01-28T14:45:15+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2443,12 +2443,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "89b55cb08715bb74391c285f673a38808c7338a8"
+                "reference": "7e950b6366d4da90292c2e7fa820b3c1842b965a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/89b55cb08715bb74391c285f673a38808c7338a8",
-                "reference": "89b55cb08715bb74391c285f673a38808c7338a8",
+                "url": "https://api.github.com/repos/symfony/process/zipball/7e950b6366d4da90292c2e7fa820b3c1842b965a",
+                "reference": "7e950b6366d4da90292c2e7fa820b3c1842b965a",
                 "shasum": ""
             },
             "require": {
@@ -2493,7 +2493,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-12T12:42:25+00:00"
+            "time": "2021-01-27T09:09:26+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -2501,12 +2501,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "cea83947622b432b60b809d14c7b42df9f0f5823"
+                "reference": "bf99754c6182a126968b1c2709d18548489f27eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/cea83947622b432b60b809d14c7b42df9f0f5823",
-                "reference": "cea83947622b432b60b809d14c7b42df9f0f5823",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/bf99754c6182a126968b1c2709d18548489f27eb",
+                "reference": "bf99754c6182a126968b1c2709d18548489f27eb",
                 "shasum": ""
             },
             "require": {
@@ -2518,7 +2518,6 @@
             },
             "type": "library",
             "extra": {
-                "branch-version": "2.3",
                 "branch-alias": {
                     "dev-main": "2.3-dev"
                 },
@@ -2570,7 +2569,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-11T09:51:46+00:00"
+            "time": "2021-01-27T16:27:53+00:00"
         },
         {
             "name": "symfony/yaml",

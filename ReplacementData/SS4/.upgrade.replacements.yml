@@ -297,6 +297,9 @@
             R: "->setAllowedFileCategories('document')"
         'Config::inst()->update(':
             R: 'Config::modify()->update('
+        'Config::inst()->get(''':
+            R: 'Config::inst()->get('''
+            C: 'Check if you should be using Name::class here instead of hard-coded class.'
         '= array();':
             R: '= [];'
         'canCreate($member = null)':

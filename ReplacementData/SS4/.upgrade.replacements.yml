@@ -74,14 +74,55 @@
             R: '$List(\Page'
         '$List(Page':
             R: '$List(SilverStripe\CMS\Model\SiteTree:'
+
         ".Format('U')":
             R: ".Timestamp"
             C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
         ".Format('d/m/y')":
-            R: ".Format('d/LLL/yy')"
-            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            R: ".Format('d/MM/yy')"
+            C: "i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".Format('d/m/Y')":
+            R: ".Format('d/MM/yyyy')"
+            C: "i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".Format('ymd')":
+            R: ".Format('yyMMd')"
+            C: "i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".Format('Ymd')":
+            R: ".Format('yyMMd')"
+            C: "i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".Format('y-m-d')":
+            R: ".Format('yy-MM-d')"
+            C: "i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".Format('Y-m-d')":
+            R: ".Format('yyyy-MM-d')"
+            C: "i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
         '.Format(':
             R: '.Format('
+            C: 'Format function for dates have changed! Please consider something like: PHP NativeFormat as an extension (see http://userguide.icu-project.org/formatparse/datetime)'
+
+        ".format('U')":
+            R: ".Timestamp"
+            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".format('d/m/y')":
+            R: ".format('d/MM/yy')"
+            C: "i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".format('d/m/Y')":
+            R: ".format('d/MM/yyyy')"
+            C: "i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".format('ymd')":
+            R: ".format('yyMMd')"
+            C: "i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".format('Ymd')":
+            R: ".format('yyMMd')"
+            C: "i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".format('y-m-d')":
+            R: ".format('yy-MM-d')"
+            C: "i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ".format('Y-m-d')":
+            R: ".format('yyyy-MM-d')"
+            C: "i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        '.format(':
+            R: '.format('
             C: 'Format function for dates have changed! Please consider something like: PHP NativeFormat as an extension (see http://userguide.icu-project.org/formatparse/datetime)'
 
 
@@ -138,15 +179,60 @@
             C: "Check that this still works.  You can put: Requirements::themedCSS('client/css/MyFle') you also need to make sure you have a templates folder in your modules or Requirements::themedCSS will not work."
         "Member::currentUser()":
             R: "Security::getCurrentUser()"
+
         "->Format('U')":
             R: "->getTimestamp()"
             C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
         "->Format('d/m/y')":
-            R: "->Format('d/LLL/yy')"
+            R: "->Format('d/MM/yy')"
+            C: "i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        "->Format('d/m/Y')":
+            R: "->Format('d/MM/yyyy')"
+            C: "i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ">Format('ymd')":
+            R: "->Format('yyMMd')"
+            C: "i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ">Format('Ymd')":
+            R: "->Format('yyyyMMd')"
+            C: "i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ">Format('y-m-d')":
+            R: "->Format('yyyy-MM-d')"
+            C: "i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        "->Format('Y-m-d')":
+            R: "->Format('yyyy-MM-d')"
+            C: "i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        "->Format(":
+            R: "->Format("
             C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        ">format('Y-m-d')":
-            R: "->format('Y-MM-d')"
+
+
+        "->format('U')":
+            R: "->getTimestamp()"
             C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        "->format('d/m/y')":
+            R: "->format('d/MM/yy')"
+            C: "i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        "->format('d/m/Y')":
+            R: "->format('d/MM/yyyy')"
+            C: "i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ">Format('ymd')":
+            R: "->format('yyMMd')"
+            C: "i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ">Format('Ymd')":
+            R: "->format('yyyyMMd')"
+            C: "i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        ">Format('y-m-d')":
+            R: "->format('yyyy-MM-d')"
+            C: "i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        "->format('Y-m-d')":
+            R: "->format('yyyy-MM-d')"
+            C: "i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+        "->format(":
+            R: "->format("
+            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+
+
+
         db::alteration_message:
             R: 'DB::alteration_message'
         Db::alteration_message:
@@ -189,9 +275,6 @@
         "SS_Log::add_writer":
             R: "SS_Log::add_writer"
             C: "replace with ... "
-        "->format(":
-            R: "->format("
-            C: 'If this is a PHP Date format call then this needs to be changed to new Date formatting system. (see http://userguide.icu-project.org/formatparse/datetime)'
         " => 'Image'":
             R: " => 'Image'"
             C: 'you may want to add ownership (owns)'

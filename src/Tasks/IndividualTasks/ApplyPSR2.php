@@ -34,7 +34,7 @@ class ApplyPSR2 extends Task
         $webRoot = $this->mu()->getWebRootDirLocation();
         if(
             PHP2CommandLineSingleton::commandExists('sslint-ecs') &&
-            PHP2CommandLineSingleton::commandExists('sslint-stan')
+            PHP2CommandLineSingleton::commandExists('sslint-stan -l 2')
         ) {
             $commandAdd = '';
         } else {

@@ -37,11 +37,12 @@ class FixClassNamesWithUnderscores extends Task
                     ->getFlatFileArray();
                 if (is_array($flatArray) && count($flatArray)) {
                     foreach ($flatArray as $path) {
-                        $this->mu()->colourPrint('Searching ' . $path, 'grey');
                         $shortClassName = str_replace('.php', '', basename($path));
                         if(strpos($shortClassName, '_')) {
                             $errors++;
-                            $this->mu()->colourPrint('Found an underscore in: ' . $searchPath, 'red');
+                            $this->mu()->colourPrint('Found an underscore in ... ' . $searchPath, 'red');
+                        } else {
+                            $this->mu()->colourPrint('All Good in the Hood for ...  ' . $path, 'grey');
                         }
                     }
                 } else {

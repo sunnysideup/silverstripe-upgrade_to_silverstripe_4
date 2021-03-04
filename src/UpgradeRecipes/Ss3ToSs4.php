@@ -38,7 +38,7 @@ class Ss3ToSs4 extends BaseClass
         //Step1: Prepare
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
-        'SwitchPhpVersion' => [
+        'SwitchPhpVersion-1' => [
             'version' => '7.1',
         ],
         'CheckoutDevMaster-1' => [],
@@ -66,7 +66,7 @@ class Ss3ToSs4 extends BaseClass
         'UpdateComposerRequirements' => [],
         'RemoveInstallerFolder' => [],
         'UpgradeDevBuild' => [],
-        'SwitchPhpVersion' => [
+        'SwitchPhpVersion-2' => [
             'version' => '7.4',
         ],
         'ResetWebRootDir-3' => [],

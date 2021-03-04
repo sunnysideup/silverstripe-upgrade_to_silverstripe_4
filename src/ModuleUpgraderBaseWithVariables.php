@@ -589,7 +589,8 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
             } else {
                 user_error(
                     'You need to set moduleDirLocations (setModuleDirLocations)
-                    as there are currently none.'
+                    as there are currently none.
+                    We tried to look at: '. print_r($this->moduleDirLocation, 1)
                 );
             }
         }

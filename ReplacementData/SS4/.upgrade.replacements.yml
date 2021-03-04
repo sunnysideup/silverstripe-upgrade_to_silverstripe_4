@@ -397,14 +397,14 @@
         'public function setValue($value)':
             R: 'public function setValue($value, $data = null)'
             I: true
-        'canDelete($member = null)':
-            R: 'canDelete($member = null, $context = [])'
+        'canDelete($member)':
+            R: 'canDelete($member = null)'
             I: true
-        'canEdit($member = null)':
-            R: 'canEdit($member = null, $context = [])'
+        'canEdit($member)':
+            R: 'canEdit($member = null)'
             I: true
-        'canView($member = null)':
-            R: 'canView($member = null, $context = [])'
+        'canView($member)':
+            R: 'canView($member = null)'
             I: true
         ' implements flushable':
             R: ' implements Flushable'

@@ -566,12 +566,14 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
             }
             $this->themeDirLocation = '';
         } else {
-            if (! count($this->moduleDirLocations)) {
+            if (count($this->moduleDirLocations) === 0) {
                 $this->moduleDirLocations[] = $this->webRootDirLocation . '/mysite';
                 $this->moduleDirLocations[] = $this->webRootDirLocation . '/app';
             } else {
                 foreach ($this->moduleDirLocations as $key => $location) {
-                    $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
+                    if(! file_exists($location)) {
+                        $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
+                    }
                 }
             }
         }

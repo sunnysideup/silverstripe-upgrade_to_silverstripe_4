@@ -285,6 +285,19 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             'https://raw.githubusercontent.com/',
             $gitLinkWithoutExtension
         );
+        $this->gitLinkAsHTTPS = str_replace(
+            'git@bitbucket.org:',
+            'https://bitbucket.org/',
+            $gitLinkWithoutExtension
+        );
+        $this->gitLinkAsRawHTTPS = str_replace(
+            'git@bitbucket.org:',
+            'https://bitbucket.org/',
+            $gitLinkWithoutExtension
+        );
+        if(stripos($this->gitLinkAsRawHTTPS, 'bitbucket') > 0) {
+            $this->gitLinkAsRawHTTPS .= '/raw';
+        }
 
         //Origin Composer FileLocation
         $this->originComposerFileLocation = $moduleDetails['OriginComposerFileLocation'] ?? '';
@@ -342,7 +355,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                     $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
                 } else {
                     if (! $this->originComposerFileLocation) {
-                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/master/composer.json';
+                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/'.$this->nameOfBranchForBaseCode.'/composer.json';
                     }
                     if ($this->URLExists($this->originComposerFileLocation)) {
                         $json = file_get_contents($this->originComposerFileLocation);
@@ -365,13 +378,12 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                 'PackageFolderNameForInstall',
                 $this->packageFolderNameForInstall
             );
-        }
-        if($this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
-            user_error('
-                Could not find: '.$this->webRootDirLocation . '/' .$this->packageFolderNameForInstall.',
-                Composer File Used: '.$this->originComposerFileLocation .',
-                Session Value: '.$packageFolderNameForInstall
-            );
+        } else {
+            // user_error('
+            //     Could not find: '.$this->webRootDirLocation . '/' .$this->packageFolderNameForInstall.'
+            //     Composer File Used: '.$this->originComposerFileLocation .',
+            //     Session Value: '.$packageFolderNameForInstall
+            // );
         }
         if(!  $this->packageFolderNameForInstall) {
             $this->packageFolderNameForInstall = $this->getPackageName();

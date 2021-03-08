@@ -39,7 +39,7 @@ class Ss3ToSs4 extends BaseClass
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
         'SwitchPhpVersion-1' => [
-            'version' => '7.1',
+            'version' => '7.2', //huringa requires it.
         ],
         'CheckoutDevMaster-1' => [],
         'AddLegacyBranch' => [

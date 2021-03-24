@@ -25,7 +25,11 @@ class UpdateComposerRequirements extends Task
 
     protected $replacementArray = [];
 
-    protected $runCommit = false;
+    protected $changed = [
+        'silverstripe/recipe-cms',
+    ];
+
+    protected $runCommit = true;
 
     public function getTitle()
     {
@@ -37,7 +41,8 @@ class UpdateComposerRequirements extends Task
         return '
             Change requirements in composer.json file from
             ' . ($this->package ?: 'an Old Package') . ' to ' . ($this->getReplacementPackage() ?: 'a New Package') . ':' . ($this->newVersion ?: ' (and New Version)') . '
-            For example, we upgrade silverstripe/framework requirement from 3 to 4.';
+            For example, we upgrade silverstripe/framework requirement from 3 to 4.
+            Any packages that are not specified will be set to "*".';
     }
 
     public function runActualTask($params = [])
@@ -54,8 +59,8 @@ class UpdateComposerRequirements extends Task
         } else {
             $this->runActualTaskInner();
         }
-
-        $this->setCommitMessage('MAJOR: upgrading composer requirements to - updating core requirements');
+        $this->upgradeAllPackages();
+        $this->setCommitMessage('MAJOR: upgrading composer requirements to latest versions ... ');
     }
 
     public function getReplacementPackage()
@@ -75,6 +80,7 @@ class UpdateComposerRequirements extends Task
 
         // it is possible to run without any changes ....
         if ($package) {
+            $this->changed[$package] = $package;
             $this->runCommit = true;
 
             $newVersion = $this->newVersion;
@@ -106,6 +112,17 @@ class UpdateComposerRequirements extends Task
                 $comment
             );
         }
+    }
+
+    protected function upgradeAllPackages()
+    {
+        $json = ComposerJsonFixes::getJSON($this->mu()->getGitRootDir());
+        foreach($json['require'] as $package => $version) {
+            if (! isset($this->changed[$package])) {
+                $json['require'][$package] = '*';
+            }
+        }
+        ComposerJsonFixes::setJSON($this->mu()->getGitRootDir(), $json);
     }
 
     protected function hasCommitAndPush()

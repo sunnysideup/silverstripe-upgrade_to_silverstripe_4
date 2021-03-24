@@ -60,7 +60,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
         $jsonFile = file_get_contents($this->getJsonFileLocation());
         $jsonData = json_decode($jsonFile, true);
 
-        $libraries = $jsonData['installed'];
+        $libraries = $jsonData['installed'] ?? [];
 
         $this->resetProject();
         foreach ($libraries as $library) {

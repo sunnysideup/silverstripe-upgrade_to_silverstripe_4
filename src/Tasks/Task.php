@@ -295,4 +295,32 @@ abstract class Task
             $keyNotesLogFileLocation
         );
     }
+
+
+    protected function findModuleNames(): array
+    {
+        $moduleNames = [];
+        if ($this->mu()->getIsModuleUpgrade()) {
+            $moduleNames = [
+                $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+            ];
+        } else {
+            foreach ($this->mu()->getExistingModuleDirLocations() as $location) {
+                $moduleNames[] = $location;
+            }
+        }
+        return $moduleNames;
+    }
+
+    protected function findModuleNameLocation(string $moduleName): string
+    {
+        if (strpos($moduleName, '/')) {
+            $moduleNameLocation = 'vendor/' . $moduleName;
+        } else {
+            $moduleNameLocation = $moduleName;
+        }
+
+        return $moduleNameLocation;
+    }
+
 }

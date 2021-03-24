@@ -59,9 +59,7 @@ class Ss3ToSs4 extends BaseClass
         'AddTableName' => [],
         'ChangeControllerInitToProtected' => [],
         // 'AddTableNamePrivateStatic' => [],
-        'RemoveComposerRequirements' => [
-            'package' => 'silverstripe/framework',
-        ],
+        'RemoveComposerRequirements' => [],
         'RecomposeHomeBrew' => [],
         'UpdateComposerRequirements' => [],
         'RemoveInstallerFolder' => [],

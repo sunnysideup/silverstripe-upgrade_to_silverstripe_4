@@ -13,7 +13,25 @@ class RemoveComposerRequirements extends Task
 {
     protected $taskStep = 's20';
 
-    protected $package = '';
+    protected $packages = [
+        'silverstripe/recipe-cms',
+        'silverstripe/admin',
+        'silverstripe/assets',
+        'silverstripe/config',
+        'silverstripe/admin',
+
+        'silverstripe/cms',
+        'silverstripe/framework',
+        'silverstripe/asset-admin',
+        'silverstripe/campaign-admin',
+        'silverstripe/errorpage',
+        'silverstripe/graphql',
+        'silverstripe/reports',
+        'silverstripe/siteconfig',
+        'silverstripe/versioned-admin',
+        'silverstripe/versioned',
+        'php',
+    ];
 
     public function getTitle()
     {
@@ -24,25 +42,26 @@ class RemoveComposerRequirements extends Task
     {
         return '
             Remove requirements in composer.json file for
-            ' . ($this->package ?: 'an Old Package') . '
+            ' . (count($this->packages) ? implode(', ', $this->packages) : 'old packages - if any') . '
             For example, we remove silverstripe/framework requirement from 3 to 4.';
     }
 
     public function runActualTask($params = [])
     {
-        $package = $this->package;
+        foreach($this->packages as $package) {
 
-        $command = 'unset($data["require"]["' . $package . '"]);';
+            $command = 'unset($data["require"]["' . $package . '"]);';
 
-        $comment = 'remove the requirement for ' . $package . ' from ' . $this->mu()->getGitRootDir();
+            $comment = 'remove the requirement for ' . $package . ' from ' . $this->mu()->getGitRootDir();
 
-        ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
-            $this->mu()->getGitRootDir(),
-            $command,
-            $comment
-        );
+            ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
+                $this->mu()->getGitRootDir(),
+                $command,
+                $comment
+            );
 
-        $this->setCommitMessage('MAJOR: remove composer requirements - removing requirements for: ' . $this->package);
+        }
+        $this->setCommitMessage('MAJOR: remove composer requirements - removing requirements for: ' . implode(', ', $this->packages));
     }
 
     protected function hasCommitAndPush()

@@ -13,7 +13,7 @@ class FixOutdatedPHPStyles extends Task
 
     public function getTitle()
     {
-        return 'Uses sunnysideup/huringa to check for outdated styles';
+        return 'Uses sunnysideup/huringa to check for outdated styles. An important part of this is to separate files into separate files / classes.';
     }
 
     public function getDescription()

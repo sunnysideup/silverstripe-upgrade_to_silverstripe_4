@@ -170,6 +170,15 @@
 
 
     php:
+        'SS_Cache':
+            R: 'SS_Cache'
+            C: 'SS_Cache: Using symfony/cache now (https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache)'
+        'useCustomClass':
+            R: 'useCustomClass'
+            C: 'Object::useCustomClass(): Use injector instead (https://docs.silverstripe.org/en/4/changelogs/4.0.0#custom-authenticators)'
+        '->populateTemplate':
+            R: '->setData'
+            C: 'Email->populateTemplate() has been replaced with Email->setData()'
         'HtmlEditorConfig':
             R: 'HTMLEditorConfig'
         'HtmlEditorField':
@@ -272,9 +281,9 @@
         "Member_ChangePasswordEmail":
             R: "Email"
             C: "Member_ForgotPasswordEmail does not exist anymore. ss_template = 'ChangePasswordEmail', Subject = Your password reset link"
-        "SS_Log::add_writer":
-            R: "SS_Log::add_writer"
-            C: "replace with ... "
+        "SS_Log::":
+            R: "SS_Log::"
+            C: "SS_Log: Replaced with a PSR-3 logger (https://docs.silverstripe.org/en/4/changelogs/4.0.0#psr3-logging)"
         " => 'Image'":
             R: " => 'Image'"
             C: 'you may want to add ownership (owns)'

@@ -122,6 +122,8 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- parameter "endWith=MySpecificTask" ... runs all steps up to MySpecificTask', 'white');
 
+        $mu->colourPrint('- parameter "again" ... run the last step again', 'white');
+
         $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'white');
 
         $mu->colourPrint('- ---', 'light_cyan');
@@ -150,7 +152,7 @@ class ModuleUpgraderInfo
             $string .= $this->mu->newLine() . '- ' . $count . ': ' . $task . $add;
             if (count($variables)) {
                 foreach ($variables as $variableName => $variableValue) {
-                    $string .= $this->mu->newLine() . '  .... ' . $variableName . ' = ' . print_r($variableValue, 1) . $this->mu->newLine();
+                    $string .= $this->mu->newLine() . '  ... ' . $variableName . ' = ' . print_r($variableValue, 1) . $this->mu->newLine();
                 }
             }
         }

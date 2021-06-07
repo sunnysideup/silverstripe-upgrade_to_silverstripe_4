@@ -78,7 +78,7 @@ class UpdateComposerRequirements extends Task
     {
         $package = $this->package;
 
-        // it is possible to run without any changes ....
+        // it is possible to run without any changes ...
         if ($package) {
             $this->changed[$package] = $package;
             $this->runCommit = true;

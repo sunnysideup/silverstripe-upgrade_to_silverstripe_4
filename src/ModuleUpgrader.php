@@ -427,7 +427,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         if ($key === $lastMethod) {
                             $found = true;
                             if ($this->runLastOneAgain) {
-                                $this->onlyRun = $arrayKeys[$index];
+                                $this->onlyRun = $arrayKeys[$index] ?? 'could not find the task to run again';
                             } else {
                                 if (isset($arrayKeys[$index + 1])) {
                                     if (isset($this->listOfTasks[$arrayKeys[$index + 1]])) {

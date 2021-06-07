@@ -28,7 +28,7 @@ class FixOutdatedPHPStyles extends Task
 
         $this->mu()->execMe(
             $webRoot,
-            'composer global require sunnysideup/huringa:dev-master',
+            'composer require --dev sunnysideup/huringa:dev-master',
             'installing huringa',
             false
         );
@@ -49,7 +49,7 @@ class FixOutdatedPHPStyles extends Task
 
         $this->mu()->execMe(
             $webRoot,
-            'composer global remove sunnysideup/huringa:dev-master',
+            'composer remove sunnysideup/huringa:dev-master',
             'uninstalling huringa',
             false
         );

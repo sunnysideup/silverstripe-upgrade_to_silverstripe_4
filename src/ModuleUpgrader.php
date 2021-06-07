@@ -87,16 +87,16 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
             $this->printVarsForModule($moduleDetails);
-            foreach ($this->listOfTasks as $class => $params) {
+            foreach ($this->listOfTasks as $fauxClassName => $params) {
                 //get class without number
-                $properClass = current(explode('-', $class));
+                $properClass = current(explode('-', $fauxClassName));
                 $nameSpacesArray = explode('\\', $properClass);
                 $shortClassCode = end($nameSpacesArray);
                 if (! class_exists($properClass)) {
                     $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
                 }
                 if (class_exists($properClass)) {
-                    $runItNow = $this->shouldWeRunIt((string) $class);
+                    $runItNow = $this->shouldWeRunIt((string) $fauxClassName);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     $taskName = $obj->getTaskName();
@@ -107,7 +107,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         $nextStep = $params['taskName'];
                     }
                     if ($runItNow) {
-                        $this->currentlyRunning = $class;
+                        $this->currentlyRunning = $fauxClassName;
                         $this->colourPrint('# --------------------', 'yellow', 3);
                         $this->colourPrint('# ' . $obj->getTitle() . ' (' . $params['taskName'] . ')', 'yellow');
                         $this->colourPrint('# --------------------', 'yellow');
@@ -117,7 +117,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         if ($this->runInteractively) {
                             $hasRun = true;
                             if ($this->outOfOrderTask === false) {
-                                $this->getSessionManager()->setSessionValue('Completed', $class);
+                                $this->getSessionManager()->setSessionValue('Completed', $fauxClassName);
                             }
                         }
                     } else {
@@ -186,11 +186,15 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
         if ($this->getCommandLineOrArgumentAsString('startFrom')) {
             $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
+            if( $this->runInteractively) {
+                $this->onlyRun = $this->getCommandLineOrArgumentAsString('startFrom');
+            }
         }
         if ($this->getCommandLineOrArgumentAsString('endWith')) {
             $this->endWith = $this->getCommandLineOrArgumentAsString('endWith');
         }
         if ($this->getCommandLineOrArgumentAsString('task')) {
+            $this->runInteractively = true;
             $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
         }
         if ($this->onlyRun) {

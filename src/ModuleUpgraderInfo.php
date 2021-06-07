@@ -103,11 +103,14 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('---------------------', 'light_cyan');
 
-        $mu->colourPrint('- parameter "again" ... runs last comand again', 'white');
+        $mu->colourPrint('while running one tasks at the time (interactively), you can use:', 'light_cyan');
+        $mu->colourPrint('- ---', 'light_cyan');
+
+        $mu->colourPrint('- parameter "task=MySpecificTask" ... to run any task out of order', 'white');
+
+        $mu->colourPrint('- parameter "startFrom=MySpecificTask" ... to start from a specific step', 'white');
 
         $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'white');
-
-        $mu->colourPrint('- parameter "task=MySpecificTask" ... runs MySpecificTask', 'white');
 
         $mu->colourPrint('- ---', 'light_cyan');
         $mu->colourPrint('while running all tasks at once, you can use:', 'light_cyan');
@@ -115,12 +118,15 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- parameter "startFrom=MySpecificTask" ... runs all steps from MySpecificTask', 'white');
 
+        $mu->colourPrint('- parameter "task=MySpecificTask" ... to run any task out of order', 'white');
+
         $mu->colourPrint('- parameter "endWith=MySpecificTask" ... runs all steps up to MySpecificTask', 'white');
 
+        $mu->colourPrint('- parameter "restart" ... starts process from beginning', 'white');
 
         $mu->colourPrint('- ---', 'light_cyan');
-        $mu->colourPrint('if running step by step, you can edit the session file (see file location above) ', 'light_cyan');
-        $mu->colourPrint('to start ats specific step (e.g. bypass current one). ', 'light_cyan');
+        $mu->colourPrint('if running step by step, you can also edit the session file (see file location above) ', 'light_cyan');
+        $mu->colourPrint('to start at a specific step (e.g. bypass current one). ', 'light_cyan');
         $mu->colourPrint('- ---', 'light_cyan');
     }
 

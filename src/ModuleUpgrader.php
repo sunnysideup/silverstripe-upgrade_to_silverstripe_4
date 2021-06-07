@@ -196,8 +196,6 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         if ($this->getCommandLineOrArgumentAsString('task')) {
             $this->runInteractively = true;
             $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
-        }
-        if ($this->onlyRun) {
             $this->outOfOrderTask = true;
         }
     }

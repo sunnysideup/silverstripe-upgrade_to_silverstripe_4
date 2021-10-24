@@ -111,8 +111,8 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         $this->colourPrint('# --------------------', 'yellow', 3);
                         $this->colourPrint('# ' . $obj->getTitle() . ' (' . $params['taskName'] . ')', 'yellow');
                         $this->colourPrint('# --------------------', 'yellow');
-                        $this->colourPrint('# ' . $obj->getDescriptionNice(), 'dark_grey');
-                        $this->colourPrint('# --------------------', 'dark_grey');
+                        $this->colourPrint('# ' . $obj->getDescriptionNice(), 'light_green');
+                        $this->colourPrint('# --------------------', 'light_green');
                         $obj->run();
                         if ($this->runInteractively) {
                             $hasRun = true;

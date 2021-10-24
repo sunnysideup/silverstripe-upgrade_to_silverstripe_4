@@ -148,8 +148,9 @@ class ModuleUpgraderInfo
             $customVars = $customVariables[$task] ?? [];
             $variables += $customVars;
             $count++;
-            $add = ($currentOne === $task ? ' (CURRENT ONE)' : '');
-            $string .= $this->mu->newLine() . '- ' . $count . ': ' . $task . $add;
+            $addAfter = ($currentOne === $task ? ' (CURRENT ONE)' : '');
+            $addBefore = ($currentOne === $task ? ' **** ' : '');
+            $string .= $this->mu->newLine() . '- ' . $count . $addBefore . ': ' . $task . $add;
             if (count($variables)) {
                 foreach ($variables as $variableName => $variableValue) {
                     $string .= $this->mu->newLine() . '  ... ' . $variableName . ' = ' . print_r($variableValue, 1) . $this->mu->newLine();

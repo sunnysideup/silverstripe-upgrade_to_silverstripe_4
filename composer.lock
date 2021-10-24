@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sunnysideup/silverstripe-php_2_command_line.git",
-                "reference": "183df0df7a6f53c3434603d4a14f1ea8b6654870"
+                "reference": "b5b16a5bc0546f9d97f7c643ae9eaeada2818909"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/183df0df7a6f53c3434603d4a14f1ea8b6654870",
-                "reference": "183df0df7a6f53c3434603d4a14f1ea8b6654870",
+                "url": "https://api.github.com/repos/sunnysideup/silverstripe-php_2_command_line/zipball/b5b16a5bc0546f9d97f7c643ae9eaeada2818909",
+                "reference": "b5b16a5bc0546f9d97f7c643ae9eaeada2818909",
                 "shasum": ""
             },
             "default-branch": true,
@@ -50,7 +50,7 @@
                 "issues": "https://github.com/sunnysideup/silverstripe-php_2_command_line/issues",
                 "source": "https://github.com/sunnysideup/silverstripe-php_2_command_line/tree/master"
             },
-            "time": "2020-06-28T22:09:18+00:00"
+            "time": "2021-10-24T01:12:30+00:00"
         }
     ],
     "packages-dev": [

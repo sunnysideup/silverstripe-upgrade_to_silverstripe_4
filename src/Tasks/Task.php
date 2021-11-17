@@ -200,7 +200,7 @@ abstract class Task
                 } else {
                     user_error(
                         'You are trying to set ' . $paramKey . '
-                        but it is meaninguless to this class: ' . static::class
+                        but it is meaningless to this class: ' . static::class
                     );
                 }
             }

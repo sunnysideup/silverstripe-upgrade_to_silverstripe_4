@@ -150,7 +150,7 @@ class ModuleUpgraderInfo
             $count++;
             $addAfter = ($currentOne === $task ? ' (CURRENT ONE)' : '');
             $addBefore = ($currentOne === $task ? ' **** ' : '');
-            $string .= $this->mu->newLine() . '- ' . $count . $addBefore . ': ' . $task . $add;
+            $string .= $this->mu->newLine() . '- ' . $count . $addBefore . ': ' . $task . $addAfter;
             if (count($variables)) {
                 foreach ($variables as $variableName => $variableValue) {
                     $string .= $this->mu->newLine() . '  ... ' . $variableName . ' = ' . print_r($variableValue, 1) . $this->mu->newLine();

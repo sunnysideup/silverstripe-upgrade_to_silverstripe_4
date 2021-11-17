@@ -13,6 +13,9 @@ use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
  */
 class AddPHPDoc extends Task
 {
+
+    const REPLACER = 'REPLACE_WITH_MODULE_NAME';
+
     protected $taskStep = 's60';
 
     /**
@@ -37,9 +40,9 @@ SilverLeague\IDEAnnotator\DataObjectAnnotator:
   enabled: true
   use_short_name: true
   enabled_modules:
-    - REPLACE_WITH_MODULE_NAME
-
-yml;
+yml
+.'
+    - '.self::REPLACER;
 
     public function getTitle()
     {
@@ -53,7 +56,7 @@ yml;
 
     public function runActualTask($params = [])
     {
-        $this->mu()->getWebRootDirLocation();
+        // $this->mu()->getWebRootDirLocation();
 
         Composer::inst($this->mu())
             ->Remove('phpunit/phpunit', true)
@@ -74,24 +77,8 @@ yml;
             );
             $this->mu()->setBreakOnAllErrors(false);
         }
-        Composer::inst($this->mu())
-            ->Remove('silverleague/ideannotator', true);
     }
 
-    protected function updateComposerFile(string $moduleName)
-    {
-        if ($this->mu()->getIsModuleUpgrade()) {
-            $moduleLocation = $this->findModuleNameLocation($moduleName);
-            $json = ComposerJsonFixes::inst($this->mu())
-                ->getJSON($moduleLocation);
-            if (! isset($json['require-dev'])) {
-                $json['require-dev'] = [];
-            }
-            $json['require-dev']['silverleague/ideannotator'] = $this->ideAnnotatorVersion;
-            $json = ComposerJsonFixes::inst($this->mu())
-                ->setJSON($moduleLocation, $json);
-        }
-    }
 
     protected function updateModuleConfigFile(string $moduleName)
     {
@@ -101,7 +88,7 @@ yml;
         FileSystemFixes::inst($this->mu())
             ->removeDirOrFile($fileLocation);
         $ideannotatorConfigForModule = $this->ideannotatorConfig;
-        $ideannotatorConfigForModule = str_replace('REPLACE_WITH_MODULE_NAME', $moduleName, $ideannotatorConfigForModule);
+        $ideannotatorConfigForModule = str_replace(self::REPLACER, $moduleName, $ideannotatorConfigForModule);
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
             'echo \'' . str_replace('\'', '"', $ideannotatorConfigForModule) . '\' > ' . $fileLocation,
@@ -113,31 +100,6 @@ yml;
         }
     }
 
-    protected function findModuleNames(): array
-    {
-        $moduleNames = [];
-        if ($this->mu()->getIsModuleUpgrade()) {
-            $moduleNames = [
-                $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
-            ];
-        } else {
-            foreach ($this->mu()->getExistingModuleDirLocations() as $location) {
-                $moduleNames[] = $location;
-            }
-        }
-        return $moduleNames;
-    }
-
-    protected function findModuleNameLocation(string $moduleName): string
-    {
-        if (strpos($moduleName, '/')) {
-            $moduleNameLocation = 'vendor/' . $moduleName;
-        } else {
-            $moduleNameLocation = $moduleName;
-        }
-
-        return $moduleNameLocation;
-    }
 
     protected function hasCommitAndPush(): bool
     {

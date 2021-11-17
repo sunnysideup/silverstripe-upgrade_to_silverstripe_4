@@ -16,8 +16,6 @@ class SwitchPhpVersion extends Task
 
     protected $defaultVersion = '7.1';
 
-    protected $version = '7.1';
-
     public function getTitle()
     {
         return 'Change PHP version';
@@ -29,25 +27,38 @@ class SwitchPhpVersion extends Task
             This requires https://github.com/sunnysideup/silverstripe-switch-php-versions to be installed';
     }
 
+    protected $version = '';
+
+    public function setVersion(string $version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    public function getVersion() :string
+    {
+        return $this->version;
+    }
+
     /**
      * [runActualTask description]
      * @param  array  $params not currently used for this task
      */
     public function runActualTask($params = [])
     {
-        $this->version = $params['version'] ?? $this->defaultVersion;
+        $version = $this->version ?: $this->defaultVersion;
         if(PHP2CommandLineSingleton::commandExists('php-switch')) {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'php-switch '.$this->version,
-                'switching to PHP version '.$this->version,
+                'php-switch '.$version,
+                'switching to PHP version '.$version,
                 false
             );
         } else {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'echo \'switch to PHP Version: '.$this->version . '\'',
-                'Reminder to switch to PHP '.$this->version,
+                'echo \'switch to PHP Version: '.$version . '\'',
+                'Reminder to switch to PHP '.$version,
                 false
             );
         }

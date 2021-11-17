@@ -17,25 +17,6 @@ class RecomposeHomeBrew extends Task
         'silverstripe/recipe-cms' => '^4.4',
     ];
 
-    protected $requireLinesToRemove = [
-        'silverstripe/recipe-cms',
-        'silverstripe/admin',
-        'silverstripe/assets',
-        'silverstripe/config',
-        'silverstripe/admin',
-
-        'silverstripe/cms',
-        'silverstripe/framework',
-        'silverstripe/asset-admin',
-        'silverstripe/campaign-admin',
-        'silverstripe/errorpage',
-        'silverstripe/graphql',
-        'silverstripe/reports',
-        'silverstripe/siteconfig',
-        'silverstripe/versioned-admin',
-        'silverstripe/versioned',
-    ];
-
     public function getTitle()
     {
         return 'Update composer.json to ' . $this->mu()->getFrameworkComposerRestraint() . '';
@@ -59,10 +40,6 @@ class RecomposeHomeBrew extends Task
                     $this->requireLinesToAdd[$package] = '*';
                 }
             }
-        }
-        foreach ($this->requireLinesToRemove as $package) {
-            $command .=
-            'unset($data["require"]["' . $package . '"]);';
         }
         foreach ($this->requireLinesToAdd as $key => $value) {
             $command .=

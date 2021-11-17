@@ -23,12 +23,11 @@
         "sunnysideup/php_2_command_line":              "dev-master"
     },
     "require-dev": {
-        "silverstripe/upgrader":                       "^1.4.3"
+        "silverstripe/upgrader":                       "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "Sunnysideup\\UpgradeToSilverstripe4\\":"src/",
-            "Sunnysideup\\PHP2CommandLine\\":"vendor/sunnysideup/php_2_command_line/src/"
+            "Sunnysideup\\UpgradeToSilverstripe4\\": "src/"
         }
     },
     "minimum-stability": "dev",

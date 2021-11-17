@@ -16,13 +16,11 @@ class ComposerJsonFixes
         return json_decode($jsonString, true);
     }
 
-    public function setJSON(string $dir, array $data): self
+    public function setJSON(string $dir, array $data)
     {
         $location = $dir . '/composer.json';
         $newJsonString = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        file_put_contents("'.${location}.'", $newJsonString);
-
-        return $this;
+        file_put_contents($location, $newJsonString);
     }
 
     public function UpdateJSONViaCommandLine(string $dir, string $code, string $comment)

@@ -87,16 +87,16 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             $this->loadVarsForModule($moduleDetails);
             $this->workOutMethodsToRun();
             $this->printVarsForModule($moduleDetails);
-            foreach ($this->listOfTasks as $class => $params) {
+            foreach ($this->listOfTasks as $fauxClassName => $params) {
                 //get class without number
-                $properClass = current(explode('-', $class));
+                $properClass = current(explode('-', $fauxClassName));
                 $nameSpacesArray = explode('\\', $properClass);
                 $shortClassCode = end($nameSpacesArray);
                 if (! class_exists($properClass)) {
                     $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
                 }
                 if (class_exists($properClass)) {
-                    $runItNow = $this->shouldWeRunIt((string) $class);
+                    $runItNow = $this->shouldWeRunIt((string) $fauxClassName);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);
                     $taskName = $obj->getTaskName();
@@ -107,17 +107,17 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         $nextStep = $params['taskName'];
                     }
                     if ($runItNow) {
-                        $this->currentlyRunning = $class;
+                        $this->currentlyRunning = $fauxClassName;
                         $this->colourPrint('# --------------------', 'yellow', 3);
                         $this->colourPrint('# ' . $obj->getTitle() . ' (' . $params['taskName'] . ')', 'yellow');
                         $this->colourPrint('# --------------------', 'yellow');
-                        $this->colourPrint('# ' . $obj->getDescriptionNice(), 'dark_grey');
-                        $this->colourPrint('# --------------------', 'dark_grey');
+                        $this->colourPrint('# ' . $obj->getDescriptionNice(), 'light_green');
+                        $this->colourPrint('# --------------------', 'light_green');
                         $obj->run();
                         if ($this->runInteractively) {
                             $hasRun = true;
                             if ($this->outOfOrderTask === false) {
-                                $this->getSessionManager()->setSessionValue('Completed', $class);
+                                $this->getSessionManager()->setSessionValue('Completed', $fauxClassName);
                             }
                         }
                     } else {
@@ -186,14 +186,16 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
         if ($this->getCommandLineOrArgumentAsString('startFrom')) {
             $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
+            if( $this->runInteractively) {
+                $this->onlyRun = $this->getCommandLineOrArgumentAsString('startFrom');
+            }
         }
         if ($this->getCommandLineOrArgumentAsString('endWith')) {
             $this->endWith = $this->getCommandLineOrArgumentAsString('endWith');
         }
         if ($this->getCommandLineOrArgumentAsString('task')) {
+            $this->runInteractively = true;
             $this->onlyRun = $this->getCommandLineOrArgumentAsString('task');
-        }
-        if ($this->onlyRun) {
             $this->outOfOrderTask = true;
         }
     }
@@ -285,6 +287,19 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             'https://raw.githubusercontent.com/',
             $gitLinkWithoutExtension
         );
+        $this->gitLinkAsHTTPS = str_replace(
+            'git@bitbucket.org:',
+            'https://bitbucket.org/',
+            $gitLinkWithoutExtension
+        );
+        $this->gitLinkAsRawHTTPS = str_replace(
+            'git@bitbucket.org:',
+            'https://bitbucket.org/',
+            $gitLinkWithoutExtension
+        );
+        if(stripos($this->gitLinkAsRawHTTPS, 'bitbucket') > 0) {
+            $this->gitLinkAsRawHTTPS .= '/raw';
+        }
 
         //Origin Composer FileLocation
         $this->originComposerFileLocation = $moduleDetails['OriginComposerFileLocation'] ?? '';
@@ -342,7 +357,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                     $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
                 } else {
                     if (! $this->originComposerFileLocation) {
-                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/master/composer.json';
+                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/'.$this->nameOfBranchForBaseCode.'/composer.json';
                     }
                     if ($this->URLExists($this->originComposerFileLocation)) {
                         $json = file_get_contents($this->originComposerFileLocation);
@@ -365,13 +380,12 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                 'PackageFolderNameForInstall',
                 $this->packageFolderNameForInstall
             );
-        }
-        if($this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
-            user_error('
-                Could not find: '.$this->webRootDirLocation . '/' .$this->packageFolderNameForInstall.',
-                Composer File Used: '.$this->originComposerFileLocation .',
-                Session Value: '.$packageFolderNameForInstall
-            );
+        } else {
+            // user_error('
+            //     Could not find: '.$this->webRootDirLocation . '/' .$this->packageFolderNameForInstall.'
+            //     Composer File Used: '.$this->originComposerFileLocation .',
+            //     Session Value: '.$packageFolderNameForInstall
+            // );
         }
         if(!  $this->packageFolderNameForInstall) {
             $this->packageFolderNameForInstall = $this->getPackageName();
@@ -413,7 +427,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         if ($key === $lastMethod) {
                             $found = true;
                             if ($this->runLastOneAgain) {
-                                $this->onlyRun = $arrayKeys[$index];
+                                $this->onlyRun = $arrayKeys[$index] ?? 'could not find the task to run again';
                             } else {
                                 if (isset($arrayKeys[$index + 1])) {
                                     if (isset($this->listOfTasks[$arrayKeys[$index + 1]])) {

@@ -31,6 +31,12 @@ $obj = ModuleUpgrader::create()
         ]
     )
     ->setFrameworkComposerRestraint('^4.4')
+    ->setModuleDirLocations(
+        [
+            'mysite',
+            'somethingElse'
+        ]
+    )
     //->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')
     // ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     // ->setListOfTasks(

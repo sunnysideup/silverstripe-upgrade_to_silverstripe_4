@@ -13,7 +13,7 @@ class FixOutdatedPHPStyles extends Task
 
     public function getTitle()
     {
-        return 'Uses sunnysideup/huringa to check for outdated styles';
+        return 'Uses sunnysideup/huringa to check for outdated styles. An important part of this is to separate files into separate files / classes.';
     }
 
     public function getDescription()
@@ -26,10 +26,11 @@ class FixOutdatedPHPStyles extends Task
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
 
-        Composer::inst($this->mu())->RequireDev(
-            'sunnysideup/huringa',
-            'dev-master',
-            $this->composerOptions
+        $this->mu()->execMe(
+            $webRoot,
+            'composer require --dev sunnysideup/huringa:dev-master',
+            'installing huringa',
+            false
         );
 
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
@@ -37,7 +38,7 @@ class FixOutdatedPHPStyles extends Task
         foreach ($codeDirs as $codeDir) {
             $this->mu()->execMe(
                 $webRoot,
-                './vendor/bin/huringa ' . $codeDir,
+                'huringa ' . $codeDir,
                 'fixing outdated code styles in ' . $codeDir,
                 false
             );
@@ -46,7 +47,12 @@ class FixOutdatedPHPStyles extends Task
         }
         $this->mu()->setBreakOnAllErrors(false);
 
-        Composer::inst($this->mu())->Remove('sunnysideup/huringa', true);
+        $this->mu()->execMe(
+            $webRoot,
+            'composer remove sunnysideup/huringa:dev-master',
+            'uninstalling huringa',
+            false
+        );
     }
 
     protected function hasCommitAndPush()

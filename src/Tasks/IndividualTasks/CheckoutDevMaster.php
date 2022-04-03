@@ -16,7 +16,7 @@ class CheckoutDevMaster extends Task
 
     protected $branchOrTagToUse = 'master';
 
-    protected $composerOptions = '--prefer-source --update-no-dev';
+    protected $composerOptions = '--prefer-source --no-dev';
 
     public function getTitle()
     {

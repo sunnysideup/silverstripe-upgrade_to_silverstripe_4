@@ -28,7 +28,7 @@ class FixOutdatedPHPStyles extends Task
 
         $this->mu()->execMe(
             $webRoot,
-            'composer require --dev --with-all-dependencies sunnysideup/huringa:dev-master',
+            'composer require --dev --with-all-dependencies sunnysideup/huringa:dev-master --no-interaction',
             'installing huringa',
             false
         );

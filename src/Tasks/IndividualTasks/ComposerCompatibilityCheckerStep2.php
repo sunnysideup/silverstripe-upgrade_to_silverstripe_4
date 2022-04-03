@@ -74,7 +74,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
             unset($libraryOutput);
             $libraryOutput = $this->mu()->execMe(
                 $this->webRootLocation,
-                'composer require ' . $name . " '" . $version . "' 2>&1 ",
+                'composer require ' . $name . " '" . $version . "' 2>&1 --no-interaction",
                 'adding module'
             );
             $message = 'composer require ' . $name . ':' . $version . ' ... ';
@@ -87,7 +87,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
                 unset($show);
                 $show = $this->mu()->execMe(
                     $this->webRootLocation,
-                    'composer show -a ' . $name . ' 2>&1 ',
+                    'composer show -a ' . $name . ' --no-interaction 2>&1 ',
                     'show details of module'
                 );
                 $versionsString = $show[3];

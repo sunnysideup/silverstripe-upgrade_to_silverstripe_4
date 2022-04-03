@@ -14,7 +14,7 @@ class CheckoutUpgradeStarterBranch extends Task
 {
     protected $taskStep = 's00';
 
-    protected $composerOptions = '--prefer-source --no-dev';
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
     {
@@ -50,7 +50,7 @@ class CheckoutUpgradeStarterBranch extends Task
             $this->gitClone();
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'composer info --self',
+                'composer info --self --no-interaction',
                 'show information about installed project',
                 false
             );
@@ -73,7 +73,7 @@ class CheckoutUpgradeStarterBranch extends Task
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer init -s dev -n',
+            'composer init -s dev -n --no-interaction',
             'Start composer - setting it to dev means that it is more likely
             to install dependencies that do not have tags',
             false
@@ -89,7 +89,7 @@ class CheckoutUpgradeStarterBranch extends Task
             );
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+            'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(). ' --no-interaction',
             'show information about installed package',
             false
         );

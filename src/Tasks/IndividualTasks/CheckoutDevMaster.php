@@ -16,7 +16,7 @@ class CheckoutDevMaster extends Task
 
     protected $branchOrTagToUse = 'master';
 
-    protected $composerOptions = '--prefer-source --no-dev';
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
     {
@@ -46,7 +46,7 @@ simply start again in a few minutes in this case to make it work.
             } else {
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
-                    'composer init -s dev -n',
+                    'composer init -s dev -n --no-interaction',
                     'Start composer - setting it to dev means that
                         it is more likely to install dependencies that do not have tags',
                     false
@@ -60,7 +60,7 @@ simply start again in a few minutes in this case to make it work.
                     );
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
-                    'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
+                    'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ' --no-interaction',
                     'show information about installed package',
                     false
                 );
@@ -69,7 +69,7 @@ simply start again in a few minutes in this case to make it work.
             $this->gitClone();
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'composer info --self',
+                'composer info --self --no-interaction',
                 'show information about installed project',
                 false
             );

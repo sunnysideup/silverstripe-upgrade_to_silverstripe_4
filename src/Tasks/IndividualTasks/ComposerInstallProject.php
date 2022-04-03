@@ -49,10 +49,16 @@ class ComposerInstallProject extends Task
         'silverstripe/versioned',
     ];
 
+    protected $allowedPlugins = [
+        'composer/installers',
+        'silverstripe/recipe-plugin',
+        'silverstripe/vendor-plugin',
+    ];
+
     /**
      * @var string
      */
-    protected $composerOptions = '--prefer-source --no-dev';
+    protected $composerOptions = '--prefer-source --update-no-dev';
 
     protected $defaultSilverstripeProject = 'silverstripe/installer';
 
@@ -96,10 +102,18 @@ class ComposerInstallProject extends Task
             } else {
                 $this->mu()->execMe(
                     $this->mu()->getAboveWebRootDirLocation(),
-                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project ' . $this->defaultSilverstripeProject . ' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
+                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project -n ' . $this->defaultSilverstripeProject . ' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad ,
                     'set up vanilla install of ' . $this->defaultSilverstripeProject . ' - version: ' . $this->versionToLoad,
                     false
                 );
+                foreach($this->allowedPlugins as $plugin) {
+                    $this->mu()->execMe(
+                        $this->mu()->getWebRootDirLocation(),
+                        $this->mu()->getComposerEnvironmentVars() . 'composer config --no-interaction allow-plugins.' .$plugin.' true',
+                        'composer config --no-interaction allow-plugins.' .$plugin.' true',
+                        false
+                    );
+                }
             }
         }
         if ($this->installModuleAsVendorModule) {
@@ -148,7 +162,7 @@ class ComposerInstallProject extends Task
         if ($this->mu()->getIsProjectUpgrade()) {
             $this->mu()->execMe(
                 $this->mu()->getGitRootDir(),
-                'composer update -vvv',
+                'composer update -vvv --no-interaction',
                 'run composer update',
                 false
             );

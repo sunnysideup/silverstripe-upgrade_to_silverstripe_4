@@ -43,7 +43,7 @@ class ComposerCompatibilityCheckerStep1 extends Task
             $webRootLocation = $this->mu()->getWebRootDirLocation();
             $this->mu()->execMe(
                 $webRootLocation,
-                'composer info ' . $this->composerSettings . ' --format=json > ' . $this->infoFileFileName,
+                'composer info ' . $this->composerSettings . ' --format=json > ' . $this->infoFileFileName . ' --no-interaction',
                 'getting requirement details',
                 false
             );

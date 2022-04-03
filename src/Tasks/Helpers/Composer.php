@@ -14,7 +14,7 @@ class Composer
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer dumpautoload',
+            'composer dumpautoload --no-interaction',
             'run composer dumpautoload',
             false
         );
@@ -26,7 +26,7 @@ class Composer
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer clear-cache',
+            'composer clear-cache --no-interaction',
             'clear composer cache',
             false
         );
@@ -54,7 +54,7 @@ class Composer
         $devFlag = $devOnly ? '--dev' : '';
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer remove ' . $package . ' ' . $devFlag,
+            'composer remove ' . $package . ' ' . $devFlag. ' --no-interaction',
             'running composer remove ' . $package . ' ' . $devFlag,
             false
         );
@@ -77,7 +77,7 @@ class Composer
         }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer ' . $globalPhrase . ' require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
+            'composer ' . $globalPhrase . ' require ' . $package . $version . ' ' . $devFlag . ' ' . $options. ' --no-interaction',
             'running composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             false
         );

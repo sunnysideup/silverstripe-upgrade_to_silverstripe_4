@@ -52,7 +52,7 @@ class ComposerInstallProject extends Task
     /**
      * @var string
      */
-    protected $composerOptions = '--prefer-source --update-no-dev';
+    protected $composerOptions = '--prefer-source --no-dev';
 
     protected $defaultSilverstripeProject = 'silverstripe/installer';
 

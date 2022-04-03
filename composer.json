@@ -34,5 +34,10 @@
     "suggest": {
         "hirak/prestissimo": "INSTALL GLOBAL! if you can",
         "sunnysideup/easy-coding-standards": "INSTALL GLOBAL! if you can"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": false
+        }
     }
 }

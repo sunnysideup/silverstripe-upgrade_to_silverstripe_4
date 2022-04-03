@@ -14,7 +14,7 @@ class CheckoutUpgradeStarterBranch extends Task
 {
     protected $taskStep = 's00';
 
-    protected $composerOptions = '--prefer-source --update-no-dev';
+    protected $composerOptions = '--prefer-source --no-dev';
 
     public function getTitle()
     {

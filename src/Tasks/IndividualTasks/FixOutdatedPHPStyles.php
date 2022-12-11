@@ -38,7 +38,7 @@ class FixOutdatedPHPStyles extends Task
         foreach ($codeDirs as $codeDir) {
             $this->mu()->execMe(
                 $webRoot,
-                'huringa ' . $codeDir,
+                'vendor/bin/huringa ' . $codeDir,
                 'fixing outdated code styles in ' . $codeDir,
                 false
             );

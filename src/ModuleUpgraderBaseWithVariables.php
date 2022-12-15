@@ -13,6 +13,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Traits\Misc;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss33ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\ApplyNamespacing;
 
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss4Lint;
@@ -44,9 +45,9 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     protected $availableRecipes = [
         'SS4' => Ss3ToSs4::class,
         'SS4-LINT' => Ss4Lint::class,
-        'SS31-37' => Ss31ToSs37::class,
         'SS33-37' => Ss33ToSs37::class,
         'SS35-37' => Ss35ToSs37::class,
+        'ApplyNamespacing' => ApplyNamespacing::class,
     ];
 
     #########################################
@@ -579,7 +580,9 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         }
         $array = [];
         foreach ($this->moduleDirLocations as $location) {
+            echo $location;
             $location = (string) $this->checkIfPathExistsAndCleanItUp($location, false);
+            echo $location;
             if ($location) {
                 $array[$location] = $location;
             }
@@ -590,7 +593,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
                 user_error(
                     'You need to set moduleDirLocations (setModuleDirLocations)
                     as there are currently none.
-                    We tried to look at: '. print_r($this->moduleDirLocation, 1)
+                    We tried to look at: '. print_r($this->moduleDirLocations, 1)
                 );
             }
         }

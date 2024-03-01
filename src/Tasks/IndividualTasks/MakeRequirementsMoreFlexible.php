@@ -44,15 +44,19 @@ Goes through all the requirements in the composer.json file and changes them fro
 
     function updateComposerJson()
     {
-        // Tāpiri i te ^ ki ngā putanga e tīmata ana ki tētahi tau
         $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
             $this->mu()->getGitRootDir()
         );
         foreach (['require', 'require-dev'] as $section) {
             if (isset($composerData[$section]) && is_array($composerData[$section]) && count($composerData[$section])) {
                 foreach ($composerData[$section] as $package => &$version) {
-                    // Tirohia mēnā ka tīmata te putanga ki tētahi tau
-                    if (ctype_digit($version[0]) && !str_starts_with($version, '^')) {
+                    if (strpos($version, '.x') !== false) {
+                        $version = str_replace('.x', '.0', $version);
+                    }
+                    if (strpos($version, '.*') !== false) {
+                        $version = str_replace('.*', '.0', $version);
+                    }
+                    if (ctype_digit(substr($version[0], 0, 1)) && !str_starts_with($version, '^')) {
                         $version = '^' . $version;
                     }
                 }

@@ -46,11 +46,12 @@ class Ss3ToSs4 extends BaseClass
             'nameOfLegacyBranch' => '3',
         ],
         'AddUpgradeStarterBranch' => [],
+        'CheckoutUpgradeStarterBranch-1' => [],
         'MakeRequirementsMoreFlexible' => [],
         'PHPCompatabilityCheck' => [],
         'ResetWebRootDir-2' => [],
 
-        'CheckoutUpgradeStarterBranch' => [],
+        'CheckoutUpgradeStarterBranch-2' => [],
         'AddTempUpgradeBranch' => [],
         'ComposerCompatibilityCheckerStep1' => [],
         'FixOutdatedPHPStyles' => [],
@@ -92,8 +93,8 @@ class Ss3ToSs4 extends BaseClass
         'AddPSR4Autoloading' => [],
 
         //Step5: FixUpgrade
-        'FixBadUseStatements' => [],
-        'FixBadUseStatements' => [],
+        'FixBadUseStatements-1' => [],
+        'FixBadUseStatements-2' => [],
         'InspectAPIChanges-1' => [],
         'DatabaseMigrationLegacyYML' => [],
         'Reorganise' => [],

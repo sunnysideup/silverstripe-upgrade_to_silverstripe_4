@@ -49,7 +49,7 @@ Goes through all the requirements in the composer.json file and changes them fro
             $this->mu()->getGitRootDir()
         );
         foreach (['require', 'require-dev'] as $section) {
-            if (isset($composerData[$section]) && is_array($composerData[$section])) {
+            if (isset($composerData[$section]) && is_array($composerData[$section]) && count($composerData[$section])) {
                 foreach ($composerData[$section] as $package => &$version) {
                     // Tirohia mēnā ka tīmata te putanga ki tētahi tau
                     if (ctype_digit($version[0]) && !str_starts_with($version, '^')) {

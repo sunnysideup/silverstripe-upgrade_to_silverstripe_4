@@ -46,6 +46,7 @@ class Ss3ToSs4 extends BaseClass
             'nameOfLegacyBranch' => '3',
         ],
         'AddUpgradeStarterBranch' => [],
+        'MakeRequirementsMoreFlexible' => [],
         'PHPCompatabilityCheck' => [],
         'ResetWebRootDir-2' => [],
 

@@ -38,6 +38,7 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true
-        }
+        },
+        "sort-packages": true
     }
 }

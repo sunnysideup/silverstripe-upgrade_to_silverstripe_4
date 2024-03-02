@@ -1,46 +1,108 @@
 {
-    "name": "sunnysideup/upgrade_to_silverstripe_4",
-    "type": "library",
-    "description": "Upgrade modules to silverstripe 4 and beyond",
-    "keywords": [
-        "Silverstripe-CMS",
-        "CMS",
-        "Silverstripe",
-        "upgrade",
-        "upgrader",
-        "upgrades",
-        "SS4"
-    ],
-    "license": "BSD-3-Clause",
+    "name": "moveforward/international-engineering-alliance",
+    "description": "International Engineering Alliance Website",
+    "minimum-stability": "dev",
+    "license": "proprietary",
     "authors": [
         {
-            "name": "Nicolaas Francken",
-            "email": "modules@sunnysideup.co.nz",
-            "role": "lead developer"
+            "name": "Emily Mossman",
+            "email": "emily@moveforward.co.nz"
+        },
+        {
+            "name": "Nathaniel Ashiagbor",
+            "email": "nat@moveforward.co.nz"
+        },
+        {
+            "name": "Steve Wake",
+            "email": "steve@moveforward.co.nz"
+        },
+        {
+            "name": "Keryn Townsley",
+            "email": "keryn@moveforward.co.nz"
         }
     ],
     "require": {
-        "sunnysideup/huringa": "dev-master",
-        "sunnysideup/php_2_command_line": "dev-master"
+        "silverstripe/tagfield": "*",
+        "silverstripe/external-content": "*",
+        "silverstripe/display-logic": "*",
+        "silverstripe/mimevalidator": "*",
+        "silverstripe/recaptcha": "*",
+        "symbiote/silverstripe-content-services": "*",
+        "silverstripe/sharedraftcontent": "*",
+        "tractorcow/silverstripe-colorpicker": "*",
+        "undefinedoffset/sortablegridfield": "*",
+        "i-lateral/silverstripe-custommenus": "*",
+        "crackerjackdigital/silverstripe-authsmtp": "*",
+        "crackerjackdigital/silverstripe-modular": "*",
+        "crackerjackdigital/silverstripe-modular-build": "*",
+        "crackerjackdigital/silverstripe-modular-debug": "*",
+        "crackerjackdigital/silverstripe-modular-fields": "*",
+        "crackerjackdigital/silverstripe-modular-mappable": "*",
+        "crackerjackdigital/silverstripe-modular-queue": "*",
+        "crackerjackdigital/silverstripe-modular-tasklog": "*",
+        "crackerjackdigital/silverstripe-modular-types": "*",
+        "crackerjackdigital/silverstripe-opensemanticsearch": "*",
+        "comodojo/zip": "*",
+        "diversen/http-send-file": "*",
+        "heyday/silverstripe-wkhtml": "*",
+        "silverstripe/taxonomy": "*",
+        "silverstripe/userforms": "*",
+        "silverstripe/spamprotection": "*",
+        "silverstripe/recipe-cms": "*"
     },
-    "require-dev": {
-        "silverstripe/upgrader":                       "dev-master"
-    },
-    "autoload": {
-        "psr-4": {
-            "Sunnysideup\\UpgradeToSilverstripe4\\": "src/"
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-authsmtp"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-modular"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-modular-build"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-modular-debug"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-modular-fields"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-modular-mappable"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-modular-queue"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-modular-tasklog"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-modular-types"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-testmode"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/crackerjackdigital/silverstripe-opensemanticsearch"
         }
-    },
-    "minimum-stability": "dev",
-    "suggest": {
-        "hirak/prestissimo": "INSTALL GLOBAL! if you can",
-        "sunnysideup/easy-coding-standards": "INSTALL GLOBAL! if you can"
-    },
+    ],
     "config": {
         "allow-plugins": {
-            "composer/installers": true,
-            "silverstripe/vendor-plugin": true
+            "composer/installers": true
         },
         "sort-packages": true
+    },
+    "require-dev": {
+        "sunnysideup/huringa": "dev-master"
     }
 }

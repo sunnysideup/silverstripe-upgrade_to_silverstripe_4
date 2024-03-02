@@ -46,10 +46,12 @@ class Ss3ToSs4 extends BaseClass
             'nameOfLegacyBranch' => '3',
         ],
         'AddUpgradeStarterBranch' => [],
+        'CheckoutUpgradeStarterBranch-1' => [],
+        'MakeRequirementsMoreFlexible' => [],
         'PHPCompatabilityCheck' => [],
         'ResetWebRootDir-2' => [],
 
-        'CheckoutUpgradeStarterBranch' => [],
+        'CheckoutUpgradeStarterBranch-2' => [],
         'AddTempUpgradeBranch' => [],
         'ComposerCompatibilityCheckerStep1' => [],
         'FixOutdatedPHPStyles' => [],
@@ -59,11 +61,11 @@ class Ss3ToSs4 extends BaseClass
         'AddTableName' => [],
         'ChangeControllerInitToProtected' => [],
         // 'AddTableNamePrivateStatic' => [],
-        'RemoveComposerRequirements' => [],
-        'RecomposeHomeBrew' => [],
-        'UpdateComposerRequirements' => [],
-        'RemoveInstallerFolder' => [],
-        'UpgradeDevBuild' => [],
+        'RemoveComposerRequirements' => [], // remove framework, etc...
+        'RecomposeHomeBrew' => [], // set all requoirements to *, except for recipe-cms
+        'UpdateComposerRequirements' => [], // run find and replace for specific packages.
+        'RemoveInstallerFolder' => [], // remove installer folder from composer.json
+        'UpgradeDevBuild' => [], // fix dev/build in composer.json
         'SwitchPhpVersion-2' => [
             'version' => '7.4',
         ],
@@ -72,6 +74,7 @@ class Ss3ToSs4 extends BaseClass
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
         'ComposerCompatibilityCheckerStep2' => [],
+        'ComposerCompatibilityCheckerStep3' => [],
         'Recompose' => [],
 
         //Step3: FixBeforeStart
@@ -91,8 +94,8 @@ class Ss3ToSs4 extends BaseClass
         'AddPSR4Autoloading' => [],
 
         //Step5: FixUpgrade
-        'FixBadUseStatements' => [],
-        'FixBadUseStatements' => [],
+        'FixBadUseStatements-1' => [],
+        'FixBadUseStatements-2' => [],
         'InspectAPIChanges-1' => [],
         'DatabaseMigrationLegacyYML' => [],
         'Reorganise' => [],

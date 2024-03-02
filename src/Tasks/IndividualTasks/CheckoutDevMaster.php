@@ -14,6 +14,11 @@ class CheckoutDevMaster extends Task
 {
     protected $taskStep = 's00';
 
+    /**
+     * overruled by NameOfBranchForBaseCode
+     *
+     * @var string
+     */
     protected $branchOrTagToUse = 'master';
 
     protected $composerOptions = '--prefer-source --update-no-dev';
@@ -39,6 +44,10 @@ simply start again in a few minutes in this case to make it work.
      */
     public function runActualTask($params = [])
     {
+        $alternativeCodeBase = $this->mu()->getNameOfBranchForBaseCode();
+        if($alternativeCodeBase) {
+            $this->branchOrTagToUse = $alternativeCodeBase;
+        }
         $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
             if ($this->mu()->getUseGitClone()) {

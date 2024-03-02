@@ -45,7 +45,6 @@ class FixOutdatedPHPStyles extends Task
 
             $this->setCommitMessage('MAJOR: fixing outdated code styles using sunnysideup/huringa in ' . $codeDir);
         }
-        $this->mu()->setBreakOnAllErrors(false);
 
         $this->mu()->execMe(
             $webRoot,
@@ -53,6 +52,8 @@ class FixOutdatedPHPStyles extends Task
             'uninstalling huringa',
             false
         );
+
+        $this->mu()->setBreakOnAllErrors(false);
     }
 
     protected function hasCommitAndPush()

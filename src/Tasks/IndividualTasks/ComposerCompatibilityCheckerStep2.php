@@ -19,6 +19,8 @@ class ComposerCompatibilityCheckerStep2 extends Task
         'silverstripe/recipe-cms',
     ];
 
+    protected $appendixToKey = '-tmp';
+
     public function getTitle()
     {
         if ($this->mu()->getIsModuleUpgrade()) {
@@ -42,23 +44,36 @@ class ComposerCompatibilityCheckerStep2 extends Task
         if ($this->mu()->getIsModuleUpgrade()) {
             return null;
         }
+        $this->moveToTmpVar();
+        $this->testEachRequirement();
 
+        $this->mu()->execMe(
+            $this->mu()->getGitRootDir(),
+            'composer update -vvv --no-interaction',
+            'run composer update',
+            false
+        );
         return null;
     }
 
-    public function runInner()
+
+    protected function moveToTmpVar()
     {
         $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
             $this->mu()->getGitRootDir()
         );
         foreach (['require', 'require-dev'] as $section) {
+            $tmpSection = $section.$this->appendixToKey;
+            // move all
             if(! empty($composerData[$section])) {
-                $composerData[$section.'-tmp'] = $composerData[$section];
+                $composerData[$tmpSection] = $composerData[$section];
                 unset($composerData[$section]);
             }
+            // move the keeps back!
             foreach($this->alwaysKeepArray as $package) {
-                if(isset($composerData[$section.'-tmp'][$package])) {
-                    $composerData[$section][$package] = $composerData[$section.'-tmp'][$package];
+                if(isset($composerData[$tmpSection][$package])) {
+                    $composerData[$section][$package] = $composerData[$tmpSection][$package];
+                    unset($composerData[$tmpSection][$package]);
                 }
             }
         }
@@ -66,20 +81,24 @@ class ComposerCompatibilityCheckerStep2 extends Task
             $this->mu()->getGitRootDir(),
             $composerData
         );
-        foreach (['require-tmp', 'require-dev-tmp'] as $section) {
-            if (isset($composerData[$section]) && is_array($composerData[$section]) && count($composerData[$section])) {
-                foreach ($composerData[$section] as $package => $version) {
-                    if (in_array($package, $this->alwaysKeepArray)) {
-                        // Skip silverstripe/recipe-cms since it's already included
-                        continue;
-                    }
+    }
+
+
+    protected function testEachRequirement()
+    {
+        $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
+            $this->mu()->getGitRootDir()
+        );
+        foreach (['require', 'require-dev'] as $section) {
+            $tmpSection = $section.$this->appendixToKey;
+            if (isset($composerData[$tmpSection]) && is_array($composerData[$tmpSection]) && count($composerData[$tmpSection])) {
+                foreach ($composerData[$tmpSection] as $package => $version) {
 
                     $this->mu()->colourPrint('trying to add '.$package.':'.$version, 'yellow', 1);
 
                     // Attempt to require the package
                     $output = '';
                     exec("composer require $package:$version --no-update", $output, $returnVar);
-                    $this->mu()->colourPrint('result'.print_r($output), 'yellow', 1);
                     if ($returnVar !== 0) {
                         $this->mu()->colourPrint("$package:$version could not be added. Skipping...", 'red', 1);
                         $this->updateComposerJson($section, $package, $version, 'remove');
@@ -100,34 +119,26 @@ class ComposerCompatibilityCheckerStep2 extends Task
             }
         }
 
-        if ($this->mu()->getIsProjectUpgrade()) {
-            $this->mu()->execMe(
-                $this->mu()->getGitRootDir(),
-                'composer update -vvv --no-interaction',
-                'run composer update',
-                false
-            );
-        }
     }
-
 
     /**
      * Update composer.json to add, remove, or suggest a package.
      */
-    public function updateComposerJson(string $section, string $package, string $version, string $action, string $message = ''): void
+    protected function updateComposerJson(string $section, string $package, string $version, string $action, string $message = ''): void
     {
         $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
             $this->mu()->getGitRootDir()
         );
         switch ($action) {
             case 'remove':
-                unset($composerJson[$section][$package]);
-                $composerJson['suggest'][$package] = 'Could not load with version '.$version;
                 $this->mu()->colourPrint('removing to add '.$package.':'.$version, 'red', 1);
+                unset($composerJson[$section][$package]);
+                $composerJson[$section.'-tmp'][$package] = $version;
                 break;
             case 'add':
                 $this->mu()->colourPrint('adding '.$package.':'.$version, 'green', 1);
                 $composerJson[$section][$package] = $version;
+                unset($composerJson[$section.'-tmp'][$package]);
                 break;
         }
         ComposerJsonFixes::inst($this->mu())->setJSON(

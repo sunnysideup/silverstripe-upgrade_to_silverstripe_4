@@ -116,13 +116,13 @@ class UpdateComposerRequirements extends Task
 
     protected function upgradeAllPackages()
     {
-        $json = ComposerJsonFixes::getJSON($this->mu()->getGitRootDir());
+        $json = ComposerJsonFixes::inst($this->mu())->getJSON($this->mu()->getGitRootDir());
         foreach($json['require'] as $package => $version) {
             if (! isset($this->changed[$package])) {
                 $json['require'][$package] = '*';
             }
         }
-        ComposerJsonFixes::setJSON($this->mu()->getGitRootDir(), $json);
+        ComposerJsonFixes::inst($this->mu())->setJSON($this->mu()->getGitRootDir(), $json);
     }
 
     protected function hasCommitAndPush()

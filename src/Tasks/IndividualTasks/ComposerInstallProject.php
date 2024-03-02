@@ -8,7 +8,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 
-
 /**
  * Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')
  * using composer' ;
@@ -102,7 +101,7 @@ class ComposerInstallProject extends Task
             } else {
                 $this->mu()->execMe(
                     $this->mu()->getAboveWebRootDirLocation(),
-                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project -n ' . $this->defaultSilverstripeProject . ' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad ,
+                    $this->mu()->getComposerEnvironmentVars() . ' composer create-project -n ' . $this->defaultSilverstripeProject . ' ' . $this->mu()->getWebRootDirLocation() . ' ' . $this->versionToLoad,
                     'set up vanilla install of ' . $this->defaultSilverstripeProject . ' - version: ' . $this->versionToLoad,
                     false
                 );
@@ -124,12 +123,13 @@ class ComposerInstallProject extends Task
                     'dev-' . $this->mu()->getNameOfTempBranch(),
                     $this->composerOptions
                 );
-            if($this->mu()->getNameOfTempBranch() !== 'master') {
+            $branch = $this->mu()->getParentProjectForModuleBranchOrTag() ?: 'master';
+            if($this->mu()->getNameOfTempBranch() !== $branch) {
                 $gitLink = $this->mu()->getGitLink();
                 $command = '
                     git init;
                     git remote add origin '.$gitLink.';
-                    git pull origin master;
+                    git pull origin '.$altBranch.';
                     git status;';
                 $this->mu()->execMe(
                     $this->mu()->getGitRootDir(),

@@ -23,7 +23,9 @@ class MakeRequirementsMoreFlexible extends Task
     public function getDescription()
     {
         return '
-Goes through all the requirements in the composer.json file and changes them from, for example, 3.6.2 to ^3.6.2. Including dev requirements.
+Goes through all the requirements in the composer.json file and changes them from, for example, 3.6.2 to ^3.6.2.
+Also checks dev requirements.
+Runs a composer update at the end.
 ';
     }
 
@@ -50,14 +52,25 @@ Goes through all the requirements in the composer.json file and changes them fro
         foreach (['require', 'require-dev'] as $section) {
             if (isset($composerData[$section]) && is_array($composerData[$section]) && count($composerData[$section])) {
                 foreach ($composerData[$section] as $package => &$version) {
+                    if (strpos($version, 'silverstripe-australia') !== false) {
+                        $newVersion = str_replace('silverstripe-australia', 'symbiote', $version);
+                        $this->mu()->colourPrint('replacing '.$package.':'.$version. ' with '.$package.':'.$newVersion, 'green', 1);
+                        $version = $newVersion;
+                    }
                     if (strpos($version, '.x') !== false) {
-                        $version = str_replace('.x', '.0', $version);
+                        $newVersion = str_replace('.x', '.0', $version);
+                        $this->mu()->colourPrint('replacing '.$package.':'.$version. ' with '.$package.':'.$newVersion, 'green', 1);
+                        $version = $newVersion;
                     }
                     if (strpos($version, '.*') !== false) {
-                        $version = str_replace('.*', '.0', $version);
+                        $newVersion = str_replace('.*', '.0', $version);
+                        $this->mu()->colourPrint('replacing '.$package.':'.$version. ' with '.$package.':'.$newVersion, 'green', 1);
+                        $version = $newVersion;
                     }
                     if (ctype_digit(substr($version[0], 0, 1)) && !str_starts_with($version, '^')) {
-                        $version = '^' . $version;
+                        $newVersion = '^' . $version;
+                        $this->mu()->colourPrint('replacing '.$package.':'.$version. ' with '.$package.':'.$newVersion, 'green', 1);
+                        $version = $newVersion;
                     }
                 }
             }
@@ -68,6 +81,14 @@ Goes through all the requirements in the composer.json file and changes them fro
             $this->mu()->getGitRootDir(),
             $composerData
         );
+        if ($this->mu()->getIsProjectUpgrade()) {
+            $this->mu()->execMe(
+                $this->mu()->getGitRootDir(),
+                'composer update -vvv --no-interaction',
+                'run composer update',
+                false
+            );
+        }
     }
 
 }

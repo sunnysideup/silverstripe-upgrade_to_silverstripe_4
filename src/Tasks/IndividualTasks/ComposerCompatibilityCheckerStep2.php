@@ -3,6 +3,7 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 //use either of the following to create the info.json file required
@@ -14,35 +15,23 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class ComposerCompatibilityCheckerStep2 extends Task
 {
     protected $taskStep = 's10';
-
-    protected $infoFileFileName = 'composer-requirements-info.json';
-
-    protected $resultsFileAsJSON = 'composer-requirements-info.upgraded.json';
-
-    protected $lessUpgradeIsBetter = false;
-
-    private $outputArray = [];
-
-    private $firstTimeReset = true;
-
-    private $webRootLocation = '';
+    protected $alwaysKeepArray = [
+        'silverstripe/recipe-cms',
+    ];
 
     public function getTitle()
     {
         if ($this->mu()->getIsModuleUpgrade()) {
-            return 'For modules upgrades, this is not being used right now.';
+            return 'For module upgrades, this is not being used right now.';
         }
-        return 'Check what composer requirements packages are best to use, using the '
-            . $this->getJsonFileLocation() . ' file and placing results in '
-            . $this->getJsonFileLocationJSONResults();
+        return 'Check what composer requirements can be added.';
     }
 
     public function getDescription()
     {
-        return '
-            THIS IS STILL UNDER CONSTRUCTION!
-            ';
+        return 'Goes through all the composer requirements and adds them one by one....';
     }
+
 
     /**
      * @param array $params
@@ -53,165 +42,101 @@ class ComposerCompatibilityCheckerStep2 extends Task
         if ($this->mu()->getIsModuleUpgrade()) {
             return null;
         }
-        $this->webRootLocation = $this->mu()->getWebRootDirLocation();
-
-        file_put_contents($this->getJsonFileLocationJSONResults(), '');
-
-        $jsonFile = file_get_contents($this->getJsonFileLocation());
-        $jsonData = json_decode($jsonFile, true);
-
-        $libraries = $jsonData['installed'] ?? [];
-
-        $this->resetProject();
-        foreach ($libraries as $library) {
-            $commit = '';
-            $name = $library['name'];
-            $version = $library['version'];
-            if (strpos($version, 'dev-master') !== false) {
-                $commit = $version;
-                $version = str_replace(' ', '#', $version);
-            }
-            unset($libraryOutput);
-            $libraryOutput = $this->mu()->execMe(
-                $this->webRootLocation,
-                'composer require ' . $name . " '" . $version . "' 2>&1 --no-interaction",
-                'adding module'
-            );
-            $message = 'composer require ' . $name . ':' . $version . ' ... ';
-            if (in_array('  [InvalidArgumentException]', $libraryOutput, true)) {
-                $message .= "unsuccessful, could not find a matching version of package.\n";
-                $this->mu()->colourPrint($message);
-            } elseif (in_array('Installation failed, reverting ./composer.json to its original content.', $libraryOutput, true)) {
-                $message .= "unsuccessful, searching for next best version.\n";
-                $this->mu()->colourPrint($message);
-                unset($show);
-                $show = $this->mu()->execMe(
-                    $this->webRootLocation,
-                    'composer show -a ' . $name . ' --no-interaction 2>&1 ',
-                    'show details of module'
-                );
-                $versionsString = $show[3];
-                $versionsString = str_replace('versions : ', '', $versionsString);
-                $currentVersionPos = strpos($versionsString, ', ' . $version);
-                $versionsString = substr($versionsString, 0, $currentVersionPos);
-                $newerVersions = explode(', ', $versionsString);
-                if ($this->lessUpgradeIsBetter) {
-                    $newerVersions = array_reverse($newerVersions);
-                }
-                $output = 0;
-                $versionFound = false;
-                foreach ($newerVersions as $newVersion) {
-                    unset($output);
-                    $output = $this->mu()->execMe(
-                        $this->webRootLocation,
-                        'composer require ' . $name . " '" . $newVersion . "' 2>&1 ",
-                        'show details of module',
-                        false
-                    );
-                    $message = 'composer require ' . $name . ':' . $newVersion . ' ...... ';
-                    if (! in_array('Installation failed', $output, true)) {
-                        $versionFound = true;
-                        $message .= "successful!, it is the next best version.\n";
-                        $this->mu()->colourPrint($message);
-                        $this->addToOutputArray($name, $newVersion);
-                        break;
-                    }
-                    $message .= "unsuccessful, searching for next best version.\n";
-                    $this->mu()->colourPrint($message, false);
-                }
-
-                if (! $versionFound) {
-                    $message = 'Could not find any compatiable versions for:  ' . $name . "!'\n ";
-                    $this->mu()->colourPrint($message);
-                }
-            } else {
-                $message .= "successful!\n ";
-                $this->mu()->colourPrint($message);
-                $version = $commit ?: $version;
-                $this->addToOutputArray($name, $version);
-            }
-        }
-
-        file_put_contents(
-            $this->getJsonFileLocationJSONResults(),
-            json_encode($this->outputArray),
-            FILE_APPEND | LOCK_EX
-        );
 
         return null;
     }
 
-    protected function resetProject()
+    public function runInner()
     {
-        $this->mu()->colourPrint('resetting project to composer.json.default', false);
-        if ($this->firstTimeReset === true) {
-            $this->mu()->execMe(
-                $this->webRootLocation,
-                'cp composer.json composer.json.temp.default',
-                'make temporary copy of composer.json'
-            );
-        }
-        $fixer = FileSystemFixes::inst($this->mu())
-            ->removeDirOrFile($this->webRootLocation . '/composer.json');
-        $this->mu()->execMe(
-            $this->webRootLocation,
-            'cp composer.json.temp.default composer.json',
-            'back to default composer file'
+        $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
+            $this->mu()->getGitRootDir()
         );
-        if ($this->firstTimeReset === false) {
-            $this->mu()->execMe(
-                $this->webRootLocation,
-                'composer update',
-                'run composer update'
-            );
+        foreach (['require', 'require-dev'] as $section) {
+            if(! empty($composerData[$section])) {
+                $composerData[$section.'-tmp'] = $composerData[$section];
+                unset($composerData[$section]);
+            }
+            foreach($this->alwaysKeepArray as $package) {
+                if(isset($composerData[$section.'-tmp'][$package])) {
+                    $composerData[$section][$package] = $composerData[$section.'-tmp'][$package];
+                }
+            }
         }
-        $this->firstTimeReset = false;
-    }
-
-    protected function addToOutputArray($name, $version)
-    {
-        $pos = strpos($name, '/') + 1;
-        $array['folder'] = substr($name, $pos);
-        $array['tag'] = $version;
-        $array['repo'] = null;
-        unset($strings);
-        $strings = $this->mu()->execMe(
-            $this->webRootLocation,
-            'composer show -a ' . $name . ' 2>&1 ',
-            'run composer update'
+        ComposerJsonFixes::inst($this->mu())->setJSON(
+            $this->mu()->getGitRootDir(),
+            $composerData
         );
-        $source = '';
+        foreach (['require-tmp', 'require-dev-tmp'] as $section) {
+            if (isset($composerData[$section]) && is_array($composerData[$section]) && count($composerData[$section])) {
+                foreach ($composerData[$section] as $package => $version) {
+                    if (in_array($package, $this->alwaysKeepArray)) {
+                        // Skip silverstripe/recipe-cms since it's already included
+                        continue;
+                    }
 
-        foreach ($strings as $string) {
-            if (strpos($string, 'source') !== false) {
-                $source = $string;
-                preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $source, $match);
-                if (! isset($match[0][0])) {
-                    preg_match_all(
-                        '#((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?#',
-                        $source,
-                        $match
-                    );
+                    $this->mu()->colourPrint('trying to add '.$package.':'.$version, 'yellow', 1);
+
+                    // Attempt to require the package
+                    $output = '';
+                    exec("composer require $package:$version --no-update", $output, $returnVar);
+                    $this->mu()->colourPrint('result'.print_r($output), 'yellow', 1);
+                    if ($returnVar !== 0) {
+                        $this->mu()->colourPrint("$package:$version could not be added. Skipping...", 'red', 1);
+                        $this->updateComposerJson($section, $package, $version, 'remove');
+                        // Skip adding to suggest or removing since it's being processed dynamically
+                    } else {
+                        // If require was successful, update composer
+                        $output = '';
+                        exec('composer update', $output, $updateReturnVar);
+                        if ($updateReturnVar !== 0) {
+                            // If update fails, revert the require
+                            $this->mu()->colourPrint("Update failed after requiring $package. Reverting...", 'red', 1);
+                            $this->updateComposerJson($section, $package, $version, 'remove');
+                        } else {
+                            $this->updateComposerJson($section, $package, $version, 'add');
+                        }
+                    }
                 }
-                if (isset($match[0][0])) {
-                    $array['repo'] = $match[0][0];
-                }
-                break;
             }
         }
 
-        array_push($this->outputArray, $array);
+        if ($this->mu()->getIsProjectUpgrade()) {
+            $this->mu()->execMe(
+                $this->mu()->getGitRootDir(),
+                'composer update -vvv --no-interaction',
+                'run composer update',
+                false
+            );
+        }
     }
 
-    protected function getJsonFileLocation(): string
+
+    /**
+     * Update composer.json to add, remove, or suggest a package.
+     */
+    public function updateComposerJson(string $section, string $package, string $version, string $action, string $message = ''): void
     {
-        return $this->mu()->getWebRootDirLocation() . '/' . $this->infoFileFileName;
+        $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
+            $this->mu()->getGitRootDir()
+        );
+        switch ($action) {
+            case 'remove':
+                unset($composerJson[$section][$package]);
+                $composerJson['suggest'][$package] = 'Could not load with version '.$version;
+                $this->mu()->colourPrint('removing to add '.$package.':'.$version, 'red', 1);
+                break;
+            case 'add':
+                $this->mu()->colourPrint('adding '.$package.':'.$version, 'green', 1);
+                $composerJson[$section][$package] = $version;
+                break;
+        }
+        ComposerJsonFixes::inst($this->mu())->setJSON(
+            $this->mu()->getGitRootDir(),
+            $composerData
+        );
     }
 
-    protected function getJsonFileLocationJSONResults(): string
-    {
-        return $this->mu()->getWebRootDirLocation() . '/' . $this->resultsFileAsJSON;
-    }
+
 
     protected function hasCommitAndPush()
     {

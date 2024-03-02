@@ -159,14 +159,7 @@ class ComposerInstallProject extends Task
                     $this->composerOptions
                 );
         }
-        if ($this->mu()->getIsProjectUpgrade()) {
-            $this->mu()->execMe(
-                $this->mu()->getGitRootDir(),
-                'composer update -vvv --no-interaction',
-                'run composer update',
-                false
-            );
-        }
+
         $this->mu()->setBreakOnAllErrors(false);
     }
 

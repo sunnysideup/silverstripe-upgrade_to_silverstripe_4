@@ -23,48 +23,51 @@ All paths can be customised, but the above are the defaults.
 
 The way you run this project is by copying one of the EXAMPLE files in the root dir
 to `index.php` (or anything with `index.php` will do). From the command line, you then run:
-`php index.php`, and you keep running this until all tasks have been created
+`php index.php`, and you keep running this until all tasks have been completed.
 (i.e. you run it once for each step).
 
 Here is what this module does, AUTOMAGICALLY:
 
- * clear workbench
- * checkout master of your module
- * create legacy branch
- * create upgrade branch
- * clear workbench
- * do upgrade stuff on the upgrade branch
- * set up SS4 / SS3.7 vanilla install
- * add your module / project again (upgrade branch)
- * do more upgrade stuff
- * run a dev/build and a test
+-   clear workbench
+-   checkout master of your module
+-   create legacy branch
+-   create upgrade branch
+-   clear workbench
+-   do upgrade stuff on the upgrade branch
+-   set up SS4 / SS3.7 vanilla install
+-   add your module / project again (upgrade branch)
+-   do more upgrade stuff
+-   run a dev/build and a test
 
 Once that has completed you can MANUALLY:
- * review and fix any outstanding issues (many of them clearly marked) OR rerun full process (it is repeatable).
- * merge your upgrade branch into your master (and delete the upgrade branch)
- * you are now SS4 ready
+
+-   review and fix any outstanding issues (many of them clearly marked) OR rerun full process (it is repeatable).
+-   merge your upgrade branch into your master (and delete the upgrade branch)
+-   you are now SS4 ready
 
 Along the way, you may have to fix stuff and (a) start again OR (b) run the last
 task again.
 
-
-
 # prerequisites before you start:
 
- - projects need to be a git repository (private is fine)
- - for modules only:
-     - module to be upgraded needs to be listed on packagist.   
-     - composer file needs to follow a valid pattern (see below)
+-   projects need to be a git repository (private is fine)
+-   for modules only:
 
-- **IMPORTANT** The module's / project's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to **silverstripe/framework**, where classes are put in semantic folder names.  
-You do not need to use title case for the folder names as this will be fixed by the upgrade tool.
+    -   module to be upgraded needs to be listed on packagist.
+    -   composer file needs to follow a valid pattern (see below)
 
-- Separate MyPage and MyPageController into separate classes and move them into Pages and Control folder (moving both into a PageTypes folder is fine also).
+-   **IMPORTANT** The module's / project's PHP classes are organised in meaningfull folders so that they are PSR-4 ready. This means that you create folders, similar to **silverstripe/framework**, where classes are put in semantic folder names.  
+    You do not need to use title case for the folder names as this will be fixed by the upgrade tool.
+
+-   Separate MyPage and MyPageController into separate classes and move them into Pages and Control folder (moving both into a PageTypes folder is fine also).
+
 ```
 /code/MyPage1.php (contains class MyPage1 AND MyPage1_Controller)
 /code/MyPage2.php (contains class MyPage2 AND MyPage2_Controller)
 ```
+
 becomes:
+
 ```
 /code/Pages/MyPage1.php (contains class MyPage1)
 /code/Pages/MyPage2.php (contains class MyPage2)
@@ -73,6 +76,7 @@ becomes:
 ```
 
 OR:
+
 ```
 /code/PageTypes/MyPage1.php (contains class MyPage1)
 /code/PageTypes/MyPage2.php (contains class MyPage2)
@@ -80,11 +84,10 @@ OR:
 /code/PageTypes/MyPage2Controller.php (contains class MyPage2Controller)
 ```
 
-
 # composer things to consider before you start
 
+-   It is recommended that your composer file follows this pattern (module only):
 
-- It is recommended that your composer file follows this pattern (module only):
 ```json
 {
     "name": "sunnysideup/my-module-name-foo-bar",
@@ -94,16 +97,15 @@ OR:
     "otherstuff": "goes here",
     "extra": {
         "installer-name": "my-module-name-foo-bar"
-    },
+    }
 }
 ```
 
- N.B. Installer-name requirement may be dropped in the future.
+N.B. Installer-name requirement may be dropped in the future.
 
 # git things to consider before you start
 
-- create a tag of the module/project you are upgrading
-
+-   create a tag of the module/project you are upgrading
 
 # what does this module do?
 
@@ -114,12 +116,11 @@ To customise your list of tasks, please see config options below.
 This upgrader basically wraps around https://github.com/silverstripe/silverstripe-upgrader/
 to make the upgrade more automated.
 
-In short, it checks out dev-master of your module / project.  Adds a branch named
+In short, it checks out dev-master of your module / project. Adds a branch named
 `3` for backwards compatability, then it ads a temporary upgrade branch.
 
 Next, it runs a bunch of upgrades, including the ones in the original SilverStripe
 upgrade module.
-
 
 # installation and usage:
 
@@ -132,9 +133,8 @@ upgrade module.
 
 2.  Create a php file (e.g. `/index.php`) in your root dir, i.e. `/var/www/silverstripe-upgrade_to_silverstripe_4/` (or anywhere else where you can run it) - using the examples provided:
 
-  - [full](/examples/run.me.index.full.php.EXAMPLE) - overview of all settings available
-  - [short](/examples/run.me.index.short.php.EXAMPLE) - least amount of settings required
-
+-   [full](/examples/run.me.index.full.php.EXAMPLE) - overview of all settings available
+-   [short](/examples/run.me.index.short.php.EXAMPLE) - least amount of settings required
 
 3. Run the file to upgrade your module / project - e.g.
 
@@ -144,15 +144,17 @@ upgrade module.
 
 Note that you can run this step by step and that you can also use the following commands:
 
-- restart
-- again
-- task=MyTask
-- more options become available all the time!
+-   restart
+-   again
+-   task=MyTask
+-   more options become available all the time!
 
 e.g.
+
 ```sh
     $ php index.php again
 ```
+
 OR
 
 ```sh
@@ -161,22 +163,19 @@ OR
 
 **NB: You can run (3) as many times as you see fit**.
 
-
 4. Apply any manual final fixes to the upgrade branch of your module / project to make it SS4 ready. E.g.
 
-  a. Add $private static $table_name for every class that extends DataObject, including pages (e.g private static $table_name = 'WebPortfolioPage';).
+a. Add $private static $table_name for every class that extends DataObject, including pages (e.g private static $table_name = 'WebPortfolioPage';).
 
-  b. move template files (in the future this module may do this for you).
+b. move template files (in the future this module may do this for you).
 
-  c. Check for use statements WITHOUT name spacing - as these may need attention.
+c. Check for use statements WITHOUT name spacing - as these may need attention.
 
-  d. etc...
+d. etc...
 
 5. Merge the upgrade branch into `dev-master` as you see fit.
 
-
 # main config options:
-
 
 ### set any variable
 
@@ -200,6 +199,7 @@ To set any of the variables in any of the tasks, you can set these as follows:
     );
 
 ```
+
 where `package` and `newVersion` are variables (`properties`) in the `UpdateComposerRequirements`
 task.
 
@@ -213,9 +213,8 @@ You can also use:
 
 `->setRecipe('SS4')`:
 This project comes with a few basic recipes. For example, you can set it to `SS4`
-to follow a typical upgrade from `SS3` to `SS4`.  You can also set it to `SS37`
+to follow a typical upgrade from `SS3` to `SS4`. You can also set it to `SS37`
 which is an upgrade path to Silvestripe 3.7.
-
 
 ### root directory
 
@@ -223,14 +222,12 @@ which is an upgrade path to Silvestripe 3.7.
 This is meant to be the directory where you do the work.
 This should be a folder where you usually save your websites locally so that you can test your upgraded module.
 
-
 ### upgrade directory
 
 `->setWebRootName('upgradeto4')`:
 This is the name of the directory that is created in the root dir where the upgrade takes place.
 That is, your actual module will be cloned in the `[rootdir]/[upgrade directory]` and when completed, this directory will be deleted.
 **Careful! Only use this directory for automated work as it will be deleted when you run the upgrade again.**
-
 
 ### list of modules / projects
 
@@ -244,8 +241,7 @@ For details see: [example files](/examples/).
 `->setNameOfTempBranch('4.1-TEMP-upgrade')`:
 This is the name of the (temporary OR upgrade) branch added to your module.
 All upgrade changes will be committed to this branch.
-**Careful!  This branch will be deleted every time you run the update process to allow you to rerun the upgrade process.**
-
+**Careful! This branch will be deleted every time you run the update process to allow you to rerun the upgrade process.**
 
 ### start from
 
@@ -268,10 +264,7 @@ being executed in your upgrade sequence.
 `->setLogFolderDirLocation('/var/www/logs')`:
 If set, a log of your upgrade will be saved in this folder.
 
-
-
 # advanced config options:
-
 
 ### run immediately or create bash script?
 
@@ -279,7 +272,6 @@ If set, a log of your upgrade will be saved in this folder.
 `->setRunImmediately(false)`: get a bash script to run later (UNTESTED!)
 
 NB. Bash script option is currently NOT working. You should run it immediately.
-
 
 ### set list of tasks
 
@@ -301,6 +293,7 @@ Customise your list of tasks to run on your module during the upgrade.
     ]
 )
 ```
+
 See [available tasks](/docs/en/AvailableTasks.md) and also the current [default tasks](https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/blob/master/src/ModuleUpgrader.php#L105-L139).
 
 ### remove from list of tasks
@@ -319,14 +312,12 @@ See [default tasks](/docs/en/AvailableTasks.md) for a list of tasks available.
 `->setComposerEnvironmentVars('COMPOSER_HOME="/home/UserName"')`:
 specific stuff for your composer.
 
-
 ### location for the Silverstripe Upgrade module
 
 `->setLocationOfSSUpgradeModule('~/.composer/vendor/bin/upgrade-code')`:
 this module is also installed with this tool (via composer requirements)
 so, in general, there is no need to set this.
 
-
 # Important references:
 
-* https://github.com/silverstripe/silverstripe-upgrader/issues/71#issuecomment-395244428
+-   https://github.com/silverstripe/silverstripe-upgrader/issues/71#issuecomment-395244428

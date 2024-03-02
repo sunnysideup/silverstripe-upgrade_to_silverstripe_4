@@ -35,7 +35,7 @@ class RemoveComposerRequirements extends Task
 
     public function getTitle()
     {
-        return 'Remove composer.json requirements';
+        return 'Remove composer.json requirements for basic packages like silverstripe/framework, silverstripe/admin, etc.';
     }
 
     public function getDescription()

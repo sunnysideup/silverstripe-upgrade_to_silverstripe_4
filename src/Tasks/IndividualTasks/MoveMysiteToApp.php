@@ -34,15 +34,14 @@ class MoveMysiteToApp extends Task
             $rootDir = $this->mu()->getWebRootDirLocation();
             $old = '/mysite/';
             $new = '/app/';
-            if (file_exists($rootDir . '/' . $old)) {
-                if (! file_exists($rootDir . '/' . $new)) {
+            $oldPath = $this->normalisedDir($rootDir . $old);
+            if (file_exists($oldPath)) {
+                $newPath = $this->normalisedDir($rootDir . $new);
+                if (! file_exists($newPath)) {
                     $fixer = FileSystemFixes::inst($this->mu());
-                    $fixer->moveFolderOrFile($rootDir . $old, $rootDir . $new);
+                    $fixer->moveFolderOrFile($oldPath, $newPath);
                 } else {
-                    $this->mu()->colourPrint(
-                        $rootDir . '/' . $new . ' already exists',
-                        'red'
-                    );
+                    $this->mu()->colourPrint($newPath . ' already exists', 'red');
                 }
             } else {
                 $this->mu()->colourPrint(
@@ -56,5 +55,11 @@ class MoveMysiteToApp extends Task
     protected function hasCommitAndPush()
     {
         return true;
+    }
+
+    protected function normalisedDir(string $path): string
+    {
+        $normalizedPath = str_replace(['//', '/', '\\\\', '\\'], DIRECTORY_SEPARATOR, $path);
+        return realpath($normalizedPath);
     }
 }

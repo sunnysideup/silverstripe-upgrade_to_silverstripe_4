@@ -135,7 +135,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
         );
         switch ($action) {
             case 'remove':
-                $this->mu()->colourPrint('removing to add '.$package.':'.$version, 'red', 1);
+                $this->mu()->colourPrint('removing '.$package.':'.$version, 'red', 1);
                 unset($composerData[$section][$package]);
                 $composerData[$section.'-tmp'][$package] = $version;
                 break;

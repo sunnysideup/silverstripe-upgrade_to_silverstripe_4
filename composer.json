@@ -102,7 +102,4 @@
         },
         "sort-packages": true
     },
-    "require-dev": {
-        "sunnysideup/huringa": "dev-master"
-    }
 }

@@ -95,7 +95,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
         );
         foreach (['require', 'require-dev'] as $section) {
             $tmpSection = $section.$this->appendixToKey;
-            if (isset($composerData[$tmpSection]) && is_array($composerData[$tmpSection]) && count($composerData[$tmpSection])) {
+            if (! empty($composerData[$tmpSection])) {
                 foreach ($composerData[$tmpSection] as $package => $version) {
 
                     $this->mu()->colourPrint('trying to add '.$package.':'.$version, 'yellow', 1);

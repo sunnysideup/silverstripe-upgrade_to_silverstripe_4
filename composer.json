@@ -20,7 +20,8 @@
         }
     ],
     "require": {
-        "sunnysideup/php_2_command_line":              "dev-master"
+        "sunnysideup/huringa": "dev-master",
+        "sunnysideup/php_2_command_line": "dev-master"
     },
     "require-dev": {
         "silverstripe/upgrader":                       "dev-master"
@@ -37,7 +38,8 @@
     },
     "config": {
         "allow-plugins": {
-            "composer/installers": true
+            "composer/installers": true,
+            "silverstripe/vendor-plugin": true
         },
         "sort-packages": true
     }

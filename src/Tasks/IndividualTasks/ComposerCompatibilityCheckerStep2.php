@@ -41,6 +41,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
      */
     public function runActualTask($params = [])
     {
+        $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
             return null;
         }
@@ -53,7 +54,10 @@ class ComposerCompatibilityCheckerStep2 extends Task
             'run composer update',
             false
         );
+        $this->mu()->setBreakOnAllErrors(false);
+
         return null;
+
     }
 
 
@@ -132,13 +136,13 @@ class ComposerCompatibilityCheckerStep2 extends Task
         switch ($action) {
             case 'remove':
                 $this->mu()->colourPrint('removing to add '.$package.':'.$version, 'red', 1);
-                unset($composerJson[$section][$package]);
-                $composerJson[$section.'-tmp'][$package] = $version;
+                unset($composerData[$section][$package]);
+                $composerData[$section.'-tmp'][$package] = $version;
                 break;
             case 'add':
                 $this->mu()->colourPrint('adding '.$package.':'.$version, 'green', 1);
-                $composerJson[$section][$package] = $version;
-                unset($composerJson[$section.'-tmp'][$package]);
+                $composerData[$section][$package] = $version;
+                unset($composerData[$section.'-tmp'][$package]);
                 break;
         }
         ComposerJsonFixes::inst($this->mu())->setJSON(

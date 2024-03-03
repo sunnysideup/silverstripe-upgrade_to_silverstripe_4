@@ -32,11 +32,9 @@ class ApplyPSR2 extends Task
     public function runActualTask($params = [])
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        if(
-            PHP2CommandLineSingleton::commandExists('sake-ling-all')
-        ) {
-            $commandAdd = '';
-        } else {
+        $localInstall = (bool) PHP2CommandLineSingleton::commandExists('sake-ling-all');
+        $commandAdd = '';
+        if($localInstall) {
             $commandAdd = 'vendor/bin/';
             Composer::inst($this->mu())
                 ->RequireDev(
@@ -78,11 +76,7 @@ class ApplyPSR2 extends Task
                 false
             );
         }
-        if(
-            PHP2CommandLineSingleton::commandExists('sake-ling-all')
-        ) {
-            $commandAdd = '';
-        } else {
+        if($localInstall) {
             $commandAdd = 'vendor/bin/';
             Composer::inst($this->mu())
                 ->RemoveDev(

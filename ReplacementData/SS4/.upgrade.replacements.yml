@@ -8,15 +8,12 @@
 ####                C: comment - this makes it a complex replacement.
 ####                I: ignore case (default is case sensitive)
 
-
 '.':
-
-
     '*':
         'mysite':
-            R: "app"
+            R: 'app'
         'Mysite':
-            R: "App"
+            R: 'App'
         'HtmlEditorConfig':
             R: 'HTMLEditorConfig'
         'HtmlEditorField':
@@ -24,16 +21,13 @@
 
     'md':
         'mysite':
-            R: "app"
+            R: 'app'
         'Mysite':
-            R: "App"
-
-
+            R: 'App'
 
     'js':
         'themes/':
             R: 'resources/themes/'
-
 
     'ss':
         'themes/':
@@ -70,65 +64,62 @@
         '/js/':
             R: '/client/js/'
             C: 'Check new location, also see: https://docs.silverstripe.org/en/4/developer_guides/templates/requirements/#direct-resource-urls'
-        '$List(Page':
-            R: '$List(\Page'
-        '$List(Page':
-            R: '$List(SilverStripe\CMS\Model\SiteTree:'
+        # '$List(Page':
+        #     R: '$List(SilverStripe\CMS\Model\SiteTree:'
 
         ".Format('U')":
-            R: ".Timestamp"
-            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            R: '.Timestamp'
+            C: 'check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".Format('d/m/y')":
             R: ".Format('d/MM/yy')"
-            C: "i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".Format('d/m/Y')":
             R: ".Format('d/MM/yyyy')"
-            C: "i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".Format('ymd')":
             R: ".Format('yyMMd')"
-            C: "i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".Format('Ymd')":
             R: ".Format('yyMMd')"
-            C: "i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".Format('y-m-d')":
             R: ".Format('yy-MM-d')"
-            C: "i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".Format('Y-m-d')":
             R: ".Format('yyyy-MM-d')"
-            C: "i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         '.Format(':
             R: '.Format('
             C: 'Format function for dates have changed! Please consider something like: PHP NativeFormat as an extension (see http://userguide.icu-project.org/formatparse/datetime)'
 
         ".format('U')":
-            R: ".Timestamp"
-            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            R: '.Timestamp'
+            C: 'check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".format('d/m/y')":
             R: ".format('d/MM/yy')"
-            C: "i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".format('d/m/Y')":
             R: ".format('d/MM/yyyy')"
-            C: "i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".format('ymd')":
             R: ".format('yyMMd')"
-            C: "i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".format('Ymd')":
             R: ".format('yyMMd')"
-            C: "i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".format('y-m-d')":
             R: ".format('yy-MM-d')"
-            C: "i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ".format('Y-m-d')":
             R: ".format('yyyy-MM-d')"
-            C: "i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         '.format(':
             R: '.format('
             C: 'Format function for dates have changed! Please consider something like: PHP NativeFormat as an extension (see http://userguide.icu-project.org/formatparse/datetime)'
 
-
     'yml':
         '_Controller':
-            R: "Controller"
+            R: 'Controller'
         'Director:':
             R: "SilverStripe\\Control\\Director:"
         'SiteTree:':
@@ -167,12 +158,12 @@
         'themes/':
             R: 'resources/themes/'
 
-
-
     php:
         'SS_Cache':
             R: 'SS_Cache'
             C: 'SS_Cache: Using symfony/cache now (https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache)'
+        'SS_DateTime':
+            R: 'DateTime'
         'useCustomClass':
             R: 'useCustomClass'
             C: 'Object::useCustomClass(): Use injector instead (https://docs.silverstripe.org/en/4/changelogs/4.0.0#custom-authenticators)'
@@ -181,117 +172,87 @@
             C: 'Email->populateTemplate() has been replaced with Email->setData()'
         'HtmlEditorConfig':
             R: 'HTMLEditorConfig'
-        'HtmlEditorField':
-            R: 'HTMLEditorField'
         "Requirements::themedCSS('":
             R: "Requirements::themedCSS('client/css/"
             C: "Check that this still works.  You can put: Requirements::themedCSS('client/css/MyFle') you also need to make sure you have a templates folder in your modules or Requirements::themedCSS will not work."
-        "Member::currentUser()":
-            R: "Security::getCurrentUser()"
-
-        "->Format('U')":
-            R: "->getTimestamp()"
-            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        "->Format('d/m/y')":
-            R: "->Format('d/MM/yy')"
-            C: "i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        "->Format('d/m/Y')":
-            R: "->Format('d/MM/yyyy')"
-            C: "i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        ">Format('ymd')":
-            R: "->Format('yyMMd')"
-            C: "i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        ">Format('Ymd')":
-            R: "->Format('yyyyMMd')"
-            C: "i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        ">Format('y-m-d')":
-            R: "->Format('yyyy-MM-d')"
-            C: "i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        "->Format('Y-m-d')":
-            R: "->Format('yyyy-MM-d')"
-            C: "i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        "->Format(":
-            R: "->Format("
-            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-
+        'Member::currentUser()':
+            R: 'Security::getCurrentUser()'
 
         "->format('U')":
-            R: "->getTimestamp()"
-            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            R: '->getTimestamp()'
+            C: 'check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         "->format('d/m/y')":
             R: "->format('d/MM/yy')"
-            C: "i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 28/12/21 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         "->format('d/m/Y')":
             R: "->format('d/MM/yyyy')"
-            C: "i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 28/12/2021 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ">Format('ymd')":
             R: "->format('yyMMd')"
-            C: "i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ">Format('Ymd')":
             R: "->format('yyyyMMd')"
-            C: "i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 20211228 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         ">Format('y-m-d')":
             R: "->format('yyyy-MM-d')"
-            C: "i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
+            C: 'i.e. 21-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
         "->format('Y-m-d')":
             R: "->format('yyyy-MM-d')"
-            C: "i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-        "->format(":
-            R: "->format("
-            C: "check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime"
-
-
+            C: 'i.e. 2021-12-28 ... check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
+        '->format(':
+            R: '->format('
+            C: 'check usage of new date/time system https://www.php.net/manual/en/datetime.format.php vs http://userguide.icu-project.org/formatparse/datetime'
 
         db::alteration_message:
             R: 'DB::alteration_message'
         Db::alteration_message:
             R: 'DB::alteration_message'
-        "OptionSetField":
-            R: "OptionsetField"
-        " convert::":
-            R: " Convert::"
-        "new DropDownField":
-            R: "new DropdownField"
-        "DropDownField::create":
-            R: "DropdownField::create"
-        "TagField":
-            R: "TagField"
-            C: "Check for fourth parameter to set Title (e.g. Title, Name)"
-        "LinkField":
-            R: "LinkField"
-            C: "You may need to run the following class: https://github.com/sunnysideup/silverstripe-migration-task/blob/master/src/Tasks/FixSheaDawsonLink.php"
-        "increase_time_limit_to(":
+        'OptionSetField':
+            R: 'OptionsetField'
+        ' convert::':
+            R: ' Convert::'
+        'new DropDownField':
+            R: 'new DropdownField'
+        'DropDownField::create':
+            R: 'DropdownField::create'
+        'TagField':
+            R: 'TagField'
+            C: 'Check for fourth parameter to set Title (e.g. Title, Name)'
+        'LinkField':
+            R: 'LinkField'
+            C: 'You may need to run the following class: https://github.com/sunnysideup/silverstripe-migration-task/blob/master/src/Tasks/FixSheaDawsonLink.php'
+        'increase_time_limit_to(':
             R: "Silverstripe\\Core\\Environment::increaseTimeLimitTo("
-        "increase_memory_limit_to(":
+        'increase_memory_limit_to(':
             R: "Silverstripe\\Core\\Environment::increaseMemoryLimitTo("
-        "Member::get_unique_identifier_field()":
+        'Member::get_unique_identifier_field()':
             R: "Member::config()->get('unique_identifier_field')"
-        "file_get_contents":
-            R: "file_get_contents"
-            C: "Use new asset abstraction (https://docs.silverstripe.org/en/4/changelogs/4.0.0#asset-storage"
-        "attachFileFromString":
-            R: "addAttachmentFromData"
-            C: "Check new way of attaching file to eamil"
-        "CronTask":
-            R: "CronTaskController"
-            C: "CronTask does not exist anymore. You have to include silverstripe/crontask"
-        "Member_ForgotPasswordEmail":
-            R: "Email"
+        'file_get_contents':
+            R: 'file_get_contents'
+            C: 'Use new asset abstraction (https://docs.silverstripe.org/en/4/changelogs/4.0.0#asset-storage'
+        'attachFileFromString':
+            R: 'addAttachmentFromData'
+            C: 'Check new way of attaching file to eamil'
+        'CronTask':
+            R: 'CronTaskController'
+            C: 'CronTask does not exist anymore. You have to include silverstripe/crontask'
+        'Member_ForgotPasswordEmail':
+            R: 'Email'
             C: "Member_ForgotPasswordEmail does not exist anymore. ss_template = 'ForgotPasswordEmail', Subject = Your password has been changed"
-        "Member_ChangePasswordEmail":
-            R: "Email"
+        'Member_ChangePasswordEmail':
+            R: 'Email'
             C: "Member_ForgotPasswordEmail does not exist anymore. ss_template = 'ChangePasswordEmail', Subject = Your password reset link"
-        "SS_Log::":
-            R: "SS_Log::"
-            C: "SS_Log: Replaced with a PSR-3 logger (https://docs.silverstripe.org/en/4/changelogs/4.0.0#psr3-logging)"
+        'SS_Log::':
+            R: 'SS_Log::'
+            C: 'SS_Log: Replaced with a PSR-3 logger (https://docs.silverstripe.org/en/4/changelogs/4.0.0#psr3-logging)'
         " => 'Image'":
             R: " => 'Image'"
             C: 'you may want to add ownership (owns)'
-        "new NumericField":
-            R: "NumericField::create"
+        'new NumericField':
+            R: 'NumericField::create'
             C: 'check the number of decimals required and add as ->setScale(2)'
-        "NumericField::create":
-            R: "NumericField::create"
+        'NumericField::create':
+            R: 'NumericField::create'
             C: 'check the number of decimals required and add as ->setScale(2)'
         'framework/sake':
             R: 'vendor/bin/sake'
@@ -368,7 +329,7 @@
         '->setMultiple(true)':
             R: '->setMultiple(true)'
             C: 'Is this a listBox field? Now deprecated, ListboxField now extends MultiSelectField so multiple selections are built in.'
-        '->getConfig(''showcalendar'')':
+        "->getConfig('showcalendar')":
             R: '->getHTML5()'
             C: 'Date Field? New way of finding out if the calendar is being shown (approximately). DateField no longer provides a jQuery UI date picker (showcalendar option), and uses HTML5 date pickers by default instead.'
         '->ElementArea()':
@@ -389,8 +350,8 @@
             R: "->setAllowedFileCategories('document')"
         'Config::inst()->update(':
             R: 'Config::modify()->update('
-        'Config::inst()->get(''':
-            R: 'Config::inst()->get('''
+        "Config::inst()->get('":
+            R: "Config::inst()->get('"
             C: 'Check if you should be using Name::class here instead of hard-coded class.'
         'Config::inst()->get("':
             R: 'Config::inst()->get("'
@@ -415,8 +376,6 @@
         'canView($member)':
             R: 'canView($member = null)'
             I: true
-        ' implements flushable':
-            R: ' implements Flushable'
         'Textfield':
             R: 'TextField'
         'HtmlEditorField':
@@ -432,23 +391,23 @@
             C: this is likely to be part of the Requirements_Backend calls'
         'mysite/css/':
             R: "ModuleLoader::getModule('mysite')->getResource('css/UPGRADE-FIX-REQUIRED.css')->getRelativePath()"
-            C: "Please review update and fix as required"
+            C: 'Please review update and fix as required'
         'mysite/javascript/':
             R: "ModuleLoader::getModule('mysite')->getResource('javascript/UPGRADE-FIX-REQUIRED.js')->getRelativePath()"
-            C: "Please review update and fix as required"
+            C: 'Please review update and fix as required'
         'mysite/images/':
             R: "ModuleLoader::getModule('mysite')->getResource('images/UPGRADE-FIX-REQUIRED.png')->getRelativePath()"
-            C: "Please review update and fix as required"
+            C: 'Please review update and fix as required'
         ' extends Object':
-            R: " extends ViewableData"
-            C: "This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable"
+            R: ' extends ViewableData'
+            C: 'This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable'
             I: true
         ' extends \Object':
-            R: " extends ViewableData"
-            C: "This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable"
+            R: ' extends ViewableData'
+            C: 'This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable'
             I: true
         ' implements flushable':
-            R: " implements Flushable"
+            R: ' implements Flushable'
             I: true
         '->getFullPath()':
             R: '->getFilename()'
@@ -474,16 +433,16 @@
         'fulltext':
             R: 'fulltext'
             C: 'See https://docs.silverstripe.org/en/4/developer_guides/search/fulltextsearch/ and check implementation!'
-        "ENGINE=MyISAM":
+        'ENGINE=MyISAM':
             R: 'ENGINE=MyISAM - replace with: MySQLSchemaManager::ID => "ENGINE=MyISAM"'
             C: 'See https://docs.silverstripe.org/en/4/developer_guides/search/fulltextsearch/ and check implementation!'
         ' extends Extension':
-            R: " extends Extension"
-            C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
+            R: ' extends Extension'
+            C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait'
             I: true
         ' extends DataExtension':
-            R: " extends DataExtension"
-            C: "Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait"
+            R: ' extends DataExtension'
+            C: 'Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait'
             I: true
         'DB::getConn()':
             R: 'DB::get_conn()'
@@ -491,18 +450,18 @@
             R: '->tableList()'
             C: 'SUGGESTION ... DB::get_conn()->tableList() ... WITH ... DataObject::getSchema()->getTableNames()'
         'BASE_PATH':
-            R: "Director::baseFolder()"
+            R: 'Director::baseFolder()'
         'FRAMEWORK_DIR':
             R: "SilverStripe\\Core\\Manifest\\ModuleLoader::getModule('silverstripe/framework')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()"
-            C: "Please review update and fix as required"
+            C: 'Please review update and fix as required'
             I: true
         'CMS_DIR':
             R: "SilverStripe\\Core\\Manifest\\ModuleLoader::getModule('silverstripe/cms')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()"
-            C: "Please review update and fix as required"
+            C: 'Please review update and fix as required'
             I: true
         'REPORTS_DIR':
             R: "SilverStripe\\Core\\Manifest\\ModuleLoader::getModule('silverstripe/reports')->getResource('UPGRADE-FIX-REQUIRED.php')->getRelativePath()"
-            C: "Please review update and fix as required"
+            C: 'Please review update and fix as required'
             I: true
         'SSViewer::get_theme_folder()':
             R: "\\SilverStripe\\View\\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')"
@@ -510,38 +469,38 @@
             I: true
         'THEMES_DIR':
             R: "SilverStripe\\View\\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')"
-            C: "Please review update and fix as required"
+            C: 'Please review update and fix as required'
             I: true
         'Session::get_all()':
-            R: "Controller::curr()->getRequest()->getSession()->getAll()"
-            C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
+            R: 'Controller::curr()->getRequest()->getSession()->getAll()'
+            C: 'If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. '
         'Session::clear_all()':
-            R: "Controller::curr()->getRequest()->getSession()->clearAll()"
-            C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
+            R: 'Controller::curr()->getRequest()->getSession()->clearAll()'
+            C: 'If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. '
         'Session::':
-            R: "Controller::curr()->getRequest()->getSession()->"
-            C: "If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. "
+            R: 'Controller::curr()->getRequest()->getSession()->'
+            C: 'If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. '
         'SSViewer::set_source_file_comments(':
             R: "Config::modify()->update('SSViewer', 'source_file_comments', "
         'ReadOnlyField':
-            R: "ReadonlyField"
+            R: 'ReadonlyField'
         '->setError':
-            R: "->setCustomValidationMessage"
-            C: "This needs further investigation, see: https://github.com/silverstripe/silverstripe-framework/issues/8225"
-        "$result->error(":
-            R: "$result->addError("
+            R: '->setCustomValidationMessage'
+            C: 'This needs further investigation, see: https://github.com/silverstripe/silverstripe-framework/issues/8225'
+        '$result->error(':
+            R: '$result->addError('
         '$form->addErrorMessage(':
             R: '$form->sessionError('
             C: 'SilverStripe\Forms\Form->addErrorMessage(): Removed. Use `sessionMessage()` or `sessionError()` to add a form level message, throw a `ValidationException` during submission, or add a custom validator.'
-        "Object::use_custom_class":
-            R: "Object::use_custom_class"
+        'Object::use_custom_class':
+            R: 'Object::use_custom_class'
             C: "You need to move this code to yml, using SilverStripe\\Core\\Injector\\Injector\n  OldClass: NewClass"
-        "_Controller extends PageController":
-            R: "Controller extends PageController"
-            C: "Remove the underscore in your classname - check all references!"
-        "_Controller extends Page_Controller":
-            R: "Controller extends PageController"
-            C: "Remove the underscores in your classname - check all references!"
+        '_Controller extends PageController':
+            R: 'Controller extends PageController'
+            C: 'Remove the underscore in your classname - check all references!'
+        '_Controller extends Page_Controller':
+            R: 'Controller extends PageController'
+            C: 'Remove the underscores in your classname - check all references!'
         'THIRDPARTY_DIR."/jquery/jquery.js"':
             R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
             C: 'Check for best usage and inclusion of Jquery'
@@ -558,14 +517,11 @@
             R: "'silverstripe/admin: thirdparty/jquery/jquery.js'"
             C: 'Check for best usage and inclusion of Jquery'
         'public function includeInHTML($templateFile, $content)':
-            R: "public function includeInHTML($content)"
+            R: 'public function includeInHTML($content)'
             I: true
         'Cache::factory(':
             R: 'SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class . ''.'' . '
             C: 'Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
-        '$cache->load(':
-            R: '$cache->has('
-            C: 'See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache, you may also need to add $cache->get( !!!'
         '$cache->set(':
             R: '$cache->set('
             C: 'Cache key and value need to be swapped!!! Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache'
@@ -665,8 +621,8 @@
             C: 'This should probably be replaced by PSR-4 autoloading!'
         'UserDefinedForm_Controller':
             R: 'UserDefinedFormController'
-        "UploadField(Image":
-            R: "UploadField(Image"
+        'UploadField(Image':
+            R: 'UploadField(Image'
             C: make sure that Image does not end up as Image::class where this is not required
         "UploadField('Image":
             R: "UploadField('Image"
@@ -674,13 +630,13 @@
         "TextField('Email'":
             R: "TextField('Email'"
             C: make sure that this does not end up as Email::class
-        "TextField(Email::class":
+        'TextField(Email::class':
             R: "TextField('Email'"
             C: make sure that this does not end up as Email::class
         "EmailField('Email'":
             R: "EmailField('Email'"
             C: make sure that this does not end up as Email::class
-        "EmailField(Email::class":
+        'EmailField(Email::class':
             R: "EmailField('Email'"
             C: make sure that this does not end up as Email::class
         'Email::setAdminEmail':
@@ -714,31 +670,25 @@
         '@param FieldList':
             R: '@param \\Silverstripe\\Forms\\FieldList'
         '@return FieldList':
-            R: '@return \Silverstripe\Forms\\FieldList'
-        '@return FieldList':
             R: '@return \\Silverstripe\\Forms\\FieldList'
         'assets/':
             R: 'assets/'
             C: 'Check if you need the assets parts - use ASSETS_PATH if needed'
-        ' Object::':
-            R: " SS_Object::"
-            C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
-            I: true
         '(Object::':
-            R: "(SS_Object::"
-            C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
+            R: '(SS_Object::'
+            C: 'Check usage for Object (PHP) vs SS_Object (Silverstripe)'
             I: true
         'HTTP::set_cache_age(':
-            R: "HTTPCacheControl::singleton()->disableCache(); or HTTPCacheControl::singleton()->enableCache()->setMaxAge(60);"
-            C: "HTTP Cache Header change - Opt-in Opt-out for http caching"
+            R: 'HTTPCacheControl::singleton()->disableCache(); or HTTPCacheControl::singleton()->enableCache()->setMaxAge(60);'
+            C: 'HTTP Cache Header change - Opt-in Opt-out for http caching'
             I: true
         'create_new_password':
-            R: "create_new_password"
-            C: "This is depracated in SS4: https://github.com/silverstripe/silverstripe-framework/commit/f16d7e1838d834575738086326d1191db3a5cfd8, consider if there is a better way to implement this functionality"
+            R: 'create_new_password'
+            C: 'This is depracated in SS4: https://github.com/silverstripe/silverstripe-framework/commit/f16d7e1838d834575738086326d1191db3a5cfd8, consider if there is a better way to implement this functionality'
             I: true
         'svg':
-            R: "svg"
-            C: "SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration"
+            R: 'svg'
+            C: 'SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration'
         'SVG':
-            R: "SVG"
-            C: "SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration"
+            R: 'SVG'
+            C: 'SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration'

@@ -344,7 +344,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
     protected function workoutPackageFolderName(array $moduleDetails): string
     {
         $this->packageFolderNameForInstall = trim($this->packageFolderNameForInstall);
-        if ($this->packageFolderNameForInstall && $this->testExistenceFromRoot($packageFolderNameForInstall)) {
+        if ($this->packageFolderNameForInstall && $this->testExistenceFromRoot($this->packageFolderNameForInstall)) {
             //do nothing
         } else {
             $packageFolderNameForInstall = $this->getSessionManager()->getSessionValue(

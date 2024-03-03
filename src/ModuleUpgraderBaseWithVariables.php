@@ -262,6 +262,11 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     protected $gitLink = '';
 
     /**
+     * @var bool
+     */
+    protected $isOnPackagist = false;
+
+    /**
      * git link for the module in https form
      * e.g. https://github.com/sunnysideup/silverstripe-dynamiccache/
      * @var string
@@ -734,10 +739,10 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     {
         return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
     }
-    public function getUseGitCloneNice(): string
+    public function getisOnPackagistNice(): string
     {
         if ($this->getIsModuleUpgrade()) {
-            return $this->getUseGitClone() ? 'not listed on packagist' : 'listed on packagist';
+            return $this->getisOnPackagist() ? 'listed on packagist' : 'not listed on packagist';
         } else {
             return 'not listed on packagist';
         }

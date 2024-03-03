@@ -25,7 +25,7 @@ foreach($modules as $module) {
               'UpgradeAsFork' => false,
               'IsModuleUpgrade' => true,
               'NameOfBranchForBaseCode' => 'develop',
-              'UseGitClone' => true,
+              'isOnPackagist' => false,
             ]
         ]
     )

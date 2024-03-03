@@ -186,7 +186,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
         if ($this->getCommandLineOrArgumentAsString('startFrom')) {
             $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
-            if( $this->runInteractively) {
+            if($this->runInteractively) {
                 $this->onlyRun = $this->getCommandLineOrArgumentAsString('startFrom');
             }
         }
@@ -247,7 +247,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         //Is Module Upgrade
         //do this first as a lot of other functions rely on it ...
         $this->isModuleUpgrade = isset($moduleDetails['IsModuleUpgrade']) ? (bool) $moduleDetails['IsModuleUpgrade'] : true;
-        $this->useGitClone = isset($moduleDetails['UseGitClone']) ? (bool) $moduleDetails['UseGitClone'] : false;
+        $this->isOnPackagist = isset($moduleDetails['isOnPackagist']) ? (bool) $moduleDetails['isOnPackagist'] : false;
 
         //VendorName
         $this->vendorName = $moduleDetails['VendorName'];
@@ -341,7 +341,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         return $this->webRootDirLocation . '/vendor/' . $this->vendorName . '/' . $this->packageName;
     }
 
-    protected function workoutPackageFolderName(array $moduleDetails) : string
+    protected function workoutPackageFolderName(array $moduleDetails): string
     {
         $this->packageFolderNameForInstall = trim($this->packageFolderNameForInstall);
         if ($this->packageFolderNameForInstall && $this->testExistenceFromRoot($packageFolderNameForInstall)) {
@@ -393,7 +393,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         return $this->packageFolderNameForInstall;
     }
 
-    protected function testLocationFromRootDir(string $dir) : bool
+    protected function testLocationFromRootDir(string $dir): bool
     {
         return (bool) file_exists($this->webRootDirLocation . '/'. $dir);
     }

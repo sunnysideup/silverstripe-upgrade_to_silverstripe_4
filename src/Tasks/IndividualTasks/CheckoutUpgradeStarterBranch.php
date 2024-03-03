@@ -41,7 +41,7 @@ class CheckoutUpgradeStarterBranch extends Task
     {
         $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
-            if ($this->mu()->getUseGitClone()) {
+            if ($this->mu()->getisOnPackagist() !== true) {
                 $this->gitClone();
             } else {
                 $this->composerRequire();

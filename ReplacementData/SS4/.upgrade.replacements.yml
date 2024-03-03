@@ -163,7 +163,7 @@
             R: 'SS_Cache'
             C: 'SS_Cache: Using symfony/cache now (https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache)'
         'SS_DateTime':
-            R: 'DateTime'
+            R: 'Datetime'
         'useCustomClass':
             R: 'useCustomClass'
             C: 'Object::useCustomClass(): Use injector instead (https://docs.silverstripe.org/en/4/changelogs/4.0.0#custom-authenticators)'

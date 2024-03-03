@@ -49,6 +49,11 @@ class Composer
         return $this->requireAny($package, $version, true, $options, false);
     }
 
+    public function RemoveDev(string $package): self
+    {
+        return $this->Remove($package, true);
+    }
+
     public function Remove(string $package, ?bool $devOnly = false): self
     {
         $devFlag = $devOnly ? '--dev' : '';

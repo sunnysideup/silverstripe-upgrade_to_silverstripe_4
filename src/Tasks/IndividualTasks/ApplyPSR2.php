@@ -33,8 +33,7 @@ class ApplyPSR2 extends Task
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
         if(
-            PHP2CommandLineSingleton::commandExists('sslint-ecs') &&
-            PHP2CommandLineSingleton::commandExists('sslint-stan')
+            PHP2CommandLineSingleton::commandExists('sake-ling-all')
         ) {
             $commandAdd = '';
         } else {
@@ -56,19 +55,19 @@ class ApplyPSR2 extends Task
                 ->removeDirOrFile($knownIssuesFileName);
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd.'sslint-ecs '.$relativeDir,
+                $commandAdd.'sake-ling-all '.$relativeDir,
                 'Apply easy coding standards to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd.'sslint-ecs '.$relativeDir,
+                $commandAdd.'sake-ling-all '.$relativeDir,
                 'Apply easy coding standards a second time ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd.'sslint-ecs '.$relativeDir.' > ' . $knownIssuesFileName,
+                $commandAdd.'sake-ling-all '.$relativeDir.' > ' . $knownIssuesFileName,
                 'Apply easy coding standards a third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to ' . $knownIssuesFileName,
                 false
             );
@@ -78,6 +77,19 @@ class ApplyPSR2 extends Task
                 'Apply phpstan. to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $knownIssuesFileName,
                 false
             );
+        }
+        if(
+            PHP2CommandLineSingleton::commandExists('sake-ling-all')
+        ) {
+            $commandAdd = '';
+        } else {
+            $commandAdd = 'vendor/bin/';
+            Composer::inst($this->mu())
+                ->RemoveDev(
+                    'sunnysideup/easy-coding-standards',
+                    'dev-master',
+                    $this->composerOptions
+                );
         }
     }
 

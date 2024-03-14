@@ -11,10 +11,10 @@
 '.':
     'ss':
         '/\$First\b/':
-            R: '$isFirst'
+            R: '$IsFirst'
 
         '/\$Last\b/':
-            R: '$isLast'
+            R: '$IsLast'
 
         '.CroppedImage(':
             R: '.Fill('

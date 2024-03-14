@@ -52,7 +52,28 @@
 
         'strtolower(':
             R: 'strtolower((string) '
-
+        'strrev(':
+            R: 'strrev((string) '
+        'ltrim(':
+            R: 'ltrim((string) '
+        'rtrim(':
+            R: 'rtrim((string) '
+        'substr(':
+            R: 'substr((string) '
+        'str_replace(':
+            R: 'str_replace((mixed) '
+        'strpos(':
+            R: 'strpos((string) '
+        'str_repeat(':
+            R: 'str_repeat((string) '
+        'strlen(':
+            R: 'strlen((string) '
+        'strcmp(':
+            R: 'strcmp((string) '
+        'strcasecmp(':
+            R: 'strcasecmp((string) '
+        'str_split(':
+            R: 'str_split((string) '
         'strtoupper(':
             R: 'strtoupper((string) '
 

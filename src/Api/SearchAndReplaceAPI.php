@@ -737,11 +737,10 @@ class SearchAndReplaceAPI
         return false;
     }
 
-
     protected function isValidRegex(string $pattern): bool
     {
         // Check if the pattern looks like a regex
-        if (!preg_match('/^\/.*\/[a-zA-Z]*$/', $pattern)) {
+        if (! preg_match('/^\/.*\/[a-zA-Z]*$/', $pattern)) {
             return false;
         }
 
@@ -759,6 +758,4 @@ class SearchAndReplaceAPI
             return false; // The pattern is invalid
         }
     }
-
-
 }

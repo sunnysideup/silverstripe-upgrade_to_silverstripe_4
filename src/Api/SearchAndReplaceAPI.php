@@ -296,11 +296,16 @@ class SearchAndReplaceAPI
             if ($this->replacementHeader) {
                 $string .= '  * WHY: ' . $this->replacementHeader . PHP_EOL;
             }
-            $caseSensitiveStatement = ($this->caseSensitive ? 'case sensitive' : 'ignore case');
+            $caseSensitiveStatement = ($this->caseSensitive ? '' : ' (ignore case)');
             $replacementTypeStatement = ($this->replacementType ? ' (' . $this->replacementType . ')' : '');
+            $new = '';
+            if($this->searchKey !== $this->replacementKey) {
+            } else {
+                $new = '  * NEW: ' . $this->replacementKey . ' ... ' . $replacementTypeStatement . PHP_EOL ;
+            }
             $string .=
-                '  * OLD: ' . $this->searchKey . ' (' . $caseSensitiveStatement . ')' . PHP_EOL .
-                '  * NEW: ' . $this->replacementKey . $replacementTypeStatement . PHP_EOL .
+                '  * OLD: ' . $this->searchKey . $caseSensitiveStatement  . PHP_EOL .
+                $new.
                 '  * EXP: ' . $this->comment . PHP_EOL .
                 '  * ' . $this->endMarker . PHP_EOL .
                 '  */' .

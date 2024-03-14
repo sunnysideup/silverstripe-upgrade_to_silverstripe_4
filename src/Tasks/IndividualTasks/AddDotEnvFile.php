@@ -13,7 +13,7 @@ class AddDotEnvFile extends Task
     protected $taskStep = 's60';
 
     protected $envContent = [
-        'SS_DATABASE_CLASS="MySQLPDODatabase"',
+        'SS_DATABASE_CLASS="MySQLDatabase"',
         'SS_DATABASE_NAME="--DB-NAME--HERE--"',
         'SS_DATABASE_PASSWORD="x"',
         'SS_DATABASE_SERVER="localhost"',

@@ -61,6 +61,7 @@ class AddTableName extends Task
 
     public function runActualTask($params = []): ?string
     {
+        $caseSensitive = true;
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $moduleDir = $this->mu()->findMyCodeDir($moduleDir);
             //Start search machine from the module location. replace API
@@ -85,7 +86,6 @@ class AddTableName extends Task
                     "++++++++++++++++++++++++++++++++++++\n"
                 );
                 foreach ($this->findArray as $finalFind) {
-                    $caseSensitive = true;
                     $replacementType = 'COMPLEX';
                     $comment = 'Check that is class indeed extends DataObject and that it is not a data-extension!';
                     $finalReplace = '

@@ -2,6 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
+use Exception;
+
 /**
  * @BasedOn  :  MA Razzaque Rupom <rupom_315@yahoo.com>, <rupom.bd@gmail.com>
  *             Moderator, phpResource Group(http://groups.yahoo.com/group/phpresource/)
@@ -35,6 +37,8 @@ class SearchAndReplaceAPI
     private $replacementType = '';
 
     private $caseSensitive = true;
+
+    private $isRegex = false;
 
     private $ignoreFrom = [
         '//',
@@ -250,6 +254,7 @@ class SearchAndReplaceAPI
     {
         $this->searchKey = $searchKey;
         $this->caseSensitive = $caseSensitive;
+        $this->isRegex = $this->isValidRegex($this->searchKey);
         $this->replacementType = $replacementType;
         //reset comment
         $this->comment = '';
@@ -458,7 +463,6 @@ class SearchAndReplaceAPI
     {
         $foundInLineCount = 0;
         $myReplacementKey = $this->replacementKey;
-        $searchKey = preg_quote($this->searchKey, '/');
         if ($this->isReplacingEnabled) {
             //prerequisites for file and content ...
             if ($this->testMustContain($file) === false) {
@@ -479,9 +483,15 @@ class SearchAndReplaceAPI
             }
             $oldFileContentArray = (array) file($file) ?? [];
             $newFileContentArray = [];
-            $pattern = "/${searchKey}/U";
-            if (! $this->caseSensitive) {
-                $pattern = "/${searchKey}/Ui";
+
+            if($this->isRegex === true) {
+                $pattern = $this->searchKey;
+            } else {
+                $searchKey = preg_quote($this->searchKey, '/');
+                $pattern = "/${searchKey}/U";
+                if (! $this->caseSensitive) {
+                    $pattern = "/${searchKey}/Ui";
+                }
             }
             $foundCount = 0;
             $insidePreviousReplaceComment = false;
@@ -505,6 +515,8 @@ class SearchAndReplaceAPI
                     if ($insidePreviousReplaceComment || $insideIgnoreArea) {
                         //do nothing ...
                     } else {
+                        // echo PHP_EOL . $pattern . PHP_EOL;
+                        // $pattern = '/\$First\b/U';
                         $foundInLineCount = preg_match_all(
                             $pattern,
                             (string) $oldLineContent,
@@ -724,4 +736,29 @@ class SearchAndReplaceAPI
         }
         return false;
     }
+
+
+    protected function isValidRegex(string $pattern): bool
+    {
+        // Check if the pattern looks like a regex
+        if (!preg_match('/^\/.*\/[a-zA-Z]*$/', $pattern)) {
+            return false;
+        }
+
+        // Attempt to validate the regex pattern
+        set_error_handler(function () {
+            throw new Exception('Invalid regex.');
+        });
+
+        try {
+            preg_match($pattern, '');
+            restore_error_handler();
+            return true; // The pattern is valid
+        } catch (Exception $e) {
+            restore_error_handler();
+            return false; // The pattern is invalid
+        }
+    }
+
+
 }

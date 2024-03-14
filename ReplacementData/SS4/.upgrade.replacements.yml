@@ -3,7 +3,7 @@
 ####
 ####    PATH (relative to root folder of module)
 ####        LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
-####            FindKey
+####            FindKey  (you can use REGEX!)
 ####                R: replace with entry - you can leave empty to keep it as the find... in that case you should add a comment
 ####                C: comment - this makes it a complex replacement.
 ####                I: ignore case (default is case sensitive)

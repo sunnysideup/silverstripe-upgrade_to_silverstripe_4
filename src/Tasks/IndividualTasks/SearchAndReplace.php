@@ -157,6 +157,7 @@ class SearchAndReplace extends Task
                                 $comment = isset($findDetails['C']) ? $findDetails['C'] : '';
                                 $ignoreCase = isset($findDetails['I']) ? $findDetails['I'] : false;
                                 $caseSensitive = ! $ignoreCase;
+                                $isRegex = false;
                                 //$replace = $replaceArray[1]; unset($replaceArray[1]);
                                 //$fullReplacement =
                                 //   (isset($replaceArray[2]) ? "/* ".$replaceArray[2]." */\n" : "").$replaceArray[1];

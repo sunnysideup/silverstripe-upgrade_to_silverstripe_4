@@ -3,53 +3,48 @@
 ####
 ####    PATH (relative to root folder of module)
 ####        LANGUAGE (php / ss / js / css / etc... to use more than one, you can use php|inc)
-####            FindKey
+####            FindKey (you can use REGEX!)
 ####                R: replace with entry - you can leave empty to keep it as the find... in that case you should add a comment
 ####                C: comment - this makes it a complex replacement.
 ####                I: ignore case (default is case sensitive)
 
-
 '.':
-
-
     'yml':
         ' Object':
-            R: " SS_Object"
-            C: "Check usage"
+            R: ' SS_Object'
+            C: 'Check usage'
             I: true
         'svg':
-            R: "svg"
-            C: "SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration"
+            R: 'svg'
+            C: 'SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration'
         'SVG':
-            R: "SVG"
-            C: "SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration"
-
-
+            R: 'SVG'
+            C: 'SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration'
 
     'php':
         'extends Object':
-            R: "extends SS_Object"
-            C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
+            R: 'extends SS_Object'
+            C: 'Check usage for Object (PHP) vs SS_Object (Silverstripe)'
             I: true
         ' Object::':
-            R: " SS_Object::"
-            C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
+            R: ' SS_Object::'
+            C: 'Check usage for Object (PHP) vs SS_Object (Silverstripe)'
             I: true
         '(Object::':
-            R: "(SS_Object::"
-            C: "Check usage for Object (PHP) vs SS_Object (Silverstripe)"
+            R: '(SS_Object::'
+            C: 'Check usage for Object (PHP) vs SS_Object (Silverstripe)'
             I: true
         'HTTP::set_cache_age(':
-            R: "HTTPCacheControl::singleton()->disableCache(); or HTTPCacheControl::singleton()->enableCache()->setMaxAge(60);"
-            C: "HTTP Cache Header change - Opt-in Opt-out for http caching"
+            R: 'HTTPCacheControl::singleton()->disableCache(); or HTTPCacheControl::singleton()->enableCache()->setMaxAge(60);'
+            C: 'HTTP Cache Header change - Opt-in Opt-out for http caching'
             I: true
         'create_new_password':
-            R: "create_new_password"
-            C: "This is depracated in SS4: https://github.com/silverstripe/silverstripe-framework/commit/f16d7e1838d834575738086326d1191db3a5cfd8, consider if there is a better way to implement this functionality"
+            R: 'create_new_password'
+            C: 'This is depracated in SS4: https://github.com/silverstripe/silverstripe-framework/commit/f16d7e1838d834575738086326d1191db3a5cfd8, consider if there is a better way to implement this functionality'
             I: true
         'svg':
-            R: "svg"
-            C: "SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration"
+            R: 'svg'
+            C: 'SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration'
         'SVG':
-            R: "SVG"
-            C: "SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration"
+            R: 'SVG'
+            C: 'SVG uploads are now disabled in SS3.7: https://github.com/silverstripe/silverstripe-installer/commit/c25478bef75cc5482852e80a1fa6f1f0e6460e39, if you need to allow SVG uploads you need to update your configuration'

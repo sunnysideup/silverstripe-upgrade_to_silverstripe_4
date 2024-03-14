@@ -47,6 +47,7 @@ class FixTemplateIncludeStatements extends Task
     public function runActualTask($params = []): ?string
     {
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
+        $caseSensitive = false;
         foreach ($codeDirs as $baseNameSpace => $codeDir) {
             $baseDir = dirname($codeDir);
             //Start search machine from the module location. replace API
@@ -68,8 +69,8 @@ class FixTemplateIncludeStatements extends Task
                     'BASE ' . $baseDir . "\n" .
                     "++++++++++++++++++++++++++++++++++++\n"
                 );
+
                 foreach ($this->findArray as $finalFind) {
-                    $caseSensitive = false;
                     $replacementType = 'BASIC';
                     $finalReplace = '<% include ' . $baseNameSpace . '\Includes';
                     $this->mu()->colourPrint(

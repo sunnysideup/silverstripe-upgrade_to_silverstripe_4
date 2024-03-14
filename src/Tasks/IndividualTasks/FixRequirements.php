@@ -102,9 +102,6 @@ class FixRequirements extends Task
                             // $findWithPackageName = $find . strtolower($this->mu()->getPackageName());
                             $vendorAndPackageFolderNameForInstall =
                                 $this->mu()->getVendorAndPackageFolderNameForInstall();
-                            if (trim($find) === '') {
-                                user_error("no find is specified, replace is: ${replace}");
-                            }
 
                             foreach (['\'', '"'] as $quoteMark) {
                                 $finalReplace = $find . $quoteMark . $vendorAndPackageFolderNameForInstall . ': ';
@@ -132,8 +129,8 @@ class FixRequirements extends Task
                         //vendor/packagename: silverstripe/admin
                         //to
                         //silverstripe/admin: only
+                        $isCaseSensitive = true;
                         foreach (['cms', 'framework', 'siteconfig', 'reports'] as $ssModule) {
-                            $isStraightReplace = true;
                             $finalFind = $vendorAndPackageFolderNameForInstall . ': silverstripe/' . $ssModule . ': ';
                             $finalReplace = 'silverstripe/' . $ssModule . ': ';
                             $this->mu()->colourPrint(
@@ -142,7 +139,7 @@ class FixRequirements extends Task
                             );
                             $textSearchMachine->setSearchKey(
                                 $finalFind,
-                                $isStraightReplace,
+                                $isCaseSensitive,
                                 'silverstripe/' . $ssModule . '/@@@@double-up@@@@'
                             );
                             $textSearchMachine->setReplacementKey($finalReplace);

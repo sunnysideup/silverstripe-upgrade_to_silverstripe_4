@@ -47,6 +47,6 @@ class WebrootUpdate extends Task
 
     public function hasCommitAndPush()
     {
-        true;
+        return true;
     }
 }

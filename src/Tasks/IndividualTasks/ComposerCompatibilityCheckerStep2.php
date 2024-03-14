@@ -36,7 +36,6 @@ class ComposerCompatibilityCheckerStep2 extends Task
 
     /**
      * @param array $params
-     * @return string|null
      */
     public function runActualTask($params = []): ?string
     {

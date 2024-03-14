@@ -102,7 +102,7 @@ class FixRequirements extends Task
                             // $findWithPackageName = $find . strtolower($this->mu()->getPackageName());
                             $vendorAndPackageFolderNameForInstall =
                                 $this->mu()->getVendorAndPackageFolderNameForInstall();
-                            if (empty($find)) {
+                            if (trim($find) === '') {
                                 user_error("no find is specified, replace is: ${replace}");
                             }
 

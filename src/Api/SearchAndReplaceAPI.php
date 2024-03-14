@@ -631,9 +631,9 @@ class SearchAndReplaceAPI
     /**
      * returns full output
      * and clears it.
-     * @return string
+     * @return void
      */
-    private function addToOutput($s)
+    private function addToOutput($s) : void
     {
         $this->output .= $s;
     }

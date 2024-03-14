@@ -46,7 +46,6 @@ class ComposerCompatibilityCheckerStep3 extends Task
 
     /**
      * @param array $params
-     * @return string|null
      */
     public function runActualTask($params = []): ?string
     {
@@ -174,7 +173,7 @@ class ComposerCompatibilityCheckerStep3 extends Task
         $array['folder'] = substr($name, $pos);
         $array['tag'] = $version;
         $array['repo'] = null;
-        unset($strings);
+
         $strings = $this->mu()->execMe(
             $this->webRootLocation,
             'composer show -a ' . $name . ' 2>&1 ',

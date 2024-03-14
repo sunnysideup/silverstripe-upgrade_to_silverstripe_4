@@ -166,8 +166,6 @@ abstract class Task
      * this class.
      *
      * When it returns a string, we regard this to be a description of a fatal error!
-     *
-     * @return string|null
      */
     abstract public function runActualTask($params = []): ?string;
 

@@ -3,7 +3,6 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -35,7 +34,7 @@ class LintAll extends Task
             foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),
-                    'sake-lint-all '.$moduleDir,
+                    'sake-lint-all ' . $moduleDir,
                     'Linting all PHP files in ' . $moduleDir,
                     true
                 );

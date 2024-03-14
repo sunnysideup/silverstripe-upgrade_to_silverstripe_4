@@ -9,7 +9,15 @@
 ####                I: ignore case (default is case sensitive)
 
 '.':
-    '*':
+    'ss':
+        '.First':
+            R: '.IsFirst'
+            C: 'Check!'
+        '.Last':
+            R: '.IsLast'
+            C: 'Check!'
+
+    'php':
         '->extend(':
             R: '->extend('
             C: 'Changed parameter name in ... SilverStripe\Core\Extensible::extend() from $a1 to $arguments and modified it to accept variable arguments using the splat operator'
@@ -26,9 +34,10 @@
             R: '->orderBy('
             C: 'Please check that this still works. OrderBy only excepts arrays, not strings!'
 
+    '*':
         '::get_one(':
             R: '::get_one('
-            C: 'Changed parameter name in ... SilverStripe\ORM\DataObject::get_one() from $orderby to $sort'
+            C: 'Changed parameter name in ... SilverStripe\ORM\DataObject::get_one() from $orderby to $sort. TBC'
 
         'AbstractConfirmationToken':
             R: 'AbstractConfirmationToken'
@@ -274,10 +283,6 @@
             R: 'findAnAdministrator('
             C: 'Removed deprecated method ... SilverStripe\Security\Security::findAnAdministrator() - use SilverStripe\Security\DefaultAdminService::findOrCreateDefaultAdmin() instead'
 
-        'First(':
-            R: 'First('
-            C: 'Removed deprecated method ... SilverStripe\View\SSViewer_BasicIteratorSupport::First() - use SilverStripe\View\SSViewer_BasicIteratorSupport::IsFirst() instead'
-
         'FixFolderPermissionsHelper':
             R: 'FixFolderPermissionsHelper'
             C: 'Removed deprecated class ... SilverStripe\Dev\Tasks\FixFolderPermissionsHelper without equivalent functionality to replace it'
@@ -461,10 +466,6 @@
         'invokeWithExtensions(':
             R: 'invokeWithExtensions('
             C: 'Removed deprecated parameter ... SilverStripe\Core\Extensible::invokeWithExtensions() from $a1 to $arguments and modified it to accept variable arguments using the splat operator'
-
-        'Last(':
-            R: 'Last('
-            C: 'Removed deprecated method ... SilverStripe\View\SSViewer_BasicIteratorSupport::Last() - use SilverStripe\View\SSViewer_BasicIteratorSupport::IsLast() instead'
 
         'legacy_filenames':
             R: 'legacy_filenames'

@@ -54,14 +54,10 @@
         'strtotime(':
             R: 'strtotime((string) '
 
-        '(string) (string) ':
-            R: '(string) '
-
         'default_sort = [':
             R: 'default_sort = ['
             C: 'A string is preferred over an array'
 
-    '*':
         '::get_one(':
             R: '::get_one('
             C: 'Changed parameter name in ... SilverStripe\ORM\DataObject::get_one() from $orderby to $sort. TBC'
@@ -945,3 +941,5 @@
         'writeDuplication(':
             R: 'writeDuplication('
             C: 'Changed parameter type ... DNADesign\Elemental\TopPage\SiteTreeExtension::writeDuplication() for $original from Page to SilverStripe\CMS\Model\SiteTree'
+        '(string) (string) ':
+            R: '(string) '

@@ -170,7 +170,7 @@ class Git
 
         $this->mu()->execMe(
             $dir,
-            'git checkout ' . $branch,
+            'git checkout -b ' . $branch,
             'check out : ' . $branch . ' as a starting point',
             false
         );

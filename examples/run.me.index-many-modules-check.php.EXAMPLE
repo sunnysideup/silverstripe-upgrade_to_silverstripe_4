@@ -29,7 +29,7 @@ foreach($modules as $module) {
             ]
         ]
     )
-    ->setRunInteractively(false)
+    ->setRunInteractively(true)
     ->setAboveWebRootDirLocation('/var/www/module-upgrades')
     ->setLogFolderDirLocation('')
     ->setRecipe('SS4')

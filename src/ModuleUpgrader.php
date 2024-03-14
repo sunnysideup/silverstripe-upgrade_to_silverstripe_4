@@ -169,7 +169,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             } else {
                 user_error(
                     'Recipe ' . $recipeName . ' not available.
-                    Available Recipes are: ' . print_r($this->getAvailableRecipes())
+                    Available Recipes are: ' . print_r($this->getAvailableRecipes(), 1)
                 );
             }
         }

@@ -156,7 +156,7 @@ class SearchAndReplaceAPI
     public function setBasePath($pathLocation)
     {
         $this->basePath = $pathLocation;
-        $this->fileFinder->setBasePath($pathLocation);
+        $this->fileFinder->setSearchPath($pathLocation);
 
         return $this;
     }

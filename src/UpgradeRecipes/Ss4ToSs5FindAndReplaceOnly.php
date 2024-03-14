@@ -53,6 +53,7 @@ class Ss4ToSs5FindAndReplaceOnly extends BaseClass
 
         'SearchAndReplace' => [
             'sourceFolders' => ['SS5'],
+            'commitAndPush' => false
         ],
     ];
 

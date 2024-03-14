@@ -62,6 +62,8 @@ class SearchAndReplace extends Task
         'SS4',
     ];
 
+    protected $commitAndPush = true;
+
     public function getTitle()
     {
         return 'Search and Replace';
@@ -85,6 +87,13 @@ class SearchAndReplace extends Task
     public function setIgnoreFolderArray(array $a)
     {
         $this->ignoreFolderArray = $a;
+
+        return $this;
+    }
+
+    public function setCommitAndPush(bool $b)
+    {
+        $this->commitAndPush = $b;
 
         return $this;
     }
@@ -193,7 +202,7 @@ class SearchAndReplace extends Task
 
     protected function hasCommitAndPush()
     {
-        return true;
+        return $this->commitAndPush;
     }
 
     protected function getReplacementDataObjects(): array

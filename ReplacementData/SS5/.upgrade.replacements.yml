@@ -10,12 +10,17 @@
 
 '.':
     'ss':
-        '$First':
+        '\$First\b':
             R: '$isFirst'
-            C: 'Check!'
-        '$Last':
+
+        '\$Last\b':
             R: '$isLast'
-            C: 'Check!'
+
+        '\.CroppedImage\(':
+            R: '.Fill('
+
+        '\.SetRatioSize\(':
+            R: '.FitMax('
 
     'php':
         '->extend(':
@@ -24,15 +29,15 @@
 
         '->insertBefore(':
             R: '->insertBefore('
-            C: 'Check that this is in the right order!'
+            C: 'Name of the field to insert before is listed first, then the field - just check this.'
 
         '->insertAfter(':
             R: '->insertAfter('
-            C: 'Check that this is in the right order!'
+            C: 'Name of the field to insert after is listed first, then the field - just check this.'
 
         '->sort(':
-            R: '->orderBy('
-            C: 'Please check that this still works. OrderBy only excepts arrays, not strings!'
+            R: '->sort('
+            C: 'This method no longer accepts raw sql, only known field names.  If you have raw SQL then use ->orderBy'
 
         '->deleteFile(':
             R: '->doArchive('
@@ -494,10 +499,6 @@
             R: 'LegacyFileIDHelper'
             C: 'Removed deprecated class ... SilverStripe\Assets\FilenameParsing\LegacyFileIDHelper - legacy file names are not supported in Silverstripe CMS 5'
 
-        'limit(':
-            R: 'limit('
-            C: 'Removed deprecated method ... SilverStripe\FullTextSearch\Search\Queries\SearchQuery::limit() - use SilverStripe\FullTextSearch\Search\Queries\SearchQuery::setLimit() instead'
-
         'LocaleLink(':
             R: 'LocaleInformation('
             C: 'Removed deprecated method ... TractorCow\Fluent\Extension\FluentExtension::LocaleLink() - use TractorCow\Fluent\Extension\FluentExtension::LocaleInformation() instead'
@@ -652,7 +653,7 @@
 
         'SearchQuery':
             R: 'SearchQuery'
-            C: 'Removed deprecated method ... SilverStripe\FullTextSearch\Search\Queries\SearchQuery::exclude() / ::filter - use SilverStripe\FullTextSearch\Search\Queries\SearchQuery::addExclude() AND addFilter (instead of Filter) instead'
+            C: 'Removed deprecated method ... SilverStripe\FullTextSearch\Search\Queries\SearchQuery::exclude() / ::filter / ::limit - use SilverStripe\FullTextSearch\Search\Queries\SearchQuery::addExclude(), addFilter, setLimit instead'
 
         'send(':
             R: 'send('
@@ -882,8 +883,8 @@
             R: 'TestState'
             C: 'Removed deprecated class ... DNADesign\Elemental\TopPage\TestState without equivalent functionality to replace it'
 
-        'theme':
-            R: 'theme'
+        "'theme'":
+            R: "'theme'"
             C: 'Removed deprecated config ... SilverStripe\View\SSViewer.theme - use SilverStripe\View\SSViewer.themes config instead'
 
         'ThemeDir(':
@@ -941,5 +942,311 @@
         'writeDuplication(':
             R: 'writeDuplication('
             C: 'Changed parameter type ... DNADesign\Elemental\TopPage\SiteTreeExtension::writeDuplication() for $original from Page to SilverStripe\CMS\Model\SiteTree'
+
         '(string) (string) ':
             R: '(string) '
+
+    'yml':
+        'default_sort: ':
+            R: 'default_sort: '
+            C: 'A string is preferred over an array'
+
+        'cach_age':
+            R: 'cach_age'
+            C: 'Removed deprecated property ... SilverStripe\Control\HTTP::$cache_age - use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware::setMaxAge() instead'
+
+        'cache_ajax_requests':
+            R: 'cache_ajax_requests'
+            C: 'Removed deprecated config ... SilverStripe\Control\HTTP.cache_ajax_requests'
+
+        'cache_control':
+            R: 'cache_control'
+            C: 'Removed deprecated config ... SilverStripe\Control\HTTP.cache_control - use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware instead'
+
+        'disable_http_cache':
+            R: 'disable_http_cache'
+            C: 'Removed deprecated config ... SilverStripe\Control\HTTP.disable_http_cache - use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware.defaultState or SilverStripe\Control\Middleware\HTTPCacheControlMiddleware.defaultForcingLevel instead'
+
+        'etag':
+            R: 'etag'
+            C: 'Removed deprecated property ... SilverStripe\Control\HTTP::$etag - use SilverStripe\Control\Middleware\ChangeDetectionMiddleware instead'
+
+        'force_subsite':
+            R: 'force_subsite'
+            C: 'Removed deprecated property ... SilverStripe\Subsites\Model\Subsite::$force_subsite - use SilverStripe\Subsites\State\SubsiteState::withState() instead.'
+
+        'legacy_filenames':
+            R: 'legacy_filenames'
+            C: 'Removed deprecated config ... SilverStripe\Assets\Flysystem\FlysystemAssetStore.legacy_filenames - legacy file names are not supported in Silverstripe CMS 5'
+
+        'modification_date':
+            R: 'modification_date'
+            C: 'Removed deprecated property ... SilverStripe\Control\HTTP::$modification_date - use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware instead'
+
+        'module_priority':
+            R: 'module_priority'
+            C: 'Removed deprecated config ... SilverStripe\i18n\Data\Sources.module_priority - use SilverStripe\Core\Manifest\ModuleManifest.module_priority instead'
+
+        'quiet':
+            R: 'quiet'
+            C: 'Removed deprecated property ... SilverStripe\CronTask\Controllers\CronTaskController::$quiet - use SilverStripe\CronTask\Controllers\CronTaskController.verbosity instead'
+
+        'subitem_class':
+            R: 'subitem_class'
+            C: 'Removed deprecated config ... SilverStripe\CMS\Controllers\CMSMain.subitem_class - do not use this option'
+
+        ' theme:':
+            R: ' theme:'
+            C: 'Removed deprecated config ... SilverStripe\View\SSViewer.theme - use SilverStripe\View\SSViewer.themes config instead'
+
+        'use_draft_site':
+            R: 'use_draft_site'
+            C: 'Removed deprecated property ... SilverStripe\Dev\FunctionalTest::$use_draft_site - use ?stage=Stage in your request`s querystring instead'
+
+        'vary':
+            R: 'vary'
+            C: 'Removed deprecated config ... SilverStripe\Control\HTTP.vary - use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware instead'
+
+        'AbstractConfirmationToken':
+            R: 'AbstractConfirmationToken'
+            C: 'Removed deprecated class ... SilverStripe\Core\Startup\AbstractConfirmationToken without equivalent functionality to replace it'
+
+        'Captures\SearchManipulateCapture_MySQLDatabase':
+            R: 'Captures\SearchManipulateCapture_MySQLDatabase'
+            C: 'Removed deprecated class ... SilverStripe\FullTextSearch\Search\Captures\SearchManipulateCapture_MySQLDatabase - use tractorcow/silverstripe-proxy-db to proxy the database connector instead'
+
+        'Captures\SearchManipulateCapture_PostgreSQLDatabase':
+            R: 'Captures\SearchManipulateCapture_PostgreSQLDatabase'
+            C: 'Removed deprecated class ... SilverStripe\FullTextSearch\Search\Captures\SearchManipulateCapture_PostgreSQLDatabase - use tractorcow/silverstripe-proxy-db to proxy the database connector instead'
+
+        'Captures\SearchManipulateCapture_SQLite3Database':
+            R: 'Captures\SearchManipulateCapture_SQLite3Database'
+            C: 'Removed deprecated class ... SilverStripe\FullTextSearch\Search\Captures\SearchManipulateCapture_SQLite3Database - use tractorcow/silverstripe-proxy-db to proxy the database connector instead'
+
+        'CMSMainExtension':
+            R: 'CMSMainExtension'
+            C: 'Removed deprecated class ... SilverStripe\VersionedAdmin\Extensions\CMSMainExtension without equivalent functionality to replace it'
+
+        'CMSPageHistoryController':
+            R: 'CMSPageHistoryController'
+            C: 'Removed deprecated class ... SilverStripe\CMS\Controllers\CMSPageHistoryController - use SilverStripe\VersionedAdmin\Controllers\CMSPageHistoryViewerController instead'
+
+        'CommentsGridFieldAction':
+            R: 'CommentsGridFieldAction'
+            C: 'Removed deprecated class ... SilverStripe\Comments\Admin\CommentsGridFieldAction - use SilverStripe\Comments\Admin\CommentsGridFieldApproveAction or SilverStripe\Comments\Admin\CommentsGridFieldSpamAction instead'
+
+        'CommentsGridFieldBulkAction\Handler':
+            R: 'CommentsGridFieldBulkAction\Handler'
+            C: 'Removed deprecated class ... SilverStripe\Comments\Admin\CommentsGridFieldBulkAction\Handler - use SilverStripe\Comments\Admin\CommentsGridFieldBulkAction\SpamHandler or SilverStripe\Comments\Admin\CommentsGridFieldBulkAction\ApproveHandler instead'
+
+        'ConfirmationTokenChain':
+            R: 'ConfirmationTokenChain'
+            C: 'Removed deprecated class ... SilverStripe\Core\Startup\ConfirmationTokenChain without equivalent functionality to replace it'
+
+        'CSVParser':
+            R: 'CSVParser'
+            C: 'Removed deprecated class ... SilverStripe\Dev\CSVParser - use League\Csv\Reader instead'
+
+        'CwpSiteSummaryExtension':
+            R: 'CwpSiteSummaryExtension'
+            C: 'Removed deprecated class ... CWP\CWP\Extensions\CwpSiteSummaryExtension without equivalent functionality to replace it'
+
+        'CwpSolrConfigStore':
+            R: 'CwpSolrConfigStore'
+            C: 'Removed deprecated class ... CWP\Search\Solr\CwpSolrConfigStore - use SilverStripe\FullTextSearch\Solr\Stores\SolrConfigStore_Post in silverstripe/fulltextsearch instead'
+
+        'CWPVersionExtension':
+            R: 'CWPVersionExtension'
+            C: 'Removed deprecated class ... CWP\Core\Extension\CWPVersionExtension without equivalent functionality to replace it'
+
+        'ElementalSolrIndex':
+            R: 'ElementalSolrIndex'
+            C: 'Removed deprecated class ... DNADesign\Elemental\Search\ElementalSolrIndex - use a custom index instead'
+
+        'ErrorControlChain':
+            R: 'ErrorControlChain'
+            C: 'Removed deprecated class ... SilverStripe\Core\Startup\ErrorControlChain without equivalent functionality to replace it'
+
+        'ErrorControlChainMiddleware':
+            R: 'ErrorControlChainMiddleware'
+            C: 'Removed deprecated class ... SilverStripe\Core\Startup\ErrorControlChainMiddleware without equivalent functionality to replace it'
+
+        'ErrorDirector':
+            R: 'ErrorDirector'
+            C: 'Removed deprecated class ... SilverStripe\Core\Startup\ErrorDirector without equivalent functionality to replace it'
+
+        'FixFolderPermissionsHelper':
+            R: 'FixFolderPermissionsHelper'
+            C: 'Removed deprecated class ... SilverStripe\Dev\Tasks\FixFolderPermissionsHelper without equivalent functionality to replace it'
+
+        'GridFieldVersionedState':
+            R: 'GridFieldVersionedState'
+            C: 'Removed deprecated class ... SilverStripe\Forms\GridField\GridFieldVersionedState - use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState instead'
+
+        'GroupImportForm':
+            R: 'GroupImportForm'
+            C: 'Removed deprecated class ... SilverStripe\Admin\GroupImportForm without equivalent functionality to replace it'
+
+        'HistoryControllerFactory':
+            R: 'HistoryControllerFactory'
+            C: 'Removed deprecated class ... SilverStripe\VersionedAdmin\Controllers\HistoryControllerFactory without equivalent functionality to replace it'
+
+        'HTML4Value':
+            R: 'HTML4Value'
+            C: 'Removed deprecated class ... SilverStripe\View\Parsers\HTML4Value - use SilverStripe\View\Parsers\HTMLValue instead'
+
+        'InstallerTest':
+            R: 'InstallerTest'
+            C: 'Removed deprecated class ... SilverStripe\Dev\InstallerTest without equivalent functionality to replace it'
+
+        'LegacyFileIDHelper':
+            R: 'LegacyFileIDHelper'
+            C: 'Removed deprecated class ... SilverStripe\Assets\FilenameParsing\LegacyFileIDHelper - legacy file names are not supported in Silverstripe CMS 5'
+
+        'Map_Iterator':
+            R: 'Map_Iterator'
+            C: 'Removed deprecated class ... SilverStripe\ORM\Map_Iterator without equivalent functionality to replace it'
+
+        'McryptCrypto':
+            R: 'McryptCrypto'
+            C: 'Removed deprecated class ... SilverStripe\HybridSessions\Crypto\McryptCrypto - use SilverStripe\HybridSessions\Crypto\OpenSSLCrypto instead'
+
+        'MemberImportForm':
+            R: 'MemberImportForm'
+            C: 'Removed deprecated class ... SilverStripe\Admin\MemberImportForm without equivalent functionality to replace it'
+
+        'MigrateFileTask':
+            R: 'MigrateFileTask'
+            C: 'Removed deprecated class ... SilverStripe\Dev\Tasks\MigrateFileTask without equivalent functionality to replace it'
+
+        'MigrateSiteTreeLinkingTask':
+            R: 'MigrateSiteTreeLinkingTask'
+            C: 'Removed deprecated class ... SilverStripe\CMS\Tasks\MigrateSiteTreeLinkingTask without equivalent functionality to replace it'
+
+        'ParameterConfirmationToken':
+            R: 'ParameterConfirmationToken'
+            C: 'Removed deprecated class ... SilverStripe\Core\Startup\ParameterConfirmationToken without equivalent functionality to replace it'
+
+        'PDOConnector':
+            R: 'PDOConnector'
+            C: 'Removed deprecated class ... SilverStripe\ORM\Connect\PDOConnector without equivalent functionality to replace it'
+
+        'PDOQuery':
+            R: 'PDOQuery'
+            C: 'Removed deprecated class ... SilverStripe\ORM\Connect\PDOQuery without equivalent functionality to replace it'
+
+        'PDOStatementHandle':
+            R: 'PDOStatementHandle'
+            C: 'Removed deprecated class ... SilverStripe\ORM\Connect\PDOStatementHandle without equivalent functionality to replace it'
+
+        'RemoveOrphanedPagesTask':
+            R: 'RemoveOrphanedPagesTask'
+            C: 'Removed deprecated class ... SilverStripe\CMS\Tasks\RemoveOrphanedPagesTask without equivalent functionality to replace it'
+
+        'RequestProcessor':
+            R: 'RequestProcessor'
+            C: 'Removed deprecated class ... SilverStripe\Control\RequestProcessor - use SilverStripe\Control\Middleware\HTTPMiddleware directly instead.'
+
+        'SapphireInfo':
+            R: 'SapphireInfo'
+            C: 'Removed deprecated class ... SilverStripe\Dev\SapphireInfo without equivalent functionality to replace it'
+
+        'SilverStripe\AssetAdmin\Model\EmbedResource':
+            R: 'SilverStripe\AssetAdmin\Model\EmbedResource'
+            C: 'Removed deprecated class ... SilverStripe\AssetAdmin\Model\EmbedResource - use SilverStripe\View\Embed\EmbedContainer instead'
+
+        'SilverStripe\View\Embed\EmbedResource':
+            R: 'SilverStripe\View\Embed\EmbedResource'
+            C: 'Removed deprecated class ... SilverStripe\View\Embed\EmbedResource - use SilverStripe\View\Embed\EmbedContainer instead'
+
+        'SilverStripe\View\Parsers\Diff':
+            R: 'SilverStripe\View\Parsers\Diff'
+            C: 'Removed deprecated class ... SilverStripe\View\Parsers\Diff - use SilverStripe\View\Parsers\HtmlDiff instead'
+
+        'SiteTreeFileExtension':
+            R: 'SiteTreeFileExtension'
+            C: 'Removed deprecated class ... SilverStripe\CMS\Model\SiteTreeFileExtension - use SilverStripe\Assets\Shortcodes\FileLinkTracking instead'
+
+        'SiteTreeFileFormFactoryExtension':
+            R: 'SiteTreeFileFormFactoryExtension'
+            C: 'Removed deprecated class ... SilverStripe\CMS\Model\SiteTreeFileFormFactoryExtension - use SilverStripe\Admin\Forms\UsedOnTable instead'
+
+        'SiteTreeFolderExtension':
+            R: 'SiteTreeFolderExtension'
+            C: 'Removed deprecated class ... SilverStripe\CMS\Model\SiteTreeFolderExtension without equivalent functionality to replace it'
+
+        'SiteTreeMaintenanceTask':
+            R: 'SiteTreeMaintenanceTask'
+            C: 'Removed deprecated class ... SilverStripe\CMS\Tasks\SiteTreeMaintenanceTask without equivalent functionality to replace it'
+
+        'SubsiteMigrateFileTask':
+            R: 'SubsiteMigrateFileTask'
+            C: 'Removed deprecated class ... SilverStripe\Subsites\Tasks\SubsiteMigrateFileTask without equivalent functionality to replace it'
+
+        'SubsiteSecurityReport':
+            R: 'SubsiteSecurityReport'
+            C: 'Removed deprecated class ... SilverStripe\SecurityReport\Subsites\SubsiteSecurityReport without equivalent functionality to replace it'
+
+        'SwiftMailer':
+            R: 'SwiftMailer'
+            C: 'Removed deprecated class ... SilverStripe\Control\Email\SwiftMailer - use symfony/mailer instead'
+
+        'SwiftPlugin':
+            R: 'SwiftPlugin'
+            C: 'Removed deprecated class ... SilverStripe\Control\Email\SwiftPlugin - use symfony/mailer instead'
+
+        'Tasks\FileMigrationHelper':
+            R: 'Tasks\FileMigrationHelper'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\Tasks\FileMigrationHelper without equivalent functionality to replace it'
+
+        'Tasks\FolderMigrationHelper':
+            R: 'Tasks\FolderMigrationHelper'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\Tasks\FolderMigrationHelper without equivalent functionality to replace it'
+
+        'Tasks\LegacyThumbnailMigrationHelper':
+            R: 'Tasks\LegacyThumbnailMigrationHelper'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\Tasks\LegacyThumbnailMigrationHelper without equivalent functionality to replace it'
+
+        'Tasks\NormaliseAccessMigrationHelper':
+            R: 'Tasks\NormaliseAccessMigrationHelper'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\Tasks\NormaliseAccessMigrationHelper without equivalent functionality to replace it'
+
+        'Tasks\SecureAssetsMigrationHelper':
+            R: 'Tasks\SecureAssetsMigrationHelper'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\Tasks\SecureAssetsMigrationHelper without equivalent functionality to replace it'
+
+        'Tasks\TagsToShortcodeHelper':
+            R: 'Tasks\TagsToShortcodeHelper'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\Tasks\TagsToShortcodeHelper without equivalent functionality to replace it'
+
+        'Tasks\TagsToShortcodeTask':
+            R: 'Tasks\TagsToShortcodeTask'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\Tasks\TagsToShortcodeTask without equivalent functionality to replace it'
+
+        'Tasks\VersionedFilesMigrationTask':
+            R: 'Tasks\VersionedFilesMigrationTask'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\Tasks\VersionedFilesMigrationTask without equivalent functionality to replace it'
+
+        'TestSession_STResponseWrapper':
+            R: 'TestSession_STResponseWrapper'
+            C: 'Removed deprecated class ... SilverStripe\Dev\TestSession_STResponseWrapper without equivalent functionality to replace it'
+
+        'TestState':
+            R: 'TestState'
+            C: 'Removed deprecated class ... DNADesign\Elemental\TopPage\TestState without equivalent functionality to replace it'
+
+        'TinyMCEGZIPGenerator':
+            R: 'TinyMCEGZIPGenerator'
+            C: 'Removed deprecated class ... SilverStripe\Forms\HTMLEditor\TinyMCEGZIPGenerator without equivalent functionality to replace it'
+
+        'URLConfirmationToken':
+            R: 'URLConfirmationToken'
+            C: 'Removed deprecated class ... SilverStripe\Core\Startup\URLConfirmationToken without equivalent functionality to replace it'
+
+        'VendorModule':
+            R: 'VendorModule'
+            C: 'Removed deprecated class ... SilverStripe\VendorPlugin\VendorModule - use SilverStripe\VendorPlugin\Library instead'
+
+        'VersionedFilesMigrator':
+            R: 'VersionedFilesMigrator'
+            C: 'Removed deprecated class ... SilverStripe\Assets\Dev\VersionedFilesMigrator without equivalent functionality to replace it'

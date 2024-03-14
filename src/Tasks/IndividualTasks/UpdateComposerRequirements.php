@@ -60,7 +60,7 @@ class UpdateComposerRequirements extends Task
             $this->runActualTaskInner();
         }
         $this->upgradeAllPackages();
-        $this->setCommitMessage('MAJOR: upgrading composer requirements to latest versions ... ');
+        $this->setCommitMessage('API:  upgrading composer requirements to latest versions ... ');
     }
 
     public function getReplacementPackage()

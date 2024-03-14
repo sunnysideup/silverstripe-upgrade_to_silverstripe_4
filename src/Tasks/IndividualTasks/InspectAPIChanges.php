@@ -65,7 +65,7 @@ class InspectAPIChanges extends Task
                 $rootDir,
                 $this->settings
             );
-            $this->setCommitMessage('MAJOR: core upgrade to SS4: running INSPECT on ' . $this->param1);
+            $this->setCommitMessage('API:  core upgrade to SS4: running INSPECT on ' . $this->param1);
         }
 
         $this->mu()->setBreakOnAllErrors(false);

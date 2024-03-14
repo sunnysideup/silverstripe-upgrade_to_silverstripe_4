@@ -49,7 +49,7 @@ class Recompose extends Task
                 $this->rootDirForCommand,
                 $this->settings
             );
-            $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 - STEP 2');
+            $this->setCommitMessage('API:  upgrading composer requirements to SS4 - STEP 2');
         }
     }
 

@@ -50,7 +50,7 @@ class RecomposeHomeBrew extends Task
             $command,
             'adding cms recipe version: ' . $this->mu()->getFrameworkComposerRestraint()
         );
-        $this->setCommitMessage('MAJOR: upgrading composer requirements to SS4 ');
+        $this->setCommitMessage('API:  upgrading composer requirements to SS4 ');
     }
 
     protected function hasCommitAndPush()

@@ -44,7 +44,7 @@ class DoctorTask extends Task
                 $this->param2,
                 $this->rootDirForCommand
             );
-            $this->setCommitMessage('MAJOR: changing environment file(s)');
+            $this->setCommitMessage('API:  changing environment file(s)');
         }
     }
 

@@ -81,7 +81,7 @@ class AddNamespace extends Task
                 'adding namespace: ' . $baseNameSpace . ' to ' . $codeDir,
                 false
             );
-            $this->setCommitMessage('MAJOR: adding namespaces');
+            $this->setCommitMessage('API:  adding namespaces');
         }
     }
 

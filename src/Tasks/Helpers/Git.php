@@ -157,7 +157,7 @@ class Git
                 git pull origin ' . $fromBranch . '
                 git checkout ' . $intoBranch . '
                 git merge --squash ' . $fromBranch . '
-                git commit . -m "MAJOR: upgrade merge"
+                git commit . -m "API:  upgrade merge"
                 git push origin ' . $intoBranch . '
             ',
             'merging ' . $fromBranch . ' into ' . $intoBranch . ' in ' . $dir,

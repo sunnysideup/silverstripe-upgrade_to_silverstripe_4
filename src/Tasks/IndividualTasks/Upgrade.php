@@ -50,7 +50,7 @@ class Upgrade extends Task
                 $this->rootDirForCommand,
                 $this->settings
             );
-            $this->setCommitMessage('MAJOR: core upgrade to SS4 - STEP 1 (upgrade) on ' . $actualDir);
+            $this->setCommitMessage('API:  core upgrade to SS4 - STEP 1 (upgrade) on ' . $actualDir);
         }
         $this->mu()->setBreakOnAllErrors(false);
     }

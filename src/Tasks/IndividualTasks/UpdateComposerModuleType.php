@@ -38,7 +38,7 @@ class UpdateComposerModuleType extends Task
                 $command,
                 $comment
             );
-            $this->setCommitMessage('MAJOR: ' . $this->getTitle());
+            $this->setCommitMessage('API:  ' . $this->getTitle());
         }
     }
 

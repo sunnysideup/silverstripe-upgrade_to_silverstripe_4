@@ -41,7 +41,7 @@ class WebrootUpdate extends Task
             $this->rootDirForCommand,
             $this->settings
         );
-        $this->setCommitMessage('MAJOR: adding webroot concept');
+        $this->setCommitMessage('API:  adding webroot concept');
     }
 
     public function hasCommitAndPush()

@@ -66,7 +66,7 @@ class AddVendorExposeDataToComposer extends Task
                 'exposing: ' . implode(', ', $expose)
             );
 
-            $this->setCommitMessage('MAJOR: exposing folders' . implode(',', $expose));
+            $this->setCommitMessage('API:  exposing folders' . implode(',', $expose));
         }
     }
 

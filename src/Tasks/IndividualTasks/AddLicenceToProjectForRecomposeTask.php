@@ -37,7 +37,7 @@ class AddLicenceToProjectForRecomposeTask extends Task
                 $command,
                 $comment
             );
-            $this->setCommitMessage('MAJOR: ' . $this->getTitle());
+            $this->setCommitMessage('API:  ' . $this->getTitle());
         }
     }
 

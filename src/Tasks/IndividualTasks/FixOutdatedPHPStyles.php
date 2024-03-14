@@ -42,7 +42,7 @@ class FixOutdatedPHPStyles extends Task
                 false
             );
 
-            $this->setCommitMessage('MAJOR: fixing outdated code styles using sunnysideup/huringa in ' . $codeDir);
+            $this->setCommitMessage('API:  fixing outdated code styles using sunnysideup/huringa in ' . $codeDir);
         }
 
         $this->mu()->execMe(

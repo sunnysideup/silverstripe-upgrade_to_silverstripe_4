@@ -50,7 +50,7 @@ class Reorganise extends Task
                 $this->rootDirForCommand,
                 $this->settings
             );
-            $this->setCommitMessage('MAJOR: re-organising files');
+            $this->setCommitMessage('API:  re-organising files');
         }
     }
 

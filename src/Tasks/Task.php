@@ -232,7 +232,7 @@ abstract class Task
     protected function getCommitMessage()
     {
         if (! $this->commitMessage) {
-            $this->commitMessage = 'MAJOR: upgrade to new version of Silverstripe - step: ' . $this->getTitle();
+            $this->commitMessage = 'API:  upgrade to new version of Silverstripe - step: ' . $this->getTitle();
         }
         return $this->commitMessage;
     }

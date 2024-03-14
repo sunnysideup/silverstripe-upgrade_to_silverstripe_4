@@ -44,7 +44,7 @@ class RemoveInstallerFolder extends Task
                 $command,
                 $comment
             );
-            $this->setCommitMessage('MAJOR: Removing extra.installer-name variable');
+            $this->setCommitMessage('API:  Removing extra.installer-name variable');
         }
     }
 

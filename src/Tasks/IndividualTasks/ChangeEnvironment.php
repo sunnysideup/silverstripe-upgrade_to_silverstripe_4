@@ -48,7 +48,7 @@ class ChangeEnvironment extends Task
                 $this->rootDirForCommand,
                 $this->settings
             );
-            $this->setCommitMessage('MAJOR: changing environment file(s)');
+            $this->setCommitMessage('API:  changing environment file(s)');
         }
     }
 

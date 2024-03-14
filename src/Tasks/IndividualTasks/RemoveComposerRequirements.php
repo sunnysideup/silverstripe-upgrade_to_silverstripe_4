@@ -61,7 +61,7 @@ class RemoveComposerRequirements extends Task
             );
 
         }
-        $this->setCommitMessage('MAJOR: remove composer requirements - removing requirements for: ' . implode(', ', $this->packages));
+        $this->setCommitMessage('API:  remove composer requirements - removing requirements for: ' . implode(', ', $this->packages));
     }
 
     protected function hasCommitAndPush()

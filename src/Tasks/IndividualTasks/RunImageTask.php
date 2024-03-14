@@ -22,7 +22,7 @@ class RunImageTask extends Task
             Run a dev/tasks/MigrateFileTask to upgrade files and images.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
         } else {
@@ -33,6 +33,7 @@ class RunImageTask extends Task
                 false
             );
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

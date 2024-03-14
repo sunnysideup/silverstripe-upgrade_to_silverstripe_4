@@ -38,7 +38,7 @@ class ComposerCompatibilityCheckerStep2 extends Task
      * @param array $params
      * @return string|null
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {

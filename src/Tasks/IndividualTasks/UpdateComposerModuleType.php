@@ -25,7 +25,7 @@ class UpdateComposerModuleType extends Task
             This means your module will be installed in the vendor folder after this upgrade.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
             $command =
@@ -40,6 +40,7 @@ class UpdateComposerModuleType extends Task
             );
             $this->setCommitMessage('API:  ' . $this->getTitle());
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -31,11 +31,12 @@ Runs a composer update at the end.
     /**
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->mu()->setBreakOnAllErrors(true);
         $this->updateComposerJson();
         $this->mu()->setBreakOnAllErrors(false);
+        return null;
     }
 
     protected function hasCommitAndPush()
@@ -43,7 +44,7 @@ Runs a composer update at the end.
         return true;
     }
 
-    function updateComposerJson()
+    public function updateComposerJson()
     {
         $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
             $this->mu()->getGitRootDir()

@@ -40,7 +40,7 @@ class InspectAPIChanges extends Task
             This step will also warn of any upgradable code issues that may prevent a succesful upgrade.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
@@ -69,6 +69,7 @@ class InspectAPIChanges extends Task
         }
 
         $this->mu()->setBreakOnAllErrors(false);
+        return null;
     }
 
     protected function hasCommitAndPush()

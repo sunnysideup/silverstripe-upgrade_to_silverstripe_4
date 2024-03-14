@@ -29,7 +29,7 @@ class CreateClientFolder extends Task
     /**
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $newClientFolder = $moduleDir . '/' . $this->clientFolderName . '/ ';
@@ -47,6 +47,7 @@ class CreateClientFolder extends Task
                 $fixer->moveFolderOrFile($folderToMove, $newClientFolder);
             }
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

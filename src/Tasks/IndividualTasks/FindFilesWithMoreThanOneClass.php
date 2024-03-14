@@ -22,7 +22,7 @@ class FindFilesWithMoreThanOneClass extends Task
         ';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $errors = [];
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
@@ -80,6 +80,7 @@ class FindFilesWithMoreThanOneClass extends Task
         if (count($errors)) {
             return 'Found files with multiple classes: ' . implode("\n\n ---\n\n", $errors);
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -38,10 +38,10 @@ class PHPCompatabilityCheck extends Task
         return $this;
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        if( PHP2CommandLineSingleton::commandExists('sslint-compat')) {
+        if(PHP2CommandLineSingleton::commandExists('sslint-compat')) {
             foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
                 // $file = str_replace('\\', '-', $baseNameSpace);
                 $this->mu()->execMe(
@@ -105,6 +105,7 @@ class PHPCompatabilityCheck extends Task
                 ->Remove('squizlabs/php_codesniffer', true)
                 ->Remove('phpcompatibility/php-compatibility', true);
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

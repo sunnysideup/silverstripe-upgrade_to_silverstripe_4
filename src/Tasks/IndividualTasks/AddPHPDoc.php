@@ -12,7 +12,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
  */
 class AddPHPDoc extends Task
 {
-    const REPLACER = 'REPLACE_WITH_MODULE_NAME';
+    public const REPLACER = 'REPLACE_WITH_MODULE_NAME';
 
     protected $taskStep = 's60';
 
@@ -52,7 +52,7 @@ yml
         return 'Runs through the source code and adds hidden Silverstripe property and method documentation to classes';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         // $this->mu()->getWebRootDirLocation();
 
@@ -75,6 +75,7 @@ yml
             );
             $this->mu()->setBreakOnAllErrors(false);
         }
+        return null;
     }
 
     protected function updateModuleConfigFile(string $moduleName)

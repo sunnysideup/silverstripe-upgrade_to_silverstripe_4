@@ -33,7 +33,7 @@ class DoctorTask extends Task
             CAREFUL: will remove any customisations!';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
             //do nothing ...
@@ -46,6 +46,7 @@ class DoctorTask extends Task
             );
             $this->setCommitMessage('API:  changing environment file(s)');
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

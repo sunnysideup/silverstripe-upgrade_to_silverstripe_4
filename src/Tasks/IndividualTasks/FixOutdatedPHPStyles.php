@@ -21,7 +21,7 @@ class FixOutdatedPHPStyles extends Task
             See huringa module for mor details';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
 
@@ -53,6 +53,7 @@ class FixOutdatedPHPStyles extends Task
         );
 
         $this->mu()->setBreakOnAllErrors(false);
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -55,6 +55,7 @@ class Ss4ToSs5FindAndReplaceOnly extends BaseClass
             'sourceFolders' => ['SS5'],
             'commitAndPush' => false,
         ],
+        'LintAll' => [],
     ];
 
     protected $frameworkComposerRestraint = '~5@stable';

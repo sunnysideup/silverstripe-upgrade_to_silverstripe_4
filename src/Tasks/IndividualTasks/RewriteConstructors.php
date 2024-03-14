@@ -22,7 +22,7 @@ class RewriteConstructors extends Task
             rewrites deprecated constructors to be compatible with PHP7.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->mu()->execMe(
             $this->mu()->getAboveWebRootDirLocation(),
@@ -30,6 +30,7 @@ class RewriteConstructors extends Task
             'create upgrade directory: ' . $this->mu()->getWebRootDirLocation(),
             false
         );
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -24,7 +24,7 @@ class AddNamespace extends Task
             using the PSR-4 approach (matching folders and namespaces).';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
         $dirsDone = [];
@@ -83,6 +83,7 @@ class AddNamespace extends Task
             );
             $this->setCommitMessage('API:  adding namespaces');
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

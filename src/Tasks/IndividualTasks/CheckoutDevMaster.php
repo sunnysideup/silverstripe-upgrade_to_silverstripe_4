@@ -42,7 +42,7 @@ simply start again in a few minutes in this case to make it work.
     /**
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $alternativeCodeBase = $this->mu()->getNameOfBranchForBaseCode();
         if($alternativeCodeBase) {
@@ -84,6 +84,7 @@ simply start again in a few minutes in this case to make it work.
             );
         }
         $this->mu()->setBreakOnAllErrors(false);
+        return null;
     }
 
     protected function gitClone()

@@ -27,7 +27,7 @@ class CheckThatFoldersAreReady extends Task
      * Checks that the required folder variables link to folders that file_exists
      * and which are writable.
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $abovewebdir = $this->mu()->getAboveWebRootDirLocation();
         //check dir above web dir exists
@@ -59,6 +59,7 @@ class CheckThatFoldersAreReady extends Task
             }
             //all ok
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

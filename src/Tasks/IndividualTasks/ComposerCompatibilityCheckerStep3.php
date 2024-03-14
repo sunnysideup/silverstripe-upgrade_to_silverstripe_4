@@ -48,7 +48,7 @@ class ComposerCompatibilityCheckerStep3 extends Task
      * @param array $params
      * @return string|null
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
             return null;

@@ -35,7 +35,7 @@ class ComposerCompatibilityCheckerStep1 extends Task
      * @param array $params
      * @return string|null
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
             //do nothing for now ...
@@ -48,6 +48,7 @@ class ComposerCompatibilityCheckerStep1 extends Task
                 false
             );
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

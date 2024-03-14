@@ -22,7 +22,7 @@ class FinalDevBuild37 extends Task
             Run a dev/build as a smoke test to see if all is well.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
@@ -30,6 +30,7 @@ class FinalDevBuild37 extends Task
             'It is time for a dev/build',
             false
         );
+        return null;
     }
 
     protected function hasCommitAndPush()

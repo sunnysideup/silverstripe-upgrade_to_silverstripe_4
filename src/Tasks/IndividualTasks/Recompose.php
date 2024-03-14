@@ -32,7 +32,7 @@ class Recompose extends Task
             https://github.com/silverstripe/silverstripe-upgrader#recompose';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
         } else {
@@ -51,6 +51,7 @@ class Recompose extends Task
             );
             $this->setCommitMessage('API:  upgrading composer requirements to SS4 - STEP 2');
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

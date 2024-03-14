@@ -30,7 +30,7 @@ class CreatePublicFolder extends Task
      * [runActualTask description]
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsProjectUpgrade()) {
             $newFolder = $this->mu()->getWebRootDirLocation() . '/' . $this->publicFolderName;
@@ -44,6 +44,7 @@ class CreatePublicFolder extends Task
                 false
             );
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -45,7 +45,7 @@ class UpdateComposerRequirements extends Task
             Any packages that are not specified will be set to "*".';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if (is_array($this->replacementArray) && count($this->replacementArray)) {
             foreach ($this->replacementArray as $replacementDetails) {
@@ -61,6 +61,7 @@ class UpdateComposerRequirements extends Task
         }
         $this->upgradeAllPackages();
         $this->setCommitMessage('API:  upgrading composer requirements to latest versions ... ');
+        return null;
     }
 
     public function getReplacementPackage()

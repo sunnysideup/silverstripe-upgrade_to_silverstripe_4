@@ -111,7 +111,7 @@ class SearchAndReplace extends Task
         return $this;
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
 
         //replacement data
@@ -197,6 +197,7 @@ class SearchAndReplace extends Task
                 }
             }
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

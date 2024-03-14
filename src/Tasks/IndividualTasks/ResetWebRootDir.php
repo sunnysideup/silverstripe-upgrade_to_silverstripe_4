@@ -23,12 +23,13 @@ class ResetWebRootDir extends Task
             Delete the web root directory to allow for a fresh install.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         FileSystemFixes::inst($this->mu())
             ->removeDirOrFile($this->mu()->getWebRootDirLocation(), $this->mu()->getAboveWebRootDirLocation());
         FileSystemFixes::inst($this->mu())
             ->mkDir($this->mu()->getWebRootDirLocation(), $this->mu()->getAboveWebRootDirLocation());
+        return null;
     }
 
     protected function hasCommitAndPush()

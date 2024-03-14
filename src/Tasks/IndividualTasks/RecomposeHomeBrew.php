@@ -29,7 +29,7 @@ class RecomposeHomeBrew extends Task
             We may need to look at "project-files" here and make sure they do not get muddled up.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $command = '';
         foreach ($this->requireLinesToAdd as $package => $constraint) {
@@ -51,6 +51,7 @@ class RecomposeHomeBrew extends Task
             'adding cms recipe version: ' . $this->mu()->getFrameworkComposerRestraint()
         );
         $this->setCommitMessage('API:  upgrading composer requirements to SS4 ');
+        return null;
     }
 
     protected function hasCommitAndPush()

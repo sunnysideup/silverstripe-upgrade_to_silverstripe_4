@@ -28,7 +28,7 @@ class FindFilesWithSimpleUseStatements extends Task
             apart from things like "use \\Page;". ';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $errors = [];
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
@@ -83,6 +83,7 @@ class FindFilesWithSimpleUseStatements extends Task
         } else {
             $this->mu()->colourPrint('Clean bill of health in terms of use statements.', 'green');
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -46,7 +46,7 @@ class RemoveComposerRequirements extends Task
             For example, we remove silverstripe/framework requirement from 3 to 4.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         foreach($this->packages as $package) {
 
@@ -62,6 +62,7 @@ class RemoveComposerRequirements extends Task
 
         }
         $this->setCommitMessage('API:  remove composer requirements - removing requirements for: ' . implode(', ', $this->packages));
+        return null;
     }
 
     protected function hasCommitAndPush()

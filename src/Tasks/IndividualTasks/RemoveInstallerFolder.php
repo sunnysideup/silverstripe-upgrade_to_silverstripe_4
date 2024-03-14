@@ -31,7 +31,7 @@ class RemoveInstallerFolder extends Task
             installs into vendor folder.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
             $command =
@@ -46,6 +46,7 @@ class RemoveInstallerFolder extends Task
             );
             $this->setCommitMessage('API:  Removing extra.installer-name variable');
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -35,7 +35,7 @@ class AddDotEnvFile extends Task
         return 'Adds a basic .env file in case that is needed.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if (! file_exists($this->mu()->getWebRootDirLocation() . '/.env')) {
             foreach ($this->envContent as $line) {
@@ -53,6 +53,7 @@ class AddDotEnvFile extends Task
                     '.env'
                 );
         }
+        return null;
     }
 
     protected function getEnvtContentAddValues(string $string)

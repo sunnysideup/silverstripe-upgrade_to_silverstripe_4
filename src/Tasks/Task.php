@@ -169,7 +169,7 @@ abstract class Task
      *
      * @return string|null
      */
-    abstract public function runActualTask($params = []);
+    abstract public function runActualTask($params = []): ?string;
 
     public function setCommitMessage($s)
     {

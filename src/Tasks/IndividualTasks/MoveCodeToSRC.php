@@ -28,7 +28,7 @@ class MoveCodeToSRC extends Task
      * [runActualTask description]
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $old = '/code/';
@@ -36,6 +36,7 @@ class MoveCodeToSRC extends Task
             $fixer = FileSystemFixes::inst($this->mu());
             $fixer->moveFolderOrFile($moduleDir . $old, $moduleDir . $new);
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

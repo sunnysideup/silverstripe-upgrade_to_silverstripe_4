@@ -30,7 +30,7 @@ class UpgradeDevBuild extends Task
             Upgrades any reference to framework/sake or framework/cli-script.php';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $command = <<<'EOT'
 
@@ -51,6 +51,7 @@ EOT;
             $comment
         );
         $this->setCommitMessage('MINOR: Updating framework/sake to vendor/bin/sake');
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -44,7 +44,7 @@ class FixTemplateIncludeStatements extends Task
         return $this;
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $codeDirs = $this->mu()->findNameSpaceAndCodeDirs();
         foreach ($codeDirs as $baseNameSpace => $codeDir) {
@@ -92,6 +92,7 @@ class FixTemplateIncludeStatements extends Task
                 $this->mu()->colourPrint($textSearchMachine->getOutput());
             }
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

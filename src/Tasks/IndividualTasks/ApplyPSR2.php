@@ -29,7 +29,7 @@ class ApplyPSR2 extends Task
             Applies a light cleanup of the code to match PSR-2 standards.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
         $localInstall = (bool) PHP2CommandLineSingleton::commandExists('sake-ling-all');
@@ -85,6 +85,7 @@ class ApplyPSR2 extends Task
                     $this->composerOptions
                 );
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

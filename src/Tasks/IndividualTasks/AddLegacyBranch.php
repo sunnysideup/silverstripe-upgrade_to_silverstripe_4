@@ -35,7 +35,7 @@ class AddLegacyBranch extends Task
     /**
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $gitRootDir = $this->mu()->getGitRootDir();
         Git::inst($this->mu())->createNewBranchIfItDoesNotExist(
@@ -43,6 +43,7 @@ class AddLegacyBranch extends Task
             $this->nameOfLegacyBranch,
             $this->mu()->getNameOfBranchForBaseCode()
         );
+        return null;
     }
 
     protected function hasCommitAndPush()

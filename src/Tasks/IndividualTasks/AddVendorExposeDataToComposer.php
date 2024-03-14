@@ -39,7 +39,7 @@ class AddVendorExposeDataToComposer extends Task
             By default we expose all the client related files (images, css and javascript)';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $expose = [];
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
@@ -68,6 +68,7 @@ class AddVendorExposeDataToComposer extends Task
 
             $this->setCommitMessage('API:  exposing folders' . implode(',', $expose));
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

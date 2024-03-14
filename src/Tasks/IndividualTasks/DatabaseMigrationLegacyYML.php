@@ -28,7 +28,7 @@ class DatabaseMigrationLegacyYML extends Task
      * [runActualTask description]
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $oldFile = $moduleDir . '/.upgrade.yml';
@@ -68,6 +68,7 @@ class DatabaseMigrationLegacyYML extends Task
                 false
             );
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

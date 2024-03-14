@@ -31,13 +31,14 @@ class AddUpgradeStarterBranch extends Task
     /**
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         Git::inst($this->mu())->createNewBranchIfItDoesNotExist(
             $this->mu()->getGitRootDir(),
             $this->mu()->getNameOfUpgradeStarterBranch(),
             $this->mu()->getNameOfBranchForBaseCode()
         );
+        return null;
     }
 
     protected function hasCommitAndPush()

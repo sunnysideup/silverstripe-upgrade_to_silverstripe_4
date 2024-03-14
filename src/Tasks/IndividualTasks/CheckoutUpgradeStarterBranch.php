@@ -37,7 +37,7 @@ class CheckoutUpgradeStarterBranch extends Task
     /**
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
@@ -56,6 +56,7 @@ class CheckoutUpgradeStarterBranch extends Task
             );
         }
         $this->mu()->setBreakOnAllErrors(false);
+        return null;
     }
 
     protected function gitClone()

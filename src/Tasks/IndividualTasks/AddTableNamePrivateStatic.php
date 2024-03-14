@@ -29,7 +29,7 @@ class AddTableNamePrivateStatic extends Task
             Adds a private static variable called "table_name" to any class that looks like a data object.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $fileFinder = new FindFiles();
@@ -70,6 +70,7 @@ class AddTableNamePrivateStatic extends Task
                 $this->mu()->colourPrint('Could not find ' . $searchPath, 'blue');
             }
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

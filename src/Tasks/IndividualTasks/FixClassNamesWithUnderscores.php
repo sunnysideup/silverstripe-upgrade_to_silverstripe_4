@@ -23,7 +23,7 @@ class FixClassNamesWithUnderscores extends Task
             finds classes with underscores the removes them and adds an entry to .upgrade.yml and database legacy yml. ';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $errors = 0;
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
@@ -64,10 +64,11 @@ class FixClassNamesWithUnderscores extends Task
                 ',
                 'red'
             );
-            return true;
+            return 'There are errors to fix';
         } else {
             $this->mu()->colourPrint('There are no classes with underscores', 'green');
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

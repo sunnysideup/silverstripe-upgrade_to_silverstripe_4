@@ -59,7 +59,7 @@ class AddTableName extends Task
         return $this;
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
             $moduleDir = $this->mu()->findMyCodeDir($moduleDir);
@@ -112,6 +112,7 @@ class AddTableName extends Task
                 $this->mu()->colourPrint($textSearchMachine->getOutput());
             }
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

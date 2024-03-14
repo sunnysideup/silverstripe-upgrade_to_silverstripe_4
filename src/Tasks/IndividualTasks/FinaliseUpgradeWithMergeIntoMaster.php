@@ -39,7 +39,7 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                 You can do this as follows: `$upgrader->setRunIrreversibly(true)`.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getRunIrreversibly()) {
             $this->mu()->setBreakOnAllErrors(true);
@@ -59,6 +59,7 @@ class FinaliseUpgradeWithMergeIntoMaster extends Task
                 );
             $this->mu()->setBreakOnAllErrors(false);
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

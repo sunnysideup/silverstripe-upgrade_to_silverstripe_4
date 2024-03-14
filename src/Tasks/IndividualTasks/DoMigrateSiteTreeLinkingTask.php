@@ -26,7 +26,7 @@ class DoMigrateSiteTreeLinkingTask extends Task
      * @param array $params
      * @return string|null
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
             return null;
@@ -37,6 +37,7 @@ class DoMigrateSiteTreeLinkingTask extends Task
             'MigrateSiteTreeLinkingTask is running',
             false
         );
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -37,7 +37,7 @@ class Upgrade extends Task
             https://github.com/silverstripe/silverstripe-upgrader#upgrade';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->mu()->setBreakOnAllErrors(true);
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
@@ -53,6 +53,7 @@ class Upgrade extends Task
             $this->setCommitMessage('API:  core upgrade to SS4 - STEP 1 (upgrade) on ' . $actualDir);
         }
         $this->mu()->setBreakOnAllErrors(false);
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -39,7 +39,7 @@ class MoveTemplates extends Task
     /**
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu->getIsModuleUpgrade()) {
             $fixer = FileSystemFixes::inst($this->mu());
@@ -60,6 +60,7 @@ class MoveTemplates extends Task
         } else {
             $this->mu()->colourPrint('SKIPPING you will have to move templates manually because this code has not been completed yet.', 'light_red');
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

@@ -32,7 +32,7 @@ class WebrootUpdate extends Task
             introduced with SilverStripe 4.1';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->runSilverstripeUpgradeTask(
             'webroot',
@@ -42,6 +42,7 @@ class WebrootUpdate extends Task
             $this->settings
         );
         $this->setCommitMessage('API:  adding webroot concept');
+        return null;
     }
 
     public function hasCommitAndPush()

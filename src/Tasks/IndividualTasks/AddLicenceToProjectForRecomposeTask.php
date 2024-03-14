@@ -24,7 +24,7 @@ class AddLicenceToProjectForRecomposeTask extends Task
             Adds the license = proprietary to the composer file to ensure the recompose task works.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsProjectUpgrade()) {
             $comment = 'add license';
@@ -39,6 +39,7 @@ class AddLicenceToProjectForRecomposeTask extends Task
             );
             $this->setCommitMessage('API:  ' . $this->getTitle());
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

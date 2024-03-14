@@ -28,7 +28,7 @@ class AddPSR4Autoloading extends Task
         ';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         //project composer.json
         // - app/src/...
@@ -97,6 +97,7 @@ class AddPSR4Autoloading extends Task
         }
         Composer::inst($this->mu())
             ->DumpAutoload();
+        return null;
     }
 
     protected function hasCommitAndPush()

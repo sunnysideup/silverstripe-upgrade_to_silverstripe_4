@@ -35,7 +35,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
         $this->nameReplacements = $a;
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
             $di = new \RecursiveIteratorIterator(
@@ -64,6 +64,7 @@ class UpperCaseFolderNamesForPSR4 extends Task
                 }
             }
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

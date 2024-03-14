@@ -43,7 +43,7 @@ class SwitchPhpVersion extends Task
      * [runActualTask description]
      * @param  array  $params not currently used for this task
      */
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $version = $this->version ?: $this->defaultVersion;
         if(PHP2CommandLineSingleton::commandExists('php-switch')) {
@@ -61,6 +61,7 @@ class SwitchPhpVersion extends Task
                 false
             );
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

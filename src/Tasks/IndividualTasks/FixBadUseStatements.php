@@ -56,7 +56,7 @@ class FixBadUseStatements extends Task
         return $this;
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         //replacement data patterns that will be searched for
 
@@ -112,6 +112,7 @@ class FixBadUseStatements extends Task
                 }
             }
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

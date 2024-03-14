@@ -28,13 +28,14 @@ class FindYmlExamplesFilesAndChangeExtension extends Task
         return 'In our modules we include a lot of .yml.example files - we want to update those as well.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $files = FindFiles::inst()
             ->setSearchPath($this->mu()->getGitRootDir())
             ->setExtensions($this->extensions)
             ->getFlatFileArray();
         print_r($files);
+        return null;
     }
 
     protected function hasCommitAndPush()

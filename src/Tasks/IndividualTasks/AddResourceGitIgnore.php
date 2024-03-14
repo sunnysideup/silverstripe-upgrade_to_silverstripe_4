@@ -23,7 +23,7 @@ txt;
 
     public function getTitle()
     {
-        return 'Add git ignore to resources folder';
+        return 'Add git ignore to resources folder. TO BE COMPLETED';
     }
 
     public function getDescription()
@@ -31,30 +31,31 @@ txt;
         return 'Adds a gitignore file to the resources folder';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $dir = $this->mu()->getWebRootDirLocation();
-
+        return null;
     }
 
     protected function updateModuleConfigFile(string $moduleName)
     {
-        $moduleLocation = $this->findModuleNameLocation($moduleName);
+        // $moduleLocation = $this->findModuleNameLocation($moduleName);
 
-        $fileLocation = $this->mu()->getWebRootDirLocation() . '/' . $moduleLocation . '/_config/' . $this->configFileName;
-        FileSystemFixes::inst($this->mu())
-            ->removeDirOrFile($fileLocation);
-        $ideannotatorConfigForModule = $this->ideannotatorConfig;
-        $ideannotatorConfigForModule = str_replace(self::REPLACER, $moduleName, $ideannotatorConfigForModule);
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'echo \'' . str_replace('\'', '"', $ideannotatorConfigForModule) . '\' > ' . $fileLocation,
-            'Adding IDEAnnotator configuration',
-            false
-        );
-        if (! file_exists($fileLocation)) {
-            user_error('Could not locate ' . $fileLocation);
-        }
+        // $fileLocation = $this->mu()->getWebRootDirLocation() . '/' . $moduleLocation . '/_config/' . $this->configFileName;
+        // FileSystemFixes::inst($this->mu())
+        //     ->removeDirOrFile($fileLocation);
+        // $ideannotatorConfigForModule = $this->ideannotatorConfig;
+        // $ideannotatorConfigForModule = str_replace(self::REPLACER, $moduleName, $ideannotatorConfigForModule);
+        // $this->mu()->execMe(
+        //     $this->mu()->getWebRootDirLocation(),
+        //     'echo \'' . str_replace('\'', '"', $ideannotatorConfigForModule) . '\' > ' . $fileLocation,
+        //     'Adding IDEAnnotator configuration',
+        //     false
+        // );
+        // if (! file_exists($fileLocation)) {
+        //     user_error('Could not locate ' . $fileLocation);
+        // }
+
     }
 
     protected function hasCommitAndPush(): bool

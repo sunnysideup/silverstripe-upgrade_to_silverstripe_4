@@ -28,7 +28,7 @@ class AddTempUpgradeBranch extends Task
             If it already exists then it will first be DELETED!';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         Git::inst($this->mu())
             ->deleteBranch(
@@ -40,6 +40,7 @@ class AddTempUpgradeBranch extends Task
                 $this->mu()->getNameOfTempBranch(),
                 $this->mu()->getNameOfUpgradeStarterBranch()
             );
+        return null;
     }
 
     protected function hasCommitAndPush()

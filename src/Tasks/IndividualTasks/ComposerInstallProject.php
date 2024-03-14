@@ -73,7 +73,7 @@ class ComposerInstallProject extends Task
             using composer and install module / project into the vanilla silverstripe install.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         $this->mu()->setBreakOnAllErrors(true);
         $fixer = FileSystemFixes::inst($this->mu())
@@ -161,6 +161,7 @@ class ComposerInstallProject extends Task
         }
 
         $this->mu()->setBreakOnAllErrors(false);
+        return null;
     }
 
     protected function workoutExtraRequirementsFromModule()

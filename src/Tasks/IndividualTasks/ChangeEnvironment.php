@@ -36,7 +36,7 @@ class ChangeEnvironment extends Task
             file to the Silverstripe 4 .env format.';
     }
 
-    public function runActualTask($params = [])
+    public function runActualTask($params = []): ?string
     {
         if ($this->mu()->getIsModuleUpgrade()) {
             //do nothing
@@ -50,6 +50,7 @@ class ChangeEnvironment extends Task
             );
             $this->setCommitMessage('API:  changing environment file(s)');
         }
+        return null;
     }
 
     protected function hasCommitAndPush()

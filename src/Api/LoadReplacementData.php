@@ -76,6 +76,7 @@ class LoadReplacementData
      * @var array
      */
     protected $paths = [];
+    protected $toFolder = '';
 
     /**
      * @param ModuleUpgrader $mu

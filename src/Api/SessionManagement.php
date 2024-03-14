@@ -3,7 +3,6 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
-
 use Sunnysideup\UpgradeToSilverstripe4\Traits\Creator;
 
 class SessionManagement implements SessionManagementInterface
@@ -12,10 +11,6 @@ class SessionManagement implements SessionManagementInterface
 
     protected $sessionFileLocation = '';
 
-    /**
-     * @param  string                     $sessionFileLocation
-     * @return SessionManagementInterface
-     */
     public static function initSession(string $sessionFileLocation): SessionManagementInterface
     {
         $obj = self::create();
@@ -30,7 +25,7 @@ class SessionManagement implements SessionManagementInterface
         $link = $sessionFileLocation;
         $dir = dirname($link);
         if(! file_exists($dir)) {
-            user_error('Could not find: '.$dir);
+            user_error('Could not find: ' . $dir);
         }
 
         return $this;
@@ -70,9 +65,6 @@ class SessionManagement implements SessionManagementInterface
         return $this->getSessionData();
     }
 
-    /**
-     * @param array $session
-     */
     public function setSessionData(array $session): SessionManagementInterface
     {
         if (! file_exists($this->getSessionFileLocation())) {
@@ -94,7 +86,7 @@ class SessionManagement implements SessionManagementInterface
             }
         } catch (\Exception $e) {
             // send error message if you can
-            echo 'Caught exception: ' . $e->getMessage(). ' location of file: ' . $this->getSessionFileLocation();
+            echo 'Caught exception: ' . $e->getMessage() . ' location of file: ' . $this->getSessionFileLocation();
         }
 
         return $this;

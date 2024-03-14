@@ -8,14 +8,6 @@ class Git
 {
     use HelperInst;
 
-    /**
-     * @param  string $dir
-     * @param  string $gitLink
-     * @param  string $gitRootDir
-     * @param  string $branchName
-     *
-     * @return Git
-     */
     public function Clone(string $dir, string $gitLink, string $gitRootDir, ?string $branchName = 'master'): Git
     {
         $this->mu()->execMe(
@@ -48,13 +40,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param string $dir
-     * @param string $message
-     * @param string $branchName
-     *
-     * @return Git
-     */
     public function CommitAndPush(string $dir, string $message, string $branchName): Git
     {
         $this->fetchAll($dir);
@@ -89,12 +74,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param  string $dir
-     * @param  string $branchName
-     *
-     * @return Git
-     */
     public function deleteBranch(string $dir, string $branchName): Git
     {
         $this->fetchAll($dir);
@@ -105,12 +84,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param  string $dir
-     * @param  string $newBranchName
-     * @param  string $fromBranchName
-     * @return Git
-     */
     public function createNewBranchIfItDoesNotExist(string $dir, string $newBranchName, string $fromBranchName): Git
     {
         $this->fetchAll($dir);
@@ -132,12 +105,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param  string $dir
-     * @param  string $newBranchName
-     * @param  string $fromBranch
-     * @return Git
-     */
     public function createNewBranch(string $dir, string $newBranchName, string $fromBranch): Git
     {
         $this->fetchAll($dir);
@@ -159,11 +126,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param  string $dir
-     * @param  string $branch
-     * @return Git
-     */
     public function checkoutBranch(string $dir, string $branch): Git
     {
         $this->fetchAll($dir);
@@ -184,12 +146,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param string $dir
-     * @param string $fromBranch
-     * @param string $intoBranch
-     * @return Git
-     */
     public function Merge(string $dir, string $fromBranch, string $intoBranch): Git
     {
         $this->fetchAll($dir);
@@ -211,12 +167,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param  string $dir
-     * @param  string $branchName
-     *
-     * @return Git
-     */
     public function deleteBranchRemotely(string $dir, string $branchName): Git
     {
         $this->mu()->execMe(
@@ -229,9 +179,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param  string $dir
-     */
     public function fetchAll(string $dir): Git
     {
         $this->mu()->execMe(
@@ -246,12 +193,6 @@ class Git
         return $this;
     }
 
-    /**
-     * @param  string $dir
-     * @param  string $branchName
-     *
-     * @return Git
-     */
     protected function deleteBranchLocally(string $dir, string $branchName): Git
     {
         $this->mu()->execMe(

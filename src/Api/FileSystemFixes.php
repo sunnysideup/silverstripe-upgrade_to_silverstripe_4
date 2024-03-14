@@ -24,7 +24,7 @@ class FileSystemFixes
         return $this;
     }
 
-    public function removeDirOrFile(string $folderName, string $baseFolder = '') : FileSystemFixes
+    public function removeDirOrFile(string $folderName, string $baseFolder = ''): FileSystemFixes
     {
         if(! $baseFolder) {
             $baseFolder = $this->mu()->getWebRootDirLocation();

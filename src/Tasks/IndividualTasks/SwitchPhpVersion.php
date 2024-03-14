@@ -2,9 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * This task adds a legacy branch to the git repo of the original to act as a backup/legacy version for
@@ -35,7 +34,7 @@ class SwitchPhpVersion extends Task
         return $this;
     }
 
-    public function getVersion() :string
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -50,15 +49,15 @@ class SwitchPhpVersion extends Task
         if(PHP2CommandLineSingleton::commandExists('php-switch')) {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'php-switch '.$version,
-                'switching to PHP version '.$version,
+                'php-switch ' . $version,
+                'switching to PHP version ' . $version,
                 false
             );
         } else {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
-                'echo \'switch to PHP Version: '.$version . '\'',
-                'Reminder to switch to PHP '.$version,
+                'echo \'switch to PHP Version: ' . $version . '\'',
+                'Reminder to switch to PHP ' . $version,
                 false
             );
         }

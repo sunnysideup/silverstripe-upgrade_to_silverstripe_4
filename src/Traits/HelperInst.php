@@ -21,7 +21,6 @@ trait HelperInst
     }
 
     /**
-     * @param \Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader $mu
      * @return self
      */
     protected function setMu(ModuleUpgrader $mu)
@@ -31,9 +30,6 @@ trait HelperInst
         return $this;
     }
 
-    /**
-     * @return \Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader
-     */
     protected function mu(): ModuleUpgrader
     {
         return $this->myMu;

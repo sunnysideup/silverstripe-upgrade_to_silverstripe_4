@@ -296,7 +296,6 @@ abstract class Task
         );
     }
 
-
     protected function findModuleNames(): array
     {
         $moduleNames = [];
@@ -322,5 +321,4 @@ abstract class Task
 
         return $moduleNameLocation;
     }
-
 }

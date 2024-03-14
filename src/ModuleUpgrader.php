@@ -21,7 +21,6 @@ class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
      * @param  string  $command                 actual command
      * @param  string  $comment                 comment
      * @param  boolean $alwaysRun               run even if you are just preparing a real run. Default FALSE
-     * @param  string  $keyNotesLogFileLocation
      *
      * @return array
      */
@@ -207,7 +206,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             $this->aboveWebRootDirLocation
         );
         if(! $this->aboveWebRootDirLocation) {
-            die('You need the following directory for this application to work: '.$attempt);
+            die('You need the following directory for this application to work: ' . $attempt);
         }
         $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
             $this->aboveWebRootDirLocation . '/' . $this->webRootName,
@@ -357,7 +356,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                     $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
                 } else {
                     if (! $this->originComposerFileLocation) {
-                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/'.$this->nameOfBranchForBaseCode.'/composer.json';
+                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/' . $this->nameOfBranchForBaseCode . '/composer.json';
                     }
                     if ($this->URLExists($this->originComposerFileLocation)) {
                         $json = file_get_contents($this->originComposerFileLocation);
@@ -387,7 +386,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             //     Session Value: '.$packageFolderNameForInstall
             // );
         }
-        if(!  $this->packageFolderNameForInstall) {
+        if(! $this->packageFolderNameForInstall) {
             $this->packageFolderNameForInstall = $this->getPackageName();
         }
         return $this->packageFolderNameForInstall;
@@ -395,9 +394,8 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
 
     protected function testLocationFromRootDir(string $dir): bool
     {
-        return (bool) file_exists($this->webRootDirLocation . '/'. $dir);
+        return (bool) file_exists($this->webRootDirLocation . '/' . $dir);
     }
-
 
     protected function printVarsForModule(array $moduleDetails)
     {
@@ -465,7 +463,6 @@ Session has completed.
      * - should we run it?
      *
      * @param  string $name whatever is listed in the listOfTasks
-     * @return bool
      */
     protected function shouldWeRunIt(string $name): bool
     {

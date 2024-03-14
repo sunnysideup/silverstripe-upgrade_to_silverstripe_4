@@ -53,9 +53,6 @@ class FindFiles
 
     /**
      *   Sets folders to ignore
-     * @param array $ignoreFolderArray
-     *
-     * @return FindFiles
      */
     public function setIgnoreFolderArray(?array $ignoreFolderArray = []): FindFiles
     {
@@ -71,8 +68,6 @@ class FindFiles
 
     /**
      *   Sets folders to ignore
-     * @param array $ignoreFolderArray
-     * @return FindFiles
      */
     public function addToIgnoreFolderArray(?array $ignoreFolderArray = []): FindFiles
     {
@@ -92,7 +87,6 @@ class FindFiles
 
     /**
      * remove ignore folders
-     * @return FindFiles
      */
     public function resetIgnoreFolderArray(): FindFiles
     {
@@ -105,7 +99,6 @@ class FindFiles
     /**
      *   Sets extensions to look
      * @param bool $boolean - optional
-     * @return FindFiles
      */
     public function setFindAllExts(bool $boolean = true): FindFiles
     {
@@ -115,10 +108,6 @@ class FindFiles
         return $this;
     }
 
-    /**
-     * @param  string    $pathLocation
-     * @return FindFiles
-     */
     public function setSearchPath(string $pathLocation): FindFiles
     {
         if ($pathLocation !== $this->searchPath) {
@@ -132,7 +121,6 @@ class FindFiles
     /**
      *   Sets extensions to look
      * @param array $extensions - optional
-     * @return FindFiles
      */
     public function setExtensions(?array $extensions = []): FindFiles
     {
@@ -147,10 +135,6 @@ class FindFiles
         return $this;
     }
 
-    /**
-     * @param  bool      $bool
-     * @return FindFiles
-     */
     public function setRecursive(bool $bool): FindFiles
     {
         $this->recursive = $bool;
@@ -159,10 +143,6 @@ class FindFiles
         return $this;
     }
 
-    /**
-     * @param bool $bool
-     * @return FindFiles
-     */
     public function setIgnoreHiddenFilesAndFolders(bool $bool): FindFiles
     {
         $this->ignoreHiddenFilesAndFolders = $bool;
@@ -282,8 +262,6 @@ class FindFiles
     /**
      * Finds extension of a file
      * @param string $file
-     *
-     * @return string
      */
     private function findExtension($file): string
     {

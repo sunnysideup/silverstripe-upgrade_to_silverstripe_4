@@ -53,8 +53,9 @@ class FixClassNamesWithUnderscores extends Task
             }
         }
         if ($errors) {
-            $this->mu()->colourPrint('
-                    Found '.$errors.' errors.
+            $this->mu()->colourPrint(
+                '
+                    Found ' . $errors . ' errors.
                     You need to do the following things:
                     (a) check table name issues,
                     (b) update .upgrade.yml,
@@ -73,5 +74,4 @@ class FixClassNamesWithUnderscores extends Task
     {
         return false;
     }
-
 }

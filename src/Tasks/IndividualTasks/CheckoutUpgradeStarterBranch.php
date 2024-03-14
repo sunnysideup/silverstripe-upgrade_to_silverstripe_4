@@ -89,7 +89,7 @@ class CheckoutUpgradeStarterBranch extends Task
             );
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(). ' --no-interaction',
+            'composer info ' . $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName() . ' --no-interaction',
             'show information about installed package',
             false
         );

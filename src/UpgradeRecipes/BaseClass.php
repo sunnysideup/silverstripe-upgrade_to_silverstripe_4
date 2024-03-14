@@ -30,9 +30,6 @@ abstract class BaseClass
         's99' => 'ERROR!',
     ];
 
-    /**
-     * @return array
-     */
     public function getVariables(): array
     {
         $returnArray = [];

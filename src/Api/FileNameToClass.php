@@ -7,10 +7,6 @@ class FileNameToClass
     /**
      * get the full name (name \ namespace) of a class from its file path
      * result example: (string) "I\Am\The\Namespace\Of\This\Class"
-     *
-     * @param string $filePathName
-     *
-     * @return  string
      */
     public function getClassFullNameFromFile(string $filePathName): string
     {
@@ -20,7 +16,6 @@ class FileNameToClass
     /**
      * build and return an object of a class from its file path
      *
-     * @param string $filePathName
      * @return mixed
      */
     public function getClassObjectFromFile(string $filePathName)
@@ -32,10 +27,6 @@ class FileNameToClass
 
     /**
      * get the class namespace form file path using token
-     *
-     * @param string $filePathName
-     *
-     * @return string|null
      */
     public function getClassNamespaceFromFile(string $filePathName): ?string
     {
@@ -70,10 +61,6 @@ class FileNameToClass
 
     /**
      * get the class name form file path using token
-     *
-     * @param string $filePathName
-     *
-     * @return string
      */
     public function getClassNameFromFile(string $filePathName): string
     {

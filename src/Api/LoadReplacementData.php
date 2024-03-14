@@ -3,7 +3,6 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Api;
 
 use SilverStripe\Upgrader\Util\ConfigFile;
-
 /**
  * loads yml data if strings to replace in
  * code.
@@ -20,7 +19,6 @@ use SilverStripe\Upgrader\Util\ConfigFile;
  *
  * toFolders have names like: SS37 or SS4.
  */
-
 
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
@@ -76,6 +74,7 @@ class LoadReplacementData
      * @var array
      */
     protected $paths = [];
+
     protected $toFolder = '';
 
     /**
@@ -152,8 +151,6 @@ class LoadReplacementData
 
     /**
      * retrieve all replacements
-     *
-     * @return array
      */
     protected function getData(): array
     {
@@ -178,8 +175,6 @@ class LoadReplacementData
 
     /**
      * returns a list of paths to be checked for replacement data.
-     *
-     * @return array
      */
     protected function getPaths(): array
     {
@@ -198,10 +193,6 @@ class LoadReplacementData
 
     /**
      * merge config of two files ...
-     * @param  array $left
-     * @param  array $right
-     *
-     * @return array
      */
     protected static function mergeConfig(array $left, array $right): array
     {

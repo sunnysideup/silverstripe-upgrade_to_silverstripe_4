@@ -59,7 +59,7 @@ class Composer
         $devFlag = $devOnly ? '--dev' : '';
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer remove ' . $package . ' ' . $devFlag. ' --no-interaction',
+            'composer remove ' . $package . ' ' . $devFlag . ' --no-interaction',
             'running composer remove ' . $package . ' ' . $devFlag,
             false
         );
@@ -82,7 +82,7 @@ class Composer
         }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer ' . $globalPhrase . ' require ' . $package . $version . ' ' . $devFlag . ' ' . $options. ' --no-interaction',
+            'composer ' . $globalPhrase . ' require ' . $package . $version . ' ' . $devFlag . ' ' . $options . ' --no-interaction',
             'running composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             false
         );

@@ -17,8 +17,6 @@ trait Misc
      * e.g. /var/www
      *
      * @param  string $path
-     *
-     * @return string
      */
     public function checkIfPathExistsAndCleanItUp($path, $returnEvenIfItDoesNotExists = false): string
     {
@@ -38,7 +36,6 @@ trait Misc
     /**
      * Cleans an input string and returns a more natural human readable version
      * @param  string $str input string
-     * @param  array  $noStrip
      *
      * @return string cleaned string
      */

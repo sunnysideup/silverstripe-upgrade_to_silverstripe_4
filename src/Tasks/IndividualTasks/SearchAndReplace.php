@@ -4,7 +4,6 @@ namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
 use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
-
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**

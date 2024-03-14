@@ -3,9 +3,9 @@
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 
 /**
  * Adds a new branch to your repository that is going to be used for upgrading it.
@@ -53,25 +53,25 @@ class ApplyPSR2 extends Task
                 ->removeDirOrFile($knownIssuesFileName);
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd.'sake-ling-all '.$relativeDir,
+                $commandAdd . 'sake-ling-all ' . $relativeDir,
                 'Apply easy coding standards to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd.'sake-ling-all '.$relativeDir,
+                $commandAdd . 'sake-ling-all ' . $relativeDir,
                 'Apply easy coding standards a second time ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd.'sake-ling-all '.$relativeDir.' > ' . $knownIssuesFileName,
+                $commandAdd . 'sake-ling-all ' . $relativeDir . ' > ' . $knownIssuesFileName,
                 'Apply easy coding standards a third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to ' . $knownIssuesFileName,
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd.'sslint-stan '.$relativeDir.' >> ' . $knownIssuesFileName,
+                $commandAdd . 'sslint-stan ' . $relativeDir . ' >> ' . $knownIssuesFileName,
                 'Apply phpstan. to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $knownIssuesFileName,
                 false
             );

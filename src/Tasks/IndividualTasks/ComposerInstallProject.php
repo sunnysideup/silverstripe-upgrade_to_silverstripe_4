@@ -2,11 +2,11 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 
 /**
  * Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')
@@ -108,8 +108,8 @@ class ComposerInstallProject extends Task
                 foreach($this->allowedPlugins as $plugin) {
                     $this->mu()->execMe(
                         $this->mu()->getWebRootDirLocation(),
-                        $this->mu()->getComposerEnvironmentVars() . 'composer config --no-interaction allow-plugins.' .$plugin.' true',
-                        'composer config --no-interaction allow-plugins.' .$plugin.' true',
+                        $this->mu()->getComposerEnvironmentVars() . 'composer config --no-interaction allow-plugins.' . $plugin . ' true',
+                        'composer config --no-interaction allow-plugins.' . $plugin . ' true',
                         false
                     );
                 }
@@ -128,8 +128,8 @@ class ComposerInstallProject extends Task
                 $gitLink = $this->mu()->getGitLink();
                 $command = '
                     git init;
-                    git remote add origin '.$gitLink.';
-                    git pull origin '.$altBranch.';
+                    git remote add origin ' . $gitLink . ';
+                    git pull origin ' . $altBranch . ';
                     git status;';
                 $this->mu()->execMe(
                     $this->mu()->getGitRootDir(),

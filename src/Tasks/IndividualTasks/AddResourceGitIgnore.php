@@ -2,10 +2,8 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Runs through the source code and adds hidden Silverstripe property and method documentation to classes
@@ -13,8 +11,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
  */
 class AddResourceGitIgnore extends Task
 {
-
-
     protected $taskStep = 's60';
 
     protected $resourcesFolder = 'resources';
@@ -40,7 +36,6 @@ txt;
         $dir = $this->mu()->getWebRootDirLocation();
 
     }
-
 
     protected function updateModuleConfigFile(string $moduleName)
     {

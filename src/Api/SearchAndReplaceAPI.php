@@ -244,7 +244,6 @@ class SearchAndReplaceAPI
 
     /**
      * Sets search key and case sensitivity
-     * @param string $searchKey,
      * @param bool $caseSensitive
      */
     public function setSearchKey($searchKey, $caseSensitive = false, $replacementType = 'noType')
@@ -301,11 +300,11 @@ class SearchAndReplaceAPI
             $new = '';
             if($this->searchKey !== $this->replacementKey) {
             } else {
-                $new = '  * NEW: ' . $this->replacementKey . ' ... ' . $replacementTypeStatement . PHP_EOL ;
+                $new = '  * NEW: ' . $this->replacementKey . ' ... ' . $replacementTypeStatement . PHP_EOL;
             }
             $string .=
-                '  * OLD: ' . $this->searchKey . $caseSensitiveStatement  . PHP_EOL .
-                $new.
+                '  * OLD: ' . $this->searchKey . $caseSensitiveStatement . PHP_EOL .
+                $new .
                 '  * EXP: ' . $this->comment . PHP_EOL .
                 '  * ' . $this->endMarker . PHP_EOL .
                 '  */' .
@@ -595,7 +594,6 @@ class SearchAndReplaceAPI
 
     /**
      * Writes new data (after the replacement) to file
-     * @param string $file,
      * @param string $data
      */
     private function writeToFile($file, $data)

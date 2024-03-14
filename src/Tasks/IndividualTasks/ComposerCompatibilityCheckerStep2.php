@@ -2,7 +2,6 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
@@ -15,6 +14,7 @@ use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 class ComposerCompatibilityCheckerStep2 extends Task
 {
     protected $taskStep = 's10';
+
     protected $alwaysKeepArray = [
         'silverstripe/recipe-cms',
     ];
@@ -33,7 +33,6 @@ class ComposerCompatibilityCheckerStep2 extends Task
     {
         return 'Goes through all the composer requirements and adds them one by one....';
     }
-
 
     /**
      * @param array $params
@@ -60,14 +59,13 @@ class ComposerCompatibilityCheckerStep2 extends Task
 
     }
 
-
     protected function moveToTmpVar()
     {
         $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
             $this->mu()->getGitRootDir()
         );
         foreach (['require', 'require-dev'] as $section) {
-            $tmpSection = $section.$this->appendixToKey;
+            $tmpSection = $section . $this->appendixToKey;
             // move all
             if(! empty($composerData[$section])) {
                 $composerData[$tmpSection] = $composerData[$section];
@@ -87,18 +85,17 @@ class ComposerCompatibilityCheckerStep2 extends Task
         );
     }
 
-
     protected function testEachRequirement()
     {
         $composerData = ComposerJsonFixes::inst($this->mu())->getJSON(
             $this->mu()->getGitRootDir()
         );
         foreach (['require', 'require-dev'] as $section) {
-            $tmpSection = $section.$this->appendixToKey;
+            $tmpSection = $section . $this->appendixToKey;
             if (! empty($composerData[$tmpSection])) {
                 foreach ($composerData[$tmpSection] as $package => $version) {
 
-                    $this->mu()->colourPrint('trying to add '.$package.':'.$version, 'yellow', 1);
+                    $this->mu()->colourPrint('trying to add ' . $package . ':' . $version, 'yellow', 1);
 
                     // Attempt to require the package
                     $output = '';
@@ -135,14 +132,14 @@ class ComposerCompatibilityCheckerStep2 extends Task
         );
         switch ($action) {
             case 'remove':
-                $this->mu()->colourPrint('removing '.$package.':'.$version, 'red', 1);
+                $this->mu()->colourPrint('removing ' . $package . ':' . $version, 'red', 1);
                 unset($composerData[$section][$package]);
-                $composerData[$section.'-tmp'][$package] = $version;
+                $composerData[$section . '-tmp'][$package] = $version;
                 break;
             case 'add':
-                $this->mu()->colourPrint('adding '.$package.':'.$version, 'green', 1);
+                $this->mu()->colourPrint('adding ' . $package . ':' . $version, 'green', 1);
                 $composerData[$section][$package] = $version;
-                unset($composerData[$section.'-tmp'][$package]);
+                unset($composerData[$section . '-tmp'][$package]);
                 break;
         }
         ComposerJsonFixes::inst($this->mu())->setJSON(
@@ -150,8 +147,6 @@ class ComposerCompatibilityCheckerStep2 extends Task
             $composerData
         );
     }
-
-
 
     protected function hasCommitAndPush()
     {

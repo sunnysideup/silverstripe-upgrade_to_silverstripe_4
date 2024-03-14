@@ -2,10 +2,9 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
  * Runs through the source code and adds hidden Silverstripe property and method documentation to classes
@@ -13,7 +12,6 @@ use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
  */
 class AddPHPDoc extends Task
 {
-
     const REPLACER = 'REPLACE_WITH_MODULE_NAME';
 
     protected $taskStep = 's60';
@@ -41,8 +39,8 @@ SilverLeague\IDEAnnotator\DataObjectAnnotator:
   use_short_name: true
   enabled_modules:
 yml
-.'
-    - '.self::REPLACER;
+. '
+    - ' . self::REPLACER;
 
     public function getTitle()
     {
@@ -79,7 +77,6 @@ yml
         }
     }
 
-
     protected function updateModuleConfigFile(string $moduleName)
     {
         $moduleLocation = $this->findModuleNameLocation($moduleName);
@@ -99,7 +96,6 @@ yml
             user_error('Could not locate ' . $fileLocation);
         }
     }
-
 
     protected function hasCommitAndPush(): bool
     {

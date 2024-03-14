@@ -3,18 +3,14 @@
 namespace Sunnysideup\UpgradeToSilverstripe4;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
-
 use Sunnysideup\UpgradeToSilverstripe4\Api\SessionManagement;
 use Sunnysideup\UpgradeToSilverstripe4\Interfaces\ModuleUpgraderInterface;
 use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
 use Sunnysideup\UpgradeToSilverstripe4\Traits\GettersAndSetters;
-
 use Sunnysideup\UpgradeToSilverstripe4\Traits\Misc;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss31ToSs37;
+use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\ApplyNamespacing;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss33ToSs37;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\ApplyNamespacing;
-
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss4Lint;
 use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss4ToSs5FindAndReplaceOnly;
@@ -441,7 +437,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      * to the array of modules that will be worked with during the upgrade procedure.
      *
      * @param array $a data to append
-     * @return ModuleUpgraderInterface
      */
     public function addModule(array $a): ModuleUpgraderInterface
     {
@@ -456,8 +451,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      * @param string|array  $oneOrMoreTasks the tasks to be inserted
      * @param bool          $insertBeforeOrAfter If to insert before or after
      * @param bool          $isBefore
-     *
-     * @return ModuleUpgraderInterface
      */
     public function addToListOfTasks($oneOrMoreTasks, $insertBeforeOrAfter, $isBefore): ModuleUpgraderInterface
     {
@@ -485,8 +478,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     /**
      * Removes the given task from the list of tasks to execute
      * @param  string $s name of the task to remove
-     *
-     * @return ModuleUpgraderInterface
      */
     public function removeFromListOfTasks($s): ModuleUpgraderInterface
     {
@@ -500,10 +491,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this;
     }
 
-    /**
-     * @param bool $b
-     * @return ModuleUpgraderInterface
-     */
     public function setRunImmediately(bool $b): ModuleUpgraderInterface
     {
         $this->commandLineExec->setRunImmediately($b);
@@ -511,9 +498,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLocationOfThisUpgrader(): string
     {
         if (! $this->locationOfThisUpgrader) {
@@ -522,9 +506,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this->locationOfThisUpgrader;
     }
 
-    /**
-     * @return string
-     */
     public function getLocationOfSSUpgradeModule(): string
     {
         if (! $this->locationOfSSUpgradeModule) {
@@ -555,8 +536,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
     /**
      * returns an array of existing paths
-     *
-     * @return array
      */
     public function getExistingModuleDirLocations(): array
     {
@@ -598,7 +577,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
                 user_error(
                     'You need to set moduleDirLocations (setModuleDirLocations)
                     as there are currently none.
-                    We tried to look at: '. print_r($this->moduleDirLocations, 1)
+                    We tried to look at: ' . print_r($this->moduleDirLocations, 1)
                 );
             }
         }
@@ -608,7 +587,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
     /**
      * Whether execution should come to a halt when an error is reached
-     * @return self
      */
     public function setBreakOnAllErrors(bool $b): self
     {
@@ -619,7 +597,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
     /**
      * Whether execution should come to a halt when an error is reached
-     * @return bool
      */
     public function getBreakOnAllErrors(): bool
     {
@@ -628,7 +605,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 
     /**
      * Whether execution should come to a halt when an error is reached
-     * @return bool
      */
     public function getIsProjectUpgrade(): bool
     {
@@ -739,6 +715,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     {
         return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
     }
+
     public function getisOnPackagistNice(): string
     {
         if ($this->getIsModuleUpgrade()) {
@@ -753,8 +730,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      * @param  string $taskName name of the task
      * @param  string $variableName name of the task
      * @param  mixed $variableValue name of the task
-     *
-     * @return  ModuleUpgraderInterface
      */
     public function setVariableForTask(string $taskName, string $variableName, $variableValue): ModuleUpgraderInterface
     {
@@ -798,7 +773,6 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      * want to start the logger or not in different scenarios.
      *
      * For now it defaults to always existing
-     * @return PHP2CommandLineSingleton
      */
     protected function startPHP2CommandLine(): PHP2CommandLineSingleton
     {

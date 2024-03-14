@@ -2,7 +2,6 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
@@ -54,22 +53,22 @@ Runs a composer update at the end.
                 foreach ($composerData[$section] as $package => &$version) {
                     if (strpos($version, 'silverstripe-australia') !== false) {
                         $newVersion = str_replace('silverstripe-australia', 'symbiote', $version);
-                        $this->mu()->colourPrint('replacing '.$package.':'.$version. ' with '.$package.':'.$newVersion, 'green', 1);
+                        $this->mu()->colourPrint('replacing ' . $package . ':' . $version . ' with ' . $package . ':' . $newVersion, 'green', 1);
                         $version = $newVersion;
                     }
                     if (strpos($version, '.x') !== false) {
                         $newVersion = str_replace('.x', '.0', $version);
-                        $this->mu()->colourPrint('replacing '.$package.':'.$version. ' with '.$package.':'.$newVersion, 'green', 1);
+                        $this->mu()->colourPrint('replacing ' . $package . ':' . $version . ' with ' . $package . ':' . $newVersion, 'green', 1);
                         $version = $newVersion;
                     }
                     if (strpos($version, '.*') !== false) {
                         $newVersion = str_replace('.*', '.0', $version);
-                        $this->mu()->colourPrint('replacing '.$package.':'.$version. ' with '.$package.':'.$newVersion, 'green', 1);
+                        $this->mu()->colourPrint('replacing ' . $package . ':' . $version . ' with ' . $package . ':' . $newVersion, 'green', 1);
                         $version = $newVersion;
                     }
-                    if (ctype_digit(substr($version[0], 0, 1)) && !str_starts_with($version, '^')) {
+                    if (ctype_digit(substr($version[0], 0, 1)) && ! str_starts_with($version, '^')) {
                         $newVersion = '^' . $version;
-                        $this->mu()->colourPrint('replacing '.$package.':'.$version. ' with '.$package.':'.$newVersion, 'green', 1);
+                        $this->mu()->colourPrint('replacing ' . $package . ':' . $version . ' with ' . $package . ':' . $newVersion, 'green', 1);
                         $version = $newVersion;
                     }
                 }
@@ -90,5 +89,4 @@ Runs a composer update at the end.
             );
         }
     }
-
 }

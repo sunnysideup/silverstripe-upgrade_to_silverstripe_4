@@ -6,9 +6,9 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
+use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
-use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 
 /**
  * Delete the web root directory to allow for a fresh install.

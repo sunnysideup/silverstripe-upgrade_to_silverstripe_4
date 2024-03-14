@@ -2,7 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 
-class Ss4ToSs5 extends BaseClass
+class Ss4ToSs5FindAndReplaceOnly extends BaseClass
 {
     /**
      * name of the branch to be created that we use a starter branch for upgrade
@@ -14,7 +14,7 @@ class Ss4ToSs5 extends BaseClass
      * name of the branch created to do the upgrade
      * @var string branch name
      */
-    protected $nameOfTempBranch = 'upgrades/automatedbranch/4to5';
+    protected $nameOfTempBranch = 'upgrades/automatedbranch/4to5check';
 
     /**
      * The default namespace for all tasks
@@ -45,38 +45,14 @@ class Ss4ToSs5 extends BaseClass
             'branchOrTagToUse' => 'develop',
         ],
 
-        'AddUpgradeStarterBranch' => [],
-        'CheckoutUpgradeStarterBranch-1' => [],
-        'MakeRequirementsMoreFlexible' => [],
-        'PHPCompatabilityCheck' => [
-            'phpVersion' => '8.2',
-        ],
-        'ResetWebRootDir-2' => [],
-
-        'CheckoutUpgradeStarterBranch-2' => [],
         'AddTempUpgradeBranch' => [],
-        'ComposerCompatibilityCheckerStep1' => [],
-        // 'FixOutdatedPHPStyles' => [],
+        // 'ResetWebRootDir-3' => [],
 
-        // 'AddTableNamePrivateStatic' => [],
-        'RemoveComposerRequirements' => [], // remove framework, etc...
-        'UpdateComposerRequirements' => [], // run find and replace for specific packages.
+        // //Step2: MoveToNewVersion
+        // 'ComposerInstallProject' => [],
 
-        'ResetWebRootDir-3' => [],
-
-        //Step2: MoveToNewVersion
-        'ComposerInstallProject' => [],
-        'ComposerCompatibilityCheckerStep2' => [],
-        'ComposerCompatibilityCheckerStep3' => [],
-
-        //Step3: FixBeforeStart
         'SearchAndReplace' => [
             'sourceFolders' => 'SS5',
-        ],
-
-        //step7: Lock-in
-        'FinaliseUpgradeWithMergeIntoMaster' => [
-            'branchToMergeInto' => 'develop',
         ],
     ];
 

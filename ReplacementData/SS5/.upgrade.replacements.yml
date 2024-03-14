@@ -10,11 +10,11 @@
 
 '.':
     'ss':
-        '.First':
-            R: '.IsFirst'
+        '$First':
+            R: '$isFirst'
             C: 'Check!'
-        '.Last':
-            R: '.IsLast'
+        '$Last':
+            R: '$isLast'
             C: 'Check!'
 
     'php':
@@ -33,6 +33,33 @@
         '->sort(':
             R: '->orderBy('
             C: 'Please check that this still works. OrderBy only excepts arrays, not strings!'
+
+        '->deleteFile(':
+            R: '->doArchive('
+            C: ''
+
+        '->error(':
+            R: '->addError('
+            C: 'Check!'
+
+        'trim(':
+            R: 'trim((string) '
+
+        'strtolower(':
+            R: 'strtolower((string) '
+
+        'strtoupper(':
+            R: 'strtoupper((string) '
+
+        'strtotime(':
+            R: 'strtotime((string) '
+
+        '(string) (string) ':
+            R: '(string) '
+
+        'default_sort = [':
+            R: 'default_sort = ['
+            C: 'A string is preferred over an array'
 
     '*':
         '::get_one(':
@@ -72,11 +99,11 @@
             C: 'Moved Method ... SilverStripe\Control\Email\Email::addTo() now Symfony\Component\Mime\Email with a different signature'
 
         'allVersions(':
-            R: 'allVersions('
+            R: 'Versions('
             C: 'Removed deprecated method ... SilverStripe\Versioned\Versioned::allVersions() - use SilverStripe\Versioned\Versioned::Versions() instead'
 
         'alternatePreviewLink(':
-            R: 'alternatePreviewLink('
+            R: 'updatePreviewLink('
             C: 'Removed deprecated method ... SilverStripe\Subsites\Extensions\SiteTreeSubsites::alternatePreviewLink() - use SilverStripe\Subsites\Extensions\SiteTreeSubsites::updatePreviewLink() instead'
 
         'assertContains(':
@@ -140,7 +167,7 @@
             C: 'Removed deprecated class ... SilverStripe\FullTextSearch\Search\Captures\SearchManipulateCapture_SQLite3Database - use tractorcow/silverstripe-proxy-db to proxy the database connector instead'
 
         'characterStrength(':
-            R: 'characterStrength('
+            R: 'setMinTestScore('
             C: 'Removed deprecated method ... SilverStripe\Security\PasswordValidator::characterStrength() - use SilverStripe\Security\PasswordValidator::setMinTestScore() and SilverStripe\Security\PasswordValidator::setTestNames() instead'
 
         'check_default_admin(':
@@ -240,7 +267,7 @@
             C: 'Removed deprecated config ... SilverStripe\Control\HTTP.disable_http_cache - use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware.defaultState or SilverStripe\Control\Middleware\HTTPCacheControlMiddleware.defaultForcingLevel instead'
 
         'doPublish(':
-            R: 'doPublish('
+            R: 'publishRecursive('
             C: 'Removed deprecated method ... SilverStripe\Versioned\Versioned::doPublish() - use SilverStripe\Versioned\Versioned::publishRecursive() instead'
 
         'doRollbackTo(':
@@ -274,10 +301,6 @@
         'etag':
             R: 'etag'
             C: 'Removed deprecated property ... SilverStripe\Control\HTTP::$etag - use SilverStripe\Control\Middleware\ChangeDetectionMiddleware instead'
-
-        'extend(':
-            R: 'extend('
-            C: 'Removed deprecated parameter ... SilverStripe\Core\Extensible::extend() named $a2, $a7'
 
         'findAnAdministrator(':
             R: 'findAnAdministrator('
@@ -480,19 +503,19 @@
             C: 'Removed deprecated method ... SilverStripe\FullTextSearch\Search\Queries\SearchQuery::limit() - use SilverStripe\FullTextSearch\Search\Queries\SearchQuery::setLimit() instead'
 
         'LocaleLink(':
-            R: 'LocaleLink('
+            R: 'LocaleInformation('
             C: 'Removed deprecated method ... TractorCow\Fluent\Extension\FluentExtension::LocaleLink() - use TractorCow\Fluent\Extension\FluentExtension::LocaleInformation() instead'
 
         'logged_in_session_exists(':
             R: 'logged_in_session_exists('
             C: 'Removed deprecated method ... SilverStripe\Security\Member::logged_in_session_exists() - use SilverStripe\Security\Security::getCurrentUser() instead'
 
-        'logIn(':
-            R: 'logIn('
+        'Member::logIn(':
+            R: 'IdentityStore::logIn('
             C: 'Removed deprecated method ... SilverStripe\Security\Member::logIn() - use SilverStripe\Security\Security::setCurrentUser() or SilverStripe\Security\IdentityStore::logIn() instead'
 
-        'logOut(':
-            R: 'logOut('
+        'Member::logOut(':
+            R: 'IdentityStore::logOut('
             C: 'Removed deprecated method ... SilverStripe\Security\Member::logOut() - use SilverStripe\Security\Security::setCurrentUser(null) or an SilverStripe\Security\IdentityStore::logOut() instead'
 
         'Map_Iterator':
@@ -504,11 +527,11 @@
             C: 'Removed deprecated class ... SilverStripe\HybridSessions\Crypto\McryptCrypto - use SilverStripe\HybridSessions\Crypto\OpenSSLCrypto instead'
 
         'Member::currentUser(':
-            R: 'Member::currentUser('
+            R: 'Security::getCurrentUser('
             C: 'Removed deprecated method ... SilverStripe\Security\Member::currentUser() - use SilverStripe\Security\Security::getCurrentUser() instead'
 
         'Member::currentUserID(':
-            R: 'Member::currentUserID('
+            R: 'Security::getCurrentUser()?->ID'
             C: 'Removed deprecated method ... SilverStripe\Security\Member::currentUserID() - use SilverStripe\Security\Security::getCurrentUser() instead'
 
         'MemberImportForm':

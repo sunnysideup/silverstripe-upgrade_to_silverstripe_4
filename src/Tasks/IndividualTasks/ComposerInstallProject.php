@@ -105,7 +105,7 @@ class ComposerInstallProject extends Task
                     'set up vanilla install of ' . $this->defaultSilverstripeProject . ' - version: ' . $this->versionToLoad,
                     false
                 );
-                foreach($this->allowedPlugins as $plugin) {
+                foreach ($this->allowedPlugins as $plugin) {
                     $this->mu()->execMe(
                         $this->mu()->getWebRootDirLocation(),
                         $this->mu()->getComposerEnvironmentVars() . 'composer config --no-interaction allow-plugins.' . $plugin . ' true',
@@ -124,7 +124,7 @@ class ComposerInstallProject extends Task
                     $this->composerOptions
                 );
             $branch = $this->mu()->getParentProjectForModuleBranchOrTag() ?: 'master';
-            if($this->mu()->getNameOfTempBranch() !== $branch) {
+            if ($this->mu()->getNameOfTempBranch() !== $branch) {
                 $gitLink = $this->mu()->getGitLink();
                 $command = '
                     git init;

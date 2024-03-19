@@ -185,7 +185,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         $this->runLastOneAgain = $this->getCommandLineOrArgumentAsBoolean('again');
         if ($this->getCommandLineOrArgumentAsString('startFrom')) {
             $this->startFrom = $this->getCommandLineOrArgumentAsString('startFrom');
-            if($this->runInteractively) {
+            if ($this->runInteractively) {
                 $this->onlyRun = $this->getCommandLineOrArgumentAsString('startFrom');
             }
         }
@@ -205,7 +205,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         $this->aboveWebRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
             $this->aboveWebRootDirLocation
         );
-        if(! $this->aboveWebRootDirLocation) {
+        if (! $this->aboveWebRootDirLocation) {
             die('You need the following directory for this application to work: ' . $attempt);
         }
         $this->webRootDirLocation = $this->checkIfPathExistsAndCleanItUp(
@@ -242,7 +242,6 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
      */
     protected function loadVarsForModule($moduleDetails)
     {
-
         //Is Module Upgrade
         //do this first as a lot of other functions rely on it ...
         $this->isModuleUpgrade = isset($moduleDetails['IsModuleUpgrade']) ? (bool) $moduleDetails['IsModuleUpgrade'] : true;
@@ -296,7 +295,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             'https://bitbucket.org/',
             $gitLinkWithoutExtension
         );
-        if(stripos($this->gitLinkAsRawHTTPS, 'bitbucket') > 0) {
+        if (stripos($this->gitLinkAsRawHTTPS, 'bitbucket') > 0) {
             $this->gitLinkAsRawHTTPS .= '/raw';
         }
 
@@ -370,11 +369,11 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
         }
         if (! $this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
             $this->packageFolderNameForInstall = $this->getPackageFolderNameBasic(false);
-            if(! $this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
+            if (! $this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
                 $this->packageFolderNameForInstall = $this->getPackageFolderNameBasic(true);
             }
         }
-        if($this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
+        if ($this->testLocationFromRootDir($this->packageFolderNameForInstall)) {
             $this->getSessionManager()->setSessionValue(
                 'PackageFolderNameForInstall',
                 $this->packageFolderNameForInstall
@@ -386,7 +385,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             //     Session Value: '.$packageFolderNameForInstall
             // );
         }
-        if(! $this->packageFolderNameForInstall) {
+        if (! $this->packageFolderNameForInstall) {
             $this->packageFolderNameForInstall = $this->getPackageName();
         }
         return $this->packageFolderNameForInstall;

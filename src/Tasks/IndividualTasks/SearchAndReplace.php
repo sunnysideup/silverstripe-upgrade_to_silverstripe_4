@@ -113,7 +113,6 @@ class SearchAndReplace extends Task
 
     public function runActualTask($params = []): ?string
     {
-
         //replacement data
         $replacementDataObjects = $this->getReplacementDataObjects();
         foreach ($replacementDataObjects as $replacementDataObject) {

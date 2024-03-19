@@ -30,7 +30,7 @@ class LintAll extends Task
      */
     public function runActualTask($params = []): ?string
     {
-        if(PHP2CommandLineSingleton::commandExists('sake-lint-all')) {
+        if (PHP2CommandLineSingleton::commandExists('sake-lint-all')) {
             foreach ($this->mu()->getExistingModuleDirLocations() as $moduleDir) {
                 $this->mu()->execMe(
                     $this->mu()->getWebRootDirLocation(),

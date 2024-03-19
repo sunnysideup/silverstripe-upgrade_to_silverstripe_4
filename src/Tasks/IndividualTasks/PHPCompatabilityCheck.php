@@ -41,7 +41,7 @@ class PHPCompatabilityCheck extends Task
     public function runActualTask($params = []): ?string
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        if(PHP2CommandLineSingleton::commandExists('sslint-compat')) {
+        if (PHP2CommandLineSingleton::commandExists('sslint-compat')) {
             foreach ($this->mu()->findNameSpaceAndCodeDirs() as $codeDir) {
                 // $file = str_replace('\\', '-', $baseNameSpace);
                 $this->mu()->execMe(

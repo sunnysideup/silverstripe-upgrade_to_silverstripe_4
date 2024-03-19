@@ -118,7 +118,7 @@ class UpdateComposerRequirements extends Task
     protected function upgradeAllPackages()
     {
         $json = ComposerJsonFixes::inst($this->mu())->getJSON($this->mu()->getGitRootDir());
-        foreach($json['require'] as $package => $version) {
+        foreach ($json['require'] as $package => $version) {
             if (! isset($this->changed[$package])) {
                 $json['require'][$package] = '*';
             }

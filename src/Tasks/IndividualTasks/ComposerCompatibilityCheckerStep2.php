@@ -55,7 +55,6 @@ class ComposerCompatibilityCheckerStep2 extends Task
         $this->mu()->setBreakOnAllErrors(false);
 
         return null;
-
     }
 
     protected function moveToTmpVar()
@@ -66,13 +65,13 @@ class ComposerCompatibilityCheckerStep2 extends Task
         foreach (['require', 'require-dev'] as $section) {
             $tmpSection = $section . $this->appendixToKey;
             // move all
-            if(! empty($composerData[$section])) {
+            if (! empty($composerData[$section])) {
                 $composerData[$tmpSection] = $composerData[$section];
                 unset($composerData[$section]);
             }
             // move the keeps back!
-            foreach($this->alwaysKeepArray as $package) {
-                if(isset($composerData[$tmpSection][$package])) {
+            foreach ($this->alwaysKeepArray as $package) {
+                if (isset($composerData[$tmpSection][$package])) {
                     $composerData[$section][$package] = $composerData[$tmpSection][$package];
                     unset($composerData[$tmpSection][$package]);
                 }
@@ -93,7 +92,6 @@ class ComposerCompatibilityCheckerStep2 extends Task
             $tmpSection = $section . $this->appendixToKey;
             if (! empty($composerData[$tmpSection])) {
                 foreach ($composerData[$tmpSection] as $package => $version) {
-
                     $this->mu()->colourPrint('trying to add ' . $package . ':' . $version, 'yellow', 1);
 
                     // Attempt to require the package
@@ -118,7 +116,6 @@ class ComposerCompatibilityCheckerStep2 extends Task
                 }
             }
         }
-
     }
 
     /**

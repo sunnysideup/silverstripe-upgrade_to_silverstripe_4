@@ -46,7 +46,7 @@ class SwitchPhpVersion extends Task
     public function runActualTask($params = []): ?string
     {
         $version = $this->version ?: $this->defaultVersion;
-        if(PHP2CommandLineSingleton::commandExists('php-switch')) {
+        if (PHP2CommandLineSingleton::commandExists('php-switch')) {
             $this->mu()->execMe(
                 $this->mu()->getWebRootDirLocation(),
                 'php-switch ' . $version,

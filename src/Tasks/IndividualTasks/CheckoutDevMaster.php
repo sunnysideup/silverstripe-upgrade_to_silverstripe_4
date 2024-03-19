@@ -45,7 +45,7 @@ simply start again in a few minutes in this case to make it work.
     public function runActualTask($params = []): ?string
     {
         $alternativeCodeBase = $this->mu()->getNameOfBranchForBaseCode();
-        if($alternativeCodeBase) {
+        if ($alternativeCodeBase) {
             $this->branchOrTagToUse = $alternativeCodeBase;
         }
         $this->mu()->setBreakOnAllErrors(true);

@@ -303,7 +303,7 @@ class SearchAndReplaceAPI
             $caseSensitiveStatement = ($this->caseSensitive ? '' : ' (ignore case)');
             $replacementTypeStatement = ($this->replacementType ? ' (' . $this->replacementType . ')' : '');
             $new = '';
-            if($this->searchKey !== $this->replacementKey) {
+            if ($this->searchKey !== $this->replacementKey) {
             } else {
                 $new = '  * NEW: ' . $this->replacementKey . ' ... ' . $replacementTypeStatement . PHP_EOL;
             }
@@ -484,7 +484,7 @@ class SearchAndReplaceAPI
             $oldFileContentArray = (array) file($file) ?? [];
             $newFileContentArray = [];
 
-            if($this->isRegex === true) {
+            if ($this->isRegex === true) {
                 $pattern = $this->searchKey;
             } else {
                 $searchKey = preg_quote($this->searchKey, '/');

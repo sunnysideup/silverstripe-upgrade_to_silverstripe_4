@@ -10,7 +10,7 @@ class FileSystemFixes
 
     public function mkDir(string $dir, string $baseFolder = ''): FileSystemFixes
     {
-        if(! $baseFolder) {
+        if (! $baseFolder) {
             $baseFolder = $this->mu()->getWebRootDirLocation();
         }
         $this->mu()->execMe(
@@ -26,7 +26,7 @@ class FileSystemFixes
 
     public function removeDirOrFile(string $folderName, string $baseFolder = ''): FileSystemFixes
     {
-        if(! $baseFolder) {
+        if (! $baseFolder) {
             $baseFolder = $this->mu()->getWebRootDirLocation();
         }
         $this->mu()->execMe(

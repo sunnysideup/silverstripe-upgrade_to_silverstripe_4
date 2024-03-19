@@ -38,7 +38,7 @@ class FixClassNamesWithUnderscores extends Task
                 if (is_array($flatArray) && count($flatArray)) {
                     foreach ($flatArray as $path) {
                         $shortClassName = str_replace('.php', '', basename($path));
-                        if(strpos($shortClassName, '_')) {
+                        if (strpos($shortClassName, '_')) {
                             $errors++;
                             $this->mu()->colourPrint('Found an underscore in ... ' . $searchPath, 'red');
                         } else {

@@ -55,7 +55,6 @@ txt;
         // if (! file_exists($fileLocation)) {
         //     user_error('Could not locate ' . $fileLocation);
         // }
-
     }
 
     protected function hasCommitAndPush(): bool

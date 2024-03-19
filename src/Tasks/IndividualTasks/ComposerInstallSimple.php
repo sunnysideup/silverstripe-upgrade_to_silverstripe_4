@@ -2,10 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
 
 /**
@@ -17,7 +14,6 @@ class ComposerInstallSimple extends Task
     protected $taskStep = 's20';
 
     protected $versionToLoad = '';
-
 
     /**
      * @var string
@@ -38,7 +34,7 @@ class ComposerInstallSimple extends Task
     {
         $this->mu()->setBreakOnAllErrors(true);
         $command = '
-        composer install ;'.$this->composerOptions;
+        composer install ;' . $this->composerOptions;
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
             $command,
@@ -49,7 +45,6 @@ class ComposerInstallSimple extends Task
         $this->mu()->setBreakOnAllErrors(false);
         return null;
     }
-
 
     protected function hasCommitAndPush()
     {

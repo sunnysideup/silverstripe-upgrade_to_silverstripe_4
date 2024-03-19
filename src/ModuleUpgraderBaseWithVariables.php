@@ -558,7 +558,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
                 $this->moduleDirLocations[] = $this->webRootDirLocation . '/app';
             } else {
                 foreach ($this->moduleDirLocations as $key => $location) {
-                    if(! file_exists($location)) {
+                    if (! file_exists($location)) {
                         $this->moduleDirLocations[$key] = $this->webRootDirLocation . '/' . $location;
                     }
                 }

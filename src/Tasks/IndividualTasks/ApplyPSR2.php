@@ -34,7 +34,7 @@ class ApplyPSR2 extends Task
         $webRoot = $this->mu()->getWebRootDirLocation();
         $localInstall = (bool) PHP2CommandLineSingleton::commandExists('sake-ling-all');
         $commandAdd = '';
-        if($localInstall) {
+        if ($localInstall) {
             $commandAdd = 'vendor/bin/';
             Composer::inst($this->mu())
                 ->RequireDev(
@@ -76,7 +76,7 @@ class ApplyPSR2 extends Task
                 false
             );
         }
-        if($localInstall) {
+        if ($localInstall) {
             $commandAdd = 'vendor/bin/';
             Composer::inst($this->mu())
                 ->RemoveDev(

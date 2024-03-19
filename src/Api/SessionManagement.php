@@ -24,7 +24,7 @@ class SessionManagement implements SessionManagementInterface
         $this->sessionFileLocation = $sessionFileLocation;
         $link = $sessionFileLocation;
         $dir = dirname($link);
-        if(! file_exists($dir)) {
+        if (! file_exists($dir)) {
             user_error('Could not find: ' . $dir);
         }
 

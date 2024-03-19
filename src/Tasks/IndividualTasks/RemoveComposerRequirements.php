@@ -48,8 +48,7 @@ class RemoveComposerRequirements extends Task
 
     public function runActualTask($params = []): ?string
     {
-        foreach($this->packages as $package) {
-
+        foreach ($this->packages as $package) {
             $command = 'unset($data["require"]["' . $package . '"]);';
 
             $comment = 'remove the requirement for ' . $package . ' from ' . $this->mu()->getGitRootDir();
@@ -59,7 +58,6 @@ class RemoveComposerRequirements extends Task
                 $command,
                 $comment
             );
-
         }
         $this->setCommitMessage('API:  remove composer requirements - removing requirements for: ' . implode(', ', $this->packages));
         return null;

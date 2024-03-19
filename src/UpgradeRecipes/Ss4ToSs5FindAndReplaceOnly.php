@@ -52,10 +52,8 @@ class Ss4ToSs5FindAndReplaceOnly extends BaseClass
         // 'ComposerInstallProject' => [],
         'SearchAndReplace' => [
             'sourceFolders' => ['SS5'],
-            'commitAndPush' => false,
+            'commitAndPush' => true,
         ],
-        'ComposerInstallSimple' => [],
-        'LintAll' => [],
     ];
 
     protected $frameworkComposerRestraint = '~5@stable';

@@ -290,7 +290,6 @@
 
         'doPublish(':
             R: 'publishRecursive('
-            C: 'Removed deprecated method ... SilverStripe\Versioned\Versioned::doPublish() - use SilverStripe\Versioned\Versioned::publishRecursive() instead'
 
         'doRollbackTo(':
             R: 'doRollbackTo('
@@ -944,8 +943,12 @@
             R: 'use_draft_site'
             C: 'Removed deprecated property ... SilverStripe\Dev\FunctionalTest::$use_draft_site - use ?stage=Stage in your request`s querystring instead'
 
-        'vary':
-            R: 'vary'
+        "'vary'":
+            R: "'vary'"
+            C: 'Removed deprecated config ... SilverStripe\Control\HTTP.vary - use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware instead'
+
+        '"vary"':
+            R: '"vary"'
             C: 'Removed deprecated config ... SilverStripe\Control\HTTP.vary - use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware instead'
 
         'VendorModule':

@@ -54,7 +54,7 @@ class Ss4ToSs5FindAndReplaceOnly extends BaseClass
             'sourceFolders' => ['SS5'],
             'commitAndPush' => false,
         ],
-        'ComposerInstallProject' => [],
+        'ComposerInstallSimple' => [],
         'LintAll' => [],
     ];
 

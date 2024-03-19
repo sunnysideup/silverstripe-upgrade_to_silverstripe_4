@@ -356,7 +356,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                     $this->packageFolderNameForInstall = $moduleDetails['PackageFolderNameForInstall'];
                 } else {
                     if (! $this->originComposerFileLocation) {
-                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/' . $this->nameOfBranchForBaseCode . '/composer.json';
+                        $this->originComposerFileLocation = $this->gitLinkAsRawHTTPS . '/' . $this->getNameOfBranchForBaseCode() . '/composer.json';
                     }
                     if ($this->URLExists($this->originComposerFileLocation)) {
                         $json = file_get_contents($this->originComposerFileLocation);

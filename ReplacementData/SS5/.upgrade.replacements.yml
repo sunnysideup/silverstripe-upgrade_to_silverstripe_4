@@ -50,35 +50,35 @@
         'trim(':
             R: 'trim((string) '
 
-        'strtolower(':
-            R: 'strtolower((string) '
-        'strrev(':
-            R: 'strrev((string) '
-        'ltrim(':
-            R: 'ltrim((string) '
-        'rtrim(':
-            R: 'rtrim((string) '
-        'substr(':
-            R: 'substr((string) '
-        'str_replace(':
-            R: 'str_replace((mixed) '
-        'strpos(':
-            R: 'strpos((string) '
-        'str_repeat(':
-            R: 'str_repeat((string) '
-        'strlen(':
-            R: 'strlen((string) '
-        'strcmp(':
-            R: 'strcmp((string) '
-        'strcasecmp(':
-            R: 'strcasecmp((string) '
-        'str_split(':
-            R: 'str_split((string) '
-        'strtoupper(':
-            R: 'strtoupper((string) '
+        'strtolower($':
+            R: 'strtolower((string) $'
+        'strrev($':
+            R: 'strrev((string) $'
+        'ltrim($':
+            R: 'ltrim((string) $'
+        'rtrim($':
+            R: 'rtrim((string) $'
+        'substr($':
+            R: 'substr((string) $'
+        'str_replace($':
+            R: 'str_replace((string) $'
+        'strpos($':
+            R: 'strpos((string) $'
+        'str_repeat($':
+            R: 'str_repeat((string) $'
+        'strlen($':
+            R: 'strlen((string) $'
+        'strcmp($':
+            R: 'strcmp((string) $'
+        'strcasecmp($':
+            R: 'strcasecmp((string) $'
+        'str_split($':
+            R: 'str_split((string) $'
+        'strtoupper($':
+            R: 'strtoupper((string) $'
 
-        'strtotime(':
-            R: 'strtotime((string) '
+        'strtotime($':
+            R: 'strtotime((string) $'
 
         'default_sort = [':
             R: 'default_sort = ['
@@ -320,8 +320,12 @@
             R: 'ErrorDirector'
             C: 'Removed deprecated class ... SilverStripe\Core\Startup\ErrorDirector without equivalent functionality to replace it'
 
-        'etag':
-            R: 'etag'
+        "'etag'":
+            R: "'etag'"
+            C: 'Removed deprecated property ... SilverStripe\Control\HTTP::$etag - use SilverStripe\Control\Middleware\ChangeDetectionMiddleware instead'
+
+        '"etag"':
+            R: '"etag"'
             C: 'Removed deprecated property ... SilverStripe\Control\HTTP::$etag - use SilverStripe\Control\Middleware\ChangeDetectionMiddleware instead'
 
         'findAnAdministrator(':
@@ -355,10 +359,6 @@
         'generateEntropy(':
             R: 'generateEntropy('
             C: 'Removed deprecated method ... SilverStripe\Security\RandomGenerator::generateEntropy() - use native PHP function random_bytes() instead'
-
-        'get_one(':
-            R: 'get_one('
-            C: 'Changed parameter name in ... SilverStripe\ORM\DataList::limit() from $limit to $length'
 
         'getAllModules(':
             R: 'getAllModules('

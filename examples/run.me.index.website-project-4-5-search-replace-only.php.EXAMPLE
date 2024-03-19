@@ -15,9 +15,14 @@ $obj = ModuleUpgrader::create()
     ->setArrayOfModules(
         [
             1 => [
-                //see run.me.index.full.php.EXAMPLE for more details1
+                //see run.me.index.full.php.EXAMPLE for more details
+                'VendorName' => 'awesomeproject',
+                'VendorNamespace' => 'AwesomeProject',
+                'PackageName' => 'app',
+                'PackageNamespace' => 'App',
                 'GitLink' => 'git@bitbucket.org:mybitbucket/awesome.org.nz.git',
-                'NameOfBranchForBaseCode' => 'develop',
+                'IsModuleUpgrade' => false,
+                'NameOfBranchForBaseCode' => 'upgrade',
             ]
         ]
     )

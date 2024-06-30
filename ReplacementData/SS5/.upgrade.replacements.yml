@@ -12,15 +12,23 @@
     'ss':
         '/\$First\b/':
             R: '$IsFirst'
-
+            C: 'Change from $First to $IsFirst'
+        'First':
+            R: '$IsFirst'
+            C: 'Change from First to $IsFirst'
         '/\$Last\b/':
             R: '$IsLast'
-
+            C: 'SS5 change'
+        'Last':
+            R: '$IsLast'
+            C: 'Change from Last to $IsLast'
         '.CroppedImage(':
             R: '.Fill('
+            C: 'SS5 change'
 
         '.SetRatioSize(':
             R: '.FitMax('
+            C: 'SS5 change'
 
     'php':
         '->extend(':
@@ -41,7 +49,7 @@
 
         '->deleteFile(':
             R: '->doArchive('
-            C: ''
+            C: 'SS5 change'
 
         '->error(':
             R: '->addError('
@@ -49,36 +57,50 @@
 
         'trim(':
             R: 'trim((string) '
+            C: 'SS5 change'
 
         'strtolower($':
             R: 'strtolower((string) $'
+            C: 'SS5 change'
         'strrev($':
             R: 'strrev((string) $'
+            C: 'SS5 change'
         'ltrim($':
             R: 'ltrim((string) $'
+            C: 'SS5 change'
         'rtrim($':
             R: 'rtrim((string) $'
+            C: 'SS5 change'
         'substr($':
             R: 'substr((string) $'
+            C: 'SS5 change'
         'str_replace($':
             R: 'str_replace((string) $'
+            C: 'SS5 change'
         'strpos($':
             R: 'strpos((string) $'
+            C: 'SS5 change'
         'str_repeat($':
             R: 'str_repeat((string) $'
+            C: 'SS5 change'
         'strlen($':
             R: 'strlen((string) $'
         'strcmp($':
             R: 'strcmp((string) $'
+            C: 'SS5 change'
         'strcasecmp($':
             R: 'strcasecmp((string) $'
+            C: 'SS5 change'
         'str_split($':
             R: 'str_split((string) $'
+            C: 'SS5 change'
         'strtoupper($':
             R: 'strtoupper((string) $'
+            C: 'SS5 change'
 
         'strtotime($':
             R: 'strtotime((string) $'
+            C: 'SS5 change'
 
         'default_sort = [':
             R: 'default_sort = ['
@@ -969,6 +991,7 @@
 
         '(string) (string) ':
             R: '(string) '
+            C: 'Removed double code ... (string) (string) - use (string) instead'
 
     'yml':
         'default_sort: ':

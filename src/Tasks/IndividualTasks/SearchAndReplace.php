@@ -146,8 +146,8 @@ class SearchAndReplace extends Task
                             $this->mu()->colourPrint(
                                 "++++++++++++++++++++++++++++++++++++\n" .
                                 "CHECKING\n" .
-                                "IN ${path}\n" .
-                                "FOR ${extension} FILES\n" .
+                                "IN ".$path."\n" .
+                                "FOR ".$extension." FILES\n" .
                                 'BASE ' . $moduleOrThemeDir . "\n" .
                                 "++++++++++++++++++++++++++++++++++++\n"
                             );
@@ -246,9 +246,9 @@ class SearchAndReplace extends Task
                             $findStringOuterReplaced = str_replace($findStringInner, '...', $findStringOuter);
                             if ($findStringOuter === $findStringInner || $findStringOuterReplaced !== $findStringOuter) {
                                 $this->mu()->colourPrint("
-ERROR in ${language}: \t\t we are trying to find the same thing twice (A and B)
----- A: (${keyOuter}): \t\t ${findStringOuter}
----- B: (${keyInner}): \t\t ${findStringInner}");
+ERROR in ".$language.": \t\t we are trying to find the same thing twice (A and B)
+---- A: (".$keyOuter."): \t\t ".$findStringOuter."
+---- B: (".$keyInner."): \t\t ".$findStringInner);
                             }
                         }
                     }
@@ -271,9 +271,9 @@ ERROR in ${language}: \t\t we are trying to find the same thing twice (A and B)
                             $findStringOuterReplaced = str_replace($findStringInner, '...', $findStringOuter);
                             if ($findStringOuter === $findStringInner || $findStringOuterReplaced !== $findStringOuter) {
                                 $this->mu()->colourPrint("
-ERROR in ${language}: \t\t there is a replacement (A) that was earlier tried to be found (B).
----- A: (${keyOuter}): \t\t ${findStringOuter}
----- B: (${keyInner}): \t\t ${findStringInner}");
+ERROR in ".$language.": \t\t there is a replacement (A) that was earlier tried to be found (B).
+---- A: (".$keyOuter."): \t\t ".$findStringOuter."
+---- B: (".$keyInner."): \t\t ".$findStringInner);
                             }
                         }
                     }

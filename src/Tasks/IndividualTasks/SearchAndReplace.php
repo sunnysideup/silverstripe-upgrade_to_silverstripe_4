@@ -50,6 +50,8 @@ class SearchAndReplace extends Task
         '.svn',
     ];
 
+    protected $runInRootDir = false;
+
     /**
      * the names of the folder that contains the data we need
      * e.g. SS4 / SS37
@@ -90,6 +92,13 @@ class SearchAndReplace extends Task
         return $this;
     }
 
+    public function setRunInRootDir(array $a)
+    {
+        $this->ignoreFolderArray = $a;
+
+        return $this;
+    }
+
     public function setCommitAndPush(bool $b)
     {
         $this->commitAndPush = $b;
@@ -103,6 +112,7 @@ class SearchAndReplace extends Task
 
         return $this;
     }
+
 
     public function setSourceFolders(array $a)
     {
@@ -127,8 +137,12 @@ class SearchAndReplace extends Task
             }
 
             //replace API
-
-            foreach ($this->mu()->getExistingModuleDirLocationsWithThemeFolders() as $moduleOrThemeDir) {
+            if($this->runInRootDir) {
+                $list = [$this->mu()->getWebRootDirLocation()];
+            } else {
+                $list = $this->mu()->getExistingModuleDirLocationsWithThemeFolders();
+            }
+            foreach ($list as $moduleOrThemeDir) {
                 $textSearchMachine = new SearchAndReplaceAPI($moduleOrThemeDir);
                 $textSearchMachine->setIsReplacingEnabled(true);
                 $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
@@ -137,7 +151,7 @@ class SearchAndReplace extends Task
                     $path = $moduleOrThemeDir . '/' . $path ?: '';
                     $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
                     if (! file_exists($path)) {
-                        $this->mu()->colourPrint("SKIPPING ${path}");
+                        $this->mu()->colourPrint("SKIPPING ".$path);
                     } else {
                         $textSearchMachine->setSearchPath($path);
                         foreach ($pathArray as $extension => $extensionArray) {

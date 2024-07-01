@@ -33,8 +33,7 @@ class ComposerInstallSimple extends Task
     public function runActualTask($params = []): ?string
     {
         $this->mu()->setBreakOnAllErrors(true);
-        $command = '
-        composer install ;' . $this->composerOptions;
+        $command = 'composer install ' . $this->composerOptions;
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
             $command,

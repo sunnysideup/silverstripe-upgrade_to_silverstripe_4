@@ -13,14 +13,14 @@
         '/\$First\b/':
             R: '$IsFirst'
             C: 'Change from $First to $IsFirst'
-        'First':
-            R: '$IsFirst'
+        '/<% if First %>/':
+            R: '<% if $IsFirst %>'
             C: 'Change from First to $IsFirst'
         '/\$Last\b/':
             R: '$IsLast'
             C: 'SS5 change'
-        'Last':
-            R: '$IsLast'
+        '/<% if Last %>/':
+            R: '<% if $IsLast %>'
             C: 'Change from Last to $IsLast'
         '.CroppedImage(':
             R: '.Fill('

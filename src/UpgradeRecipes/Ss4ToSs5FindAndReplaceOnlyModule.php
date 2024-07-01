@@ -2,7 +2,7 @@
 
 namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
 
-class Ss4ToSs5FindAndReplaceOnly extends BaseClass
+class Ss4ToSs5FindAndReplaceOnlyModule extends BaseClass
 {
     /**
      * name of the branch to be created that we use a starter branch for upgrade
@@ -49,11 +49,10 @@ class Ss4ToSs5FindAndReplaceOnly extends BaseClass
         // 'ResetWebRootDir-3' => [],
 
         // //Step2: MoveToNewVersion
-        'ComposerInstallSimple' => [],
         'SearchAndReplace' => [
             'sourceFolders' => ['SS5'],
             'commitAndPush' => true,
-            'runInRootDir' => true, // run in the whole project to also identify issues in modules...
+            'runInRootDir' => false, // run in the whole project to also identify issues in modules...
         ],
     ];
 

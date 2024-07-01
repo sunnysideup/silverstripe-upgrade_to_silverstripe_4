@@ -94,7 +94,7 @@ class SearchAndReplace extends Task
 
     public function setRunInRootDir(bool $b)
     {
-        $this->ignoreFolderArray = $b;
+        $this->runInRootDir = $b;
 
         return $this;
     }

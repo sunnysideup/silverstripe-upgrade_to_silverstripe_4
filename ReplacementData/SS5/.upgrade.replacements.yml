@@ -30,10 +30,17 @@
             R: '.FitMax('
             C: 'SS5 change'
 
+        'ThemeDir':
+            R: 'themedResourceURL'
+            C: 'use themedResourceURL() or resourceURL()'
+
     'php':
         '->extend(':
             R: '->extend('
             C: 'Changed parameter name in ... SilverStripe\Core\Extensible::extend() from $a1 to $arguments and modified it to accept variable arguments using the splat operator'
+        '->limit(0)':
+            R: '->limit(null)'
+            C: 'In SS4, limit(0) would unset the limit, we now do that with null'
 
         '->insertBefore(':
             R: '->insertBefore('

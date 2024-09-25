@@ -30,7 +30,17 @@
             R: '.FitMax('
             C: 'SS5 change'
 
+        'silverstripe/admin/thirdparty/jquery':
+            R: 'silverstripe/admin/thirdparty/jquery'
+            C: 'Get rid of jQuery or replace it'
+
     'php':
+        'silverstripe/admin/thirdparty/jquery':
+            R: 'silverstripe/admin/thirdparty/jquery'
+            C: 'Get rid of jQuery or replace it'
+        'strftime':
+            R: 'strftime'
+            C: 'Replace with another solution!'
         '->extend(':
             R: '->extend('
             C: 'Changed parameter name in ... SilverStripe\Core\Extensible::extend() from $a1 to $arguments and modified it to accept variable arguments using the splat operator'

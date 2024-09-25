@@ -34,11 +34,9 @@
             R: 'silverstripe/admin/thirdparty/jquery'
             C: 'Get rid of jQuery or replace it'
 
-
         'ThemeDir':
             R: 'themedResourceURL'
             C: 'use themedResourceURL() or resourceURL()'
-
 
     'php':
         '->extend(':

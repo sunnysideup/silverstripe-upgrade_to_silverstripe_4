@@ -39,7 +39,7 @@ class Ss4ToSs5 extends BaseClass
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
         'SwitchPhpVersion-1' => [
-            'version' => '8.2',
+            'version' => '8.3',
         ],
         'CheckoutDevMaster-1' => [
             'branchOrTagToUse' => 'develop',
@@ -49,7 +49,7 @@ class Ss4ToSs5 extends BaseClass
         'CheckoutUpgradeStarterBranch-1' => [],
         'MakeRequirementsMoreFlexible' => [],
         'PHPCompatabilityCheck' => [
-            'phpVersion' => '8.2',
+            'phpVersion' => '8.3',
         ],
         'ResetWebRootDir-2' => [],
 

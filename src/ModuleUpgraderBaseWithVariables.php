@@ -419,7 +419,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     /**
      * Starts the output to the commandline / browser
      */
-    public function __construct()
+    public function __construct(array $argv)
     {
         global $argv;
         $this->argv = $argv;

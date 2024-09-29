@@ -4,7 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 $obj = ModuleUpgrader::create()
-    ->setRecipe('SS4')
+    ->setRecipe('SS4') // see: ModuleUpgraderBaseWithVariables::availableRecipes
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('testrun')
 

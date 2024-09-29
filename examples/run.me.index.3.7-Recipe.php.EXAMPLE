@@ -23,5 +23,5 @@ $obj = ModuleUpgrader::create()
             ]
         ]
     )
-    ->setRecipe('SS37')
+    ->setRecipe('SS37') // see: ModuleUpgraderBaseWithVariables::availableRecipes
     ->run();

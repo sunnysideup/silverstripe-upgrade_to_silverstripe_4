@@ -6,7 +6,6 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 
 $obj = ModuleUpgrader::create()
-    ->setRecipe('SS4')
     ->setLogFolderDirLocation('/var/www/upgrades-logs')
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setWebRootName('upgradeto4')
@@ -24,5 +23,5 @@ $obj = ModuleUpgrader::create()
             ]
         ]
     )
-    ->setRecipe('SS4')
+    ->setRecipe('SS4') // see: ModuleUpgraderBaseWithVariables::availableRecipes
     ->run();

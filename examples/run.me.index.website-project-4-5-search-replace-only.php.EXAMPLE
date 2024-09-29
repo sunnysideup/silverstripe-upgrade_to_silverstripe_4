@@ -5,7 +5,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 $obj = ModuleUpgrader::create()
-    ->setRecipe('SS5-SEARCH-REPLACE-ONLY')
+    ->setRecipe('SS5-SEARCH-REPLACE-ONLY') // see: ModuleUpgraderBaseWithVariables::availableRecipes
 
     ->setAboveWebRootDirLocation('/var/www/upgrades')
     ->setLogFolderDirLocation('/var/www/upgrades-logs')

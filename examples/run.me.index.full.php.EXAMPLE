@@ -5,7 +5,7 @@ use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
 
 
 $obj = ModuleUpgrader::create()
-    ->setRecipe('SS4')
+    ->setRecipe('SS4') // see: ModuleUpgraderBaseWithVariables::availableRecipes
 
     ->setRunImmediately(true)
     ->setRunInteractively(true)

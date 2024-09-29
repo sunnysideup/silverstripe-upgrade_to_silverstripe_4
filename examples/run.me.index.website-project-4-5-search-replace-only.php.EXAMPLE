@@ -22,7 +22,7 @@ $obj = ModuleUpgrader::create()
                 'PackageNamespace' => 'App',
                 'GitLink' => 'git@bitbucket.org:mybitbucket/awesome.org.nz.git',
                 'IsModuleUpgrade' => false,
-                'NameOfBranchForBaseCode' => 'upgrade',
+                'NameOfBranchForBaseCode' => 'master or main or ??',
             ]
         ]
     )

@@ -16,12 +16,24 @@
         '/<% if First %>/':
             R: '<% if $IsFirst %>'
             C: 'Change from First to $IsFirst'
+        '/<% if not $First %>/':
+            R: '<% if not $IsFirst %>'
+            C: 'Change from First to $IsFirst'
+        '/<% if not First %>/':
+            R: '<% if not $IsFirst %>'
+            C: 'Change from First to $IsFirst'            
         '/\$Last\b/':
             R: '$IsLast'
             C: 'SS5 change'
         '/<% if Last %>/':
             R: '<% if $IsLast %>'
             C: 'Change from Last to $IsLast'
+        '/<% if not Last %>/':
+            R: '<% if not $IsLast %>'
+            C: 'Change from Last to $IsLast'
+        '/<% if not $Last %>/':
+            R: '<% if not $IsLast %>'
+            C: 'Change from Last to $IsLast'            
         '.CroppedImage(':
             R: '.Fill('
             C: 'SS5 change'

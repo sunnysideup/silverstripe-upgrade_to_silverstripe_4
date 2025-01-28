@@ -294,7 +294,7 @@ class SearchAndReplaceAPI
         $string = '';
         if ($this->comment) {
             $string .=
-            PHP_EOL .
+                PHP_EOL .
                 '/**' . PHP_EOL .
                 '  * ' . $this->startMarker . PHP_EOL;
             if ($this->replacementHeader) {
@@ -488,9 +488,9 @@ class SearchAndReplaceAPI
                 $pattern = $this->searchKey;
             } else {
                 $searchKey = preg_quote($this->searchKey, '/');
-                $pattern = "/${searchKey}/U";
+                $pattern = "/" . $searchKey / "/U";
                 if (! $this->caseSensitive) {
-                    $pattern = "/${searchKey}/Ui";
+                    $pattern .= 'i';
                 }
             }
             $foundCount = 0;
@@ -524,15 +524,15 @@ class SearchAndReplaceAPI
                             PREG_PATTERN_ORDER
                         );
                         if ($foundInLineCount) {
-                            if ($this->caseSensitive) {
-                                if (strpos((string) $oldLineContent, (string) $this->searchKey) === false) {
-                                    user_error('Regex found it, but phrase does not exist: ' . $this->searchKey);
-                                }
-                            } else {
-                                if (stripos((string) $oldLineContent, $this->searchKey) === false) {
-                                    user_error('Regex found it, but phrase does not exist: ' . $this->searchKey);
-                                }
-                            }
+                            // if ($this->caseSensitive) {
+                            //     if (strpos((string) $oldLineContent, (string) $searchKey) === false) {
+                            //         user_error('Regex found it, but phrase does not exist: ' . $searchKey);
+                            //     }
+                            // } else {
+                            //     if (stripos((string) $oldLineContent, $searchKey) === false) {
+                            //         user_error('Regex found it, but phrase does not exist: ' . $searchKey);
+                            //     }
+                            // }
                             $foundCount += $foundInLineCount;
                             if ($this->isReplacingEnabled) {
                                 $newLineContent = preg_replace($pattern, $myReplacementKey, (string) $oldLineContent);
@@ -595,7 +595,7 @@ class SearchAndReplaceAPI
                     $this->appendToLog(
                         $file,
                         '********** ERROR: NO REPLACEMENT DESPITE MATCHES - searched for: ' .
-                        $pattern . ' and replaced with ' . $myReplacementKey . " \n"
+                            $pattern . ' and replaced with ' . $myReplacementKey . " \n"
                     );
                 }
             }
@@ -717,7 +717,7 @@ class SearchAndReplaceAPI
                 $this->appendToLog(
                     $fileName,
                     "********** skipping file (${fileBaseName}), as it does not contain: " .
-                    implode(', ', $this->fileNameMustContain)
+                        implode(', ', $this->fileNameMustContain)
                 );
 
                 return false;

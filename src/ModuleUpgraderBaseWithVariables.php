@@ -419,7 +419,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     /**
      * Starts the output to the commandline / browser
      */
-    public function __construct(array $argv)
+    public function __construct(?array $argv = null)
     {
         global $argv;
         $this->argv = $argv;
@@ -522,13 +522,13 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         if ($this->sessionManager === null) {
             $sessionFileLocation = trim(
                 $this->getAboveWebRootDirLocation() .
-                '/' .
-                $this->sessionFileName .
-                '_' .
-                $this->getVendorNamespace() .
-                '_' .
-                $this->getPackageNamespace() .
-                '.json'
+                    '/' .
+                    $this->sessionFileName .
+                    '_' .
+                    $this->getVendorNamespace() .
+                    '_' .
+                    $this->getPackageNamespace() .
+                    '.json'
             );
             $this->sessionManager = SessionManagement::initSession($sessionFileLocation);
         }

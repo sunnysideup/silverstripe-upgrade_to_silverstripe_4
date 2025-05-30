@@ -488,7 +488,7 @@ class SearchAndReplaceAPI
                 $pattern = $this->searchKey;
             } else {
                 $searchKey = preg_quote($this->searchKey, '/');
-                $pattern = "/" . $searchKey / "/U";
+                $pattern = "/" . $searchKey . "/U";
                 if (! $this->caseSensitive) {
                     $pattern .= 'i';
                 }

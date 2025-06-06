@@ -49,7 +49,7 @@ class Ss4ToSs5FindAndReplaceOnly extends BaseClass
         // 'ResetWebRootDir-3' => [],
 
         // //Step2: MoveToNewVersion
-        'ComposerInstallSimple' => [],
+        // 'ComposerInstallSimple' => [],
         'SearchAndReplace' => [
             'sourceFolders' => ['SS5'],
             'commitAndPush' => true,

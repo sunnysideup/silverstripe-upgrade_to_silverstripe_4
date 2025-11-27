@@ -137,8 +137,9 @@ class SearchAndReplace extends Task
             }
 
             //replace API
-            if($this->runInRootDir) {
+            if ($this->runInRootDir) {
                 $list = [$this->mu()->getWebRootDirLocation()];
+                $this->ignoreFolderArray[] = 'vendor';
             } else {
                 $list = $this->mu()->getExistingModuleDirLocationsWithThemeFolders();
             }
@@ -146,12 +147,11 @@ class SearchAndReplace extends Task
                 $textSearchMachine = new SearchAndReplaceAPI($moduleOrThemeDir);
                 $textSearchMachine->setIsReplacingEnabled(true);
                 $textSearchMachine->addToIgnoreFolderArray($this->ignoreFolderArray);
-
                 foreach ($replacementArray as $path => $pathArray) {
                     $path = $moduleOrThemeDir . '/' . $path ?: '';
                     $path = $this->mu()->checkIfPathExistsAndCleanItUp($path);
                     if (! file_exists($path)) {
-                        $this->mu()->colourPrint("SKIPPING ".$path);
+                        $this->mu()->colourPrint("SKIPPING " . $path);
                     } else {
                         $textSearchMachine->setSearchPath($path);
                         foreach ($pathArray as $extension => $extensionArray) {
@@ -159,11 +159,11 @@ class SearchAndReplace extends Task
                             $textSearchMachine->setExtensions(explode('|', $extension));
                             $this->mu()->colourPrint(
                                 "++++++++++++++++++++++++++++++++++++\n" .
-                                "CHECKING\n" .
-                                "IN ".$path."\n" .
-                                "FOR ".$extension." FILES\n" .
-                                'BASE ' . $moduleOrThemeDir . "\n" .
-                                "++++++++++++++++++++++++++++++++++++\n"
+                                    "CHECKING\n" .
+                                    "IN " . $path . "\n" .
+                                    "FOR " . $extension . " FILES\n" .
+                                    'BASE ' . $moduleOrThemeDir . "\n" .
+                                    "++++++++++++++++++++++++++++++++++++\n"
                             );
                             foreach ($extensionArray as $find => $findDetails) {
                                 $replace = isset($findDetails['R']) ? $findDetails['R'] : $find;
@@ -203,7 +203,7 @@ class SearchAndReplace extends Task
                             if ($replacements) {
                             } else {
                                 //flush output anyway!
-                                $this->mu()->colourPrint("No replacements for  ${extension}");
+                                $this->mu()->colourPrint("No replacements for  $extension");
                             }
                             $this->mu()->colourPrint($textSearchMachine->getOutput());
                         }
@@ -260,9 +260,9 @@ class SearchAndReplace extends Task
                             $findStringOuterReplaced = str_replace($findStringInner, '...', $findStringOuter);
                             if ($findStringOuter === $findStringInner || $findStringOuterReplaced !== $findStringOuter) {
                                 $this->mu()->colourPrint("
-ERROR in ".$language.": \t\t we are trying to find the same thing twice (A and B)
----- A: (".$keyOuter."): \t\t ".$findStringOuter."
----- B: (".$keyInner."): \t\t ".$findStringInner);
+ERROR in " . $language . ": \t\t we are trying to find the same thing twice (A and B)
+---- A: (" . $keyOuter . "): \t\t " . $findStringOuter . "
+---- B: (" . $keyInner . "): \t\t " . $findStringInner);
                             }
                         }
                     }
@@ -285,9 +285,9 @@ ERROR in ".$language.": \t\t we are trying to find the same thing twice (A and B
                             $findStringOuterReplaced = str_replace($findStringInner, '...', $findStringOuter);
                             if ($findStringOuter === $findStringInner || $findStringOuterReplaced !== $findStringOuter) {
                                 $this->mu()->colourPrint("
-ERROR in ".$language.": \t\t there is a replacement (A) that was earlier tried to be found (B).
----- A: (".$keyOuter."): \t\t ".$findStringOuter."
----- B: (".$keyInner."): \t\t ".$findStringInner);
+ERROR in " . $language . ": \t\t there is a replacement (A) that was earlier tried to be found (B).
+---- A: (" . $keyOuter . "): \t\t " . $findStringOuter . "
+---- B: (" . $keyInner . "): \t\t " . $findStringInner);
                             }
                         }
                     }

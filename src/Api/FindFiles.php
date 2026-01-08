@@ -155,7 +155,7 @@ class FindFiles
      * string is error!
      * @return array|string
      */
-    public function getFlatFileArray()
+    public function getFlatFileArray(): array|string
     {
         if ($this->needToFillFileCache) {
             $myArray = [];
@@ -186,7 +186,6 @@ class FindFiles
             $this->flatFileArray = array_values($myArray);
             $this->needToFillFileCache = false;
         }
-
         return $this->flatFileArray;
     }
 
@@ -211,7 +210,8 @@ class FindFiles
                     if (($file === '.') ||
                         ($file === '..') ||
                         ($fullPath === __FILE__) ||
-                        ($path === '.' && basename(__FILE__) === $file)) {
+                        ($path === '.' && basename(__FILE__) === $file)
+                    ) {
                         continue;
                     }
                     //ignore hidden files and folders

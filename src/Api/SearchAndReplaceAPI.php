@@ -77,6 +77,7 @@ class SearchAndReplaceAPI
     private $totalFound = 0; //total matches in one search
 
     private $output = ''; //buffer of output, until it is retrieved
+    private bool $skipVendorFolder = true;
 
     // static counts
 
@@ -92,6 +93,7 @@ class SearchAndReplaceAPI
     private static $class_name_cache = [];
 
     private static $finder = null;
+
 
     public function __construct($basePath = '')
     {
@@ -471,6 +473,10 @@ class SearchAndReplaceAPI
             if ($this->testFileNameRequirements($file) === false) {
                 return;
             }
+            if ($this->skipVendorFolder && strpos($file, '/vendor/') !== false) {
+                $this->appendToLog($file, '********** Skipping vendor folder');
+                return;
+            }
 
             $magicalData = [];
             $magicalData['classNameOfFile'] = $this->getClassNameOfFile($file);
@@ -716,7 +722,7 @@ class SearchAndReplaceAPI
             if ($passed === false) {
                 $this->appendToLog(
                     $fileName,
-                    "********** skipping file (${fileBaseName}), as it does not contain: " .
+                    "********** skipping file ($fileBaseName), as it does not contain: " .
                         implode(', ', $this->fileNameMustContain)
                 );
 

@@ -96,6 +96,9 @@ class Ss3ToSs4 extends BaseClass
         //Step5: FixUpgrade
         'FixBadUseStatements-1' => [],
         'FixBadUseStatements-2' => [],
+        'SwitchPhpVersion-3' => [
+            'version' => '8.1',
+        ],
         'InspectAPIChanges-1' => [],
         'DatabaseMigrationLegacyYML' => [],
         'Reorganise' => [],
@@ -105,6 +108,9 @@ class Ss3ToSs4 extends BaseClass
         'FixClassNamesWithUnderscores' => [],
         // 'WebRootUpdate' => [],
         //step6: Check
+        'SwitchPhpVersion-4' => [
+            'version' => '8.3',
+        ],
         'ApplyPSR2' => [],
         'AddDotEnvFile' => [],
         'FinalDevBuild' => [],

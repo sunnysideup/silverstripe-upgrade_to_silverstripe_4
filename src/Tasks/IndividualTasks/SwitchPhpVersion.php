@@ -61,6 +61,12 @@ class SwitchPhpVersion extends Task
                 false
             );
         }
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'composer install --ignore-platform-reqs',
+            'reinstalling composer dependencies for PHP ' . $version,
+            false
+        );
         return null;
     }
 

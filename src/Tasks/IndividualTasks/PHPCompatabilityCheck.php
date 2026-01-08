@@ -19,7 +19,7 @@ class PHPCompatabilityCheck extends Task
 
     protected $composerOptions = '';
 
-    protected $phpVersion = '7.4';
+    protected $phpVersion = '7.2';
 
     public function getTitle()
     {
@@ -93,10 +93,10 @@ class PHPCompatabilityCheck extends Task
                 $this->mu()->execMe(
                     $webRoot,
                     './vendor/bin/phpcs' .
-                    ' -p ' . $codeDir .
-                    ' --standard=PHPCompatibility' .
-                    ' --extensions=php ' .
-                    ' --runtime-set testVersion ' . $this->phpVersion,
+                        ' -p ' . $codeDir .
+                        ' --standard=PHPCompatibility' .
+                        ' --extensions=php ' .
+                        ' --runtime-set testVersion ' . $this->phpVersion,
                     'Running PHP Compatibility Check in: ' . $codeDir,
                     false
                 );

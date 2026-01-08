@@ -15,12 +15,12 @@ $obj = ModuleUpgrader::create()
         [
             1 => [
                 //see run.me.index.full.php.EXAMPLE for more details1
-                'VendorName' => 'awesomeproject',
-                'VendorNamespace' => 'AwesomeProject',
-                'PackageName' => 'app',
-                'PackageNamespace' => 'App',
-                'PackageFolderNameForInstall' => 'mymodule',
-                'GitLink' => 'git@bitbucket.org:mybitbucket/awesome.org.nz.git',
+                'VendorName' => 'sunnysideup',
+                'VendorNamespace' => 'Sunnysideup',
+                'PackageName' => 'ecommerce_delivery_custom',
+                'PackageNamespace' => 'EcommerceDeliveryCustom',
+                'PackageFolderNameForInstall' => 'ecommerce_delivery_custom',
+                'GitLink' => 'git@github.com:sunnysideup/silverstripe-ecommerce_delivery_custom.git',
                 'IsModuleUpgrade' => true,
                 'IsOnPackagist' => true,
             ]

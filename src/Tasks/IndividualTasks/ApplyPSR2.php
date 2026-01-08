@@ -53,19 +53,19 @@ class ApplyPSR2 extends Task
                 ->removeDirOrFile($knownIssuesFileName);
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd . 'sake-ling-all ' . $relativeDir,
+                $commandAdd . 'sake-lint-all ' . $relativeDir,
                 'Apply easy coding standards to ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd . 'sake-ling-all ' . $relativeDir,
+                $commandAdd . 'sake-lint-all ' . $relativeDir,
                 'Apply easy coding standards a second time ' . $relativeDir . ' (' . $baseNameSpace . ')',
                 false
             );
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd . 'sake-ling-all ' . $relativeDir . ' > ' . $knownIssuesFileName,
+                $commandAdd . 'sake-lint-all ' . $relativeDir . ' > ' . $knownIssuesFileName,
                 'Apply easy coding standards a third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to ' . $knownIssuesFileName,
                 false
             );

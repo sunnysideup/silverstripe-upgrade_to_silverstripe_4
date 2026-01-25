@@ -38,25 +38,6 @@ See [composer.json](composer.json) for details
 composer require sunnysideup/upgrade_to_silverstripe_4
 ```
 
-### Configuration
-
-
-
-In the `_config` folder you will find the `upgrade_to_silverstripe_4.yml.example`
-file that shows options for the configuration of this module.
-
-We recommend that you:
-
-  1. copy these `upgrade_to_silverstripe_4.yml.example` files into your
-`mysite/_config` folder (where available - otherwise search for `private static $` in the module to see what can be configured)
-  2. remove the .example extension,
-  3. delete the lines you do not care about, and
-  4. adjust the configurations that you would like to use.
-
-
-## Contributing
-
-
 
 We welcome any contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
@@ -64,7 +45,7 @@ We welcome any contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for more de
 
 
 
-You can pay us to create an improved / adapted version of this module for your own projects.  Please contact us if you like to find out more: [www.sunnysideup.co.nz](http://www.sunnysideup.co.nz).  For exmaple, we can write tests for this module.
+You can pay us to create an improved / adapted version of this module for your own projects.  Please contact us if you like to find out more: [www.sunnysideup.co.nz](http://www.sunnysideup.co.nz).  For example, we can write tests for this module.
 
 ## Author
 

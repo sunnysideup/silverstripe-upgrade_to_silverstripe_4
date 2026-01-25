@@ -1,4 +1,4 @@
-# Upgrade your module/project to Silverstripe 4
+# Upgrade your module/project to Silverstripe 4 (and beyond)
 
 This module helps you upgrade Silverstripe 3 modules and projects (sites)
 to Silverstripe 3.7 and Silverstripe 4 with the least amount of effort.

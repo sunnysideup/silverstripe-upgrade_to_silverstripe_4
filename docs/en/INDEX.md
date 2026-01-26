@@ -14,7 +14,7 @@ This tool is highly customisable so that you can define your own upgrade path.
 1. `cd /var/www`
 2. `mkdir /var/www/upgrades`
 3. `mkdir /var/www/upgrades-logs/`
-4. `composer install sunnysideup/upgrade`
+4. `composer require sunnysideup/upgrade-silverstripe`
 5. `cp run.me.index.short.EXAMPLE index.php`
 6. edit index.php
 7. `php index.php`

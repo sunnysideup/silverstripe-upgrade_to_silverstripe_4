@@ -1,5 +1,5 @@
 {
-    "name": "sunnysideup/upgrade",
+    "name": "sunnysideup/upgrade-silverstripe",
     "type": "library",
     "description": "Upgrade modules to silverstripe 4 and beyond",
     "keywords": [

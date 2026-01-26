@@ -21,6 +21,8 @@ class CheckoutDevMaster extends Task
      */
     protected $branchOrTagToUse = 'master';
 
+    protected $clearCache = true;
+
     protected $composerOptions = '--prefer-source --update-no-dev';
 
     public function getTitle()
@@ -61,7 +63,7 @@ simply start again in a few minutes in this case to make it work.
                     false
                 );
                 Composer::inst($this->mu())
-                    ->ClearCache()
+                    ->ClearCache($this->clearCache)
                     ->Require(
                         $this->mu()->getVendorName() . '/' . $this->mu()->getPackageName(),
                         $this->mu()->getNameOfBranchForBaseCodeForComposer(),

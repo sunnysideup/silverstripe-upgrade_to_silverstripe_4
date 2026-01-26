@@ -40,12 +40,14 @@ class Ss5ToSs6ForModules extends BaseClass
         'ResetWebRootDir-1' => [],
         'SwitchPhpVersion-1' => [
             'version' => '8.3',
+            'alsoReinstallWithComposer' => false,
         ],
         'CheckoutDevMaster-1' => [
-            'branchOrTagToUse' => 'develop',
+            'branchOrTagToUse' => 'master',
+            'clearCache' => false,
         ],
         'AddLegacyBranch' => [
-            'nameOfLegacyBranch' => 'ss5-compatibility',
+            'nameOfLegacyBranch' => 'ss5-compatible',
         ],
         'CheckoutDevMasterAndChangeToMain' => [],
         'AddUpgradeStarterBranch' => [],

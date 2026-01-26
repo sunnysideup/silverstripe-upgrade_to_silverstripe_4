@@ -13,7 +13,9 @@ class SwitchPhpVersion extends Task
 {
     protected $taskStep = 's10';
 
-    protected $defaultVersion = '7.1';
+    protected $defaultVersion = '8.3';
+
+    protected $alsoReinstallWithComposer = true;
 
     public function getTitle()
     {
@@ -61,12 +63,14 @@ class SwitchPhpVersion extends Task
                 false
             );
         }
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'composer install --ignore-platform-reqs',
-            'reinstalling composer dependencies for PHP ' . $version,
-            false
-        );
+        if ($this->alsoReinstallWithComposer) {
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'composer install --ignore-platform-reqs true',
+                'reinstalling composer dependencies for PHP ' . $version,
+                false
+            );
+        }
         return null;
     }
 

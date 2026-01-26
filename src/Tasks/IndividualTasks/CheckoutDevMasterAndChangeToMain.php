@@ -51,7 +51,6 @@ After that, it replaces master with main as the branch name.
         }
         $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
-            $this->gitClone();
 
             Git::inst($this->mu())
                 ->renameBranch(

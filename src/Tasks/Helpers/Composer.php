@@ -22,15 +22,16 @@ class Composer
         return $this;
     }
 
-    public function ClearCache(): self
+    public function ClearCache(?bool $doItForReal = true): self
     {
-        $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'composer clear-cache --no-interaction',
-            'clear composer cache',
-            false
-        );
-
+        if ($doItForReal) {
+            $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'composer clear-cache --no-interaction',
+                'clear composer cache',
+                false
+            );
+        }
         return $this;
     }
 
@@ -82,7 +83,20 @@ class Composer
         }
         $this->mu()->execMe(
             $this->mu()->getWebRootDirLocation(),
-            'composer ' . $globalPhrase . ' require ' . $package . $version . ' ' . $devFlag . ' ' . $options . ' --no-interaction',
+            'composer config allow-plugins.composer/installers true --no-interaction ',
+            'allow composer/installers plugin',
+            false
+        );
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'composer config allow-plugins.silverstripe/vendor-plugin true --no-interaction ',
+            'allow silverstripe/vendor-plugin plugin',
+            false
+        );
+
+        $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'composer ' . $globalPhrase . ' require ' . $package . $version . ' ' . $devFlag . ' ' . $options . ' --no-interaction --no-plugins',
             'running composer require ' . $package . $version . ' ' . $devFlag . ' ' . $options,
             false
         );

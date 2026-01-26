@@ -31,6 +31,7 @@ $obj = ModuleUpgrader::create()
                 'GitLink' => 'git@github.com:sunnysideup/silverstripe-glossary.git',
                 'IsModuleUpgrade' => true,
                 'IsOnPackagist' => true,
+                'NameOfBranchForBaseCode' => 'main',
             ]
         ]
     )

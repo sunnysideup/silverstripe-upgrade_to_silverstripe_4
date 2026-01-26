@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sunnysideup\UpgradeSilverstripe\Tasks\Helpers;
 
 use Sunnysideup\UpgradeSilverstripe\Traits\HelperInst;
@@ -54,48 +56,55 @@ class Git
             return $this;
         }
 
+        // 1) ensure we’re on old branch and up to date
+        $this->mu()->execMe($dir, 'git checkout ' . $oldBranchName, 'checkout old branch', false);
+        $this->mu()->execMe($dir, 'git pull --ff-only', 'pull latest changes', false);
+
+        // 2) rename locally
+        $this->mu()->execMe($dir, 'git branch -m ' . $oldBranchName . ' ' . $newBranchName, 'rename branch', false);
+
+        // 3) push main + set upstream (refspec is safest)
         $this->mu()->execMe(
             $dir,
-            'git checkout ' . $oldBranchName,
-            'checkout old branch: ' . $oldBranchName,
-            false
-        );
-        $this->mu()->execMe(
-            $dir,
-            'git pull',
-            'pull latest changes',
-            false
-        );
-        $this->mu()->execMe(
-            $dir,
-            'git branch -m ' . $oldBranchName . ' ' . $newBranchName,
-            'rename branch from ' . $oldBranchName . ' to ' . $newBranchName,
-            false
-        );
-        $this->mu()->execMe(
-            $dir,
-            'git push origin -u ' . $newBranchName,
+            'git push -u origin ' . $newBranchName . ':' . $newBranchName,
             'push renamed branch to origin',
             false
         );
+
+        // 4) make THIS clone treat origin/HEAD as main (no guessing)
+        $this->mu()->execMe(
+            $dir,
+            'git remote set-head origin ' . $newBranchName,
+            'set origin/HEAD to ' . $newBranchName,
+            false
+        );
+
+
+        // 6) clean up stale refs
+        $this->mu()->execMe($dir, 'git fetch --prune origin', 'prune old branches', false);
+
+        // 7) if the local branch was tracking origin/master, repoint it
+        $this->mu()->execMe(
+            $dir,
+            'git branch --unset-upstream || true',
+            'unset upstream (if any)',
+            false
+        );
+        $this->mu()->execMe(
+            $dir,
+            'git branch -u origin/' . $newBranchName . ' ' . $newBranchName,
+            'set upstream to origin/' . $newBranchName,
+            false
+        );
+
+        // 5) delete old remote branch (after GitHub default is switched!)
         $this->mu()->execMe(
             $dir,
             'git push origin --delete ' . $oldBranchName,
-            'delete old branch from origin',
+            'delete old branch on origin',
             false
         );
-        $this->mu()->execMe(
-            $dir,
-            'git remote set-head origin -a',
-            'set the default branch to ' . $newBranchName,
-            false
-        );
-        $this->mu()->execMe(
-            $dir,
-            'git fetch --prune ',
-            'git fetch --prune',
-            false
-        );
+
 
         return $this;
     }
@@ -105,12 +114,11 @@ class Git
         $this->fetchAll($dir);
         $output = $this->mu()->execMe(
             $dir,
-            'git ls-remote --heads ${REPO} ${BRANCH}',
+            'git ls-remote --exit-code --heads origin ' . $branchName . ' >/dev/null 2>&1 && echo true || echo false',
             'check if branch ' . $branchName . ' exists in ' . $dir,
             false,
         );
-
-        return count($output) > 0;
+        return array_pop($output) === 'true';
     }
 
     public function CommitAndPush(string $dir, string $message, string $branchName): Git
@@ -202,13 +210,21 @@ class Git
     public function checkoutBranch(string $dir, string $branch): Git
     {
         $this->fetchAll($dir);
-
-        $this->mu()->execMe(
-            $dir,
-            'git checkout -b ' . $branch,
-            'check out : ' . $branch . ' as a starting point',
-            false
-        );
+        if ($this->checkIfBranchExists($dir, $branch)) {
+            $this->mu()->execMe(
+                $dir,
+                'git checkout ' . $branch,
+                'check out : ' . $branch,
+                false
+            );
+        } else {
+            $this->mu()->execMe(
+                $dir,
+                'git checkout -b ' . $branch,
+                'check out : ' . $branch . ' as a starting point',
+                false
+            );
+        }
         $this->mu()->execMe(
             $this->mu()->getGitRootDir(),
             'git pull origin ' . $branch,

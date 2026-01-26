@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+namespace Sunnysideup\UpgradeSilverstripe\Api;
 
 use Exception;
 

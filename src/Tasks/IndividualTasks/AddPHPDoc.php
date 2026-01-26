@@ -1,10 +1,10 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\FileSystemFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Runs through the source code and adds hidden Silverstripe property and method documentation to classes
@@ -39,7 +39,7 @@ SilverLeague\IDEAnnotator\DataObjectAnnotator:
   use_short_name: true
   enabled_modules:
 yml
-. '
+        . '
     - ' . self::REPLACER;
 
     public function getTitle()

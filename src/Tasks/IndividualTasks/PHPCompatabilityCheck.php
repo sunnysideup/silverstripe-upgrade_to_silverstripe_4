@@ -4,11 +4,11 @@
 //requires https://github.com/PHPCompatibility/PHPCompatibility\
 //see: https://decentproductivity.com/codesniffer-and-phpcompatibility/'
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Delete the web root directory to allow for a fresh install.

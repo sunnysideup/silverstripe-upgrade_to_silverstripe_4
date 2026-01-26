@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeSilverstripe\ModuleUpgrader;
 
 $obj = ModuleUpgrader::create()
     ->setRecipe('SS5-SEARCH-REPLACE-ONLY') // see: ModuleUpgraderBaseWithVariables::availableRecipes

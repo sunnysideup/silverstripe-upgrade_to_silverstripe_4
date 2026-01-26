@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+namespace Sunnysideup\UpgradeSilverstripe\Api;
 
-use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
-use Sunnysideup\UpgradeToSilverstripe4\Traits\Creator;
+use Sunnysideup\UpgradeSilverstripe\Interfaces\SessionManagementInterface;
+use Sunnysideup\UpgradeSilverstripe\Traits\Creator;
 
 class SessionManagement implements SessionManagementInterface
 {

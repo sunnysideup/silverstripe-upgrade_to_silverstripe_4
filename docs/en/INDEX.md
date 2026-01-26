@@ -12,10 +12,9 @@ This tool is highly customisable so that you can define your own upgrade path.
 ## Quick install guide
 
 1. `cd /var/www`
-2. `mkdir /var/www/upgrades`
-3. `mkdir /var/www/upgrades-logs/`
-4. `composer require sunnysideup/upgrade-silverstripe`
-5. `cp run.me.index.short.EXAMPLE index.php`
+2. `mkdir /var/www/upgrades && mkdir /var/www/upgrades-logs/`
+4. `cd /var/www/upgrader/ && git clone https://github.com/sunnysideup/silverstripe-upgrade-silverstripe.git .`
+5. `cp ./examples/run.me.index.short.EXAMPLE index.php`
 6. edit index.php
 7. `php index.php`
 
@@ -124,14 +123,14 @@ upgrade module.
 
 # installation and usage
 
-1. Install this module in your web-root (or another place if needed - we use `/var/www/silverstripe-upgrade_to_silverstripe_4/` in example below) as follows:
+1. Install this module in your web-root (or another place if needed - we use `/var/www/silverstripe-upgrade-silverstripe/` in example below) as follows:
 
 ```sh
     cd /var/www/
-    composer install sunnysideup/upgrade_to_silverstripe_4
+    composer install sunnysideup/upgrade-silverstripe
 ```
 
-2. Create a php file (e.g. `/index.php`) in your root dir, i.e. `/var/www/silverstripe-upgrade_to_silverstripe_4/` (or anywhere else where you can run it) - using the examples provided:
+2. Create a php file (e.g. `/index.php`) in your root dir, i.e. `/var/www/silverstripe-upgrade-silverstripe/` (or anywhere else where you can run it) - using the examples provided:
 
 - [full](/examples/run.me.index.full.php.EXAMPLE) - overview of all settings available
 - [short](/examples/run.me.index.short.php.EXAMPLE) - least amount of settings required
@@ -295,7 +294,7 @@ Customise your list of tasks to run on your module during the upgrade.
 )
 ```
 
-See [available tasks](/docs/en/AvailableTasks.md) and also the current [default tasks](https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/blob/master/src/ModuleUpgrader.php#L105-L139).
+See [available tasks](/docs/en/AvailableTasks.md) and also the current [default tasks](https://github.com/sunnysideup/silverstripe-upgrade-silverstripe/blob/master/src/ModuleUpgrader.php#L105-L139).
 
 ### remove from list of tasks
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+namespace Sunnysideup\UpgradeSilverstripe\Api;
 
-use Sunnysideup\UpgradeToSilverstripe4\Traits\HelperInst;
+use Sunnysideup\UpgradeSilverstripe\Traits\HelperInst;
 
 class FileSystemFixes
 {
@@ -93,7 +93,7 @@ class FileSystemFixes
                 $oldParentFolder,
                 'if test -e ' . $oldPath . '; then ' . $action . ' -vn ' . $oldPath . ' ' . $newPath . '; fi;',
                 $actionName . ' ' .
-                $this->removeCommonStart($oldPath, $newPath) . ' to ' . $this->removeCommonStart($newPath, $oldPath) . '
+                    $this->removeCommonStart($oldPath, $newPath) . ' to ' . $this->removeCommonStart($newPath, $oldPath) . '
                     if test -e ... True if the FILE exists and is a file, regardless of type (node, directory, socket, etc.).
                     -v ... verbose,
                     -n ... only if does not exists already.',

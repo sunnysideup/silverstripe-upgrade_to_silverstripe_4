@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
+namespace Sunnysideup\UpgradeSilverstripe\UpgradeRecipes;
 
 class Ss4Lint extends BaseClass
 {
@@ -20,7 +20,7 @@ class Ss4Lint extends BaseClass
      * The default namespace for all tasks
      * @var string
      */
-    protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
+    protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks';
 
     #########################################
     # TASKS

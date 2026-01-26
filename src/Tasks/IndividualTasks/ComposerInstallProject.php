@@ -1,12 +1,12 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\FileSystemFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\ComposerJsonFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Git;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')

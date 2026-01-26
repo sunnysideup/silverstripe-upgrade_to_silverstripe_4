@@ -1,8 +1,8 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 //use either of the following to create the info.json file required
 //your project will also require a composer.json.default file

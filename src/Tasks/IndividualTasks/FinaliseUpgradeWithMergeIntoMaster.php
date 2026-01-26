@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Git;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Adds a new branch to your repository that is going to be used for upgrading it.

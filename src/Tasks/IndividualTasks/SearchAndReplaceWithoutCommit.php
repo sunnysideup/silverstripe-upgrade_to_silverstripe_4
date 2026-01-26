@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
 /**
  * Replaces a bunch of code snippets in preparation of the upgrade.

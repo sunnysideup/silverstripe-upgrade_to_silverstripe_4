@@ -1,11 +1,14 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+namespace Sunnysideup\UpgradeSilverstripe\Api;
 
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeSilverstripe\ModuleUpgrader;
 
 class CreateListOfTasks
 {
+
+    private $myMu;
+
     public function run()
     {
         $this->myMu = ModuleUpgrader::create();
@@ -32,9 +35,9 @@ class CreateListOfTasks
                         $params['taskName'] = $obj->getTaskName();
                     }
                     $reflectionClass = new \ReflectionClass($properClass);
-                    $path = 'https://github.com/sunnysideup/silverstripe-upgrade_to_silverstripe_4/tree/master/src/';
+                    $path = 'https://github.com/sunnysideup/silverstripe-upgrade-silverstripe/tree/master/src/';
                     $path .= str_replace('\\', '/', $reflectionClass->getName()) . '.php';
-                    $path = str_replace('Sunnysideup/UpgradeToSilverstripe4/', '', $path);
+                    $path = str_replace('Sunnysideup/UpgradeSilverstripe/', '', $path);
                     $currentStepCode = $obj->getTaskStepCode();
                     $currentStep = $obj->getTaskStep($currentStepCode);
                     if ($currentStepCode === 's00') {

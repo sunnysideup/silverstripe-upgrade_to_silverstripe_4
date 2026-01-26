@@ -1,12 +1,13 @@
 <?php
+
 /**
  * mu stands for Module Object
  */
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
+use Sunnysideup\UpgradeSilverstripe\ModuleUpgrader;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Git;
 
 abstract class Task
 {

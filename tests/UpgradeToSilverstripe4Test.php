@@ -1,6 +1,6 @@
 <?php
 
-class UpgradeToSilverstripe4Test extends SapphireTest
+class UpgradeSilverstripeTest extends SapphireTest
 {
     protected $usesDatabase = false;
 

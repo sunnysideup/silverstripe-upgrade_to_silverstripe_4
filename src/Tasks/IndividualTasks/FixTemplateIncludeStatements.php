@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\SearchAndReplaceAPI;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class FixTemplateIncludeStatements extends Task
 {
@@ -63,11 +63,11 @@ class FixTemplateIncludeStatements extends Task
                 $textSearchMachine->setExtensions($this->extensionArray); //setting extensions to search files within
                 $this->mu()->colourPrint(
                     "++++++++++++++++++++++++++++++++++++\n" .
-                    "CHECKING\n" .
-                    "IN ${baseDir}\n" .
-                    'FOR ' . implode(',', $this->extensionArray) . " FILES\n" .
-                    'BASE ' . $baseDir . "\n" .
-                    "++++++++++++++++++++++++++++++++++++\n"
+                        "CHECKING\n" .
+                        "IN ${baseDir}\n" .
+                        'FOR ' . implode(',', $this->extensionArray) . " FILES\n" .
+                        'BASE ' . $baseDir . "\n" .
+                        "++++++++++++++++++++++++++++++++++++\n"
                 );
 
                 foreach ($this->findArray as $finalFind) {
@@ -75,7 +75,7 @@ class FixTemplateIncludeStatements extends Task
                     $finalReplace = '<% include ' . $baseNameSpace . '\Includes';
                     $this->mu()->colourPrint(
                         '    --- FIND: ' . $finalFind . "\n" .
-                        '    --- REPLACE: ' . $finalReplace . "\n"
+                            '    --- REPLACE: ' . $finalReplace . "\n"
                     );
 
                     $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);

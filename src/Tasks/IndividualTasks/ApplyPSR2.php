@@ -1,11 +1,11 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\FileSystemFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Adds a new branch to your repository that is going to be used for upgrading it.

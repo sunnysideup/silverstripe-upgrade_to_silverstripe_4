@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\ComposerJsonFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Replaces the composer type from silverstripe-module to silverstripe-vendormodule in line with SS4 standards.
@@ -29,9 +29,9 @@ class AddLicenceToProjectForRecomposeTask extends Task
         if ($this->mu()->getIsProjectUpgrade()) {
             $comment = 'add license';
             $command =
-            'if(! isset($data["license"])) { '
-            . '    $data["license"] = proprietary";'
-            . '}';
+                'if(! isset($data["license"])) { '
+                . '    $data["license"] = proprietary";'
+                . '}';
             ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
                 $this->mu()->getGitRootDir(),
                 $command,

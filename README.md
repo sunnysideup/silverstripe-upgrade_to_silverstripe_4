@@ -1,11 +1,11 @@
 # Silverstripe Silvertripe Upgrade to 4
-[![Build Status](https://travis-ci.org/sunnysideup/silverstripe-upgrade_to_silverstripe_4.svg?branch=master)](https://travis-ci.org/sunnysideup/silverstripe-upgrade_to_silverstripe_4)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-upgrade_to_silverstripe_4/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-upgrade_to_silverstripe_4/?branch=master)
-[![codecov.io](https://codecov.io/github/sunnysideup/silverstripe-upgrade_to_silverstripe_4/coverage.svg?branch=master)](https://codecov.io/github/sunnysideup/silverstripe-upgrade_to_silverstripe_4?branch=master)
+[![Build Status](https://travis-ci.org/sunnysideup/silverstripe-upgrade-silverstripe.svg?branch=master)](https://travis-ci.org/sunnysideup/silverstripe-upgrade-silverstripe)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-upgrade-silverstripe/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunnysideup/silverstripe-upgrade-silverstripe/?branch=master)
+[![codecov.io](https://codecov.io/github/sunnysideup/silverstripe-upgrade-silverstripe/coverage.svg?branch=master)](https://codecov.io/github/sunnysideup/silverstripe-upgrade-silverstripe?branch=master)
 
-[![Latest Stable Version](https://poser.pugx.org/sunnysideup/upgrade_to_silverstripe_4/version)](https://packagist.org/packages/sunnysideup/upgrade_to_silverstripe_4)
-[![License](https://poser.pugx.org/sunnysideup/upgrade_to_silverstripe_4/license)](https://packagist.org/packages/sunnysideup/upgrade_to_silverstripe_4)
-[![Monthly Downloads](https://poser.pugx.org/sunnysideup/upgrade_to_silverstripe_4/d/monthly)](https://packagist.org/packages/sunnysideup/upgrade_to_silverstripe_4)
+[![Latest Stable Version](https://poser.pugx.org/sunnysideup/upgrade-silverstripe/version)](https://packagist.org/packages/sunnysideup/upgrade-silverstripe)
+[![License](https://poser.pugx.org/sunnysideup/upgrade-silverstripe/license)](https://packagist.org/packages/sunnysideup/upgrade-silverstripe)
+[![Monthly Downloads](https://poser.pugx.org/sunnysideup/upgrade-silverstripe/d/monthly)](https://packagist.org/packages/sunnysideup/upgrade-silverstripe)
 
 
 ## Documentation
@@ -14,7 +14,7 @@
 
  * [Developer Docs](docs/en/INDEX.md)
  * [User Guide](docs/en/userguide.md)
- * [API Docs](http://docs.ssmods.com/sunnysideup/upgrade_to_silverstripe_4/classes.xhtml)
+ * [API Docs](http://docs.ssmods.com/sunnysideup/upgrade-silverstripe/classes.xhtml)
 
 
 ## Requirements
@@ -35,7 +35,7 @@ See [composer.json](composer.json) for details
 
 
 ```
-composer require sunnysideup/upgrade_to_silverstripe_4
+composer require sunnysideup/upgrade-silverstripe
 ```
 
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Git;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\ComposerJsonFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Git;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * This task adds a legacy branch to the git repo of the original to act as a backup/legacy version for

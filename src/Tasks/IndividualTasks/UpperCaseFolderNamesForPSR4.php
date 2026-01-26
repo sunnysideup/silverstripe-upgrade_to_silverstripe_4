@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FileSystemFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\FileSystemFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Fixes the folder name cases in to make them PSR4 compatible

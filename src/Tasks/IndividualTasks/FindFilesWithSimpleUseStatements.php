@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\FindFiles;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class FindFilesWithSimpleUseStatements extends Task
 {
@@ -50,7 +50,8 @@ class FindFilesWithSimpleUseStatements extends Task
                             if (! isset($tokens[$index][0])) {
                                 continue;
                             }
-                            if ($tokens[$index][0] === T_USE &&
+                            if (
+                                $tokens[$index][0] === T_USE &&
                                 $tokens[$index + 1][0] === T_WHITESPACE &&
                                 $tokens[$index + 2][0] === T_STRING &&
                                 $tokens[$index + 3] === ';'
@@ -60,7 +61,7 @@ class FindFilesWithSimpleUseStatements extends Task
                                     $testPhrase = ltrim($string, '\\');
                                     if (! strpos($testPhrase, '\\')) {
                                         $errors[] = $path . ': ' . $tokens[$index][1] .
-                                        $tokens[$index + 1][1] . $tokens[$index + 2][1] . ';';
+                                            $tokens[$index + 1][1] . $tokens[$index + 2][1] . ';';
                                     }
                                 }
                                 $index += 3; // Skip checked ones ...

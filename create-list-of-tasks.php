@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\CreateListOfTasks;
+use Sunnysideup\UpgradeSilverstripe\Api\CreateListOfTasks;
 
 $obj = new CreateListOfTasks();
 

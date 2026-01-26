@@ -1,7 +1,5 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Traits;
+namespace Sunnysideup\UpgradeSilverstripe\Traits;
 
-trait CommandLineInteraction
-{
-}
+trait CommandLineInteraction {}

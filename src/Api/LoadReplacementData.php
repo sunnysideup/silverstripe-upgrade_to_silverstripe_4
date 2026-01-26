@@ -1,8 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+namespace Sunnysideup\UpgradeSilverstripe\Api;
 
 use SilverStripe\Upgrader\Util\ConfigFile;
+
 /**
  * loads yml data if strings to replace in
  * code.
@@ -20,7 +21,7 @@ use SilverStripe\Upgrader\Util\ConfigFile;
  * toFolders have names like: SS37 or SS4.
  */
 
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeSilverstripe\ModuleUpgrader;
 
 class LoadReplacementData
 {

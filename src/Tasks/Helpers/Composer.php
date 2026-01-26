@@ -1,8 +1,8 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\Helpers;
 
-use Sunnysideup\UpgradeToSilverstripe4\Traits\HelperInst;
+use Sunnysideup\UpgradeSilverstripe\Traits\HelperInst;
 
 class Composer
 {

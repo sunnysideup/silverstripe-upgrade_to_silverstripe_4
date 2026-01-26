@@ -1,10 +1,10 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\Composer;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Composer;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\ComposerJsonFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Fixes the folder name cases in to make them PSR4 compatible
@@ -83,8 +83,8 @@ class AddPSR4Autoloading extends Task
                 $location = trim(basename($codeDir), '/') . '/';
                 $command = $baseCommands . '
                 $data["autoload"]["psr-4"]["' .
-                $this->doubleSlash($baseNameSpace) . '"] = "' .
-                ltrim($location, '/') . '";';
+                    $this->doubleSlash($baseNameSpace) . '"] = "' .
+                    ltrim($location, '/') . '";';
                 $comment = 'Adding autoload psr-4 details in ' .
                     $moduleLocation . '/composer.json: ' .
                     $baseNameSpace . ' => ' . $location;

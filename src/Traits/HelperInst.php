@@ -1,8 +1,8 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Traits;
+namespace Sunnysideup\UpgradeSilverstripe\Traits;
 
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeSilverstripe\ModuleUpgrader;
 
 trait HelperInst
 {

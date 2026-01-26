@@ -1,8 +1,8 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Api;
+namespace Sunnysideup\UpgradeSilverstripe\Api;
 
-use Sunnysideup\UpgradeToSilverstripe4\Traits\HelperInst;
+use Sunnysideup\UpgradeSilverstripe\Traits\HelperInst;
 
 class FileFixes
 {

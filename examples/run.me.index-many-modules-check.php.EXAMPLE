@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use Sunnysideup\UpgradeToSilverstripe4\ModuleUpgrader;
+use Sunnysideup\UpgradeSilverstripe\ModuleUpgrader;
 // make sure the dirs noted below exist:
 // - /var/www/upgrades,
 // - /var/www/logdir

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes;
+namespace Sunnysideup\UpgradeSilverstripe\UpgradeRecipes;
 
 abstract class BaseClass
 {

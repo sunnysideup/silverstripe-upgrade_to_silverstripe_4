@@ -1,20 +1,20 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4;
+namespace Sunnysideup\UpgradeSilverstripe;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
-use Sunnysideup\UpgradeToSilverstripe4\Api\SessionManagement;
-use Sunnysideup\UpgradeToSilverstripe4\Interfaces\ModuleUpgraderInterface;
-use Sunnysideup\UpgradeToSilverstripe4\Interfaces\SessionManagementInterface;
-use Sunnysideup\UpgradeToSilverstripe4\Traits\GettersAndSetters;
-use Sunnysideup\UpgradeToSilverstripe4\Traits\Misc;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\ApplyNamespacing;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss33ToSs37;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss35ToSs37;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss3ToSs4;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss4Lint;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss4ToSs5FindAndReplaceOnly;
-use Sunnysideup\UpgradeToSilverstripe4\UpgradeRecipes\Ss4ToSs5FindAndReplaceOnlyModule;
+use Sunnysideup\UpgradeSilverstripe\Api\SessionManagement;
+use Sunnysideup\UpgradeSilverstripe\Interfaces\ModuleUpgraderInterface;
+use Sunnysideup\UpgradeSilverstripe\Interfaces\SessionManagementInterface;
+use Sunnysideup\UpgradeSilverstripe\Traits\GettersAndSetters;
+use Sunnysideup\UpgradeSilverstripe\Traits\Misc;
+use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\ApplyNamespacing;
+use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss33ToSs37;
+use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss35ToSs37;
+use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss3ToSs4;
+use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss4Lint;
+use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss4ToSs5FindAndReplaceOnly;
+use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss4ToSs5FindAndReplaceOnlyModule;
 
 class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 {
@@ -117,7 +117,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
      * The default namespace for all tasks
      * @var string
      */
-    protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks';
+    protected $defaultNamespaceForTasks = 'Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks';
 
     /**
      * if set to true it will run each step and then stop.
@@ -324,7 +324,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     /**
      * //e.g. 'upgrade-code'
      * //e.g. '~/.composer/vendor/bin/upgrade-code'
-     * //e.g. '/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code'
+     * //e.g. '/var/www/silverstripe-upgrade-silverstripe/vendor/silverstripe/upgrader/bin/upgrade-code'
      * @var string
      */
     protected $locationOfThisUpgrader = '';
@@ -332,7 +332,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
     /**
      * //e.g. 'upgrade-code'
      * //e.g. '~/.composer/vendor/bin/upgrade-code'
-     * //e.g. '/var/www/silverstripe-upgrade_to_silverstripe_4/vendor/silverstripe/upgrader/bin/upgrade-code'
+     * //e.g. '/var/www/silverstripe-upgrade-silverstripe/vendor/silverstripe/upgrader/bin/upgrade-code'
      * @var string
      */
     protected $locationOfSSUpgradeModule = '';

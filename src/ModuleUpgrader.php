@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4;
+namespace Sunnysideup\UpgradeSilverstripe;
 
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
-use Sunnysideup\UpgradeToSilverstripe4\Traits\Creator;
+use Sunnysideup\UpgradeSilverstripe\Traits\Creator;
 
 class ModuleUpgrader extends ModuleUpgraderBaseWithVariables
 {

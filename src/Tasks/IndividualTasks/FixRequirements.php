@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\SearchAndReplaceAPI;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Replaces a bunch of code snippets in preparation of the upgrade.
@@ -83,11 +83,11 @@ class FixRequirements extends Task
                         $textSearchMachine->setExtensions(explode('|', $extension));
                         $this->mu()->colourPrint(
                             "++++++++++++++++++++++++++++++++++++\n" .
-                            "CHECKING\n" .
-                            "IN ${path}\n" .
-                            "FOR ${extension} FILES\n" .
-                            'BASE ' . $moduleDir . "\n" .
-                            "++++++++++++++++++++++++++++++++++++\n"
+                                "CHECKING\n" .
+                                "IN ${path}\n" .
+                                "FOR ${extension} FILES\n" .
+                                'BASE ' . $moduleDir . "\n" .
+                                "++++++++++++++++++++++++++++++++++++\n"
                         );
                         foreach ($extensionArray as $find => $findDetails) {
                             $replace = $findDetails['R'] ?? $find;
@@ -115,7 +115,7 @@ class FixRequirements extends Task
                                 $finalFind = $find . $quoteMark;
                                 $this->mu()->colourPrint(
                                     '    --- FIND: ' . $finalFind . "\n" .
-                                    '    --- REPLACE: ' . $finalReplace . "\n"
+                                        '    --- REPLACE: ' . $finalReplace . "\n"
                                 );
 
                                 $textSearchMachine->setSearchKey($finalFind, $caseSensitive, $replacementType);
@@ -135,7 +135,7 @@ class FixRequirements extends Task
                             $finalReplace = 'silverstripe/' . $ssModule . ': ';
                             $this->mu()->colourPrint(
                                 '    --- FIND: ' . $finalFind . "\n" .
-                                '    --- REPLACE: ' . $finalReplace . "\n"
+                                    '    --- REPLACE: ' . $finalReplace . "\n"
                             );
                             $textSearchMachine->setSearchKey(
                                 $finalFind,

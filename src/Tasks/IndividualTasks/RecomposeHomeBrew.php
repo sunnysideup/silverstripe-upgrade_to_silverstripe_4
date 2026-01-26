@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Helpers\ComposerJsonFixes;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\ComposerJsonFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Runs the silverstripe/upgrade task "recompose". See:
@@ -43,7 +43,7 @@ class RecomposeHomeBrew extends Task
         }
         foreach ($this->requireLinesToAdd as $key => $value) {
             $command .=
-        '$data["require"]["' . $key . '"] = "' . $value . '"; ';
+                '$data["require"]["' . $key . '"] = "' . $value . '"; ';
         }
         ComposerJsonFixes::inst($this->mu())->UpdateJSONViaCommandLine(
             $this->mu()->getGitRootDir(),

@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\FindFiles;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\FindFiles;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class FindFilesWithMoreThanOneClass extends Task
 {
@@ -47,7 +47,8 @@ class FindFilesWithMoreThanOneClass extends Task
                             if (! isset($tokens[$index][0])) {
                                 continue;
                             }
-                            if ($tokens[$index][0] === T_CLASS &&
+                            if (
+                                $tokens[$index][0] === T_CLASS &&
                                 $tokens[$index + 1][0] === T_WHITESPACE &&
                                 $tokens[$index + 2][0] === T_STRING
                             ) {

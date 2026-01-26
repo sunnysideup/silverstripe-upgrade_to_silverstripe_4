@@ -1,7 +1,5 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Interfaces;
+namespace Sunnysideup\UpgradeSilverstripe\Interfaces;
 
-interface ModuleUpgraderInterface
-{
-}
+interface ModuleUpgraderInterface {}

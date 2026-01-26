@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4;
+namespace Sunnysideup\UpgradeSilverstripe;
 
 class ModuleUpgraderInfo
 {

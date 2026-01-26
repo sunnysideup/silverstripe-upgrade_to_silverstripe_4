@@ -1,10 +1,10 @@
 <?php
 
-namespace Sunnysideup\UpgradeToSilverstripe4\Tasks\IndividualTasks;
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
-use Sunnysideup\UpgradeToSilverstripe4\Api\LoadReplacementData;
-use Sunnysideup\UpgradeToSilverstripe4\Api\SearchAndReplaceAPI;
-use Sunnysideup\UpgradeToSilverstripe4\Tasks\Task;
+use Sunnysideup\UpgradeSilverstripe\Api\LoadReplacementData;
+use Sunnysideup\UpgradeSilverstripe\Api\SearchAndReplaceAPI;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 /**
  * Replaces a bunch of code snippets in preparation of the upgrade.

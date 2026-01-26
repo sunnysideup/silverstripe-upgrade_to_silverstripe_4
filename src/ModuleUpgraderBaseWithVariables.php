@@ -720,12 +720,12 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         return $this->getIsModuleUpgrade() ? 'module upgrade' : 'website project upgrade';
     }
 
-    public function getisOnPackagistNice(): string
+    public function getIsOnPackagistNice(): string
     {
         if ($this->getIsModuleUpgrade()) {
-            return $this->getisOnPackagist() ? 'listed on packagist' : 'not listed on packagist';
+            return $this->getIsOnPackagist() ? 'module listed on packagist' : 'module not listed on packagist';
         } else {
-            return 'not listed on packagist';
+            return 'project not listed on packagist - not applicable';
         }
     }
 

@@ -17,7 +17,7 @@ class ModuleUpgraderInfo
 
         $mu->colourPrint('- Type: ' . $mu->getIsModuleUpgradeNice(), 'light_cyan');
 
-        $mu->colourPrint('- Visibility: ' . $mu->getisOnPackagistNice(), 'light_cyan');
+        $mu->colourPrint('- Visibility: ' . $mu->getIsOnPackagistNice(), 'light_cyan');
 
         $mu->colourPrint('- Recipe: ' . ($mu->getRecipe() ?: 'no recipe selected'), 'light_cyan');
 

@@ -1,5 +1,13 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
+
+declare(strict_types=1);
+
+$cwd = getcwd();
+if ($cwd === false) {
+    throw new RuntimeException('Cannot determine current working directory.');
+}
+
+require_once $cwd . '/vendor/autoload.php';
 
 use Sunnysideup\UpgradeSilverstripe\ModuleUpgrader;
 
@@ -16,10 +24,10 @@ $obj = ModuleUpgrader::create()
             1 => [
                 //see run.me.index.full.php.EXAMPLE for more details1
                 'VendorName' => 'sunnysideup',
-                'VendorNamespace' => 'AwesomeProject',
-                'PackageName' => 'app',
-                'PackageNamespace' => 'App',
-                'PackageFolderNameForInstall' => 'mymodule',
+                'VendorNamespace' => 'Sunnysideup',
+                'PackageName' => 'glossary',
+                'PackageNamespace' => 'Glossary',
+                'PackageFolderNameForInstall' => 'glossary',
                 'GitLink' => 'git@github.com:sunnysideup/silverstripe-glossary.git',
                 'IsModuleUpgrade' => true,
                 'IsOnPackagist' => true,

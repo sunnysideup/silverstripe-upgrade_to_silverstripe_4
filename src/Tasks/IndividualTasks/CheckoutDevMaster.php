@@ -50,7 +50,7 @@ simply start again in a few minutes in this case to make it work.
         }
         $this->mu()->setBreakOnAllErrors(true);
         if ($this->mu()->getIsModuleUpgrade()) {
-            if ($this->mu()->getisOnPackagist() !== true) {
+            if ($this->mu()->getIsOnPackagist() !== true) {
                 $this->gitClone();
             } else {
                 $this->mu()->execMe(

@@ -8,7 +8,7 @@ class Ss5ToSs6ForModules extends BaseClass
      * name of the branch to be created that we use a starter branch for upgrade
      * @var string branch name
      */
-    protected $nameOfUpgradeStarterBranch = 'upgrades/starting-point/ss6-upgrade';
+    protected $nameOfUpgradeStarterBranch = 'upgrades/starting-point/5to6';
 
     /**
      * name of the branch created to do the upgrade

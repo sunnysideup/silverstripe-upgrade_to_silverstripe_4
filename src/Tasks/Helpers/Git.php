@@ -40,6 +40,79 @@ class Git
         return $this;
     }
 
+    public function renameBranch(string $dir, string $oldBranchName, string $newBranchName): Git
+    {
+        $this->fetchAll($dir);
+        $oldBranchExists = $this->checkIfBranchExists($dir, $oldBranchName);
+        $newBranchExists = $this->checkIfBranchExists($dir, $newBranchName);
+        if (! $oldBranchExists) {
+            echo "Branch " . $oldBranchName . " does not exist. Cannot rename.";
+            return $this;
+        }
+        if ($newBranchExists) {
+            echo "Branch " . $newBranchName . " already exists. Not renaming.";
+            return $this;
+        }
+
+        $this->mu()->execMe(
+            $dir,
+            'git checkout ' . $oldBranchName,
+            'checkout old branch: ' . $oldBranchName,
+            false
+        );
+        $this->mu()->execMe(
+            $dir,
+            'git pull',
+            'pull latest changes',
+            false
+        );
+        $this->mu()->execMe(
+            $dir,
+            'git branch -m ' . $oldBranchName . ' ' . $newBranchName,
+            'rename branch from ' . $oldBranchName . ' to ' . $newBranchName,
+            false
+        );
+        $this->mu()->execMe(
+            $dir,
+            'git push origin -u ' . $newBranchName,
+            'push renamed branch to origin',
+            false
+        );
+        $this->mu()->execMe(
+            $dir,
+            'git push origin --delete ' . $oldBranchName,
+            'delete old branch from origin',
+            false
+        );
+        $this->mu()->execMe(
+            $dir,
+            'git remote set-head origin -a',
+            'set the default branch to ' . $newBranchName,
+            false
+        );
+        $this->mu()->execMe(
+            $dir,
+            'git fetch --prune ',
+            'git fetch --prune',
+            false
+        );
+
+        return $this;
+    }
+
+    public function checkIfBranchExists(string $dir, string $branchName): bool
+    {
+        $this->fetchAll($dir);
+        $output = $this->mu()->execMe(
+            $dir,
+            'git ls-remote --heads ${REPO} ${BRANCH}',
+            'check if branch ' . $branchName . ' exists in ' . $dir,
+            false,
+        );
+
+        return count($output) > 0;
+    }
+
     public function CommitAndPush(string $dir, string $message, string $branchName): Git
     {
         $this->fetchAll($dir);

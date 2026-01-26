@@ -28,8 +28,7 @@ class AddLegacyBranch extends Task
         return '
             Creates a legacy branch: "' . $this->nameOfLegacyBranch . '" of your module
             from the "' . $this->mu()->getNameOfBranchForBaseCode() . '" branch so that you
-            can keep making bugfixes to older versions.
-            In the recipes you can see how to set the name of the legacy branch.';
+            can keep making bugfixes to older versions.';
     }
 
     /**

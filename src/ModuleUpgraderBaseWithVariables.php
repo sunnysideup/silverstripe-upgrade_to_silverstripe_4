@@ -15,6 +15,7 @@ use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss3ToSs4;
 use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss4Lint;
 use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss4ToSs5FindAndReplaceOnly;
 use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss4ToSs5FindAndReplaceOnlyModule;
+use Sunnysideup\UpgradeSilverstripe\UpgradeRecipes\Ss5ToSs6ForModules;
 
 class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
 {
@@ -48,6 +49,7 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
         'ApplyNamespacing' => ApplyNamespacing::class,
         'SS5-SEARCH-REPLACE-ONLY' => Ss4ToSs5FindAndReplaceOnly::class,
         'SS5-SEARCH-REPLACE-ONLY-MODULE' => Ss4ToSs5FindAndReplaceOnlyModule::class,
+        'SS6-MODULES' => Ss5ToSs6ForModules::class,
     ];
 
     #########################################

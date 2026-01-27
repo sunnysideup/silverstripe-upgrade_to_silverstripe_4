@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+
 namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
+use Composer\Semver\Semver;
 use Sunnysideup\PHP2CommandLine\PHP2CommandLineSingleton;
 use Sunnysideup\UpgradeSilverstripe\Api\FileSystemFixes;
 use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Composer;
@@ -10,7 +14,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 /**
  * Adds a new branch to your repository that is going to be used for upgrading it.
  */
-class ApplyPSR2 extends Task
+class UpgradeToSilverstripe6FixRequirements extends Task
 {
     protected $taskStep = 's60';
 
@@ -20,19 +24,19 @@ class ApplyPSR2 extends Task
 
     public function getTitle()
     {
-        return 'Apply PSR2 Cleanup.';
+        return 'Upgrade to Silverstripe 6.';
     }
 
     public function getDescription()
     {
         return '
-            Applies a light cleanup of the code to match PSR-2 standards.';
+            Runs the basic upgrade to Silverstripe 6 code changes (werner rector).';
     }
 
     public function runActualTask($params = []): ?string
     {
         $webRoot = $this->mu()->getWebRootDirLocation();
-        $isInstalled = (bool) PHP2CommandLineSingleton::commandExists('sake-lint-all');
+        $isInstalled = (bool) PHP2CommandLineSingleton::commandExists('sake-lint-rector');
         $commandAdd = '';
         if (!$isInstalled) {
             $commandAdd = 'vendor/bin/';
@@ -53,26 +57,8 @@ class ApplyPSR2 extends Task
                 ->removeDirOrFile($knownIssuesFileName);
             $this->mu()->execMe(
                 $webRoot,
-                $commandAdd . 'sake-lint-all ' . $relativeDir,
+                $commandAdd . 'sake-lint-rector  -r ./RectorSS6.php   ' . $relativeDir,
                 'Apply easy coding standards to ' . $relativeDir . ' (' . $baseNameSpace . ')',
-                false
-            );
-            $this->mu()->execMe(
-                $webRoot,
-                $commandAdd . 'sake-lint-all ' . $relativeDir,
-                'Apply easy coding standards a second time ' . $relativeDir . ' (' . $baseNameSpace . ')',
-                false
-            );
-            $this->mu()->execMe(
-                $webRoot,
-                $commandAdd . 'sake-lint-all ' . $relativeDir . ' > ' . $knownIssuesFileName,
-                'Apply easy coding standards a third time ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to ' . $knownIssuesFileName,
-                false
-            );
-            $this->mu()->execMe(
-                $webRoot,
-                $commandAdd . 'sslint-stan ' . $relativeDir . ' >> ' . $knownIssuesFileName,
-                'Apply phpstan. to ' . $relativeDir . ' (' . $baseNameSpace . ') and saving to: ' . $knownIssuesFileName,
                 false
             );
         }

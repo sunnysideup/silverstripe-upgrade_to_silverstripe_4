@@ -18,8 +18,6 @@ class RemoveComposerRequirements extends Task
         'silverstripe/admin',
         'silverstripe/assets',
         'silverstripe/config',
-        'silverstripe/admin',
-
         'silverstripe/cms',
         'silverstripe/framework',
         'silverstripe/asset-admin',

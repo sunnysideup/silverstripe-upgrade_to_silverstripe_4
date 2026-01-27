@@ -52,6 +52,8 @@ class Ss5ToSs6ForModules extends BaseClass
         'CheckoutDevMasterAndChangeToMain' => [],
         'AddUpgradeStarterBranch' => [],
         'CheckoutUpgradeStarterBranch-1' => [],
+        'AddTempUpgradeBranch' => [],
+        'UpgradeToSilverstripe6' => [],
         // 'MakeRequirementsMoreFlexible' => [],
         // 'PHPCompatabilityCheck' => [
         //     'phpVersion' => '8.3',

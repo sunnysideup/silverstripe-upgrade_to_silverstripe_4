@@ -20,7 +20,8 @@
         }
     ],
     "require": {
-        "sunnysideup/php_2_command_line":              "dev-master"
+        "sunnysideup/php_2_command_line":              "dev-master",
+        "composer/semver": "dev-main"
     },
     "autoload": {
         "psr-4": {

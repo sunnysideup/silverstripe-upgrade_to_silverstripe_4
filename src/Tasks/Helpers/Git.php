@@ -260,8 +260,10 @@ class Git
     {
         $this->mu()->execMe(
             $dir,
-            'git push origin --delete ' . $branchName,
-            'delete branch (' . $branchName . ') remotely',
+            'git ls-remote --exit-code --heads origin ' . escapeshellarg($branchName) .
+                ' > /dev/null 2>&1 && git push origin --delete ' . escapeshellarg($branchName) .
+                ' || true',
+            'delete branch ' . $branchName . ' remotely, if it exists.',
             false
         );
 

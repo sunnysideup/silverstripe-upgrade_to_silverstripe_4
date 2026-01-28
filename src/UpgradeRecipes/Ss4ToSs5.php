@@ -55,7 +55,7 @@ class Ss4ToSs5 extends BaseClass
 
         'CheckoutUpgradeStarterBranch-2' => [],
         'BranchesAddTempUpgradeBranch' => [],
-        'ComposerCompatibilityCheckerStep1' => [],
+        'ComposerBackupOriginalRequirements' => [],
         // 'LintOutdatedPHPStyles' => [],
 
         // 'AddTableNamePrivateStatic' => [],
@@ -66,7 +66,7 @@ class Ss4ToSs5 extends BaseClass
 
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
-        'ComposerCompatibilityCheckerStep2' => [],
+        'ComposerAddOneByOne' => [],
         'ComposerCompatibilityCheckerStep3' => [],
 
         //Step3: FixBeforeStart

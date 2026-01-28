@@ -10,7 +10,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 //composer info --format=json > info.json
 //composer info --direct --format=json > info.json
 
-class ComposerCompatibilityCheckerStep1 extends Task
+class ComposerBackupOriginalRequirements extends Task
 {
     protected $taskStep = 'ANY';
 

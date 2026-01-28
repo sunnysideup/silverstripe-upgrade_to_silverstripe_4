@@ -74,7 +74,7 @@ class SilverstripeCorePackageInfo
     /**
      * @return array
      */
-    public static function getCorePackages(int $silverstripeVersion = 4): array
+    public static function get_core_packages(int $silverstripeVersion = 4): array
     {
         $name = 'CORE_PACKAGES_SS' . (int) $silverstripeVersion;
         if (defined('self::' . $name)) {

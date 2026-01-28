@@ -7,9 +7,12 @@ namespace Sunnysideup\UpgradeSilverstripe\Tasks\Helpers;
 use Composer\Semver\Semver;
 use RuntimeException;
 use InvalidArgumentException;
+use Sunnysideup\UpgradeSilverstripe\Traits\HelperInst;
+use Throwable;
 
 class ComposerCompatibilityUpdater
 {
+    use HelperInst;
     private const PACKAGIST_P2_URL_TEMPLATE = 'https://repo.packagist.org/p2/%s.json';
 
     /**
@@ -28,7 +31,7 @@ class ComposerCompatibilityUpdater
      * @param array<string, string> $acceptablePackagesToConstraints e.g. ['silverstripe/admin' => '^6.0']
      * @return array<string, array{section: string, current: string, reason: string}>
      */
-    public function alreadyCompatible(
+    public function isAlreadyUpgraded(
         array $composerJson,
         array $acceptablePackagesToConstraints,
         bool $includeDevDependencies
@@ -383,7 +386,7 @@ class ComposerCompatibilityUpdater
     {
         try {
             return Semver::satisfies($version, $constraint);
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             return false;
         }
     }

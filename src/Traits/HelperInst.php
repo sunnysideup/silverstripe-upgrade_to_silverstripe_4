@@ -10,7 +10,7 @@ trait HelperInst
 
     protected $myMu = null;
 
-    public static function inst($mu)
+    public static function inst($mu): static
     {
         if (self::$inst === null) {
             $className = static::class;
@@ -23,7 +23,7 @@ trait HelperInst
     /**
      * @return self
      */
-    protected function setMu(ModuleUpgrader $mu)
+    protected function setMu(ModuleUpgrader $mu): static
     {
         $this->myMu = $mu;
 

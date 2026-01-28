@@ -53,7 +53,7 @@ class Ss3ToSs4 extends BaseClass
 
         'CheckoutUpgradeStarterBranch-2' => [],
         'BranchesAddTempUpgradeBranch' => [],
-        'ComposerCompatibilityCheckerStep1' => [],
+        'ComposerBackupOriginalRequirements' => [],
         'LintOutdatedPHPStyles' => [],
         'FindFilesWithMoreThanOneClass' => [],
 
@@ -73,7 +73,7 @@ class Ss3ToSs4 extends BaseClass
 
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
-        'ComposerCompatibilityCheckerStep2' => [],
+        'ComposerAddOneByOne' => [],
         'ComposerCompatibilityCheckerStep3' => [],
         'Recompose' => [],
 

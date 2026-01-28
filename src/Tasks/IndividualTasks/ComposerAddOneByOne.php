@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 //composer info --format=json > info.json
 //composer info --direct --format=json > info.json
 
-class ComposerCompatibilityCheckerStep2 extends Task
+class ComposerAddOneByOne extends Task
 {
     protected $taskStep = 'ANY';
 

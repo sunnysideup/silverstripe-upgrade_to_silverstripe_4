@@ -121,6 +121,7 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
                         $this->colourPrint('# --------------------', 'yellow');
                         $this->colourPrint('# ' . $obj->getDescriptionNice(), 'light_green');
                         $this->colourPrint('# --------------------', 'light_green');
+                        // run it!!!
                         $obj->run();
                         if ($this->runInteractively) {
                             $hasRun = true;

@@ -89,12 +89,21 @@ e.g. php runme.php startFrom=' . $this->currentlyRunning . '
             foreach ($this->listOfTasks as $fauxClassName => $params) {
                 //get class without number
                 $properClass = current(explode('-', $fauxClassName));
-                $nameSpacesArray = explode('\\', $properClass);
-                $shortClassCode = end($nameSpacesArray);
                 if (! class_exists($properClass)) {
-                    $properClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
+                    $testClass = $this->defaultNamespaceForTasks . '\\' . $properClass;
+                    if (! class_exists($testClass)) {
+                        foreach ($this->mu()->additionalNamespacesForTasks() as $add) {
+                            $testClass = $this->defaultNamespaceForTasks . '\\' . $add . '\\' . $properClass;
+                            if (class_exists($testClass)) {
+                                break;
+                            }
+                        }
+                    }
+                    $properClass = $testClass;
                 }
                 if (class_exists($properClass)) {
+                    $nameSpacesArray = explode('\\', $properClass);
+                    $shortClassCode = end($nameSpacesArray);
                     $runItNow = $this->shouldWeRunIt((string) $fauxClassName);
                     $params['taskName'] = $shortClassCode;
                     $obj = $properClass::create($this, $params);

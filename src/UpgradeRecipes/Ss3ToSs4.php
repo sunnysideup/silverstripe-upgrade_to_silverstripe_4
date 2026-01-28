@@ -36,40 +36,40 @@ class Ss3ToSs4 extends BaseClass
      */
     protected $listOfTasks = [
         //Step1: Prepare
-        'CheckThatFoldersAreReady' => [],
-        'ResetWebRootDir-1' => [],
+        'WebRootDirCheckFoldersReady' => [],
+        'WebRootDirReset-1' => [],
         'SwitchPhpVersion-1' => [
             'version' => '7.2', //huringa requires it.
         ],
         'CheckoutDefaultBranch-1' => [],
-        'AddLegacyBranch' => [
+        'BranchesAddLegacyBranch' => [
             'nameOfLegacyBranch' => '3',
         ],
-        'AddUpgradeStarterBranch' => [],
+        'BranchAddUpgradeStarterBranch' => [],
         'CheckoutUpgradeStarterBranch-1' => [],
-        'MakeRequirementsMoreFlexible' => [],
-        'PHPCompatabilityCheck' => [],
-        'ResetWebRootDir-2' => [],
+        'ComposerMakeRequirementsMoreLenient' => [],
+        'LintPHPCompatabilityCheck' => [],
+        'WebRootDirReset-2' => [],
 
         'CheckoutUpgradeStarterBranch-2' => [],
-        'AddTempUpgradeBranch' => [],
+        'BranchesAddTempUpgradeBranch' => [],
         'ComposerCompatibilityCheckerStep1' => [],
-        'FixOutdatedPHPStyles' => [],
+        'LintOutdatedPHPStyles' => [],
         'FindFilesWithMoreThanOneClass' => [],
 
         'CreatePublicFolder' => [],
         'AddTableName' => [],
         'ChangeControllerInitToProtected' => [],
         // 'AddTableNamePrivateStatic' => [],
-        'RemoveComposerRequirements' => [], // remove framework, etc...
+        'ComposerRemoveRequirements' => [], // remove framework, etc...
         'RecomposeHomeBrew' => [], // set all requoirements to *, except for recipe-cms
-        'UpdateComposerRequirements' => [], // run find and replace for specific packages.
+        'ComposerUpdateRequirements' => [], // run find and replace for specific packages.
         'RemoveInstallerFolder' => [], // remove installer folder from composer.json
         'UpgradeDevBuild' => [], // fix dev/build in composer.json
         'SwitchPhpVersion-2' => [
             'version' => '7.4',
         ],
-        'ResetWebRootDir-3' => [],
+        'WebRootDirReset-3' => [],
 
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],
@@ -102,7 +102,7 @@ class Ss3ToSs4 extends BaseClass
         'InspectAPIChanges-1' => [],
         'DatabaseMigrationLegacyYML' => [],
         'Reorganise' => [],
-        'UpdateComposerModuleType' => [],
+        'ComposerUpdateModuleType' => [],
         'AddVendorExposeDataToComposer' => [],
         'InspectAPIChanges-2' => [],
         'FixClassNamesWithUnderscores' => [],
@@ -111,7 +111,7 @@ class Ss3ToSs4 extends BaseClass
         'SwitchPhpVersion-4' => [
             'version' => '8.3',
         ],
-        'ApplyPSR2' => [],
+        'LintPSR2' => [],
         'AddDotEnvFile' => [],
         'FinalDevBuild' => [],
         'RunImageTask' => [],

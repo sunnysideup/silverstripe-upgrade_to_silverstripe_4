@@ -36,8 +36,8 @@ class Ss5ToSs6ForModules extends BaseClass
      */
     protected $listOfTasks = [
         //Step1: Prepare
-        'CheckThatFoldersAreReady' => [],
-        'ResetWebRootDir-1' => [],
+        'WebRootDirCheckFoldersReady' => [],
+        'WebRootDirReset-1' => [],
         'SwitchPhpVersion-1' => [
             'version' => '8.3',
             'alsoReinstallWithComposer' => false,
@@ -45,20 +45,20 @@ class Ss5ToSs6ForModules extends BaseClass
         'CheckoutDefaultBranch-1' => [
             'clearCache' => false,
         ],
-        // 'CheckIfComposerJsonIsReadyForUpgrade' => [],
-        'AddLegacyBranch' => [
+        // 'ComposerCheckIfReadyForUpgrade' => [],
+        'BranchesAddLegacyBranch' => [
             'nameOfLegacyBranch' => 'ss5-compatible',
         ],
         'CheckoutDevMasterAndChangeToMain' => [],
-        'AddUpgradeStarterBranch' => [],
+        'BranchAddUpgradeStarterBranch' => [],
         'CheckoutUpgradeStarterBranch-1' => [],
-        'AddTempUpgradeBranch' => [],
+        'BranchesAddTempUpgradeBranch' => [],
         'UpgradeToSilverstripe6' => [],
-        // 'UpdateComposerRequirements' => [],
-        // 'UpdateComposerRequirements' => [],
+        // 'ComposerUpdateRequirements' => [],
+        // 'ComposerUpdateRequirements' => [],
         // update composer requirements to ss6 compatible versions
         // test
-        'ResetWebRootDir-2' => [],
+        'WebRootDirReset-2' => [],
         'SwitchPhpVersion-2' => [
             'version' => '8.4',
             'alsoReinstallWithComposer' => false,

@@ -7,12 +7,15 @@ use Sunnysideup\UpgradeSilverstripe\ModuleUpgrader;
 class CreateListOfTasks
 {
 
-    private $myMu;
+    private ModuleUpgrader $myMu;
+
+
 
     public function run()
     {
         $this->myMu = ModuleUpgrader::create();
         $html = '';
+        $defaultNamespace = $this->mu()->getDefaultNamespaceForTasks();
         foreach (array_keys($this->mu()->getAvailableRecipes()) as $recipeKey) {
             $this->mu()->applyRecipe($recipeKey);
             $html .= '<h1>List of Tasks in run order for recipe: ' . $recipeKey . '</h1>';
@@ -21,12 +24,20 @@ class CreateListOfTasks
             $previousStep = '';
             foreach ($this->mu()->getListOfTasks() as $class => $params) {
                 $properClass = current(explode('-', $class));
-                $nameSpacesArray = explode('\\', $class);
-                $shortClassCode = end($nameSpacesArray);
                 if (! class_exists($properClass)) {
-                    $properClass = $this->mu()->getDefaultNamespaceForTasks() . '\\' . $properClass;
+                    $properClass = $defaultNamespace . '\\' . $properClass;
+                    if (! class_exists($properClass)) {
+                        foreach ($this->mu()->AdditionalNamespacesForTasks() as $namespace) {
+                            $properClass = $defaultNamespace . '\\' . $namespace . '\\' . $properClass;
+                            if (class_exists($properClass)) {
+                                break;
+                            }
+                        }
+                    }
                 }
                 if (class_exists($properClass)) {
+                    $nameSpacesArray = explode('\\', $class);
+                    $shortClassCode = end($nameSpacesArray);
                     $count++;
                     // $runItNow = $this->mu()->shouldWeRunIt((string) $shortClassCode);
                     $params['taskName'] = $shortClassCode;
@@ -35,19 +46,16 @@ class CreateListOfTasks
                         $params['taskName'] = $obj->getTaskName();
                     }
                     $reflectionClass = new \ReflectionClass($properClass);
-                    $path = 'https://github.com/sunnysideup/silverstripe-upgrade-silverstripe/tree/master/src/';
+                    $path = 'https://github.com/sunnysideup/silverstripe-upgrade-silverstripe/tree/main/src/';
                     $path .= str_replace('\\', '/', $reflectionClass->getName()) . '.php';
                     $path = str_replace('Sunnysideup/UpgradeSilverstripe/', '', $path);
                     $currentStepCode = $obj->getTaskStepCode();
                     $currentStep = $obj->getTaskStep($currentStepCode);
-                    if ($currentStepCode === 's00') {
-                        //do nothing when it is an anytime step
-                    } else {
-                        if ($previousStep !== $currentStep) {
-                            $html .= '<h2>' . $currentStep . '</h2>';
-                        }
-                        $previousStep = $currentStep;
+
+                    if ($previousStep !== $currentStep) {
+                        $html .= '<h2>' . $currentStep . '</h2>';
                     }
+                    $previousStep = $currentStep;
                     $html .= '<h4>' . $count . '/' . $totalCount . ': ' . $obj->getTitle() . '</h4>';
                     $html .= '<p>' . $obj->getDescription() . '<br />';
                     $html .= '<strong>Class Code: </strong>' . $class;
@@ -68,7 +76,7 @@ class CreateListOfTasks
                 $html
             );
         } else {
-            user_error('Coult not find ' . $dir . ' directory');
+            user_error('Could not find ' . $dir . ' directory');
         }
     }
 

@@ -14,7 +14,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class ComposerInstallProject extends Task
 {
-    protected $taskStep = 's20';
+    protected $taskStep = 'ANY';
 
     protected $versionToLoad = '';
 
@@ -26,6 +26,8 @@ class ComposerInstallProject extends Task
     protected $alsoRequire = [];
 
     protected $installModuleAsVendorModule = false;
+
+    protected $branchToUse = '';
 
     /**
      * @var array
@@ -58,6 +60,7 @@ class ComposerInstallProject extends Task
      * @var string
      */
     protected $composerOptions = '--prefer-source --update-no-dev';
+    protected string $branchOrTagToUse = '';
 
     protected $defaultSilverstripeProject = 'silverstripe/installer';
 
@@ -83,10 +86,14 @@ class ComposerInstallProject extends Task
             $this->versionToLoad = $this->mu()->getFrameworkComposerRestraint();
         }
 
+
         //install project / silverstripe clean.
-        $altBranch = $this->mu()->getParentProjectForModuleBranchOrTag();
-        if (! $altBranch) {
-            $altBranch = 'master';
+        $branch = $this->mu()->getParentProjectForModuleBranchOrTag();
+        if (! $branch) {
+            $branch =
+                $this->branchOrTagToUse ?:
+                $this->mu()->getNameOfBranchForBaseCode() ?:
+                Git::inst($this->mu())->resolveBranchOrTagToUse([]);
         }
         if ($this->mu()->getIsModuleUpgrade()) {
             $alternativeGitLink = $this->mu()->getParentProjectForModule();
@@ -96,7 +103,7 @@ class ComposerInstallProject extends Task
                         $this->mu()->getWebRootDirLocation(),
                         $alternativeGitLink,
                         $this->mu()->getGitRootDir(),
-                        $altBranch
+                        $branch
                     );
             } else {
                 $this->mu()->execMe(
@@ -129,7 +136,7 @@ class ComposerInstallProject extends Task
                 $command = '
                     git init;
                     git remote add origin ' . $gitLink . ';
-                    git pull origin ' . $altBranch . ';
+                    git pull origin ' . $branch . ';
                     git status;';
                 $this->mu()->execMe(
                     $this->mu()->getGitRootDir(),

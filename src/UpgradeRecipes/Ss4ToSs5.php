@@ -36,8 +36,8 @@ class Ss4ToSs5 extends BaseClass
      */
     protected $listOfTasks = [
         //Step1: Prepare
-        'CheckThatFoldersAreReady' => [],
-        'ResetWebRootDir-1' => [],
+        'WebRootDirCheckFoldersReady' => [],
+        'WebRootDirReset-1' => [],
         'SwitchPhpVersion-1' => [
             'version' => '8.3',
         ],
@@ -45,24 +45,24 @@ class Ss4ToSs5 extends BaseClass
             'branchOrTagToUse' => 'develop',
         ],
 
-        'AddUpgradeStarterBranch' => [],
+        'BranchAddUpgradeStarterBranch' => [],
         'CheckoutUpgradeStarterBranch-1' => [],
-        'MakeRequirementsMoreFlexible' => [],
-        'PHPCompatabilityCheck' => [
+        'ComposerMakeRequirementsMoreLenient' => [],
+        'LintPHPCompatabilityCheck' => [
             'phpVersion' => '8.3',
         ],
-        'ResetWebRootDir-2' => [],
+        'WebRootDirReset-2' => [],
 
         'CheckoutUpgradeStarterBranch-2' => [],
-        'AddTempUpgradeBranch' => [],
+        'BranchesAddTempUpgradeBranch' => [],
         'ComposerCompatibilityCheckerStep1' => [],
-        // 'FixOutdatedPHPStyles' => [],
+        // 'LintOutdatedPHPStyles' => [],
 
         // 'AddTableNamePrivateStatic' => [],
-        'RemoveComposerRequirements' => [], // remove framework, etc...
-        'UpdateComposerRequirements' => [], // run find and replace for specific packages.
+        'ComposerRemoveRequirements' => [], // remove framework, etc...
+        'ComposerUpdateRequirements' => [], // run find and replace for specific packages.
 
-        'ResetWebRootDir-3' => [],
+        'WebRootDirReset-3' => [],
 
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [],

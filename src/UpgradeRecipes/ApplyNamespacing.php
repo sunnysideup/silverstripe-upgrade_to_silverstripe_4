@@ -37,11 +37,11 @@ class ApplyNamespacing extends BaseClass
     protected $listOfTasks = [
         //Step1: Prepare
         //Step4: CoreUpgrade
-        'CheckThatFoldersAreReady' => [],
-        'ResetWebRootDir' => [],
+        'WebRootDirCheckFoldersReady' => [],
+        'WebRootDirReset' => [],
         'CheckoutDefaultBranch' => [],
         'CheckoutUpgradeStarterBranch' => [],
-        'AddUpgradeStarterBranch' => [],
+        'BranchAddUpgradeStarterBranch' => [],
         'ComposerInstallProject' => [],
         'AddNamespace' => [],
         'Upgrade' => [],

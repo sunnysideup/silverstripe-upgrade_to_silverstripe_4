@@ -9,6 +9,8 @@ namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
  */
 class SearchAndReplaceWithoutCommit extends SearchAndReplace
 {
+    protected $taskStep = 'ANY';
+
     protected function hasCommitAndPush()
     {
         return false;

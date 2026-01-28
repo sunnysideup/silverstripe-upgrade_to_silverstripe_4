@@ -191,7 +191,7 @@ To set any of the variables in any of the tasks, you can set these as follows:
 
 ```php
     $moduleUpgrader->setListOfTasks(
-        'UpdateComposerRequirements' => [
+        'ComposerUpdateRequirements' => [
             'Package' => 'silverstripe/framework',
             'NewVersion' => '~4.0'
         ]
@@ -199,7 +199,7 @@ To set any of the variables in any of the tasks, you can set these as follows:
 
 ```
 
-where `package` and `newVersion` are variables (`properties`) in the `UpdateComposerRequirements`
+where `package` and `newVersion` are variables (`properties`) in the `ComposerUpdateRequirements`
 task.
 
 You can also use:
@@ -281,10 +281,10 @@ Customise your list of tasks to run on your module during the upgrade.
 ```php
 ->setListOfTasks(
     [
-        'ResetWebRootDir-1' => [],
-        'AddLegacyBranch' => [],
-        'ResetWebRootDir-2' => [],
-        'UpdateComposerRequirements-2' => [
+        'WebRootDirReset-1' => [],
+        'BranchesAddLegacyBranch' => [],
+        'WebRootDirReset-2' => [],
+        'ComposerUpdateRequirements-2' => [
             'Package' => 'silverstripe/cms',
             'ReplacementPackage' => 'silverstripe/recipe-cms',
             'NewVersion' => '1.1.2'

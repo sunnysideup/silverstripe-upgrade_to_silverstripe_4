@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\Helpers;
+
 use Composer\Semver\Semver;
 use RuntimeException;
 use InvalidArgumentException;
@@ -17,6 +19,50 @@ class ComposerCompatibilityUpdater
 
     /**
      * 1) Check composer content, return incompatible packages.
+     *
+     * Rules:
+     * - If a package release requires ANY acceptable package, then it must allow the acceptable version.
+     * - If a package requires NONE of the acceptable packages (in all its stable releases), it passes.
+     *
+     * @param array<string, mixed> $composerJson
+     * @param array<string, string> $acceptablePackagesToConstraints e.g. ['silverstripe/admin' => '^6.0']
+     * @return array<string, array{section: string, current: string, reason: string}>
+     */
+    public function alreadyCompatible(
+        array $composerJson,
+        array $acceptablePackagesToConstraints,
+        bool $includeDevDependencies
+    ): bool {
+        $requirements = $this->collectRequirements($composerJson, $includeDevDependencies);
+
+        foreach ($acceptablePackagesToConstraints as $acceptablePackage => $acceptableConstraint) {
+            if (!is_string($acceptablePackage) || $acceptablePackage === '' || !is_string($acceptableConstraint) || $acceptableConstraint === '') {
+                continue;
+            }
+
+            if (!isset($requirements[$acceptablePackage])) {
+                continue;
+            }
+
+            $currentConstraint = (string) $requirements[$acceptablePackage]['current'];
+
+            // best-effort check: if current constraint already allows the acceptable "probe" version
+            $probe = $this->probeVersionFromConstraint($acceptableConstraint);
+            if ($probe === null) {
+                continue;
+            }
+
+            if ($this->constraintAllowsVersion($currentConstraint, $probe)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * 2) Check composer content, return incompatible packages.
      *
      * Rules:
      * - If a package release requires ANY acceptable package, then it must allow the acceptable version.
@@ -79,7 +125,7 @@ class ComposerCompatibilityUpdater
     }
 
     /**
-     * 2) Like (1) but updates composer content and returns it.
+     * 3) Like (2) but updates composer content and returns it.
      * On fail it throws.
      *
      * Update rules:

@@ -161,6 +161,7 @@ class LoadReplacementData
         foreach ($this->paths as $path) {
             $file = $path . DIRECTORY_SEPARATOR . $this->toFolder . DIRECTORY_SEPARATOR . $this->ymlFileName;
             if (file_exists($file)) {
+                //@todo: fix to work with ConfigFile class (see silverstripe upgrader)
                 $nextConfig = ConfigFile::loadConfig($file);
                 // Merge
                 $config = $this->mergeConfig($config, $nextConfig);

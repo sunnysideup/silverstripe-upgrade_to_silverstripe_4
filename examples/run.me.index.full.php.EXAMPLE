@@ -41,22 +41,22 @@ $obj = ModuleUpgrader::create()
     // ->setLocationOfSSUpgradeModule(__DIR__ .'/vendor/silverstripe/upgrader/bin/upgrade-code')
     // ->setListOfTasks(
     //     [
-    //         'ResetWebRootDir-1' => [],
-    //         'AddLegacyBranch' => [],
-    //         'ResetWebRootDir-2' => [],
-    //         'AddUpgradeStarterBranch' => [],
-    //         'UpdateComposerRequirements-1' => [
+    //         'WebRootDirReset-1' => [],
+    //         'BranchesAddLegacyBranch' => [],
+    //         'WebRootDirReset-2' => [],
+    //         'BranchAddUpgradeStarterBranch' => [],
+    //         'ComposerUpdateRequirements-1' => [
     //             'Package' => 'silverstripe/framework',
     //             'NewVersion' => '~4.0'
     //         ],
     //         'RecomposeHomeBrew' => [],
-    //         'UpdateComposerRequirements-2' => [
+    //         'ComposerUpdateRequirements-2' => [
     //             'Package' => 'silverstripe/cms',
     //             'ReplacementPackage' => 'silverstripe/recipe-cms',
     //             'NewVersion' => '1.1.2'
     //         ],
     //
-    //         'ResetWebRootDir-3' => [],
+    //         'WebRootDirReset-3' => [],
     //         'ComposerInstallProject' => [],
     //         'SearchAndReplace' => [],
     //         // 'ChangeEnvironment' => [],

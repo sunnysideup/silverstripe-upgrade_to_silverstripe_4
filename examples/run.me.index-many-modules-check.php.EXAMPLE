@@ -35,8 +35,8 @@ foreach($modules as $module) {
     ->setRecipe('SS4') // see: ModuleUpgraderBaseWithVariables::availableRecipes
     ->setListOfTasks(
         [
-            'CheckThatFoldersAreReady' => [],
-            'ResetWebRootDir' => [],
+            'WebRootDirCheckFoldersReady' => [],
+            'WebRootDirReset' => [],
             'CheckoutDefaultBranch' => [
                 'branchOrTagToUse' => $module['tag'],
             ],

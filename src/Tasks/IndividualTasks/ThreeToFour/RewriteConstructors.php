@@ -1,0 +1,40 @@
+<?php
+
+namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks\ThreeToFour;
+
+use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
+
+/**
+ * Delete the web root directory to allow for a fresh install.
+ */
+class RewriteConstructors extends Task
+{
+    protected $taskStep = 'SS3->SS4';
+
+    public function getTitle()
+    {
+        return 'Constructor rewrite';
+    }
+
+    public function getDescription()
+    {
+        return '
+            rewrites deprecated constructors to be compatible with PHP7.';
+    }
+
+    public function runActualTask($params = []): ?string
+    {
+        $this->mu()->execMe(
+            $this->mu()->getAboveWebRootDirLocation(),
+            'php ' . $this->mu()->getWebRootDirLocation() . '--disable-class-file-create',
+            'create upgrade directory: ' . $this->mu()->getWebRootDirLocation(),
+            false
+        );
+        return null;
+    }
+
+    protected function hasCommitAndPush()
+    {
+        return false;
+    }
+}

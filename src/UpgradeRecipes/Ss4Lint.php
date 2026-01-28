@@ -35,13 +35,13 @@ class Ss4Lint extends BaseClass
      * @var array
      */
     protected $listOfTasks = [
-        'CheckThatFoldersAreReady' => [],
-        'ResetWebRootDir-1' => [],
+        'WebRootDirCheckFoldersReady' => [],
+        'WebRootDirReset-1' => [],
 
         'CheckoutDefaultBranch' => [],
-        'AddUpgradeStarterBranch' => [],
-        'AddTempUpgradeBranch' => [],
-        'ResetWebRootDir-3' => [],
+        'BranchAddUpgradeStarterBranch' => [],
+        'BranchesAddTempUpgradeBranch' => [],
+        'WebRootDirReset-3' => [],
 
         //Step2: MoveToNewVersion
         'ComposerInstallProject' => [
@@ -51,9 +51,9 @@ class Ss4Lint extends BaseClass
         'FinalDevBuild' => [],
 
         'FixClassNamesWithUnderscores' => [],
-        'PHPCompatabilityCheck' => [],
-        'ApplyPSR2' => [],
-        'AddPHPDoc' => [],
+        'LintPHPCompatabilityCheck' => [],
+        'LintPSR2' => [],
+        'LintAddPHPDoc' => [],
 
         'FinaliseUpgradeWithMergeIntoDefaultBranch' => [],
     ];

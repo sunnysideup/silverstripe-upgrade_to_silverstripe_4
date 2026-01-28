@@ -27,25 +27,25 @@ class Ss31ToSs37 extends BaseClass
     #########################################
 
     protected $listOfTasks = [
-        'CheckThatFoldersAreReady' => [],
-        'ResetWebRootDir-1' => [],
+        'WebRootDirCheckFoldersReady' => [],
+        'WebRootDirReset-1' => [],
 
         'CheckoutDefaultBranch-1' => [],
-        'AddLegacyBranch' => [
+        'BranchesAddLegacyBranch' => [
             'nameOfLegacyBranch' => 'pre-upgrade3.1',
         ],
 
-        'ResetWebRootDir-2' => [],
+        'WebRootDirReset-2' => [],
 
         'CheckoutDefaultBranch-2' => [],
 
-        'AddUpgradeStarterBranch' => [],
+        'BranchAddUpgradeStarterBranch' => [],
 
-        'UpdateComposerRequirements-1' => [
+        'ComposerUpdateRequirements-1' => [
             'Package' => 'silverstripe/framework',
             'NewVersion' => '~3.7',
         ],
-        'UpdateComposerRequirements-2' => [
+        'ComposerUpdateRequirements-2' => [
             'Package' => 'silverstripe/cms',
             'NewVersion' => '~3.7',
         ],
@@ -56,7 +56,7 @@ class Ss31ToSs37 extends BaseClass
                 'SS37',
             ],
         ],
-        'PHPCompatabilityCheck' => [],
+        'LintPHPCompatabilityCheck' => [],
     ];
 
     protected $frameworkComposerRestraint = '~3.7@stable';

@@ -796,4 +796,14 @@ class ModuleUpgraderBaseWithVariables implements ModuleUpgraderInterface
             $this->commandLineExec = null;
         }
     }
+    protected function additionalNamespacesForTasks()
+    {
+        return [
+            'SevenToEight',
+            'SixToSeven',
+            'FiveToSix',
+            'FourToFive',
+            'ThreeToFour',
+        ];
+    }
 }

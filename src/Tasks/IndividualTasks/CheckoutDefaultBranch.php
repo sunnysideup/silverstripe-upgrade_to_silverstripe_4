@@ -21,14 +21,14 @@ class CheckoutDefaultBranch extends Task
      *
      * @var string
      */
-    protected $branchOrTagToUse = '';
+    protected string $branchOrTagToUse = '';
 
     /**
      * Fallback list if we cannot detect remote HEAD.
      *
      * @var string
      */
-    protected $branchesToTryInThisOrder = 'develop,main,master';
+    protected array $branchesToTryInThisOrder = ['develop', 'main', 'master'];
 
     protected $clearCache = true;
 
@@ -60,7 +60,10 @@ simply start again in a few minutes in this case to make it work.
         // 1. explicit override on the task wins
         // 2. NameOfBranchForBaseCode override wins next
         // 3. else: detect remote default branch (HEAD), else fallback list, else empty (= git default)
-        $this->branchOrTagToUse = $this->resolveBranchOrTagToUse();
+        $this->branchOrTagToUse =
+            $this->branchOrTagToUse ?:
+            $this->mu()->getNameOfBranchForBaseCode() ?:
+            Git::inst($this->mu())->resolveBranchOrTagToUse($this->branchesToTryInThisOrder);
 
         $this->mu()->setBreakOnAllErrors(true);
 
@@ -153,76 +156,7 @@ simply start again in a few minutes in this case to make it work.
         return false;
     }
 
-    protected function resolveBranchOrTagToUse(): string
-    {
-        if ($this->branchOrTagToUse) {
-            return $this->branchOrTagToUse;
-        }
 
-        $alternativeCodeBase = (string) $this->mu()->getNameOfBranchForBaseCode();
-        if ($alternativeCodeBase) {
-            return $alternativeCodeBase;
-        }
-
-        $detected = $this->detectDefaultBranchFromRemoteHead();
-        if ($detected) {
-            return $detected;
-        }
-
-        $fallback = $this->detectFirstExistingBranchFromFallbackList();
-        if ($fallback) {
-            return $fallback;
-        }
-
-        // empty means: clone with git default branch, and for composer we fall back to '@dev'
-        return '';
-    }
-
-    protected function detectDefaultBranchFromRemoteHead(): string
-    {
-        $gitLink = (string) $this->mu()->getGitLink();
-        if ($gitLink === '') {
-            return '';
-        }
-
-        $output = (string) $this->mu()->execMe(
-            $this->mu()->getWebRootDirLocation(),
-            'git ls-remote --symref ' . escapeshellarg($gitLink) . ' HEAD',
-            'detect default branch via remote HEAD',
-            false
-        );
-
-        if (preg_match('/^ref:\s+refs\/heads\/([^\s]+)\s+HEAD\s*$/m', $output, $matches)) {
-            return (string) ($matches[1] ?? '');
-        }
-
-        return '';
-    }
-
-    protected function detectFirstExistingBranchFromFallbackList(): string
-    {
-        $gitLink = (string) $this->mu()->getGitLink();
-        if ($gitLink === '') {
-            return '';
-        }
-
-        $candidates = array_filter(array_map('trim', explode(',', (string) $this->branchesToTryInThisOrder)));
-
-        foreach ($candidates as $branch) {
-            $output = (string) $this->mu()->execMe(
-                $this->mu()->getWebRootDirLocation(),
-                'git ls-remote --heads ' . escapeshellarg($gitLink) . ' ' . escapeshellarg($branch),
-                'check if branch exists: ' . $branch,
-                false
-            );
-
-            if (trim($output) !== '') {
-                return $branch;
-            }
-        }
-
-        return '';
-    }
 
     protected function convertBranchOrTagToComposerConstraint(string $branchOrTag): string
     {

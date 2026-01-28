@@ -165,7 +165,7 @@ class Git
         return $this;
     }
 
-    public function createNewBranchIfItDoesNotExist(string $dir, string $newBranchName, string $fromBranchName): Git
+    public function createNewBranchIfItDoesNotExist(string $dir, string $newBranchName, string $fromBranchName, ?bool $alsoCheckOutAndMakeDefault = false): Git
     {
         $this->fetchAll($dir);
 
@@ -182,11 +182,22 @@ class Git
             'create branch ' . $newBranchName . ' from the ' . $fromBranchName . ' branch in ' . $dir,
             false
         );
+        $makeDefault = '';
+        if ($alsoCheckOutAndMakeDefault) {
+            $makeDefault = ' -u ';
+            $this->checkoutBranch($dir, $newBranchName);
+        }
+        $this->mu()->execMe(
+            $dir,
+            'git push ' . $makeDefault . ' origin ' . $newBranchName,
+            'push it ',
+            false
+        );
 
         return $this;
     }
 
-    public function createNewBranch(string $dir, string $newBranchName, string $fromBranch): Git
+    public function createNewBranch(string $dir, string $newBranchName, string $fromBranch, ?bool $alsoCheckOutAndMakeDefault = false): Git
     {
         $this->fetchAll($dir);
 
@@ -197,10 +208,15 @@ class Git
             'create and checkout new branch: ' . $newBranchName . ' from ' . $fromBranch,
             false
         );
+        $makeDefault = '';
+        if ($alsoCheckOutAndMakeDefault) {
+            $makeDefault = ' -u ';
+            $this->checkoutBranch($dir, $newBranchName);
+        }
         $this->mu()->execMe(
             $dir,
-            'git push -u origin ' . $newBranchName,
-            'push it ' . $fromBranch,
+            'git push ' . $makeDefault . ' origin ' . $newBranchName,
+            'push it ',
             false
         );
 
@@ -294,5 +310,75 @@ class Git
         );
 
         return $this;
+    }
+
+    public function resolveBranchOrTagToUse(?array $branchesToTryInThisOrder = []): string
+    {
+        if (empty($branchesToTryInThisOrder)) {
+            $branchesToTryInThisOrder = ['develop', 'main', 'master'];
+        }
+        $alternativeCodeBase = (string) $this->mu()->getNameOfBranchForBaseCode();
+        if ($alternativeCodeBase) {
+            return $alternativeCodeBase;
+        }
+
+        $detected = $this->detectDefaultBranchFromRemoteHead();
+        if ($detected) {
+            return $detected;
+        }
+
+        $fallback = $this->detectFirstExistingBranchFromFallbackList($branchesToTryInThisOrder);
+        if ($fallback) {
+            return $fallback;
+        }
+
+        // empty means: clone with git default branch, and for composer we fall back to '@dev'
+        return '';
+    }
+
+    protected function detectDefaultBranchFromRemoteHead(): string
+    {
+        $gitLink = (string) $this->mu()->getGitLink();
+        if ($gitLink === '') {
+            return '';
+        }
+
+        $output = (string) $this->mu()->execMe(
+            $this->mu()->getWebRootDirLocation(),
+            'git ls-remote --symref ' . escapeshellarg($gitLink) . ' HEAD',
+            'detect default branch via remote HEAD',
+            false
+        );
+
+        if (preg_match('/^ref:\s+refs\/heads\/([^\s]+)\s+HEAD\s*$/m', $output, $matches)) {
+            return (string) ($matches[1] ?? '');
+        }
+
+        return '';
+    }
+
+    protected function detectFirstExistingBranchFromFallbackList(?array $branchesToTryInThisOrder = []): string
+    {
+        $gitLink = (string) $this->mu()->getGitLink();
+        if ($gitLink === '') {
+            return '';
+        }
+
+        $candidates = $branchesToTryInThisOrder;
+
+        foreach ($candidates as $branch) {
+            $output = (string) $this->mu()->execMe(
+                $this->mu()->getWebRootDirLocation(),
+                'git ls-remote --heads ' . escapeshellarg($gitLink) . ' ' . escapeshellarg($branch),
+                'check if branch exists: ' . $branch,
+                false
+            );
+
+            if (trim($output) !== '') {
+                return $branch;
+            }
+        }
+
+        return '';
     }
 }

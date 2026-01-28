@@ -36,8 +36,8 @@ class Ss4ToSs5FindAndReplaceOnly extends BaseClass
      */
     protected $listOfTasks = [
         //Step1: Prepare
-        'CheckThatFoldersAreReady' => [],
-        'ResetWebRootDir-1' => [],
+        'WebRootDirCheckFoldersReady' => [],
+        'WebRootDirReset-1' => [],
         'SwitchPhpVersion-1' => [
             'version' => '8.3',
         ],
@@ -45,8 +45,8 @@ class Ss4ToSs5FindAndReplaceOnly extends BaseClass
             'branchOrTagToUse' => 'develop',
         ],
 
-        'AddTempUpgradeBranch' => [],
-        // 'ResetWebRootDir-3' => [],
+        'BranchesAddTempUpgradeBranch' => [],
+        // 'WebRootDirReset-3' => [],
 
         // //Step2: MoveToNewVersion
         // 'ComposerInstallSimple' => [],

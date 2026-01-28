@@ -28,11 +28,11 @@ $obj = ModuleUpgrader::create()
 
     ->setListOfTasks(
         [
-            'CheckThatFoldersAreReady' => [],
-            'ResetWebRootDir-1' => [],
+            'WebRootDirCheckFoldersReady' => [],
+            'WebRootDirReset-1' => [],
             'CheckoutDefaultBranch-1' => [],
-            'AddUpgradeStarterBranch' => [],
-            'ApplyPSR2' => [],
+            'BranchAddUpgradeStarterBranch' => [],
+            'LintPSR2' => [],
         ]
     )
     ->run();

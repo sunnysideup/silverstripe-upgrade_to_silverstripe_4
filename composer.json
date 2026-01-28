@@ -20,8 +20,9 @@
         }
     ],
     "require": {
-        "sunnysideup/php_2_command_line":              "dev-master",
-        "composer/semver": "dev-main"
+        "sunnysideup/php_2_command_line": "dev-master",
+        "composer/semver": "dev-main",
+        "symfony/yaml": "^6.0"
     },
     "autoload": {
         "psr-4": {

@@ -10,7 +10,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class ResetWebRootDir extends Task
 {
-    protected $taskStep = 's00';
+    protected $taskStep = 'ANY';
 
     public function getTitle()
     {

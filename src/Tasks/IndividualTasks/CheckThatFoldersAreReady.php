@@ -9,7 +9,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class CheckThatFoldersAreReady extends Task
 {
-    protected $taskStep = 's10';
+    protected $taskStep = 'ANY';
 
     public function getTitle()
     {

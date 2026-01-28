@@ -2,16 +2,17 @@
 
 namespace Sunnysideup\UpgradeSilverstripe\Tasks\IndividualTasks;
 
+use Sunnysideup\UpgradeSilverstripe\Api\FileSystemFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Composer;
 use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\ComposerJsonFixes;
+use Sunnysideup\UpgradeSilverstripe\Tasks\Helpers\Git;
 use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
-//use either of the following to create the info.json file required
-//your project will also require a composer.json.default file
-//this file is used to reset the project to the default state before attempting to install each library
-//composer info --format=json > info.json
-//composer info --direct --format=json > info.json
-
-class ComposerCompatibilityCheckerStep2 extends Task
+/**
+ * Install a basic / standard install of Silverstripe ('.$this->versionToLoad.')
+ * using composer' ;
+ */
+class CheckIfComposerJsonIsReadyForUpgrade extends Task
 {
     protected $taskStep = 'ANY';
 

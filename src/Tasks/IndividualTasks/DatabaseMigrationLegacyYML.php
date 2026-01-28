@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class DatabaseMigrationLegacyYML extends Task
 {
-    protected $taskStep = 's50';
+    protected $taskStep = 'SS3->SS4';
 
     public function getTitle()
     {

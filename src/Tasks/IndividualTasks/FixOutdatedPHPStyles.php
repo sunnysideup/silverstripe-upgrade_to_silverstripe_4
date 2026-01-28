@@ -6,7 +6,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class FixOutdatedPHPStyles extends Task
 {
-    protected $taskStep = 's10';
+    protected $taskStep = 'ANY';
 
     protected $composerOptions = '';
 

@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class LintAll extends Task
 {
-    protected $taskStep = 's30';
+    protected $taskStep = 'ANY';
 
     public function getTitle()
     {

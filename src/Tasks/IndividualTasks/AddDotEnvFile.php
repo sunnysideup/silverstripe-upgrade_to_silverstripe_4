@@ -10,7 +10,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class AddDotEnvFile extends Task
 {
-    protected $taskStep = 's60';
+    protected $taskStep = 'SS3->SS4';
 
     protected $envContent = [
         'SS_DATABASE_CLASS="MySQLDatabase"',

@@ -10,6 +10,8 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class WebrootUpdate extends Task
 {
+    protected $taskStep = 'SS3->SS4';
+
     protected $param1 = '';
 
     protected $param2 = '';

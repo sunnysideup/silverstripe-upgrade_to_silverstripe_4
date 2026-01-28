@@ -12,7 +12,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class CheckoutDevMasterAndChangeToMain extends Task
 {
-    protected $taskStep = 's00';
+    protected $taskStep = 'SS5->SS6';
 
     /**
      * overruled by NameOfBranchForBaseCode

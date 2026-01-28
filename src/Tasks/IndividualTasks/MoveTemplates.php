@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class MoveTemplates extends Task
 {
-    protected $taskStep = 's30';
+    protected $taskStep = 'SS3->SS4';
 
     protected $templateFolder = 'templates';
 

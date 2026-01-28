@@ -12,7 +12,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class CheckoutUpgradeStarterBranch extends Task
 {
-    protected $taskStep = 's00';
+    protected $taskStep = 'ANY';
 
     protected $composerOptions = '--prefer-source --update-no-dev';
 

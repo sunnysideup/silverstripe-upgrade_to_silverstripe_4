@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class RemoveInstallerFolder extends Task
 {
-    protected $taskStep = 's20';
+    protected $taskStep = 'SS3->SS4';
 
     protected $package = '';
 

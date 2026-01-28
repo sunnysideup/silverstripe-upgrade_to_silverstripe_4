@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class ComposerInstallSimple extends Task
 {
-    protected $taskStep = 's20';
+    protected $taskStep = 'ANY';
 
     protected $versionToLoad = '';
 

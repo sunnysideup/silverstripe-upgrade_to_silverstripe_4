@@ -12,7 +12,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class UpgradeToSilverstripe6 extends Task
 {
-    protected $taskStep = 's60';
+    protected $taskStep = 'SS5->SS6';
 
     protected $composerOptions = '';
 

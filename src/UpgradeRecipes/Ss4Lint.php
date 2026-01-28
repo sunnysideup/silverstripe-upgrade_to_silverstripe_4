@@ -38,7 +38,7 @@ class Ss4Lint extends BaseClass
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
 
-        'CheckoutDevMaster' => [],
+        'CheckoutDefaultBranch' => [],
         'AddUpgradeStarterBranch' => [],
         'AddTempUpgradeBranch' => [],
         'ResetWebRootDir-3' => [],
@@ -55,7 +55,7 @@ class Ss4Lint extends BaseClass
         'ApplyPSR2' => [],
         'AddPHPDoc' => [],
 
-        'FinaliseUpgradeWithMergeIntoMaster' => [],
+        'FinaliseUpgradeWithMergeIntoDefaultBranch' => [],
     ];
 
     protected $frameworkComposerRestraint = '~4@stable';

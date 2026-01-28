@@ -41,7 +41,7 @@ class Ss3ToSs4 extends BaseClass
         'SwitchPhpVersion-1' => [
             'version' => '7.2', //huringa requires it.
         ],
-        'CheckoutDevMaster-1' => [],
+        'CheckoutDefaultBranch-1' => [],
         'AddLegacyBranch' => [
             'nameOfLegacyBranch' => '3',
         ],
@@ -118,7 +118,7 @@ class Ss3ToSs4 extends BaseClass
         'DoMigrateSiteTreeLinkingTask' => [],
         'FindFilesWithSimpleUseStatements' => [],
         //step7: Lock-in
-        'FinaliseUpgradeWithMergeIntoMaster' => [],
+        'FinaliseUpgradeWithMergeIntoDefaultBranch' => [],
     ];
 
     protected $frameworkComposerRestraint = '~4@stable';

@@ -30,7 +30,7 @@ $obj = ModuleUpgrader::create()
         [
             'CheckThatFoldersAreReady' => [],
             'ResetWebRootDir-1' => [],
-            'CheckoutDevMaster-1' => [],
+            'CheckoutDefaultBranch-1' => [],
             'AddUpgradeStarterBranch' => [],
             'ApplyPSR2' => [],
         ]

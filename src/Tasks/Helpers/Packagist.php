@@ -3,88 +3,201 @@
 declare(strict_types=1);
 
 use Composer\Semver\Semver;
+use RuntimeException;
+use InvalidArgumentException;
 
-final class SilverstripeSixComposerUpdater
+class ComposerCompatibilityUpdater
 {
-
-    protected array $alignForPackages = [
-        'silverstripe/framework',
-        'silverstripe/cms',
-        'silverstripe/admin',
-        'silverstripe/asset-admin',
-        'silverstripe/versioned',
-        'silverstripe/config',
-        'silverstripe/recipe-core',
-        'silverstripe/recipe-cms',
-    ];
-
-    protected int $versionForPackagesToAlign = 6;
-
-    /**
-     * Packagist “p2” endpoint (tagged releases only).
-     */
     private const PACKAGIST_P2_URL_TEMPLATE = 'https://repo.packagist.org/p2/%s.json';
 
     /**
-     * Cache by package name.
-     *
      * @var array<string, array<string, mixed>>
      */
     private array $packagistCache = [];
 
     /**
-     * Update require + require-dev constraints to the latest compatible release
-     * (only for packages that explicitly depend on Silverstripe).
+     * 1) Check composer content, return incompatible packages.
+     *
+     * Rules:
+     * - If a package release requires ANY acceptable package, then it must allow the acceptable version.
+     * - If a package requires NONE of the acceptable packages (in all its stable releases), it passes.
      *
      * @param array<string, mixed> $composerJson
+     * @param array<string, string> $acceptablePackagesToConstraints e.g. ['silverstripe/admin' => '^6.0']
+     * @return array<string, array{section: string, current: string, reason: string}>
+     */
+    public function findIncompatiblePackages(
+        array $composerJson,
+        array $acceptablePackagesToConstraints,
+        bool $includeDevDependencies
+    ): array {
+        $requirements = $this->collectRequirements($composerJson, $includeDevDependencies);
+
+        $bad = [];
+
+        foreach ($requirements as $packageName => $meta) {
+            if ($this->isPlatformPackage($packageName)) {
+                continue;
+            }
+
+            try {
+                $status = $this->getPackageCompatibilityStatus($packageName, $acceptablePackagesToConstraints);
+            } catch (InvalidArgumentException $e) {
+                $bad[$packageName] = [
+                    'section' => $meta['section'],
+                    'current' => $meta['current'],
+                    'reason' => 'invalid-acceptable-constraint: ' . $e->getMessage(),
+                ];
+                continue;
+            }
+
+            if ($status['packagistAvailable'] === false) {
+                $bad[$packageName] = [
+                    'section' => $meta['section'],
+                    'current' => $meta['current'],
+                    'reason' => 'packagist-unavailable',
+                ];
+                continue;
+            }
+
+            if ($status['isRelevant'] === false) {
+                continue; // package does not depend on any acceptable package => pass
+            }
+
+            if ($status['bestCompatibleVersion'] === null) {
+                $bad[$packageName] = [
+                    'section' => $meta['section'],
+                    'current' => $meta['current'],
+                    'reason' => 'no-compatible-stable-release',
+                ];
+            }
+        }
+
+        ksort($bad);
+
+        return $bad;
+    }
+
+    /**
+     * 2) Like (1) but updates composer content and returns it.
+     * On fail it throws.
+     *
+     * Update rules:
+     * - If the package is in $acceptablePackagesToConstraints, set it to that constraint.
+     * - If package is relevant (depends on any acceptable pkg) set to ^<major>.<minor> of latest compatible stable release.
+     * - If package is not relevant, leave as-is.
+     *
+     * @param array<string, mixed> $composerJson
+     * @param array<string, string> $acceptablePackagesToConstraints
      * @return array<string, mixed>
      */
-    public function updateComposerJsonToAlignWithNewVersion(array $composerJson, array $alignForPackages, int $newVersion): array
-    {
-        $this->alignForPackages = $alignForPackages;
-        $this->versionForPackagesToAlign = (int) $newVersion;
-        $composerJson = $this->updateRequirementsSection($composerJson, 'require');
-        $composerJson = $this->updateRequirementsSection($composerJson, 'require-dev');
+    public function updateComposerJsonOrFail(
+        array $composerJson,
+        array $acceptablePackagesToConstraints,
+        bool $includeDevDependencies
+    ): array {
+        $bad = $this->findIncompatiblePackages($composerJson, $acceptablePackagesToConstraints, $includeDevDependencies);
+
+        if ($bad !== []) {
+            $names = implode(', ', array_keys($bad));
+            throw new RuntimeException('Cannot update composer.json: incompatible packages: ' . $names);
+        }
+
+        $composerJson = $this->updateSection($composerJson, 'require', $acceptablePackagesToConstraints);
+
+        if ($includeDevDependencies) {
+            $composerJson = $this->updateSection($composerJson, 'require-dev', $acceptablePackagesToConstraints);
+        }
 
         return $composerJson;
     }
 
     /**
      * @param array<string, mixed> $composerJson
+     * @param array<string, string> $acceptablePackagesToConstraints
      * @return array<string, mixed>
      */
-    private function updateRequirementsSection(array $composerJson, string $sectionKey): array
+    private function updateSection(array $composerJson, string $section, array $acceptablePackagesToConstraints): array
     {
-        $requirements = $composerJson[$sectionKey] ?? null;
+        $requirements = $composerJson[$section] ?? null;
         if (!is_array($requirements)) {
             return $composerJson;
         }
 
         foreach ($requirements as $packageName => $currentConstraint) {
-            $requirements[$packageName] = $this->updateRequirementConstraint($packageName, (string) $currentConstraint);
+            if (!is_string($packageName)) {
+                continue;
+            }
+
+            if ($this->isPlatformPackage($packageName)) {
+                continue;
+            }
+
+            if (isset($acceptablePackagesToConstraints[$packageName])) {
+                $requirements[$packageName] = (string) $acceptablePackagesToConstraints[$packageName];
+                continue;
+            }
+
+            $status = $this->getPackageCompatibilityStatus($packageName, $acceptablePackagesToConstraints);
+
+            if ($status['packagistAvailable'] === false) {
+                throw new RuntimeException('Packagist unavailable while updating: ' . $packageName);
+            }
+
+            if ($status['isRelevant'] === false) {
+                continue; // leave as-is
+            }
+
+            $best = $status['bestCompatibleVersion'];
+            if ($best === null) {
+                throw new RuntimeException('No compatible stable release found for: ' . $packageName);
+            }
+
+            $requirements[$packageName] = $this->buildCaretMinorConstraint($best);
         }
 
-        $composerJson[$sectionKey] = $requirements;
+        $composerJson[$section] = $requirements;
 
         return $composerJson;
     }
 
-    public function updateRequirementConstraint(string $packageName, string $currentConstraint): ?string
+    /**
+     * @param array<string, mixed> $composerJson
+     * @return array<string, array{section: string, current: string}>
+     */
+    private function collectRequirements(array $composerJson, bool $includeDevDependencies): array
     {
-        if (!is_string($packageName) || !is_string($currentConstraint)) {
-            return null;
+        $out = [];
+
+        $require = $composerJson['require'] ?? [];
+        if (is_array($require)) {
+            foreach ($require as $packageName => $constraint) {
+                if (!is_string($packageName)) {
+                    continue;
+                }
+                $out[$packageName] = [
+                    'section' => 'require',
+                    'current' => (string) $constraint,
+                ];
+            }
         }
 
-        if ($this->isPlatformPackage($packageName)) {
-            return null;
+        if ($includeDevDependencies) {
+            $requireDev = $composerJson['require-dev'] ?? [];
+            if (is_array($requireDev)) {
+                foreach ($requireDev as $packageName => $constraint) {
+                    if (!is_string($packageName)) {
+                        continue;
+                    }
+                    $out[$packageName] = [
+                        'section' => 'require-dev',
+                        'current' => (string) $constraint,
+                    ];
+                }
+            }
         }
 
-        $bestVersion = $this->findLatestCompatibleVersion($packageName);
-        if ($bestVersion === null) {
-            return null;
-        }
-
-        return $this->buildCaretMinorConstraint($bestVersion);
+        return $out;
     }
 
     public function isPlatformPackage(string $packageName): bool
@@ -95,15 +208,33 @@ final class SilverstripeSixComposerUpdater
             || $packageName === 'composer-plugin-api';
     }
 
-    public function findLatestCompatibleVersion(string $packageName): ?string
+    /**
+     * @param array<string, string> $acceptablePackagesToConstraints
+     * @return array{packagistAvailable: bool, isRelevant: bool, bestCompatibleVersion: string|null}
+     */
+    private function getPackageCompatibilityStatus(string $packageName, array $acceptablePackagesToConstraints): array
     {
-        $packageData = $this->fetchPackagistP2($packageName);
-        $versions = $packageData['packages'][$packageName] ?? null;
+        $this->assertAcceptableConstraints($acceptablePackagesToConstraints);
 
-        if (!is_array($versions) || $versions === []) {
-            return null;
+        $data = $this->fetchPackagistP2($packageName);
+        if ($data === []) {
+            return [
+                'packagistAvailable' => false,
+                'isRelevant' => false,
+                'bestCompatibleVersion' => null,
+            ];
         }
 
+        $versions = $data['packages'][$packageName] ?? null;
+        if (!is_array($versions) || $versions === []) {
+            return [
+                'packagistAvailable' => true,
+                'isRelevant' => false,
+                'bestCompatibleVersion' => null,
+            ];
+        }
+
+        $isRelevant = false;
         $candidates = [];
 
         foreach ($versions as $versionMeta) {
@@ -112,11 +243,7 @@ final class SilverstripeSixComposerUpdater
             }
 
             $version = $versionMeta['version'] ?? null;
-            if (!is_string($version) || $version === '') {
-                continue;
-            }
-
-            if ($this->isDevOrPreRelease($version)) {
+            if (!is_string($version) || $version === '' || $this->isDevOrPreRelease($version)) {
                 continue;
             }
 
@@ -125,23 +252,77 @@ final class SilverstripeSixComposerUpdater
                 $requires = [];
             }
 
-            if (!$this->requiresAllowVersion($requires)) {
-                continue;
+            $foundAnyAcceptable = false;
+            $ok = true;
+
+            foreach ($acceptablePackagesToConstraints as $acceptablePackage => $acceptableConstraint) {
+                if (!array_key_exists($acceptablePackage, $requires)) {
+                    continue;
+                }
+
+                $foundAnyAcceptable = true;
+                $isRelevant = true;
+
+                $requiresConstraint = $requires[$acceptablePackage];
+                if (!is_string($requiresConstraint) || $requiresConstraint === '') {
+                    $ok = false;
+                    break;
+                }
+
+                $probe = $this->probeVersionFromConstraint($acceptableConstraint);
+                if ($probe === null) {
+                    throw new InvalidArgumentException('Could not derive probe version from: ' . $acceptablePackage . ':' . $acceptableConstraint);
+                }
+
+                if (!$this->constraintAllowsVersion($requiresConstraint, $probe)) {
+                    $ok = false;
+                    break;
+                }
             }
 
-            $candidates[] = ltrim($version, 'v');
+            if ($foundAnyAcceptable && $ok) {
+                $candidates[] = ltrim($version, 'v');
+            }
+        }
+
+        if ($isRelevant === false) {
+            return [
+                'packagistAvailable' => true,
+                'isRelevant' => false,
+                'bestCompatibleVersion' => null,
+            ];
         }
 
         if ($candidates === []) {
-            return null;
+            return [
+                'packagistAvailable' => true,
+                'isRelevant' => true,
+                'bestCompatibleVersion' => null,
+            ];
         }
 
         $sorted = Semver::rsort($candidates);
 
-        return $sorted[0] ?? null;
+        return [
+            'packagistAvailable' => true,
+            'isRelevant' => true,
+            'bestCompatibleVersion' => $sorted[0] ?? null,
+        ];
     }
 
-    public function isDevOrPreRelease(string $version): bool
+    /**
+     * @param array<string, string> $acceptablePackagesToConstraints
+     */
+    private function assertAcceptableConstraints(array $acceptablePackagesToConstraints): void
+    {
+        foreach ($acceptablePackagesToConstraints as $package => $constraint) {
+            if (!is_string($package) || $package === '' || !is_string($constraint) || $constraint === '') {
+                throw new InvalidArgumentException('Acceptable packages must be [package => constraint] with non-empty strings.');
+            }
+        }
+    }
+
+    private function isDevOrPreRelease(string $version): bool
     {
         $lower = strtolower($version);
 
@@ -149,60 +330,40 @@ final class SilverstripeSixComposerUpdater
             return true;
         }
 
-        // crude but effective: 1.2.3-beta1 / 1.2.3-rc.1 etc
         return str_contains($version, '-');
     }
 
-    /**
-     * Only update packages that declare a Silverstripe dependency.
-     * For those, require constraints must allow SS 6.0.0.
-     *
-     * @param array<string, mixed> $requires
-     */
-    public function requiresAllowVersion(array $requires): bool
+    private function constraintAllowsVersion(string $constraint, string $version): bool
     {
-
-        $foundAnySilverstripeDependency = false;
-
-        foreach ($this->alignForPackages as $key) {
-            if (!array_key_exists($key, $requires)) {
-                continue;
-            }
-
-            $foundAnySilverstripeDependency = true;
-
-            $constraint = $requires[$key];
-            if (!is_string($constraint) || $constraint === '') {
-                return false;
-            }
-
-            if (!$this->constraintAllowsVersion($constraint, $this->versionForPackagesToAlign . '.0.0')) {
-                return false;
-            }
-        }
-
-        return $foundAnySilverstripeDependency;
-    }
-
-    public function constraintAllowsVersion(string $constraint, string $version): bool
-    {
-        $v = $this->versionForPackagesToAlign;
         try {
             return Semver::satisfies($version, $constraint);
         } catch (Throwable) {
-            // fallback for odd constraints
-            $c = strtolower($constraint);
-            //todo: also allow for ^1,^2,^3,^4,^5, etc..
-            return str_contains($c, '^' . $v)
-                || str_contains($c, '~' . $v)
-                || str_contains($c, $v . '.*')
-                || str_contains($c, $v . '.x')
-                || str_contains($c, '>=' . $v);
+            return false;
         }
     }
 
     /**
-     * ^<major>.<minor> (e.g. 6.0.3 => ^6.0, 4.2.1 => ^4.2)
+     * Turns a constraint like '^6.0' or '~3.0' into a probe version like '6.0.0' or '3.0.0'.
+     */
+    private function probeVersionFromConstraint(string $constraint): ?string
+    {
+        if (!preg_match('/(\d+)(?:\.(\d+))?(?:\.(\d+))?/', $constraint, $m)) {
+            return null;
+        }
+
+        $major = (int) ($m[1] ?? 0);
+        $minor = (int) ($m[2] ?? 0);
+        $patch = (int) ($m[3] ?? 0);
+
+        if ($major <= 0) {
+            return null;
+        }
+
+        return $major . '.' . $minor . '.' . $patch;
+    }
+
+    /**
+     * ^<major>.<minor> (e.g. 6.0.3 => ^6.0)
      */
     private function buildCaretMinorConstraint(string $version): string
     {
@@ -225,18 +386,25 @@ final class SilverstripeSixComposerUpdater
         }
 
         $url = sprintf(self::PACKAGIST_P2_URL_TEMPLATE, $packageName);
-        $json = @file_get_contents($url);
+
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 20,
+                'header' => "User-Agent: composer-compat-updater\r\n",
+            ],
+        ]);
+
+        $json = @file_get_contents($url, false, $context);
 
         if (!is_string($json) || $json === '') {
             $this->packagistCache[$packageName] = [];
-
             return [];
         }
 
         $data = json_decode($json, true);
+
         if (!is_array($data)) {
             $this->packagistCache[$packageName] = [];
-
             return [];
         }
 

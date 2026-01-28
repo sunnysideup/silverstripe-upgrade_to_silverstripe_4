@@ -7,7 +7,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class FindFilesWithSimpleUseStatements extends Task
 {
-    protected $taskStep = 's60';
+    protected $taskStep = 'SS3->SS4';
 
     protected $listOfOKOnes = [
         'Page',

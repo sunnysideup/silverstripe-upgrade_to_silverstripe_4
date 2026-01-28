@@ -42,10 +42,10 @@ class Ss5ToSs6ForModules extends BaseClass
             'version' => '8.3',
             'alsoReinstallWithComposer' => false,
         ],
-        'CheckoutDevMaster-1' => [
-            'branchOrTagToUse' => 'master',
+        'CheckoutDefaultBranch-1' => [
             'clearCache' => false,
         ],
+        // 'CheckIfComposerJsonIsReadyForUpgrade' => [],
         'AddLegacyBranch' => [
             'nameOfLegacyBranch' => 'ss5-compatible',
         ],
@@ -54,37 +54,25 @@ class Ss5ToSs6ForModules extends BaseClass
         'CheckoutUpgradeStarterBranch-1' => [],
         'AddTempUpgradeBranch' => [],
         'UpgradeToSilverstripe6' => [],
-        // 'MakeRequirementsMoreFlexible' => [],
-        // 'PHPCompatabilityCheck' => [
-        //     'phpVersion' => '8.3',
-        // ],
-        // 'ResetWebRootDir-2' => [],
-
-        // 'CheckoutUpgradeStarterBranch-2' => [],
-        // 'AddTempUpgradeBranch' => [],
-        // 'ComposerCompatibilityCheckerStep1' => [],
-        // // 'FixOutdatedPHPStyles' => [],
-
-        // // 'AddTableNamePrivateStatic' => [],
-        // 'RemoveComposerRequirements' => [], // remove framework, etc...
-        // 'UpdateComposerRequirements' => [], // run find and replace for specific packages.
-
-        // 'ResetWebRootDir-3' => [],
-
-        // //Step2: MoveToNewVersion
-        // 'ComposerInstallProject' => [],
-        // 'ComposerCompatibilityCheckerStep2' => [],
-        // 'ComposerCompatibilityCheckerStep3' => [],
-
-        // //Step3: FixBeforeStart
-        // 'SearchAndReplace' => [
-        //     'sourceFolders' => 'SS6',
+        // 'UpdateComposerRequirements' => [],
+        // 'UpdateComposerRequirements' => [],
+        // update composer requirements to ss6 compatible versions
+        // test
+        'ResetWebRootDir-2' => [],
+        'SwitchPhpVersion-2' => [
+            'version' => '8.4',
+            'alsoReinstallWithComposer' => false,
+        ],
+        'CheckoutTempUpgradeBranch' => [],
+        // 'RunComposerInstall' => [],
+        // 'RunDevBuild' => [],
+        // 'RunSmokeTest' => [],
+        // 'RunWriteTest' => [],
+        // 'FinaliseUpgradeWithMergeIntoDefaultBranch' => [
+        //     'branchToMergeInto' => 'main',
         // ],
 
-        // //step7: Lock-in
-        // 'FinaliseUpgradeWithMergeIntoMaster' => [
-        //     'branchToMergeInto' => 'develop',
-        // ],
+
     ];
 
     protected $frameworkComposerRestraint = '~5@stable';

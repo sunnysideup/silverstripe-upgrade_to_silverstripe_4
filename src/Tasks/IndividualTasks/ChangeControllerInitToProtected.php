@@ -7,7 +7,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class ChangeControllerInitToProtected extends Task
 {
-    protected $taskStep = 's10';
+    protected $taskStep = 'SS3->SS4';
 
     protected $debug = false;
 

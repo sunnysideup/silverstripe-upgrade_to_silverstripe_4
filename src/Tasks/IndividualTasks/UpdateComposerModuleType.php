@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class UpdateComposerModuleType extends Task
 {
-    protected $taskStep = 's50';
+    protected $taskStep = 'ANY';
 
     public function getTitle()
     {

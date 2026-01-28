@@ -12,7 +12,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class ComposerCompatibilityCheckerStep1 extends Task
 {
-    protected $taskStep = 's10';
+    protected $taskStep = 'ANY';
 
     protected $infoFileFileName = 'composer-requirements-info.json';
 

@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class RecomposeHomeBrew extends Task
 {
-    protected $taskStep = 's20';
+    protected $taskStep = 'SS3->SS4';
 
     protected $requireLinesToAdd = [
         'silverstripe/recipe-cms' => '^4.4',

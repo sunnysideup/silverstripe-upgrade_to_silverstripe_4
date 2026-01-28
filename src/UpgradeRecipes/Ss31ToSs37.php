@@ -30,14 +30,14 @@ class Ss31ToSs37 extends BaseClass
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir-1' => [],
 
-        'CheckoutDevMaster-1' => [],
+        'CheckoutDefaultBranch-1' => [],
         'AddLegacyBranch' => [
             'nameOfLegacyBranch' => 'pre-upgrade3.1',
         ],
 
         'ResetWebRootDir-2' => [],
 
-        'CheckoutDevMaster-2' => [],
+        'CheckoutDefaultBranch-2' => [],
 
         'AddUpgradeStarterBranch' => [],
 

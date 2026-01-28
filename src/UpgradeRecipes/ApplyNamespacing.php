@@ -39,7 +39,7 @@ class ApplyNamespacing extends BaseClass
         //Step4: CoreUpgrade
         'CheckThatFoldersAreReady' => [],
         'ResetWebRootDir' => [],
-        'CheckoutDevMaster' => [],
+        'CheckoutDefaultBranch' => [],
         'CheckoutUpgradeStarterBranch' => [],
         'AddUpgradeStarterBranch' => [],
         'ComposerInstallProject' => [],

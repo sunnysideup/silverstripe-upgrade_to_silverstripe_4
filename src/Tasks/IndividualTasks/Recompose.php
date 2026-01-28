@@ -10,7 +10,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class Recompose extends Task
 {
-    protected $taskStep = 's20';
+    protected $taskStep = 'SS3->SS4';
 
     protected $param1 = '';
 

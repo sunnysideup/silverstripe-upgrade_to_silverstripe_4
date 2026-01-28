@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class AddResourceGitIgnore extends Task
 {
-    protected $taskStep = 's60';
+    protected $taskStep = 'SS3->SS4';
 
     protected $resourcesFolder = 'resources';
 

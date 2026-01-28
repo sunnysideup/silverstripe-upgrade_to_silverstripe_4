@@ -12,7 +12,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class ChangeEnvironment extends Task
 {
-    protected $taskStep = 's20';
+    protected $taskStep = 'SS3->SS4';
 
     protected $rootDirForCommand = '';
 

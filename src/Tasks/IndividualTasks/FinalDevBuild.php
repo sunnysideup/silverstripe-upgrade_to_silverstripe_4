@@ -9,7 +9,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class FinalDevBuild extends Task
 {
-    protected $taskStep = 's60';
+    protected $taskStep = 'ANY';
 
     public function getTitle()
     {

@@ -8,9 +8,9 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 /**
  * Adds a new branch to your repository that is going to be used for upgrading it.
  */
-class FinaliseUpgradeWithMergeIntoMaster extends Task
+class FinaliseUpgradeWithMergeIntoDefaultBranch extends Task
 {
-    protected $taskStep = 's70';
+    protected $taskStep = 'ANY';
 
     public function getTitle()
     {

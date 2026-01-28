@@ -76,7 +76,7 @@ class ComposerInstallProject extends Task
     public function runActualTask($params = []): ?string
     {
         $this->mu()->setBreakOnAllErrors(true);
-        $fixer = FileSystemFixes::inst($this->mu())
+        FileSystemFixes::inst($this->mu())
             ->removeDirOrFile($this->mu()->getWebRootDirLocation(), $this->mu()->getAboveWebRootDirLocation())
             ->mkDir($this->mu()->getWebRootDirLocation(), $this->mu()->getAboveWebRootDirLocation());
         if (! $this->versionToLoad) {

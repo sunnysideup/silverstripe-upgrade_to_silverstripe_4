@@ -7,7 +7,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class FixTemplateIncludeStatements extends Task
 {
-    protected $taskStep = 's30';
+    protected $taskStep = 'SS3->SS4';
 
     protected $debug = false;
 

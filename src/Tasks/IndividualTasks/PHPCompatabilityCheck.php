@@ -15,11 +15,11 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class PHPCompatabilityCheck extends Task
 {
-    protected $taskStep = 's00';
+    protected $taskStep = 'ANY';
 
     protected $composerOptions = '';
 
-    protected $phpVersion = '7.2';
+    protected $phpVersion = '8.4';
 
     public function getTitle()
     {

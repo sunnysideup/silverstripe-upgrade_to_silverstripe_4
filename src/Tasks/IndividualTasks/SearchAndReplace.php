@@ -13,7 +13,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class SearchAndReplace extends Task
 {
-    protected $taskStep = 's30';
+    protected $taskStep = 'ANY';
 
     /**
      * for debugging purposes

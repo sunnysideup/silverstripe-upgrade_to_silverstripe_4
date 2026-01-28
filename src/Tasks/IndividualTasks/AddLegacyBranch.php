@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class AddLegacyBranch extends Task
 {
-    protected $taskStep = 's10';
+    protected $taskStep = 'ANY';
 
     /**
      * @var string what should the legacy branch be called

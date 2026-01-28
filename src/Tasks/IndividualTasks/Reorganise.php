@@ -13,7 +13,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class Reorganise extends Task
 {
-    protected $taskStep = 's50';
+    protected $taskStep = 'SS3->SS4';
 
     protected $param1 = '';
 

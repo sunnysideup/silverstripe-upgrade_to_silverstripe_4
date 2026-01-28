@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class CreateClientFolder extends Task
 {
-    protected $taskStep = 's30';
+    protected $taskStep = 'SS3->SS4';
 
     protected $clientFolderName = 'client';
 

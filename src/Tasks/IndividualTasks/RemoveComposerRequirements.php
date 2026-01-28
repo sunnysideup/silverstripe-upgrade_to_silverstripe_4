@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class RemoveComposerRequirements extends Task
 {
-    protected $taskStep = 's20';
+    protected $taskStep = 'ANY';
 
     protected $packages = [
         'silverstripe/recipe-cms',
@@ -41,7 +41,7 @@ class RemoveComposerRequirements extends Task
         return '
             Remove requirements in composer.json file for
             ' . (count($this->packages) ? implode(', ', $this->packages) : 'old packages - if any') . '
-            For example, we remove silverstripe/framework requirement from 3 to 4.';
+            For example, we remove silverstripe/framework requirement.';
     }
 
     public function runActualTask($params = []): ?string

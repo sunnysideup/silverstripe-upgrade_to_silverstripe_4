@@ -12,7 +12,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class MakeRequirementsMoreFlexible extends Task
 {
-    protected $taskStep = 's00';
+    protected $taskStep = 'ANY';
 
     public function getTitle()
     {

@@ -41,7 +41,7 @@ class Ss4ToSs5 extends BaseClass
         'SwitchPhpVersion-1' => [
             'version' => '8.3',
         ],
-        'CheckoutDevMaster-1' => [
+        'CheckoutDefaultBranch-1' => [
             'branchOrTagToUse' => 'develop',
         ],
 
@@ -75,7 +75,7 @@ class Ss4ToSs5 extends BaseClass
         ],
 
         //step7: Lock-in
-        'FinaliseUpgradeWithMergeIntoMaster' => [
+        'FinaliseUpgradeWithMergeIntoDefaultBranch' => [
             'branchToMergeInto' => 'develop',
         ],
     ];

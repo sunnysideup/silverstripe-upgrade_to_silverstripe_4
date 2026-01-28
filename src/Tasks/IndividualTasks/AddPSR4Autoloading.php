@@ -13,7 +13,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class AddPSR4Autoloading extends Task
 {
-    protected $taskStep = 's50';
+    protected $taskStep = 'ANY';
 
     public function getTitle()
     {
@@ -45,7 +45,7 @@ class AddPSR4Autoloading extends Task
             }
         ';
         $addPage = '';
-        if ($this->mu()->getIsModuleUpgrade()) {
+        if (!$this->mu()->getIsModuleUpgrade()) {
             $addPage = '
             if(! isset($data["autoload"]["files"])) {
                 $data["autoload"]["files"] = [

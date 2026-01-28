@@ -12,7 +12,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class ApplyPSR2 extends Task
 {
-    protected $taskStep = 's60';
+    protected $taskStep = 'ANY';
 
     protected $composerOptions = '';
 

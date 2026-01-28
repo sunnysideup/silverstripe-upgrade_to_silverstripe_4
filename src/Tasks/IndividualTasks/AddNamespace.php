@@ -10,7 +10,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class AddNamespace extends Task
 {
-    protected $taskStep = 's40';
+    protected $taskStep = 'SS3->SS4';
 
     public function getTitle()
     {

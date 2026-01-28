@@ -11,7 +11,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
  */
 class SwitchPhpVersion extends Task
 {
-    protected $taskStep = 's10';
+    protected $taskStep = 'ANY';
 
     protected $defaultVersion = '8.3';
 

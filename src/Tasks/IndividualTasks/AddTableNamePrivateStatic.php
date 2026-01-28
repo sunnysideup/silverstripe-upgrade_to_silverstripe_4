@@ -7,7 +7,7 @@ use Sunnysideup\UpgradeSilverstripe\Tasks\Task;
 
 class AddTableNamePrivateStatic extends Task
 {
-    protected $taskStep = 's10';
+    protected $taskStep = 'SS3->SS4';
 
     protected $listToSearchFor = [
         'private static $db =',

@@ -14,7 +14,7 @@ class AddPHPDoc extends Task
 {
     public const REPLACER = 'REPLACE_WITH_MODULE_NAME';
 
-    protected $taskStep = 's60';
+    protected $taskStep = 'ANY';
 
     /**
      * @var string
